@@ -1,10 +1,11 @@
--- Copy table structures from public schema to dev_v2
--- This script creates the same table structure in dev_v2 without copying data
+-- Copy table structures and data from public schema to dev_v2
+-- This creates a complete replica including structure, data, and relationships
 
--- Note: This is a template. The actual structure will be created by Drizzle migrations.
--- To copy structure and data from existing public schema:
+-- Step 1: Copy table structures and data
+-- Note: LIKE ... INCLUDING ALL copies defaults, constraints, indexes
+--       but NOT foreign keys (they're added separately below)
 
--- Copy projects table
+-- Copy projects table (no dependencies)
 CREATE TABLE dev_v2.projects (LIKE public.projects INCLUDING ALL);
 INSERT INTO dev_v2.projects SELECT * FROM public.projects;
 
@@ -12,7 +13,7 @@ INSERT INTO dev_v2.projects SELECT * FROM public.projects;
 CREATE TABLE dev_v2.cost_breakdown (LIKE public.cost_breakdown INCLUDING ALL);
 INSERT INTO dev_v2.cost_breakdown SELECT * FROM public.cost_breakdown;
 
--- Copy pos table
+-- Copy pos table (no dependencies)
 CREATE TABLE dev_v2.pos (LIKE public.pos INCLUDING ALL);
 INSERT INTO dev_v2.pos SELECT * FROM public.pos;
 
@@ -32,7 +33,45 @@ INSERT INTO dev_v2.forecast_versions SELECT * FROM public.forecast_versions;
 CREATE TABLE dev_v2.budget_forecasts (LIKE public.budget_forecasts INCLUDING ALL);
 INSERT INTO dev_v2.budget_forecasts SELECT * FROM public.budget_forecasts;
 
--- Verify copy
+-- Step 2: Add foreign key constraints
+-- These create the relationships between tables
+
+-- cost_breakdown -> projects
+ALTER TABLE dev_v2.cost_breakdown
+ADD CONSTRAINT cost_breakdown_project_id_fkey
+FOREIGN KEY (project_id) REFERENCES dev_v2.projects(id);
+
+-- forecast_versions -> projects
+ALTER TABLE dev_v2.forecast_versions
+ADD CONSTRAINT forecast_versions_project_id_fkey
+FOREIGN KEY (project_id) REFERENCES dev_v2.projects(id);
+
+-- po_line_items -> pos
+ALTER TABLE dev_v2.po_line_items
+ADD CONSTRAINT po_line_items_po_id_fkey
+FOREIGN KEY (po_id) REFERENCES dev_v2.pos(id);
+
+-- po_mappings -> cost_breakdown
+ALTER TABLE dev_v2.po_mappings
+ADD CONSTRAINT po_mappings_cost_breakdown_id_fkey
+FOREIGN KEY (cost_breakdown_id) REFERENCES dev_v2.cost_breakdown(id);
+
+-- po_mappings -> po_line_items
+ALTER TABLE dev_v2.po_mappings
+ADD CONSTRAINT po_mappings_po_line_item_id_fkey
+FOREIGN KEY (po_line_item_id) REFERENCES dev_v2.po_line_items(id);
+
+-- budget_forecasts -> forecast_versions
+ALTER TABLE dev_v2.budget_forecasts
+ADD CONSTRAINT budget_forecasts_forecast_version_id_fkey
+FOREIGN KEY (forecast_version_id) REFERENCES dev_v2.forecast_versions(id);
+
+-- budget_forecasts -> cost_breakdown
+ALTER TABLE dev_v2.budget_forecasts
+ADD CONSTRAINT budget_forecasts_cost_breakdown_id_fkey
+FOREIGN KEY (cost_breakdown_id) REFERENCES dev_v2.cost_breakdown(id);
+
+-- Verify copy (tables and sizes)
 SELECT 
     schemaname, 
     tablename, 
