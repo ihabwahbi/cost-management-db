@@ -19,6 +19,7 @@ export const poLineItems = devV2Schema.table('po_line_items', {
   invoiceDate: date('invoice_date'),
   supplierPromiseDate: date('supplier_promise_date'),
   projectWbs: varchar('project_wbs'),
+  asset: varchar('asset'),
 });
 
 export type POLineItem = typeof poLineItems.$inferSelect;
