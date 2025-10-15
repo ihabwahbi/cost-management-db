@@ -6,10 +6,9 @@
   "types": "./src/index.ts",
   "scripts": {
     "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push",
+    "db:push": "drizzle-kit push --force",
     "db:studio": "drizzle-kit studio",
-    "db:introspect": "drizzle-kit introspect",
-    "db:compare": "tsx scripts/compare-schema.ts",
+    "db:reset": "tsx --env-file=.env scripts/drop-schema.ts && npm run db:push",
     "type-check": "tsc --noEmit",
     "test": "vitest run"
   },

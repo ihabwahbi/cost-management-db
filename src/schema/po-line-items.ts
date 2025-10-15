@@ -1,7 +1,6 @@
-import { pgSchema, uuid, integer, varchar, text, numeric, timestamp, date } from 'drizzle-orm/pg-core';
+import { uuid, integer, varchar, text, numeric, timestamp, date } from 'drizzle-orm/pg-core';
 import { pos } from './pos';
-
-const devV2Schema = pgSchema('dev_v2');
+import { devV2Schema } from './_schema';
 
 export const poLineItems = devV2Schema.table('po_line_items', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -19,6 +18,7 @@ export const poLineItems = devV2Schema.table('po_line_items', {
   invoicedValueUsd: numeric('invoiced_value_usd'),
   invoiceDate: date('invoice_date'),
   supplierPromiseDate: date('supplier_promise_date'),
+  projectWbs: varchar('project_wbs'),
 });
 
 export type POLineItem = typeof poLineItems.$inferSelect;

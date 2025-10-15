@@ -1,8 +1,7 @@
-import { pgSchema, uuid, numeric, text, varchar, timestamp } from 'drizzle-orm/pg-core';
+import { uuid, numeric, text, varchar, timestamp } from 'drizzle-orm/pg-core';
 import { costBreakdown } from './cost-breakdown';
 import { poLineItems } from './po-line-items';
-
-const devV2Schema = pgSchema('dev_v2');
+import { devV2Schema } from './_schema';
 
 export const poMappings = devV2Schema.table('po_mappings', {
   id: uuid('id').primaryKey().defaultRandom(),

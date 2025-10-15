@@ -1,6 +1,5 @@
-import { pgSchema, uuid, text, timestamp } from 'drizzle-orm/pg-core';
-
-const devV2Schema = pgSchema('dev_v2');
+import { uuid, text, timestamp } from 'drizzle-orm/pg-core';
+import { devV2Schema } from './_schema';
 
 export const projects = devV2Schema.table('projects', {
   id: uuid('id').primaryKey().defaultRandom(),

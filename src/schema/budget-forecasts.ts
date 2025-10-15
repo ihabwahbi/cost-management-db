@@ -1,8 +1,7 @@
-import { pgSchema, uuid, numeric, timestamp } from 'drizzle-orm/pg-core';
+import { uuid, numeric, timestamp } from 'drizzle-orm/pg-core';
 import { forecastVersions } from './forecast-versions';
 import { costBreakdown } from './cost-breakdown';
-
-const devV2Schema = pgSchema('dev_v2');
+import { devV2Schema } from './_schema';
 
 export const budgetForecasts = devV2Schema.table('budget_forecasts', {
   id: uuid('id').primaryKey().defaultRandom(),

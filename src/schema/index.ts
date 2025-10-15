@@ -5,6 +5,8 @@
  * Schema source: docs/db-schema.md
  */
 
+export * from './_schema';
+
 // Core tables
 export * from './projects';
 export * from './cost-breakdown';
