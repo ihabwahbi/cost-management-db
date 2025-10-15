@@ -5,8 +5,8 @@ Isolated PostgreSQL schema (`dev_v2`) for database development using Drizzle ORM
 ## Quick Reference
 
 ```bash
-npm run db:push       # Push schema changes (auto-approved)
-npm run db:reset      # Drop and recreate schema (DEV ONLY)
+npm run db:push       # Push schema changes to database
+npm run db:generate   # Generate migration files
 npm run db:studio     # Open Drizzle Studio GUI
 npm run type-check    # TypeScript validation
 npm test             # Run tests
@@ -75,27 +75,20 @@ src/schema/          # Drizzle schemas (SINGLE SOURCE OF TRUTH)
 ├── *.ts            # Table definitions
 └── index.ts        # Exports
 
-scripts/            # Utility scripts
 __tests__/          # Tests
 ```
 
 ## Safety Rules
 
 1. Never modify `public` schema (production)
-2. Never run `db:reset` on production
-3. Never commit `.env` file
-4. Always use npm scripts
-5. Always run type-check after changes
+2. Never commit `.env` file
+3. Always use npm scripts
+4. Always run type-check after changes
 
 ## Common Tasks
 
 ### Add/Modify Schema
 Edit file in `src/schema/` → `npm run db:push` → `npm run type-check`
-
-### Clean Reset
-```bash
-npm run db:reset  # Drops all and recreates from schema files
-```
 
 ### Inspect Schema
 ```bash
@@ -112,9 +105,9 @@ npm run db:studio  # Opens GUI
 
 | Issue | Fix |
 |-------|-----|
-| Schema doesn't exist | `npm run db:reset` |
 | Env not loading | Use npm scripts |
 | Type errors | `npm run type-check` |
+| Want to inspect changes | `npm run db:studio` |
 
 ## Resources
 

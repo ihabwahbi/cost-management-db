@@ -21,8 +21,8 @@ DATABASE_URL=postgresql://user:password@host:5432/postgres?sslmode=require
 
 ```bash
 # Schema Management
-npm run db:push              # Push schema changes (auto-approved)
-npm run db:reset             # Drop and recreate schema (DEV ONLY - DESTRUCTIVE)
+npm run db:push              # Push schema changes to database
+npm run db:generate          # Generate migration files
 npm run db:studio            # Open Drizzle Studio GUI
 
 # Quality Checks
@@ -75,10 +75,9 @@ Located in `drizzle.config.ts`:
 ## Safety Rules
 
 1. **Never modify `public` schema** - That's production
-2. **Never run `db:reset` on production** - Only for local dev
-3. **Never commit `.env` file** - Contains credentials
-4. **Always use npm scripts** - They handle environment
-5. **Always run type-check after changes** - Catches errors early
+2. **Never commit `.env` file** - Contains credentials
+3. **Always use npm scripts** - They handle environment
+4. **Always run type-check after changes** - Catches errors early
 
 ## Development Workflow
 
@@ -101,11 +100,6 @@ Located in `drizzle.config.ts`:
 3. Run `npm run db:push`
 4. Run `npm run type-check`
 
-### Clean Reset (Development Only)
-```bash
-npm run db:reset  # Drops all tables and recreates from schema files
-```
-
 ### View Schema
 ```bash
 npm run db:studio  # Opens GUI at https://local.drizzle.studio
@@ -118,10 +112,6 @@ src/schema/           # Drizzle ORM schemas (SINGLE SOURCE OF TRUTH)
 ├── _schema.ts       # Shared devV2Schema instance (import this!)
 ├── *.ts             # Individual table definitions
 └── index.ts         # Exports all tables
-
-scripts/             # Utility scripts
-├── drop-schema.ts   # Drop and recreate empty schema
-└── create-schema.ts # Create schema
 
 __tests__/           # Vitest tests
 ```
@@ -142,8 +132,7 @@ npm run db:generate  # Creates migration files
 
 | Issue | Solution |
 |-------|----------|
-| "Schema does not exist" | Run `npm run db:reset` |
-| Environment not loading | Use npm scripts (not direct tsx) |
+| Environment not loading | Use npm scripts (not direct scripts) |
 | Type errors after changes | Run `npm run type-check` |
 | Want to inspect changes | Run `npm run db:studio` |
 

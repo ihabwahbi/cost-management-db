@@ -11,8 +11,8 @@ npm install
 # Create .env file (copy from .env.example and add password)
 cp .env.example .env
 
-# Reset schema and push (development only)
-npm run db:reset
+# Push schema to database
+npm run db:push
 
 # Open database GUI
 npm run db:studio
@@ -45,9 +45,9 @@ Then: `npm run db:push`
 
 ## Available Scripts
 
-- `npm run db:push` - Push schema changes (auto-approved for AI agents)
-- `npm run db:reset` - Drop and recreate schema from scratch (dev only)
+- `npm run db:push` - Push schema changes to database
 - `npm run db:studio` - Open Drizzle Studio GUI
+- `npm run db:generate` - Generate migration files
 - `npm run type-check` - TypeScript type checking
 - `npm test` - Run tests
 
