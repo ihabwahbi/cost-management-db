@@ -1,0 +1,18 @@
+import { pgSchema, uuid, integer, text, timestamp } from 'drizzle-orm/pg-core';
+import { projects } from './projects';
+
+const devV2Schema = pgSchema('dev_v2');
+
+export const forecastVersions = devV2Schema.table('forecast_versions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  projectId: uuid('project_id')
+    .notNull()
+    .references(() => projects.id),
+  versionNumber: integer('version_number').notNull(),
+  reasonForChange: text('reason_for_change').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  createdBy: text('created_by').default('system'),
+});
+
+export type ForecastVersion = typeof forecastVersions.$inferSelect;
+export type NewForecastVersion = typeof forecastVersions.$inferInsert;
