@@ -33,6 +33,7 @@ RAW_PO_LINE_ITEMS_FILE = os.path.join(RAW_DIR, 'po line items.csv')
 # =============================================================================
 
 INTERMEDIATE_GR_CLEANED = os.path.join(INTERMEDIATE_DIR, 'gr_cleaned.csv')
+INTERMEDIATE_INVOICE_CLEANED = os.path.join(INTERMEDIATE_DIR, 'invoice_cleaned.csv')
 INTERMEDIATE_PO_LOOKUP = os.path.join(INTERMEDIATE_DIR, 'po_cost_recognition_lookup.csv')
 
 # =============================================================================

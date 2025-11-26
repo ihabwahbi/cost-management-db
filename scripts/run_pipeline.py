@@ -3,8 +3,9 @@ Run Full Data Processing Pipeline
 
 This script executes all numbered pipeline scripts in order:
   01_clean_gr_data.py
-  02_build_po_lookup.py
-  03_prepare_po_transactions.py
+  02_clean_invoice_data.py
+  03_build_po_lookup.py
+  04_prepare_po_transactions.py
 
 Usage:
   python scripts/run_pipeline.py
@@ -21,8 +22,9 @@ SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 # Pipeline scripts in execution order
 PIPELINE_SCRIPTS = [
     '01_clean_gr_data.py',
-    '02_build_po_lookup.py',
-    '03_prepare_po_transactions.py',
+    '02_clean_invoice_data.py',
+    '03_build_po_lookup.py',
+    '04_prepare_po_transactions.py',
 ]
 
 
@@ -75,6 +77,7 @@ def main():
     print(f"Total duration: {duration:.1f} seconds")
     print("\nOutput files:")
     print("  - data/intermediate/gr_cleaned.csv")
+    print("  - data/intermediate/invoice_cleaned.csv")
     print("  - data/intermediate/po_cost_recognition_lookup.csv")
     print("  - data/import_ready/po_transactions.csv")
     print("=" * 70)
