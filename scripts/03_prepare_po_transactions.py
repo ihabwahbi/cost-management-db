@@ -74,7 +74,7 @@ def transform_gr_data(df):
     transformed['transaction_type'] = 'GR'
     transformed['posting_date'] = pd.to_datetime(df['gr_posting_date']).dt.strftime('%Y-%m-%d')
     transformed['quantity'] = df['gr_effective_quantity']
-    transformed['amount'] = None  # GR typically doesn't have amount
+    transformed['amount'] = df['gr_amount_usd']
     transformed['reference_number'] = None
     return transformed
 
