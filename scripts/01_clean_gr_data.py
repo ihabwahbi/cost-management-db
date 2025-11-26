@@ -4,11 +4,11 @@ Step 01: Clean GR (Goods Receipt) Data
 This script:
 1. Reads raw GR data
 2. Aggregates by PO Line ID and posting date (sums both quantity and amount)
-3. Removes rows where BOTH quantity and amount are 0
+3. Removes rows where quantity is 0 (value-only postings)
 4. Outputs cleaned GR data to intermediate/
 
-Note: Raw GR data often has separate rows for quantity and amount postings.
-We aggregate both to get the complete picture per PO line per day.
+Note: Raw GR data has separate rows for quantity and amount postings.
+We aggregate both, but only keep rows with actual quantity receipts.
 
 Input:  data/raw/gr table.csv
 Output: data/intermediate/gr_cleaned.csv
@@ -71,14 +71,11 @@ def clean_gr_data():
     rows_after_agg = len(df_cleaned)
     print(f"  Rows after aggregation: {rows_after_agg:,}")
     
-    # Remove rows where BOTH quantity and amount are 0 (no meaningful data)
-    df_cleaned = df_cleaned[
-        (df_cleaned['gr_effective_quantity'] != 0) | (df_cleaned['gr_amount_usd'] != 0)
-    ].copy()
+    # Remove rows where quantity is 0 (keep only actual receipts)
+    df_cleaned = df_cleaned[df_cleaned['gr_effective_quantity'] != 0].copy()
     
     rows_removed = rows_after_agg - len(df_cleaned)
-    if rows_removed > 0:
-        print(f"  Removed {rows_removed:,} rows with 0 quantity AND 0 amount")
+    print(f"  Removed {rows_removed:,} rows with 0 quantity")
     
     print(f"  Final rows: {len(df_cleaned):,}")
     
