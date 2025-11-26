@@ -75,13 +75,10 @@ PO_LINE_ITEMS_COLUMNS = {
 # =============================================================================
 
 # Cost is recognized at GR (Goods Receipt) if:
-#   1. Main Vendor SLB Vendor Category = "3rd Party"
-#   OR
-#   2. PO Account Assignment Category IN ("P", "K") AND Main Vendor SLB Vendor Category = "GLD"
+#   PO Account Assignment Category IN ("P", "K") AND Main Vendor SLB Vendor Category = "GLD"
 #
 # Otherwise, cost is recognized at IR (Invoice Receipt)
 
-VENDOR_CATEGORY_3RD_PARTY = '3rd Party'
 VENDOR_CATEGORY_GLD = 'GLD'
 ACCOUNT_ASSIGNMENTS_FOR_GLD = ['P', 'K']
 

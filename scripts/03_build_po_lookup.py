@@ -7,9 +7,7 @@ This script:
 3. Outputs a lookup table to intermediate/
 
 Business Rules - Cost is recognized at GR if:
-  1. Main Vendor SLB Vendor Category = "3rd Party"
-  OR
-  2. PO Account Assignment Category IN ("P", "K") AND Main Vendor SLB Vendor Category = "GLD"
+  PO Account Assignment Category IN ("P", "K") AND Main Vendor SLB Vendor Category = "GLD"
 
 Otherwise, cost is recognized at Invoice (IR).
 
@@ -23,7 +21,6 @@ from config import (
     RAW_PO_LINE_ITEMS_FILE,
     INTERMEDIATE_PO_LOOKUP,
     PO_LINE_ITEMS_COLUMNS,
-    VENDOR_CATEGORY_3RD_PARTY,
     VENDOR_CATEGORY_GLD,
     ACCOUNT_ASSIGNMENTS_FOR_GLD,
     ensure_directories,
@@ -39,11 +36,7 @@ def determine_cost_at_gr(row):
     vendor_category = str(row['vendor_category']).strip()
     account_assignment = str(row['account_assignment']).strip()
     
-    # Rule 1: 3rd Party vendors -> cost at GR
-    if vendor_category == VENDOR_CATEGORY_3RD_PARTY:
-        return True
-    
-    # Rule 2: GLD vendors with P or K account assignment -> cost at GR
+    # GLD vendors with P or K account assignment -> cost at GR
     if vendor_category == VENDOR_CATEGORY_GLD and account_assignment in ACCOUNT_ASSIGNMENTS_FOR_GLD:
         return True
     
