@@ -1,8 +1,9 @@
-import { uuid, integer, varchar, text, numeric, timestamp, date } from 'drizzle-orm/pg-core';
+import { uuid, integer, varchar, text, numeric, timestamp, date, index } from 'drizzle-orm/pg-core';
 import { pos } from './pos';
-import { devV2Schema } from './_schema';
+import { wbsDetails } from './wbs-details';
+import { devV3Schema } from './_schema';
 
-export const poLineItems = devV2Schema.table('po_line_items', {
+export const poLineItems = devV3Schema.table('po_line_items', {
   id: uuid('id').primaryKey().defaultRandom(),
   poId: uuid('po_id')
     .notNull()
@@ -14,13 +15,15 @@ export const poLineItems = devV2Schema.table('po_line_items', {
   uom: varchar('uom').notNull(),
   lineValue: numeric('line_value').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  invoicedQuantity: numeric('invoiced_quantity'),
-  invoicedValueUsd: numeric('invoiced_value_usd'),
-  invoiceDate: date('invoice_date'),
   supplierPromiseDate: date('supplier_promise_date'),
-  projectWbs: varchar('project_wbs'),
-  asset: varchar('asset'),
-});
+  wbsNumber: varchar('wbs_number').references(() => wbsDetails.wbsNumber),
+  nisCostLine: text('nis_cost_line'),
+  poType: text('po_type'),
+  purchaseRequisitionNumber: varchar('purchase_requisition_number'),
+  purchaseRequisitionLine: integer('purchase_requisition_line'),
+}, (table) => [
+  index('po_line_items_po_id_idx').on(table.poId),
+]);
 
 export type POLineItem = typeof poLineItems.$inferSelect;
 export type NewPOLineItem = typeof poLineItems.$inferInsert;

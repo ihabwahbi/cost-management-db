@@ -1,7 +1,7 @@
 import { uuid, text, timestamp } from 'drizzle-orm/pg-core';
-import { devV2Schema } from './_schema';
+import { devV3Schema } from './_schema';
 
-export const projects = devV2Schema.table('projects', {
+export const projects = devV3Schema.table('projects', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
   subBusinessLine: text('sub_business_line').notNull(),
