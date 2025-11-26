@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+    "tools": {
+    "tavily_*": false,
+    "exa_*": false,
+    "context7_*": false,
+    "playwright_*": false,
+    "shadcn_*": false,
+    "postgres_*": true,
+    "chrome-devtools_*": false,
+    "nocodb_*": false
+  }
+}
