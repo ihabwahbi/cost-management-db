@@ -1,6 +1,6 @@
 # Cost Management Database
 
-Isolated PostgreSQL schema (`dev_v2`) for database development using Drizzle ORM.
+Isolated PostgreSQL schema (`dev_v3`) for database development using Drizzle ORM.
 
 ## Environment Setup
 
@@ -11,8 +11,9 @@ DATABASE_URL=postgresql://user:password@host:5432/postgres?sslmode=require
 ```
 
 - **Database**: Azure PostgreSQL (shared with production)
-- **Our Schema**: `dev_v2` (isolated, safe to modify)
+- **Our Schema**: `dev_v3` (isolated, safe to modify)
 - **Production Schema**: `public` (NEVER TOUCH)
+- **Previous Dev Schema**: `dev_v2` (preserved, do not modify)
 - **Schema isolation**: No extra costs, complete independence
 
 ## Development Commands
@@ -41,11 +42,11 @@ All database changes MUST go through Drizzle ORM schema files in `src/schema/`.
 ### 2. Always Import Shared Schema
 ```typescript
 // ✓ CORRECT
-import { devV2Schema } from './_schema';
+import { devV3Schema } from './_schema';
 
 // ✗ WRONG - Creates duplicate schema instances
 import { pgSchema } from 'drizzle-orm/pg-core';
-const devV2Schema = pgSchema('dev_v2');
+const devV3Schema = pgSchema('dev_v3');
 ```
 
 ### 3. Standard Workflow
@@ -62,7 +63,7 @@ const devV2Schema = pgSchema('dev_v2');
 ## Drizzle Configuration
 
 Located in `drizzle.config.ts`:
-- `schemaFilter: ['dev_v2']` - Only touches `dev_v2`, never `public`
+- `schemaFilter: ['dev_v3']` - Only touches `dev_v3`, never `public`
 - This ensures all operations are scoped safely
 
 ## Naming Conventions
@@ -96,7 +97,7 @@ Located in `drizzle.config.ts`:
 
 ### Add/Modify Schema
 1. Edit relevant file in `src/schema/`
-2. Ensure `devV2Schema` is imported from `_schema.ts`
+2. Ensure `devV3Schema` is imported from `_schema.ts`
 3. Run `npm run db:push`
 4. Run `npm run type-check`
 
@@ -109,7 +110,7 @@ npm run db:studio  # Opens GUI at https://local.drizzle.studio
 
 ```
 src/schema/           # Drizzle ORM schemas (SINGLE SOURCE OF TRUTH)
-├── _schema.ts       # Shared devV2Schema instance (import this!)
+├── _schema.ts       # Shared devV3Schema instance (import this!)
 ├── *.ts             # Individual table definitions
 └── index.ts         # Exports all tables
 
