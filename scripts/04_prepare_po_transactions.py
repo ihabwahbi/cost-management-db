@@ -6,8 +6,13 @@ This script:
 2. Loads cleaned Invoice data (from step 02)
 3. Loads cost recognition lookup (from step 03)
 4. Combines into unified transaction format
-5. Applies is_cost_recognized logic
+5. Applies cost recognition logic with partial quantity support
 6. Outputs import-ready file matching po_transactions schema
+
+Cost Recognition Rules:
+- GLD + P/K PO lines: Only GR triggers cost recognition (full qty)
+- All other PO lines: High water mark logic - whichever event (GR or Invoice)
+  pushes max(cum_gr, cum_inv) forward gets cost recognition for that qty
 
 Input:  
   - data/intermediate/gr_cleaned.csv
@@ -19,6 +24,7 @@ Output:
 """
 
 import pandas as pd
+import numpy as np
 import sys
 from config import (
     INTERMEDIATE_GR_CLEANED,
@@ -89,6 +95,60 @@ def transform_invoice_data(df):
     return transformed
 
 
+def calculate_cost_recognition_for_gr_only(group):
+    """
+    For GLD + P/K PO lines: Only GR triggers cost recognition.
+    GR gets full quantity, Invoice gets 0.
+    """
+    result = group.copy()
+    result['cost_recognized_qty'] = np.where(
+        result['transaction_type'] == 'GR',
+        result['quantity'],
+        0
+    )
+    return result
+
+
+def calculate_cost_recognition_high_water_mark(group):
+    """
+    For non-GLD+P/K PO lines: Apply high water mark logic.
+    
+    Sort by posting_date ASC, then quantity DESC (higher qty first for same date).
+    Cost recognized qty = increase in max(cumulative_gr, cumulative_invoice).
+    """
+    # Sort: date ascending, quantity descending (higher qty first on same date)
+    group = group.sort_values(
+        ['posting_date', 'quantity'], 
+        ascending=[True, False]
+    ).copy()
+    
+    # Initialize tracking variables
+    cum_gr = 0
+    cum_inv = 0
+    prev_high_water = 0
+    cost_recognized_qtys = []
+    
+    for idx, row in group.iterrows():
+        qty = row['quantity']
+        
+        if row['transaction_type'] == 'GR':
+            cum_gr += qty
+        else:  # Invoice
+            cum_inv += qty
+        
+        # High water mark is the max of cumulative GR and Invoice
+        high_water = max(cum_gr, cum_inv)
+        
+        # Cost recognized for this transaction is the increase in high water mark
+        cost_recognized_qty = high_water - prev_high_water
+        cost_recognized_qtys.append(cost_recognized_qty)
+        
+        prev_high_water = high_water
+    
+    group['cost_recognized_qty'] = cost_recognized_qtys
+    return group
+
+
 def prepare_po_transactions():
     """Prepare final PO transactions file for database import."""
     
@@ -126,66 +186,52 @@ def prepare_po_transactions():
         how='left'
     )
     
-    # Handle PO lines not found in lookup (default to cost at Invoice rules)
+    # Handle PO lines not found in lookup (default to high water mark rules)
     missing_lookup = all_transactions['cost_recognized_at_gr'].isna().sum()
     if missing_lookup > 0:
-        print(f"  WARNING: {missing_lookup:,} transactions have no lookup entry (defaulting to Invoice rules)")
+        print(f"  WARNING: {missing_lookup:,} transactions have no lookup entry (using high water mark rules)")
         all_transactions['cost_recognized_at_gr'] = all_transactions['cost_recognized_at_gr'].fillna(False)
     
-    # Convert posting_date to datetime for comparison
-    all_transactions['posting_date_dt'] = pd.to_datetime(all_transactions['posting_date'])
+    # Split into two groups based on cost recognition type
+    gr_only_mask = all_transactions['cost_recognized_at_gr'] == True
+    gr_only_lines = all_transactions[gr_only_mask]['po_line_id'].unique()
+    high_water_lines = all_transactions[~gr_only_mask]['po_line_id'].unique()
     
-    # For PO lines where cost is normally at Invoice (cost_recognized_at_gr = False),
-    # we need to check if GR came before Invoice. If so, GR gets cost recognition.
+    print(f"  GLD+P/K PO lines (GR only):     {len(gr_only_lines):,}")
+    print(f"  Other PO lines (high water):    {len(high_water_lines):,}")
     
-    # Step 1: Find earliest GR date per PO line
-    gr_dates = all_transactions[all_transactions['transaction_type'] == 'GR'].groupby('po_line_id')['posting_date_dt'].min()
-    gr_dates = gr_dates.rename('earliest_gr_date')
+    # Process GR-only PO lines
+    print("\n  Processing GR-only cost recognition...")
+    gr_only_transactions = all_transactions[all_transactions['po_line_id'].isin(gr_only_lines)]
+    if len(gr_only_transactions) > 0:
+        gr_only_result = gr_only_transactions.groupby('po_line_id', group_keys=False).apply(
+            calculate_cost_recognition_for_gr_only
+        )
+    else:
+        gr_only_result = pd.DataFrame()
     
-    # Step 2: Find earliest Invoice date per PO line
-    inv_dates = all_transactions[all_transactions['transaction_type'] == 'Invoice'].groupby('po_line_id')['posting_date_dt'].min()
-    inv_dates = inv_dates.rename('earliest_inv_date')
+    # Process high water mark PO lines
+    print("  Processing high water mark cost recognition...")
+    high_water_transactions = all_transactions[all_transactions['po_line_id'].isin(high_water_lines)]
+    if len(high_water_transactions) > 0:
+        high_water_result = high_water_transactions.groupby('po_line_id', group_keys=False).apply(
+            calculate_cost_recognition_high_water_mark
+        )
+    else:
+        high_water_result = pd.DataFrame()
     
-    # Step 3: Join these back to determine which type gets cost recognition
-    all_transactions = all_transactions.merge(gr_dates, on='po_line_id', how='left')
-    all_transactions = all_transactions.merge(inv_dates, on='po_line_id', how='left')
+    # Combine results
+    all_transactions = pd.concat([gr_only_result, high_water_result], ignore_index=True)
     
-    # Step 4: Determine effective cost recognition type per PO line
-    # For cost_at_gr lines: always GR
-    # For cost_at_invoice lines: GR if earliest_gr < earliest_inv (or no invoice), else Invoice
-    def determine_cost_type(row):
-        if row['cost_recognized_at_gr']:
-            return 'GR'
-        else:
-            # Cost normally at Invoice, but check timing
-            if pd.isna(row['earliest_inv_date']):
-                # No invoice exists, GR gets cost recognition
-                return 'GR'
-            elif pd.isna(row['earliest_gr_date']):
-                # No GR exists, Invoice gets cost recognition
-                return 'Invoice'
-            elif row['earliest_gr_date'] < row['earliest_inv_date']:
-                # GR came first, GR gets cost recognition
-                return 'GR'
-            else:
-                # Invoice came first or same date, Invoice gets cost recognition
-                return 'Invoice'
+    # Set is_cost_recognized based on cost_recognized_qty > 0
+    all_transactions['is_cost_recognized'] = all_transactions['cost_recognized_qty'] > 0
     
-    all_transactions['cost_recognition_type'] = all_transactions.apply(determine_cost_type, axis=1)
-    
-    # Step 5: Set is_cost_recognized based on whether this transaction matches the cost recognition type
-    all_transactions['is_cost_recognized'] = (
-        all_transactions['transaction_type'] == all_transactions['cost_recognition_type']
-    )
-    
-    # Drop helper columns
-    all_transactions = all_transactions.drop(columns=[
-        'cost_recognized_at_gr', 'posting_date_dt', 
-        'earliest_gr_date', 'earliest_inv_date', 'cost_recognition_type'
-    ])
+    # Drop helper column
+    all_transactions = all_transactions.drop(columns=['cost_recognized_at_gr'])
     
     # Sort by po_line_id and posting_date for readability
-    all_transactions = all_transactions.sort_values(['po_line_id', 'posting_date'])
+    all_transactions = all_transactions.sort_values(['po_line_id', 'posting_date', 'quantity'], 
+                                                     ascending=[True, True, False])
     
     # Reorder columns to match schema
     final_columns = [
@@ -194,6 +240,7 @@ def prepare_po_transactions():
         'posting_date',
         'quantity',
         'amount',
+        'cost_recognized_qty',
         'is_cost_recognized',
         'reference_number'
     ]
@@ -204,22 +251,26 @@ def prepare_po_transactions():
     all_transactions.to_csv(IMPORT_READY_PO_TRANSACTIONS, index=False)
     
     # Summary statistics
+    total_qty = all_transactions['quantity'].sum()
+    total_cost_recognized_qty = all_transactions['cost_recognized_qty'].sum()
     cost_recognized_count = all_transactions['is_cost_recognized'].sum()
     
     print("\n" + "=" * 60)
     print("SUMMARY")
     print("=" * 60)
-    print(f"  Total transactions:     {len(all_transactions):,}")
-    print(f"  GR transactions:        {len(gr_transactions):,}")
-    print(f"  Invoice transactions:   {len(invoice_transactions):,}")
-    print(f"  Cost recognized (True): {cost_recognized_count:,}")
-    print(f"  Cost recognized (False):{len(all_transactions) - cost_recognized_count:,}")
-    print(f"  Unique PO Lines:        {all_transactions['po_line_id'].nunique():,}")
+    print(f"  Total transactions:       {len(all_transactions):,}")
+    print(f"  GR transactions:          {len(gr_transactions):,}")
+    print(f"  Invoice transactions:     {len(invoice_transactions):,}")
+    print(f"  Total quantity:           {total_qty:,.2f}")
+    print(f"  Cost recognized qty:      {total_cost_recognized_qty:,.2f}")
+    print(f"  Transactions with cost:   {cost_recognized_count:,}")
+    print(f"  Transactions without:     {len(all_transactions) - cost_recognized_count:,}")
+    print(f"  Unique PO Lines:          {all_transactions['po_line_id'].nunique():,}")
     print("=" * 60)
     
     # Show sample output
-    print("\nSample output (first 10 rows):")
-    print(all_transactions.head(10).to_string(index=False))
+    print("\nSample output (first 15 rows):")
+    print(all_transactions.head(15).to_string(index=False))
     
     return all_transactions
 

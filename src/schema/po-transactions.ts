@@ -11,6 +11,7 @@ export const poTransactions = devV3Schema.table('po_transactions', {
   postingDate: date('posting_date').notNull(),
   quantity: numeric('quantity').notNull().default('0'),
   amount: numeric('amount').notNull().default('0'),
+  costRecognizedQty: numeric('cost_recognized_qty').notNull().default('0'),
   isCostRecognized: boolean('is_cost_recognized').notNull().default(false),
   referenceNumber: varchar('reference_number'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
