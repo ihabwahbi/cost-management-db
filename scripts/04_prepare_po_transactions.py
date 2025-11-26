@@ -126,21 +126,63 @@ def prepare_po_transactions():
         how='left'
     )
     
-    # Handle PO lines not found in lookup (default to cost at Invoice)
+    # Handle PO lines not found in lookup (default to cost at Invoice rules)
     missing_lookup = all_transactions['cost_recognized_at_gr'].isna().sum()
     if missing_lookup > 0:
-        print(f"  WARNING: {missing_lookup:,} transactions have no lookup entry (defaulting to cost at Invoice)")
+        print(f"  WARNING: {missing_lookup:,} transactions have no lookup entry (defaulting to Invoice rules)")
         all_transactions['cost_recognized_at_gr'] = all_transactions['cost_recognized_at_gr'].fillna(False)
     
-    # Calculate is_cost_recognized
-    # True if: (cost_at_gr AND type=GR) OR (NOT cost_at_gr AND type=Invoice)
+    # Convert posting_date to datetime for comparison
+    all_transactions['posting_date_dt'] = pd.to_datetime(all_transactions['posting_date'])
+    
+    # For PO lines where cost is normally at Invoice (cost_recognized_at_gr = False),
+    # we need to check if GR came before Invoice. If so, GR gets cost recognition.
+    
+    # Step 1: Find earliest GR date per PO line
+    gr_dates = all_transactions[all_transactions['transaction_type'] == 'GR'].groupby('po_line_id')['posting_date_dt'].min()
+    gr_dates = gr_dates.rename('earliest_gr_date')
+    
+    # Step 2: Find earliest Invoice date per PO line
+    inv_dates = all_transactions[all_transactions['transaction_type'] == 'Invoice'].groupby('po_line_id')['posting_date_dt'].min()
+    inv_dates = inv_dates.rename('earliest_inv_date')
+    
+    # Step 3: Join these back to determine which type gets cost recognition
+    all_transactions = all_transactions.merge(gr_dates, on='po_line_id', how='left')
+    all_transactions = all_transactions.merge(inv_dates, on='po_line_id', how='left')
+    
+    # Step 4: Determine effective cost recognition type per PO line
+    # For cost_at_gr lines: always GR
+    # For cost_at_invoice lines: GR if earliest_gr < earliest_inv (or no invoice), else Invoice
+    def determine_cost_type(row):
+        if row['cost_recognized_at_gr']:
+            return 'GR'
+        else:
+            # Cost normally at Invoice, but check timing
+            if pd.isna(row['earliest_inv_date']):
+                # No invoice exists, GR gets cost recognition
+                return 'GR'
+            elif pd.isna(row['earliest_gr_date']):
+                # No GR exists, Invoice gets cost recognition
+                return 'Invoice'
+            elif row['earliest_gr_date'] < row['earliest_inv_date']:
+                # GR came first, GR gets cost recognition
+                return 'GR'
+            else:
+                # Invoice came first or same date, Invoice gets cost recognition
+                return 'Invoice'
+    
+    all_transactions['cost_recognition_type'] = all_transactions.apply(determine_cost_type, axis=1)
+    
+    # Step 5: Set is_cost_recognized based on whether this transaction matches the cost recognition type
     all_transactions['is_cost_recognized'] = (
-        ((all_transactions['cost_recognized_at_gr'] == True) & (all_transactions['transaction_type'] == 'GR')) |
-        ((all_transactions['cost_recognized_at_gr'] == False) & (all_transactions['transaction_type'] == 'Invoice'))
+        all_transactions['transaction_type'] == all_transactions['cost_recognition_type']
     )
     
-    # Drop the helper column
-    all_transactions = all_transactions.drop(columns=['cost_recognized_at_gr'])
+    # Drop helper columns
+    all_transactions = all_transactions.drop(columns=[
+        'cost_recognized_at_gr', 'posting_date_dt', 
+        'earliest_gr_date', 'earliest_inv_date', 'cost_recognition_type'
+    ])
     
     # Sort by po_line_id and posting_date for readability
     all_transactions = all_transactions.sort_values(['po_line_id', 'posting_date'])
