@@ -24,7 +24,7 @@ EXCLUDED_NIS_LEVELS = [
     "Compensation Business Enablement",
 ]
 
-# Ultimate Vendor Number -> Main Vendor Name mapping
+# Main Vendor ID -> Main Vendor Name mapping
 VENDOR_NAME_MAPPING = {
     "P9516": "Dubai Hub",
     "P9109": "Houston Hub",
@@ -44,6 +44,7 @@ VENDOR_NAME_MAPPING = {
     "P9064": "PPCS",
     "P9066": "SWTC",
     "P9562": "QRTC",
+    "P9032": "FCS",
 }
 
 
@@ -103,17 +104,64 @@ def fill_nis_level_for_3021(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def map_vendor_names(df: pd.DataFrame) -> pd.DataFrame:
-    """Map Main Vendor Name based on Ultimate Vendor Number."""
-    # Find rows where Ultimate Vendor Number matches our mapping
-    mask = df["Ultimate Vendor Number"].isin(VENDOR_NAME_MAPPING.keys())
+def transform_nis_column(df: pd.DataFrame) -> pd.DataFrame:
+    """Rename NIS Level 0 Desc to NIS Line and clean up values."""
+    old_col = "NIS Level 0 Desc"
+    new_col = "NIS Line"
     
+    # Replace "Lease and Rent Total" with "Lease and Rent"
+    mask = df[old_col] == "Lease and Rent Total"
     updated_count = mask.sum()
+    df.loc[mask, old_col] = "Lease and Rent"
+    print(f"  Changed 'Lease and Rent Total' to 'Lease and Rent': {updated_count:,} rows")
     
-    # Apply the mapping
-    df.loc[mask, "Main Vendor Name"] = df.loc[mask, "Ultimate Vendor Number"].map(VENDOR_NAME_MAPPING)
+    # Rename column
+    df = df.rename(columns={old_col: new_col})
+    print(f"  Renamed column '{old_col}' to '{new_col}'")
     
-    print(f"  Updated {updated_count:,} rows with mapped vendor names")
+    return df
+
+
+def map_vendor_names(df: pd.DataFrame) -> pd.DataFrame:
+    """Map Main Vendor Name and Ultimate Vendor Name based on vendor IDs."""
+    # Map Main Vendor Name based on Main Vendor ID
+    main_mask = df["Main Vendor ID"].isin(VENDOR_NAME_MAPPING.keys())
+    main_count = main_mask.sum()
+    df.loc[main_mask, "Main Vendor Name"] = df.loc[main_mask, "Main Vendor ID"].map(VENDOR_NAME_MAPPING)
+    print(f"  Updated {main_count:,} Main Vendor Names (from Main Vendor ID)")
+    
+    # Map Ultimate Vendor Name based on Ultimate Vendor Number
+    ultimate_mask = df["Ultimate Vendor Number"].isin(VENDOR_NAME_MAPPING.keys())
+    ultimate_count = ultimate_mask.sum()
+    df.loc[ultimate_mask, "Ultimate Vendor Name"] = df.loc[ultimate_mask, "Ultimate Vendor Number"].map(VENDOR_NAME_MAPPING)
+    print(f"  Updated {ultimate_count:,} Ultimate Vendor Names (from Ultimate Vendor Number)")
+    
+    return df
+
+
+def consolidate_delivery_dates(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Consolidate delivery date columns into a single 'Expected Delivery Date'.
+    Uses Promised Date if available, otherwise falls back to Requested Date.
+    """
+    requested_col = "PO Current Supplier Requested Delivery Date"
+    promised_col = "PO Current Supplier Promised Date"
+    new_col = "Expected Delivery Date"
+    
+    # Use Promised Date if available, otherwise Requested Date
+    df[new_col] = df[promised_col].where(df[promised_col].notna() & (df[promised_col] != ""), df[requested_col])
+    
+    # Count how many used each source
+    promised_used = (df[promised_col].notna() & (df[promised_col] != "")).sum()
+    requested_used = len(df) - promised_used
+    
+    print(f"  Created '{new_col}' column")
+    print(f"    - From Promised Date: {promised_used:,} rows")
+    print(f"    - From Requested Date: {requested_used:,} rows")
+    
+    # Remove original columns
+    df = df.drop(columns=[requested_col, promised_col])
+    print(f"  Removed original columns: '{requested_col}', '{promised_col}'")
     
     return df
 
@@ -131,27 +179,35 @@ def main():
     print("=" * 60)
     
     # Load
-    print("\n[1/6] Loading data...")
+    print("\n[1/8] Loading data...")
     df = load_data(INPUT_FILE)
     
     # Filter: Valuation classes
-    print("\n[2/6] Filtering valuation classes...")
+    print("\n[2/8] Filtering valuation classes...")
     df = filter_valuation_classes(df)
     
     # Filter: NIS Levels
-    print("\n[3/6] Filtering NIS Level 0 Desc...")
+    print("\n[3/8] Filtering NIS Level 0 Desc...")
     df = filter_nis_levels(df)
     
     # Transform: Fill NIS Level for 3021
-    print("\n[4/6] Filling NIS Level 0 Desc for Valuation Class 3021...")
+    print("\n[4/8] Filling NIS Level 0 Desc for Valuation Class 3021...")
     df = fill_nis_level_for_3021(df)
     
+    # Transform: Rename and clean NIS column
+    print("\n[5/8] Transforming NIS column...")
+    df = transform_nis_column(df)
+    
     # Transform: Map vendor names
-    print("\n[5/6] Mapping Main Vendor Name from Ultimate Vendor Number...")
+    print("\n[6/8] Mapping vendor names...")
     df = map_vendor_names(df)
     
+    # Transform: Consolidate delivery dates
+    print("\n[7/8] Consolidating delivery dates...")
+    df = consolidate_delivery_dates(df)
+    
     # Save
-    print("\n[6/6] Saving cleaned data...")
+    print("\n[8/8] Saving cleaned data...")
     save_data(df, OUTPUT_FILE)
     
     print("\n" + "=" * 60)
