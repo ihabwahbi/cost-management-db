@@ -19,6 +19,7 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   poNumber: varchar('po_number').notNull(),
   poCreationDate: date('po_creation_date'),
   plantCode: varchar('plant_code'),
+  subBusinessLine: varchar('sub_business_line'),
   
   // Vendor information
   vendorId: varchar('vendor_id'),
