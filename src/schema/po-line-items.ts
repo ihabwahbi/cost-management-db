@@ -19,30 +19,47 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   poNumber: varchar('po_number').notNull(),
   poCreationDate: date('po_creation_date'),
   plantCode: varchar('plant_code'),
+  location: varchar('location'),
   subBusinessLine: varchar('sub_business_line'),
+  
+  // Purchase Requisition (source of PO)
+  prNumber: varchar('pr_number'),
+  prLine: integer('pr_line'),
+  requester: varchar('requester'),  // Person who submitted the requisition
   
   // Vendor information
   vendorId: varchar('vendor_id'),
   vendorName: varchar('vendor_name'),
   vendorCategory: varchar('vendor_category'),
+  ultimateVendorName: varchar('ultimate_vendor_name'),
   
   // Line item fields
   lineItemNumber: integer('line_item_number').notNull(),
   partNumber: varchar('part_number'),
   description: text('description'),
-  quantity: numeric('quantity').notNull(),
-  lineValue: numeric('line_value').notNull(),
+  orderedQty: numeric('ordered_qty').notNull(),
+  orderUnit: varchar('order_unit'),
+  poValueUsd: numeric('po_value_usd').notNull(),
   
   // Cost classification
   accountAssignmentCategory: varchar('account_assignment_category'),
   nisLine: varchar('nis_line'),
   wbsNumber: varchar('wbs_number').references(() => wbsDetails.wbsNumber),
   
+  // Asset reference (for maintenance POs)
+  assetCode: varchar('asset_code'),
+  
   // Dates
   expectedDeliveryDate: date('expected_delivery_date'),
   
   // Status flags
+  poReceiptStatus: varchar('po_receipt_status'),  // Open = future cost impact possible, Closed = no further impact
+  poGtsStatus: varchar('po_gts_status'),
   fmtPo: boolean('fmt_po').notNull().default(false),
+  
+  // Open PO values (calculated: total - cost impact recognized, forced to 0 for closed POs)
+  openPoQty: numeric('open_po_qty'),      // orderedQty - SUM(cost_impact_qty)
+  openPoValue: numeric('open_po_value'),  // poValueUsd - SUM(cost_impact_amount)
   
   // Timestamps
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
