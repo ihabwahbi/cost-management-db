@@ -34,6 +34,16 @@ npm test                     # Run tests
 ❌ Don't run scripts directly (missing environment)  
 ✅ Use npm scripts (handles `--env-file=.env` automatically)
 
+## Python Scripts
+
+Data processing scripts are in `scripts/` directory. Use `python3` to run them:
+
+```bash
+python3 scripts/<folder>/<script>.py
+```
+
+**Note:** Static type checker warnings (Pyright/Pylance) for pandas code can be ignored - they're false positives due to pandas' dynamic typing. Runtime behavior is what matters.
+
 ## Schema Management Rules
 
 ### 1. Never Use Direct SQL
