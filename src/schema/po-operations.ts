@@ -1,14 +1,14 @@
 import { uuid, varchar, text, timestamp, jsonb, index } from 'drizzle-orm/pg-core';
-import { pos } from './pos';
 import { poLineItems } from './po-line-items';
 import { devV3Schema } from './_schema';
 
+/**
+ * PO Operations - Tracks operational changes and approvals on PO line items
+ */
 export const poOperations = devV3Schema.table('po_operations', {
   id: uuid('id').primaryKey().defaultRandom(),
-  poId: uuid('po_id')
-    .notNull()
-    .references(() => pos.id),
   poLineItemId: uuid('po_line_item_id')
+    .notNull()
     .references(() => poLineItems.id),
   operationType: varchar('operation_type').notNull(),
   status: varchar('status').notNull().default('pending'),
@@ -24,7 +24,6 @@ export const poOperations = devV3Schema.table('po_operations', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 }, (table) => [
-  index('po_operations_po_id_idx').on(table.poId),
   index('po_operations_po_line_item_id_idx').on(table.poLineItemId),
   index('po_operations_operation_type_idx').on(table.operationType),
   index('po_operations_status_idx').on(table.status),

@@ -9,7 +9,6 @@ export * from './_schema';
 // Core tables
 export * from './projects';
 export * from './wbs-details';
-export * from './pos';
 export * from './cost-breakdown';
 export * from './po-line-items';
 export * from './po-mappings';
