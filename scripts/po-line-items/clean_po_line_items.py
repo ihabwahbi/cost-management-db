@@ -24,6 +24,31 @@ EXCLUDED_NIS_LEVELS = [
     "Compensation Business Enablement",
 ]
 
+# Plant Code -> Location mapping
+PLANT_CODE_TO_LOCATION = {
+    "3601": "Perth",
+    "3606": "Jandakot",
+    "3608": "Kewdale",
+    "3609": "Toowoomba",
+    "3610": "Roma",
+    "3611": "Dampier",
+    "3613": "Roma",
+    "3614": "Moomba",
+    "3617": "Brisbane",
+    "3649": "Port Moresby",
+    "3650": "New Plymouth",
+    "3651": "Dili",
+    "3880": "Port Moresby",
+    "3881": "New Plymouth",
+    "3882": "Jandakot",
+    "3892": "Roma",
+    "3893": "Dampier",
+    "3916": "Adelaide",
+    "4039": "Roma",
+    "4062": "Toowoomba",
+    "4063": "Dampier",
+}
+
 # Main Vendor ID -> Main Vendor Name mapping
 VENDOR_NAME_MAPPING = {
     "P9516": "Dubai Hub",
@@ -139,6 +164,25 @@ def map_vendor_names(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def map_location(df: pd.DataFrame) -> pd.DataFrame:
+    """Map Plant Code to Location."""
+    # Convert Plant Code to string for mapping
+    plant_code_str = df["Plant Code"].astype(str)
+    
+    # Create Location column based on Plant Code
+    df["Location"] = plant_code_str.map(PLANT_CODE_TO_LOCATION)
+    
+    # Count mapped and unmapped
+    mapped_count = df["Location"].notna().sum()
+    unmapped_count = df["Location"].isna().sum()
+    
+    print(f"  Created 'Location' column from Plant Code")
+    print(f"    - Mapped: {mapped_count:,} rows")
+    print(f"    - Unmapped (unknown plant codes): {unmapped_count:,} rows")
+    
+    return df
+
+
 def consolidate_delivery_dates(df: pd.DataFrame) -> pd.DataFrame:
     """
     Consolidate delivery date columns into a single 'Expected Delivery Date'.
@@ -179,35 +223,39 @@ def main():
     print("=" * 60)
     
     # Load
-    print("\n[1/8] Loading data...")
+    print("\n[1/9] Loading data...")
     df = load_data(INPUT_FILE)
     
     # Filter: Valuation classes
-    print("\n[2/8] Filtering valuation classes...")
+    print("\n[2/9] Filtering valuation classes...")
     df = filter_valuation_classes(df)
     
     # Filter: NIS Levels
-    print("\n[3/8] Filtering NIS Level 0 Desc...")
+    print("\n[3/9] Filtering NIS Level 0 Desc...")
     df = filter_nis_levels(df)
     
     # Transform: Fill NIS Level for 3021
-    print("\n[4/8] Filling NIS Level 0 Desc for Valuation Class 3021...")
+    print("\n[4/9] Filling NIS Level 0 Desc for Valuation Class 3021...")
     df = fill_nis_level_for_3021(df)
     
     # Transform: Rename and clean NIS column
-    print("\n[5/8] Transforming NIS column...")
+    print("\n[5/9] Transforming NIS column...")
     df = transform_nis_column(df)
     
     # Transform: Map vendor names
-    print("\n[6/8] Mapping vendor names...")
+    print("\n[6/9] Mapping vendor names...")
     df = map_vendor_names(df)
     
+    # Transform: Map location from plant code
+    print("\n[7/9] Mapping location from plant code...")
+    df = map_location(df)
+    
     # Transform: Consolidate delivery dates
-    print("\n[7/8] Consolidating delivery dates...")
+    print("\n[8/9] Consolidating delivery dates...")
     df = consolidate_delivery_dates(df)
     
     # Save
-    print("\n[8/8] Saving cleaned data...")
+    print("\n[9/9] Saving cleaned data...")
     save_data(df, OUTPUT_FILE)
     
     print("\n" + "=" * 60)
