@@ -47,7 +47,7 @@ def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.Data
     open_po_qty = ordered_qty - SUM(cost_impact_qty)
     open_po_value = po_value_usd - SUM(cost_impact_amount)
     
-    For closed POs (PO Receipt Status = 'Closed'), force to 0.
+    For closed POs (PO Receipt Status = 'CLOSED PO'), force to 0.
     """
     print("Calculating open PO values...")
     
@@ -65,17 +65,25 @@ def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.Data
     po_df["Total Cost Impact Qty"] = po_df["Total Cost Impact Qty"].fillna(0)
     po_df["Total Cost Impact Amount"] = po_df["Total Cost Impact Amount"].fillna(0)
     
-    # Calculate open values
-    po_df["open_po_qty"] = po_df["Ordered Quantity"] - po_df["Total Cost Impact Qty"]
-    po_df["open_po_value"] = po_df["Purchase Value USD"] - po_df["Total Cost Impact Amount"]
+    # Identify closed POs - these will have open values forced to 0
+    closed_mask = po_df["PO Receipt Status"] == "CLOSED PO"
     
-    # Force to 0 for closed POs
-    closed_mask = po_df["PO Receipt Status"] == "Closed"
-    po_df.loc[closed_mask, "open_po_qty"] = 0
-    po_df.loc[closed_mask, "open_po_value"] = 0
+    # Calculate open values only for non-closed POs
+    # For closed POs, open_po_qty and open_po_value are 0
+    po_df["open_po_qty"] = 0.0
+    po_df["open_po_value"] = 0.0
     
-    print(f"  POs with open value > 0: {(po_df['open_po_value'] > 0).sum():,}")
-    print(f"  Closed POs (forced to 0): {closed_mask.sum():,}")
+    open_mask = ~closed_mask
+    po_df.loc[open_mask, "open_po_qty"] = (
+        po_df.loc[open_mask, "Ordered Quantity"] - po_df.loc[open_mask, "Total Cost Impact Qty"]
+    )
+    po_df.loc[open_mask, "open_po_value"] = (
+        po_df.loc[open_mask, "Purchase Value USD"] - po_df.loc[open_mask, "Total Cost Impact Amount"]
+    )
+    
+    print(f"  Closed POs (open values = 0): {closed_mask.sum():,}")
+    print(f"  Open POs (calculated): {open_mask.sum():,}")
+    print(f"  POs with open_po_qty > 0: {(po_df['open_po_qty'] > 0).sum():,}")
     
     # Drop intermediate columns
     po_df = po_df.drop(columns=["Total Cost Impact Qty", "Total Cost Impact Amount"])
