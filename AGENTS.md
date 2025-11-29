@@ -34,13 +34,39 @@ npm test                     # Run tests
 ❌ Don't run scripts directly (missing environment)  
 ✅ Use npm scripts (handles `--env-file=.env` automatically)
 
-## Python Scripts
+## Data Pipeline
 
-Data processing scripts are in `scripts/` directory. Use `python3` to run them:
+The data pipeline transforms raw CSV/Excel files into import-ready CSVs that match the database schema.
 
+### Run Full Pipeline
 ```bash
-python3 scripts/<folder>/<script>.py
+python3 scripts/pipeline.py           # Run all stages
+python3 scripts/pipeline.py --stage1  # Run only stage 1 (clean)
+python3 scripts/pipeline.py --stage2  # Run stages 1-2 (clean + transform)
 ```
+
+### Pipeline Stages
+
+| Stage | Purpose | Input | Output |
+|-------|---------|-------|--------|
+| **Stage 1: Clean** | Filter, transform, standardize | `data/raw/` | `data/intermediate/` |
+| **Stage 2: Transform** | Enrich, calculate derived values | `data/intermediate/` | `data/intermediate/` |
+| **Stage 3: Prepare** | Map columns to DB schema | `data/intermediate/` | `data/import-ready/` |
+
+### Script Execution Order
+Scripts are numbered for clear execution order:
+1. `01_po_line_items.py` - Clean PO line items
+2. `02_gr_postings.py` - Clean GR postings
+3. `03_ir_postings.py` - Clean IR postings
+4. `04_enrich_po_line_items.py` - Add PR Number, Requester
+5. `05_calculate_cost_impact.py` - Calculate cost impact
+6. `06_prepare_po_line_items.py` - Map to DB schema, calc open values
+7. `07_prepare_po_transactions.py` - Map to DB schema
+
+### Key Files
+- `scripts/config/column_mappings.py` - Central source for CSV→DB column mappings
+- `data/import-ready/po_line_items.csv` - Ready for `po_line_items` table
+- `data/import-ready/po_transactions.csv` - Ready for `po_transactions` table
 
 **Note:** Static type checker warnings (Pyright/Pylance) for pandas code can be ignored - they're false positives due to pandas' dynamic typing. Runtime behavior is what matters.
 
@@ -119,12 +145,25 @@ npm run db:studio  # Opens GUI at https://local.drizzle.studio
 ## Project Structure
 
 ```
-src/schema/           # Drizzle ORM schemas (SINGLE SOURCE OF TRUTH)
-├── _schema.ts       # Shared devV3Schema instance (import this!)
-├── *.ts             # Individual table definitions
-└── index.ts         # Exports all tables
+src/schema/              # Drizzle ORM schemas (SINGLE SOURCE OF TRUTH)
+├── _schema.ts          # Shared devV3Schema instance (import this!)
+├── *.ts                # Individual table definitions
+└── index.ts            # Exports all tables
 
-__tests__/           # Vitest tests
+scripts/                 # Data pipeline scripts
+├── pipeline.py         # Orchestrator - runs all stages
+├── config/
+│   └── column_mappings.py  # CSV→DB column mappings
+├── stage1_clean/       # Raw → Intermediate
+├── stage2_transform/   # Enrichment, calculations
+└── stage3_prepare/     # Intermediate → Import-ready
+
+data/
+├── raw/                # Source files (never modified)
+├── intermediate/       # Cleaned and transformed data
+└── import-ready/       # Final CSVs matching DB schema
+
+__tests__/              # Vitest tests
 ```
 
 ## Migration Strategy
