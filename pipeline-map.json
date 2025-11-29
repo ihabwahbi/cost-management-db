@@ -1,0 +1,1224 @@
+{
+  "generated_at": "2025-11-29T03:20:01.572403",
+  "project": "cost-management-db",
+  "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
+  "pipeline_stages": [
+    {
+      "name": "stage1_clean",
+      "description": "Clean and filter raw data",
+      "input_folder": "data/raw",
+      "output_folder": "data/intermediate"
+    },
+    {
+      "name": "stage2_transform",
+      "description": "Enrich data and calculate derived values",
+      "input_folder": "data/intermediate",
+      "output_folder": "data/intermediate"
+    },
+    {
+      "name": "stage3_prepare",
+      "description": "Map columns to database schema",
+      "input_folder": "data/intermediate",
+      "output_folder": "data/import-ready"
+    }
+  ],
+  "execution_order": [
+    "01_po_line_items",
+    "02_gr_postings",
+    "03_ir_postings",
+    "04_enrich_po_line_items",
+    "05_calculate_cost_impact",
+    "06_prepare_po_line_items",
+    "07_prepare_po_transactions"
+  ],
+  "scripts": [
+    {
+      "name": "01_po_line_items",
+      "path": "scripts/stage1_clean/01_po_line_items.py",
+      "stage": "stage1_clean",
+      "docstring": "Stage 1: Clean PO Line Items\n\nReads raw PO line items CSV, applies filtering and transformations,\noutputs to intermediate folder.\n\nDependencies: None (first script in pipeline)\nInput: data/raw/po line items.csv\nOutput: data/intermediate/po_line_items.csv",
+      "inputs": [
+        "data/raw/po line items.csv",
+        "data/intermediate/po_line_items.csv"
+      ],
+      "outputs": [
+        "data/intermediate/po_line_items.csv"
+      ],
+      "dependencies": [
+        "06_prepare_po_line_items"
+      ],
+      "functions": [
+        {
+          "name": "load_data",
+          "docstring": "Load the raw CSV file.",
+          "args": [
+            "filepath"
+          ],
+          "line": 34
+        },
+        {
+          "name": "filter_valuation_classes",
+          "docstring": "Remove rows with excluded PO Valuation Classes.",
+          "args": [
+            "df"
+          ],
+          "line": 42
+        },
+        {
+          "name": "filter_nis_levels",
+          "docstring": "Remove rows with excluded NIS Level 0 Desc values.",
+          "args": [
+            "df"
+          ],
+          "line": 53
+        },
+        {
+          "name": "fill_nis_level_for_3021",
+          "docstring": "Set NIS Level 0 Desc to 'Materials and Supplies' for Valuation Class 3021 where null.",
+          "args": [
+            "df"
+          ],
+          "line": 63
+        },
+        {
+          "name": "transform_nis_column",
+          "docstring": "Rename NIS Level 0 Desc to NIS Line and clean up values.",
+          "args": [
+            "df"
+          ],
+          "line": 73
+        },
+        {
+          "name": "map_vendor_names",
+          "docstring": "Map Main Vendor Name and Ultimate Vendor Name based on vendor IDs.",
+          "args": [
+            "df"
+          ],
+          "line": 85
+        },
+        {
+          "name": "map_location",
+          "docstring": "Map Plant Code to Location.",
+          "args": [
+            "df"
+          ],
+          "line": 100
+        },
+        {
+          "name": "consolidate_delivery_dates",
+          "docstring": "Consolidate delivery date columns into 'Expected Delivery Date'.",
+          "args": [
+            "df"
+          ],
+          "line": 109
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save the cleaned DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 125
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 133
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "pandas",
+        "config.column_mappings"
+      ],
+      "line_count": 173
+    },
+    {
+      "name": "02_gr_postings",
+      "path": "scripts/stage1_clean/02_gr_postings.py",
+      "stage": "stage1_clean",
+      "docstring": "Stage 1: Clean GR (Goods Receipt) Postings\n\nReads raw GR table, filters and calculates GR amounts using unit prices\nfrom intermediate PO line items.\n\nDependencies: 01_po_line_items.py must run first\nInput: data/raw/gr table.csv, data/intermediate/po_line_items.csv\nOutput: data/intermediate/gr_postings.csv",
+      "inputs": [
+        "data/raw/gr table.csv",
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/gr_postings.csv"
+      ],
+      "outputs": [
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/gr_postings.csv"
+      ],
+      "dependencies": [
+        "06_prepare_po_line_items",
+        "05_calculate_cost_impact"
+      ],
+      "functions": [
+        {
+          "name": "load_data",
+          "docstring": "Load the raw CSV file.",
+          "args": [
+            "filepath"
+          ],
+          "line": 26
+        },
+        {
+          "name": "filter_zero_quantity",
+          "docstring": "Remove rows with zero GR Effective Quantity.",
+          "args": [
+            "df"
+          ],
+          "line": 34
+        },
+        {
+          "name": "calculate_gr_amount",
+          "docstring": "Calculate GR Amount based on unit price from PO Line Items.\nFormula: GR Amount = (Purchase Value USD / Ordered Quantity) * GR Effective Quantity",
+          "args": [
+            "df"
+          ],
+          "line": 43
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save the cleaned DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 72
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 80
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "pandas"
+      ],
+      "line_count": 111
+    },
+    {
+      "name": "03_ir_postings",
+      "path": "scripts/stage1_clean/03_ir_postings.py",
+      "stage": "stage1_clean",
+      "docstring": "Stage 1: Clean IR (Invoice Receipt) Postings\n\nReads raw invoice table, calculates invoice amounts using unit prices\nfrom intermediate PO line items.\n\nDependencies: 01_po_line_items.py must run first\nInput: data/raw/invoice table.csv, data/intermediate/po_line_items.csv\nOutput: data/intermediate/ir_postings.csv",
+      "inputs": [
+        "data/raw/invoice table.csv",
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/ir_postings.csv"
+      ],
+      "outputs": [
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/ir_postings.csv"
+      ],
+      "dependencies": [
+        "06_prepare_po_line_items",
+        "05_calculate_cost_impact"
+      ],
+      "functions": [
+        {
+          "name": "load_data",
+          "docstring": "Load the raw CSV file.",
+          "args": [
+            "filepath"
+          ],
+          "line": 26
+        },
+        {
+          "name": "calculate_invoice_amount",
+          "docstring": "Calculate Invoice Amount based on unit price from PO Line Items.\nFormula: Invoice Amount = (Purchase Value USD / Ordered Quantity) * IR Effective Quantity",
+          "args": [
+            "df"
+          ],
+          "line": 34
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save the cleaned DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 63
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 71
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "pandas"
+      ],
+      "line_count": 99
+    },
+    {
+      "name": "04_enrich_po_line_items",
+      "path": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "stage": "stage2_transform",
+      "docstring": "Stage 2: Enrich PO Line Items\n\nEnriches intermediate PO line items with PR Number and Requester\nfrom the PO Details Report.\n\nDependencies: 01_po_line_items.py must run first\nInput: data/intermediate/po_line_items.csv, data/raw/po details report.xlsx\nOutput: data/intermediate/po_line_items.csv (updated in place)",
+      "inputs": [
+        "data/raw/po details report.xlsx",
+        "data/intermediate/po_line_items.csv"
+      ],
+      "outputs": [
+        "data/intermediate/po_line_items.csv"
+      ],
+      "dependencies": [
+        "06_prepare_po_line_items"
+      ],
+      "functions": [
+        {
+          "name": "load_po_details",
+          "docstring": "Load PO Details Report and prepare for join.",
+          "args": [
+            "filepath"
+          ],
+          "line": 25
+        },
+        {
+          "name": "load_po_line_items",
+          "docstring": "Load intermediate PO line items.",
+          "args": [
+            "filepath"
+          ],
+          "line": 38
+        },
+        {
+          "name": "extract_enrichment_data",
+          "docstring": "Extract Requester and PR Number from PO Details.",
+          "args": [
+            "details"
+          ],
+          "line": 46
+        },
+        {
+          "name": "enrich_data",
+          "docstring": "Left join enrichment data to PO line items.",
+          "args": [
+            "po_df",
+            "enrichment"
+          ],
+          "line": 73
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save enriched DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 101
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 108
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "pandas"
+      ],
+      "line_count": 144
+    },
+    {
+      "name": "05_calculate_cost_impact",
+      "path": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "stage": "stage2_transform",
+      "docstring": "Stage 2: Calculate Cost Impact\n\nCalculates cost impact from GR and IR postings for each PO Line Item.\nTwo types: Simple (GLD + K/P/S/V) uses GR only, Complex uses GR/IR logic.\n\nDependencies: All stage1 scripts must run first\nInput: data/intermediate/po_line_items.csv, gr_postings.csv, ir_postings.csv\nOutput: data/intermediate/cost_impact.csv",
+      "inputs": [
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/gr_postings.csv",
+        "data/intermediate/ir_postings.csv",
+        "data/intermediate/cost_impact.csv"
+      ],
+      "outputs": [
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/gr_postings.csv",
+        "data/intermediate/ir_postings.csv",
+        "data/intermediate/cost_impact.csv"
+      ],
+      "dependencies": [
+        "06_prepare_po_line_items",
+        "07_prepare_po_transactions"
+      ],
+      "functions": [
+        {
+          "name": "load_data",
+          "docstring": "Load all required data files.",
+          "args": [],
+          "line": 31
+        },
+        {
+          "name": "classify_po_line_items",
+          "docstring": "Classify PO Line Items into simple (Type 1) and complex (Type 2).\n\nType 1 (Simple): Vendor Category = GLD AND Account Category IN (K, P, S, V)\nType 2 (Complex): All others",
+          "args": [
+            "po_df"
+          ],
+          "line": 47
+        },
+        {
+          "name": "calculate_simple_cost_impact",
+          "docstring": "Type 1: Cost impact = GR postings only (IR ignored).",
+          "args": [
+            "gr_df",
+            "simple_po_ids"
+          ],
+          "line": 68
+        },
+        {
+          "name": "calculate_complex_cost_impact",
+          "docstring": "Type 2: Cost impact based on GR/IR chronological processing.",
+          "args": [
+            "gr_df",
+            "ir_df",
+            "complex_po_ids",
+            "po_df"
+          ],
+          "line": 87
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save cost impact DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 159
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 168
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "pandas",
+        "config.column_mappings"
+      ],
+      "line_count": 206
+    },
+    {
+      "name": "06_prepare_po_line_items",
+      "path": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "stage": "stage3_prepare",
+      "docstring": "Stage 3: Prepare PO Line Items for Import\n\nMaps intermediate columns to database schema columns and calculates\nderived fields (open_po_qty, open_po_value).\n\nDependencies: All stage1 and stage2 scripts must run first\nInput: data/intermediate/po_line_items.csv, data/intermediate/cost_impact.csv\nOutput: data/import-ready/po_line_items.csv",
+      "inputs": [
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/cost_impact.csv"
+      ],
+      "outputs": [
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/cost_impact.csv"
+      ],
+      "dependencies": [
+        "07_prepare_po_transactions"
+      ],
+      "functions": [
+        {
+          "name": "load_data",
+          "docstring": "Load intermediate data files.",
+          "args": [],
+          "line": 30
+        },
+        {
+          "name": "calculate_open_values",
+          "docstring": "Calculate open_po_qty and open_po_value.\n\nopen_po_qty = ordered_qty - SUM(cost_impact_qty)\nopen_po_value = po_value_usd - SUM(cost_impact_amount)\n\nFor closed POs (PO Receipt Status = 'Closed'), force to 0.",
+          "args": [
+            "po_df",
+            "cost_df"
+          ],
+          "line": 43
+        },
+        {
+          "name": "map_columns",
+          "docstring": "Map CSV columns to database column names.",
+          "args": [
+            "po_df"
+          ],
+          "line": 86
+        },
+        {
+          "name": "validate_output",
+          "docstring": "Validate required columns are present.",
+          "args": [
+            "df"
+          ],
+          "line": 112
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save import-ready DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 131
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 140
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "pandas",
+        "config.column_mappings"
+      ],
+      "line_count": 175
+    },
+    {
+      "name": "07_prepare_po_transactions",
+      "path": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "stage": "stage3_prepare",
+      "docstring": "Stage 3: Prepare PO Transactions for Import\n\nMaps cost impact data to database schema columns for po_transactions table.\n\nDependencies: stage2_transform/05_calculate_cost_impact.py must run first\nInput: data/intermediate/cost_impact.csv\nOutput: data/import-ready/po_transactions.csv",
+      "inputs": [
+        "data/intermediate/cost_impact.csv"
+      ],
+      "outputs": [
+        "data/intermediate/cost_impact.csv"
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "load_data",
+          "docstring": "Load cost impact data.",
+          "args": [
+            "filepath"
+          ],
+          "line": 28
+        },
+        {
+          "name": "map_columns",
+          "docstring": "Map CSV columns to database column names.",
+          "args": [
+            "df"
+          ],
+          "line": 36
+        },
+        {
+          "name": "validate_output",
+          "docstring": "Validate required columns are present.",
+          "args": [
+            "df"
+          ],
+          "line": 64
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save import-ready DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 85
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 94
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "pandas",
+        "config.column_mappings"
+      ],
+      "line_count": 123
+    },
+    {
+      "name": "pipeline",
+      "path": "scripts/pipeline.py",
+      "stage": "scripts",
+      "docstring": "Data Pipeline Orchestrator\n\nRuns all data transformation scripts in the correct order to produce\nimport-ready CSV files from raw data.\n\nUsage:\n    python3 scripts/pipeline.py           # Run full pipeline\n    python3 scripts/pipeline.py --stage1  # Run only stage 1\n    python3 scripts/pipeline.py --stage2  # Run stages 1-2\n    python3 scripts/pipeline.py --stage3  # Run all stages (same as full)\n\nPipeline Stages:\n    Stage 1 (Clean):     Raw data \u2192 Intermediate (cleaned)\n    Stage 2 (Transform): Intermediate \u2192 Intermediate (enriched + cost impact)\n    Stage 3 (Prepare):   Intermediate \u2192 Import-ready (DB schema mapped)\n\nOutput:\n    data/import-ready/po_line_items.csv   \u2192 po_line_items table\n    data/import-ready/po_transactions.csv \u2192 po_transactions table",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "run_script",
+          "docstring": "Run a Python script and return success status.",
+          "args": [
+            "script_path",
+            "description"
+          ],
+          "line": 52
+        },
+        {
+          "name": "run_stage",
+          "docstring": "Run all scripts in a stage.",
+          "args": [
+            "stage_name",
+            "scripts"
+          ],
+          "line": 71
+        },
+        {
+          "name": "run_pipeline",
+          "docstring": "Run the pipeline up to the specified stage.",
+          "args": [
+            "max_stage"
+          ],
+          "line": 89
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 134
+        }
+      ],
+      "imports": [
+        "subprocess",
+        "sys",
+        "argparse",
+        "pathlib",
+        "datetime"
+      ],
+      "line_count": 167
+    }
+  ],
+  "column_mappings": {
+    "PO_LINE_ITEMS_MAPPING": {
+      "PO Line ID": "po_line_id",
+      "PO Number": "po_number",
+      "PO Document Date": "po_creation_date",
+      "Plant Code": "plant_code",
+      "Location": "location",
+      "SL Sub-Business Line Code (BV Lvl 3)": "sub_business_line",
+      "PR Number": "pr_number",
+      "PR Line": "pr_line",
+      "Requester": "requester",
+      "Main Vendor ID": "vendor_id",
+      "Main Vendor Name": "vendor_name",
+      "Main Vendor SLB Vendor Category": "vendor_category",
+      "Ultimate Vendor Name": "ultimate_vendor_name",
+      "PO Line": "line_item_number",
+      "PO Material Number": "part_number",
+      "PO Material description": "description",
+      "Ordered Quantity": "ordered_qty",
+      "PO Order Unit": "order_unit",
+      "Purchase Value USD": "po_value_usd",
+      "PO Account Assignment Category": "account_assignment_category",
+      "NIS Line": "nis_line",
+      "PO WBS Element": "wbs_number",
+      "Asset Code": "asset_code",
+      "Expected Delivery Date": "expected_delivery_date",
+      "PO Approval Status": "po_approval_status",
+      "PO Receipt Status": "po_receipt_status",
+      "PO GTS Status": "po_gts_status",
+      "FMT PO": "fmt_po",
+      "Open PO Qty": "open_po_qty",
+      "Open PO Value": "open_po_value"
+    },
+    "PO_TRANSACTIONS_MAPPING": {
+      "PO Line ID": "po_line_id",
+      "Posting Type": "transaction_type",
+      "Posting Date": "posting_date",
+      "Posting Qty": "quantity",
+      "Posting Amount": "amount",
+      "Cost Impact Qty": "cost_impact_qty",
+      "Cost Impact Amount": "cost_impact_amount"
+    },
+    "VENDOR_NAME_MAPPING": {
+      "P9516": "Dubai Hub",
+      "P9109": "Houston Hub",
+      "P9517": "Shanghai Hub",
+      "P9518": "Singapore Hub",
+      "P9514": "Canada Hub",
+      "P9519": "Japan Hub",
+      "P9097": "Rotterdam Hub",
+      "P9107": "NAM RDC",
+      "P9071": "PPCU",
+      "P9052": "SRC",
+      "P9057": "SKK",
+      "P9060": "SRPC",
+      "P9036": "HFE",
+      "P9035": "HCS",
+      "P9086": "ONESUBSEA",
+      "P9064": "PPCS",
+      "P9066": "SWTC",
+      "P9562": "QRTC",
+      "P9032": "FCS"
+    },
+    "EXCLUDED_NIS_LEVELS": [
+      "Compensation Business Delivery",
+      "Compensation Business Enablement"
+    ],
+    "SIMPLE_ACCOUNT_CATEGORIES": [
+      "K",
+      "P",
+      "S",
+      "V"
+    ]
+  },
+  "schema_tables": [
+    {
+      "name": "po_transactions",
+      "file": "po-transactions.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "poLineItemId",
+          "type": "uuid"
+        },
+        {
+          "name": "transactionType",
+          "type": "varchar"
+        },
+        {
+          "name": "postingDate",
+          "type": "date"
+        },
+        {
+          "name": "quantity",
+          "type": "numeric"
+        },
+        {
+          "name": "amount",
+          "type": "numeric"
+        },
+        {
+          "name": "costImpactQty",
+          "type": "numeric"
+        },
+        {
+          "name": "costImpactAmount",
+          "type": "numeric"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ]
+    },
+    {
+      "name": "sap_reservations",
+      "file": "sap-reservations.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "reservationNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "reservationLineNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "reservationRequirementDate",
+          "type": "date"
+        },
+        {
+          "name": "partNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "reservationQty",
+          "type": "numeric"
+        },
+        {
+          "name": "reservationValue",
+          "type": "numeric"
+        },
+        {
+          "name": "reservationStatus",
+          "type": "varchar"
+        },
+        {
+          "name": "poNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "poLineNumber",
+          "type": "integer"
+        },
+        {
+          "name": "wbsNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "assetCode",
+          "type": "varchar"
+        },
+        {
+          "name": "assetSerialNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "requester",
+          "type": "varchar"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "poLineItemId",
+          "type": "uuid"
+        }
+      ]
+    },
+    {
+      "name": "wbs_details",
+      "file": "wbs-details.ts",
+      "columns": [
+        {
+          "name": "wbsNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "clientName",
+          "type": "text"
+        },
+        {
+          "name": "subBusinessLine",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "po_line_items",
+      "file": "po-line-items.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "poLineId",
+          "type": "varchar"
+        },
+        {
+          "name": "poNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "poCreationDate",
+          "type": "date"
+        },
+        {
+          "name": "plantCode",
+          "type": "varchar"
+        },
+        {
+          "name": "location",
+          "type": "varchar"
+        },
+        {
+          "name": "subBusinessLine",
+          "type": "varchar"
+        },
+        {
+          "name": "prNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "prLine",
+          "type": "integer"
+        },
+        {
+          "name": "requester",
+          "type": "varchar"
+        },
+        {
+          "name": "vendorId",
+          "type": "varchar"
+        },
+        {
+          "name": "vendorName",
+          "type": "varchar"
+        },
+        {
+          "name": "vendorCategory",
+          "type": "varchar"
+        },
+        {
+          "name": "ultimateVendorName",
+          "type": "varchar"
+        },
+        {
+          "name": "lineItemNumber",
+          "type": "integer"
+        },
+        {
+          "name": "partNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "orderedQty",
+          "type": "numeric"
+        },
+        {
+          "name": "orderUnit",
+          "type": "varchar"
+        },
+        {
+          "name": "poValueUsd",
+          "type": "numeric"
+        },
+        {
+          "name": "accountAssignmentCategory",
+          "type": "varchar"
+        },
+        {
+          "name": "nisLine",
+          "type": "varchar"
+        },
+        {
+          "name": "wbsNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "assetCode",
+          "type": "varchar"
+        },
+        {
+          "name": "expectedDeliveryDate",
+          "type": "date"
+        },
+        {
+          "name": "poApprovalStatus",
+          "type": "varchar"
+        },
+        {
+          "name": "poReceiptStatus",
+          "type": "varchar"
+        },
+        {
+          "name": "poGtsStatus",
+          "type": "varchar"
+        },
+        {
+          "name": "fmtPo",
+          "type": "boolean"
+        },
+        {
+          "name": "openPoQty",
+          "type": "numeric"
+        },
+        {
+          "name": "openPoValue",
+          "type": "numeric"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ]
+    },
+    {
+      "name": "projects",
+      "file": "projects.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "name": "subBusinessLine",
+          "type": "text"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ]
+    },
+    {
+      "name": "po_operations",
+      "file": "po-operations.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "poLineItemId",
+          "type": "uuid"
+        },
+        {
+          "name": "operationType",
+          "type": "varchar"
+        },
+        {
+          "name": "status",
+          "type": "varchar"
+        },
+        {
+          "name": "requestedBy",
+          "type": "varchar"
+        },
+        {
+          "name": "requestedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "approvedBy",
+          "type": "varchar"
+        },
+        {
+          "name": "approvedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "completedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "reason",
+          "type": "text"
+        },
+        {
+          "name": "notes",
+          "type": "text"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ]
+    },
+    {
+      "name": "cost_breakdown",
+      "file": "cost-breakdown.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "projectId",
+          "type": "uuid"
+        },
+        {
+          "name": "subBusinessLine",
+          "type": "text"
+        },
+        {
+          "name": "costLine",
+          "type": "text"
+        },
+        {
+          "name": "spendType",
+          "type": "text"
+        },
+        {
+          "name": "spendSubCategory",
+          "type": "text"
+        },
+        {
+          "name": "budgetCost",
+          "type": "numeric"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ]
+    },
+    {
+      "name": "forecast_versions",
+      "file": "forecast-versions.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "projectId",
+          "type": "uuid"
+        },
+        {
+          "name": "versionNumber",
+          "type": "integer"
+        },
+        {
+          "name": "reasonForChange",
+          "type": "text"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "createdBy",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "po_mappings",
+      "file": "po-mappings.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "poLineItemId",
+          "type": "uuid"
+        },
+        {
+          "name": "costBreakdownId",
+          "type": "uuid"
+        },
+        {
+          "name": "mappedAmount",
+          "type": "numeric"
+        },
+        {
+          "name": "mappingNotes",
+          "type": "text"
+        },
+        {
+          "name": "mappedBy",
+          "type": "varchar"
+        },
+        {
+          "name": "mappedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ]
+    },
+    {
+      "name": "budget_forecasts",
+      "file": "budget-forecasts.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "forecastVersionId",
+          "type": "uuid"
+        },
+        {
+          "name": "costBreakdownId",
+          "type": "uuid"
+        },
+        {
+          "name": "forecastedCost",
+          "type": "numeric"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        }
+      ]
+    }
+  ],
+  "data_files": {
+    "raw": [
+      "po details report.xlsx",
+      "invoice table.csv",
+      "po line items.csv",
+      "gr table.csv"
+    ],
+    "intermediate": [
+      "gr_postings.csv",
+      "ir_postings.csv",
+      "cost_impact.csv",
+      "po_line_items.csv"
+    ],
+    "import-ready": [
+      "po_transactions.csv",
+      "po_line_items.csv"
+    ]
+  },
+  "key_files": {
+    "orchestrator": "scripts/pipeline.py",
+    "column_config": "scripts/config/column_mappings.py",
+    "schema_dir": "src/schema/"
+  },
+  "ai_agent_notes": {
+    "to_add_new_column": [
+      "1. Add column to src/schema/<table>.ts",
+      "2. Run npm run db:push",
+      "3. Add CSV\u2192DB mapping in scripts/config/column_mappings.py",
+      "4. Update relevant stage script to include the column",
+      "5. Run python3 scripts/pipeline.py to regenerate data"
+    ],
+    "to_add_new_transformation": [
+      "1. Identify which stage the transformation belongs to",
+      "2. Add function to appropriate stage script",
+      "3. Update the main() function to call new transformation",
+      "4. Test with python3 scripts/pipeline.py"
+    ],
+    "to_add_new_data_source": [
+      "1. Place raw file in data/raw/",
+      "2. Create new stage1 script (numbered appropriately)",
+      "3. Add to STAGE1_SCRIPTS in pipeline.py",
+      "4. Create column mappings if needed for import"
+    ]
+  }
+}
