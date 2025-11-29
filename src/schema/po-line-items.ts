@@ -53,6 +53,7 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   expectedDeliveryDate: date('expected_delivery_date'),
   
   // Status flags
+  poApprovalStatus: varchar('po_approval_status'),
   poReceiptStatus: varchar('po_receipt_status'),  // Open = future cost impact possible, Closed = no further impact
   poGtsStatus: varchar('po_gts_status'),
   fmtPo: boolean('fmt_po').notNull().default(false),
