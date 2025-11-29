@@ -42,12 +42,11 @@ def load_data():
 
 def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Calculate open_po_qty and open_po_value.
+    Calculate open_po_qty and open_po_value, then derive PO Receipt Status.
     
-    open_po_qty = ordered_qty - SUM(cost_impact_qty)
-    open_po_value = po_value_usd - SUM(cost_impact_amount)
-    
-    For closed POs (PO Receipt Status = 'CLOSED PO'), force to 0.
+    Logic:
+    - If raw status is CLOSED PO: trust it, set open_po_qty = 0
+    - If raw status is NOT closed: calculate open_po_qty, if <= 0 then close it
     """
     print("Calculating open PO values...")
     
@@ -65,25 +64,31 @@ def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.Data
     po_df["Total Cost Impact Qty"] = po_df["Total Cost Impact Qty"].fillna(0)
     po_df["Total Cost Impact Amount"] = po_df["Total Cost Impact Amount"].fillna(0)
     
-    # Identify closed POs - these will have open values forced to 0
-    closed_mask = po_df["PO Receipt Status"] == "CLOSED PO"
+    # Identify POs already closed in raw data - trust this, don't recalculate
+    already_closed = po_df["PO Receipt Status"] == "CLOSED PO"
+    not_closed = ~already_closed
     
-    # Calculate open values only for non-closed POs
-    # For closed POs, open_po_qty and open_po_value are 0
-    po_df["open_po_qty"] = 0.0
-    po_df["open_po_value"] = 0.0
+    # For already closed POs: set open values to 0
+    po_df.loc[already_closed, "open_po_qty"] = 0
+    po_df.loc[already_closed, "open_po_value"] = 0
     
-    open_mask = ~closed_mask
-    po_df.loc[open_mask, "open_po_qty"] = (
-        po_df.loc[open_mask, "Ordered Quantity"] - po_df.loc[open_mask, "Total Cost Impact Qty"]
+    # For non-closed POs: calculate open values
+    po_df.loc[not_closed, "open_po_qty"] = (
+        po_df.loc[not_closed, "Ordered Quantity"] - po_df.loc[not_closed, "Total Cost Impact Qty"]
     )
-    po_df.loc[open_mask, "open_po_value"] = (
-        po_df.loc[open_mask, "Purchase Value USD"] - po_df.loc[open_mask, "Total Cost Impact Amount"]
+    po_df.loc[not_closed, "open_po_value"] = (
+        po_df.loc[not_closed, "Purchase Value USD"] - po_df.loc[not_closed, "Total Cost Impact Amount"]
     )
     
-    print(f"  Closed POs (open values = 0): {closed_mask.sum():,}")
-    print(f"  Open POs (calculated): {open_mask.sum():,}")
-    print(f"  POs with open_po_qty > 0: {(po_df['open_po_qty'] > 0).sum():,}")
+    # For non-closed POs: if calculated open_po_qty <= 0, mark as closed
+    should_close = not_closed & (po_df["open_po_qty"] <= 0)
+    po_df.loc[should_close, "open_po_qty"] = 0
+    po_df.loc[should_close, "open_po_value"] = 0
+    po_df.loc[should_close, "PO Receipt Status"] = "CLOSED PO"
+    
+    print(f"  Already closed (from raw): {already_closed.sum():,}")
+    print(f"  Newly closed (calculated): {should_close.sum():,}")
+    print(f"  Remaining open: {(not_closed & ~should_close).sum():,}")
     
     # Drop intermediate columns
     po_df = po_df.drop(columns=["Total Cost Impact Qty", "Total Cost Impact Amount"])
