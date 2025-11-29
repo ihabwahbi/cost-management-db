@@ -118,6 +118,41 @@ Located in `drizzle.config.ts`:
 3. **Always use npm scripts** - They handle environment
 4. **Always run type-check after changes** - Catches errors early
 
+## Commit Discipline (AI Agents)
+
+### Commit Frequently
+- **Commit after each logical unit of work** - Don't batch unrelated changes
+- **Commit before risky operations** - Create a checkpoint you can revert to
+- **Commit after successful tests** - Lock in working state
+
+### Commit Message Format
+```
+<type>: <short description>
+
+Types: feat, fix, refactor, docs, chore, test
+```
+
+### Pre-commit Hooks
+This project uses pre-commit hooks. When committing changes to pipeline scripts or schema files, the pipeline map is automatically regenerated.
+
+```bash
+# Install pre-commit (one-time setup)
+pip install pre-commit
+pre-commit install
+
+# If pre-commit blocks your commit, the pipeline map was updated
+# Stage the updated files and commit again:
+git add pipeline-map.json pipeline-map.md
+git commit -m "your message"
+```
+
+### What Triggers Pipeline Map Regeneration
+- Any change to `scripts/*.py`
+- Any change to `scripts/config/*.py`  
+- Any change to `src/schema/*.ts`
+
+The hook ensures `pipeline-map.json` and `pipeline-map.md` stay in sync with the codebase.
+
 ## Development Workflow
 
 ### Using PLAN Agent (OpenCode)

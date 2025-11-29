@@ -1,0 +1,15 @@
+# Pre-commit hooks for cost-management-db
+# Install: pip install pre-commit && pre-commit install
+# Manual run: pre-commit run --all-files
+
+repos:
+  - repo: local
+    hooks:
+      # Regenerate pipeline map when pipeline-related files change
+      - id: update-pipeline-map
+        name: Update Pipeline Map
+        entry: python3 scripts/generate_pipeline_map.py
+        language: system
+        files: ^scripts/.*\.py$|^src/schema/.*\.ts$|^scripts/config/.*\.py$
+        pass_filenames: false
+        stages: [pre-commit]
