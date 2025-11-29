@@ -53,20 +53,11 @@ python3 scripts/pipeline.py --stage2  # Run stages 1-2 (clean + transform)
 | **Stage 2: Transform** | Enrich, calculate derived values | `data/intermediate/` | `data/intermediate/` |
 | **Stage 3: Prepare** | Map columns to DB schema | `data/intermediate/` | `data/import-ready/` |
 
-### Script Execution Order
-Scripts are numbered for clear execution order:
-1. `01_po_line_items.py` - Clean PO line items
-2. `02_gr_postings.py` - Clean GR postings
-3. `03_ir_postings.py` - Clean IR postings
-4. `04_enrich_po_line_items.py` - Add PR Number, Requester
-5. `05_calculate_cost_impact.py` - Calculate cost impact
-6. `06_prepare_po_line_items.py` - Map to DB schema, calc open values
-7. `07_prepare_po_transactions.py` - Map to DB schema
-
-### Key Files
+### Script Conventions
+- Scripts are numbered (`01_`, `02_`, etc.) for execution order
+- Each stage folder contains scripts that run sequentially by number
 - `scripts/config/column_mappings.py` - Central source for CSV→DB column mappings
-- `data/import-ready/po_line_items.csv` - Ready for `po_line_items` table
-- `data/import-ready/po_transactions.csv` - Ready for `po_transactions` table
+- Output CSVs in `data/import-ready/` match database table names
 
 **Note:** Static type checker warnings (Pyright/Pylance) for pandas code can be ignored - they're false positives due to pandas' dynamic typing. Runtime behavior is what matters.
 
