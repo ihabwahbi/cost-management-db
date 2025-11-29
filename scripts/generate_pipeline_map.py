@@ -15,7 +15,7 @@ import ast
 import json
 import re
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 
 # Paths
@@ -372,6 +372,43 @@ def generate_mermaid_diagram(pipeline_map: Dict) -> str:
     return "\n".join(lines)
 
 
+def get_latest_source_mtime() -> datetime:
+    """Get the latest modification time of all source files.
+    
+    This makes the generated timestamp deterministic - it only changes
+    when source files actually change, preventing infinite loops in
+    pre-commit hooks.
+    """
+    latest_mtime = 0.0
+    
+    # Check all pipeline scripts
+    stage_dirs = ["stage1_clean", "stage2_transform", "stage3_prepare", "config"]
+    for stage_dir in stage_dirs:
+        stage_path = SCRIPTS_DIR / stage_dir
+        if stage_path.exists():
+            for script_file in stage_path.glob("*.py"):
+                mtime = script_file.stat().st_mtime
+                if mtime > latest_mtime:
+                    latest_mtime = mtime
+    
+    # Check pipeline.py itself
+    pipeline_script = SCRIPTS_DIR / "pipeline.py"
+    if pipeline_script.exists():
+        mtime = pipeline_script.stat().st_mtime
+        if mtime > latest_mtime:
+            latest_mtime = mtime
+    
+    # Check schema files
+    schema_dir = PROJECT_ROOT / "src" / "schema"
+    if schema_dir.exists():
+        for schema_file in schema_dir.glob("*.ts"):
+            mtime = schema_file.stat().st_mtime
+            if mtime > latest_mtime:
+                latest_mtime = mtime
+    
+    return datetime.fromtimestamp(latest_mtime, tz=timezone.utc)
+
+
 def generate_pipeline_map():
     """Generate the complete pipeline map."""
     print("=" * 60)
@@ -413,8 +450,10 @@ def generate_pipeline_map():
     data_files = get_data_files()
     
     # Build the map
+    # Use deterministic timestamp based on source file mtimes
+    source_mtime = get_latest_source_mtime()
     pipeline_map = {
-        "generated_at": datetime.now().isoformat(),
+        "generated_at": source_mtime.isoformat(),
         "project": "cost-management-db",
         "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
         

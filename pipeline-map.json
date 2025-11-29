@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-29T07:08:56.055609",
+  "generated_at": "2025-11-29T07:06:19.515446+00:00",
   "project": "cost-management-db",
   "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
   "pipeline_stages": [
