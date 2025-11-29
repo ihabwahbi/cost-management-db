@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-29T03:20:01.572403",
+  "generated_at": "2025-11-29T07:08:56.055609",
   "project": "cost-management-db",
   "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
   "pipeline_stages": [
@@ -458,7 +458,7 @@
           "args": [
             "df"
           ],
-          "line": 112
+          "line": 116
         },
         {
           "name": "save_data",
@@ -467,13 +467,13 @@
             "df",
             "filepath"
           ],
-          "line": 131
+          "line": 135
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 140
+          "line": 144
         }
       ],
       "imports": [
@@ -482,7 +482,7 @@
         "pandas",
         "config.column_mappings"
       ],
-      "line_count": 175
+      "line_count": 179
     },
     {
       "name": "07_prepare_po_transactions",

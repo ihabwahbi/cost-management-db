@@ -102,8 +102,12 @@ def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
     if "open_po_value" in po_df.columns:
         output_df["open_po_value"] = po_df["open_po_value"].round(2)
     
-    # Add default for fmt_po (boolean)
-    output_df["fmt_po"] = False
+    # Set fmt_po = True when vendor category is OPS
+    vendor_category_col = "Main Vendor SLB Vendor Category"
+    if vendor_category_col in po_df.columns:
+        output_df["fmt_po"] = po_df[vendor_category_col] == "OPS"
+    else:
+        output_df["fmt_po"] = False
     
     print(f"  Mapped {len(output_df.columns)} columns")
     return output_df
