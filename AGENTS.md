@@ -70,6 +70,17 @@ Scripts are numbered for clear execution order:
 
 **Note:** Static type checker warnings (Pyright/Pylance) for pandas code can be ignored - they're false positives due to pandas' dynamic typing. Runtime behavior is what matters.
 
+### Pipeline Map (AI Context)
+For AI agents working on the pipeline, read `pipeline-map.json` at session start. It contains:
+- All scripts with their inputs/outputs and dependencies
+- Column mappings (CSV → DB schema)
+- Function definitions and data flow
+
+Regenerate after pipeline changes:
+```bash
+python3 scripts/generate_pipeline_map.py
+```
+
 ## Schema Management Rules
 
 ### 1. Never Use Direct SQL
