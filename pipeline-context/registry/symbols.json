@@ -13,9 +13,9 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "read_csv",
+        "len",
         "print",
-        "len"
+        "read_csv"
       ],
       "called_by": []
     },
@@ -30,12 +30,12 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "merge",
-        "round",
-        "read_csv",
-        "print",
         "len",
-        "drop_duplicates"
+        "round",
+        "merge",
+        "read_csv",
+        "drop_duplicates",
+        "print"
       ],
       "called_by": [
         "main"
@@ -53,9 +53,9 @@
       ],
       "return_type": "None",
       "calls": [
-        "mkdir",
         "len",
         "print",
+        "mkdir",
         "to_csv"
       ],
       "called_by": []
@@ -69,11 +69,11 @@
       "args": [],
       "return_type": null,
       "calls": [
-        "load_data",
         "calculate_invoice_amount",
+        "save_data",
         "exists",
-        "print",
-        "save_data"
+        "load_data",
+        "print"
       ],
       "called_by": []
     },
@@ -88,9 +88,9 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "read_csv",
+        "len",
         "print",
-        "len"
+        "read_csv"
       ],
       "called_by": []
     },
@@ -105,9 +105,9 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "copy",
+        "len",
         "print",
-        "len"
+        "copy"
       ],
       "called_by": [
         "main"
@@ -124,12 +124,12 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "merge",
-        "round",
-        "read_csv",
-        "print",
         "len",
-        "drop_duplicates"
+        "round",
+        "merge",
+        "read_csv",
+        "drop_duplicates",
+        "print"
       ],
       "called_by": [
         "main"
@@ -147,9 +147,9 @@
       ],
       "return_type": "None",
       "calls": [
-        "mkdir",
         "len",
         "print",
+        "mkdir",
         "to_csv"
       ],
       "called_by": []
@@ -163,12 +163,12 @@
       "args": [],
       "return_type": null,
       "calls": [
+        "filter_zero_quantity",
+        "save_data",
+        "exists",
         "load_data",
         "calculate_gr_amount",
-        "filter_zero_quantity",
-        "print",
-        "exists",
-        "save_data"
+        "print"
       ],
       "called_by": []
     },
@@ -183,9 +183,9 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "read_csv",
+        "len",
         "print",
-        "len"
+        "read_csv"
       ],
       "called_by": []
     },
@@ -200,10 +200,10 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "isin",
-        "to_numeric",
-        "print",
         "len",
+        "isin",
+        "print",
+        "to_numeric",
         "copy"
       ],
       "called_by": [
@@ -221,10 +221,10 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "copy",
-        "isin",
+        "len",
         "print",
-        "len"
+        "isin",
+        "copy"
       ],
       "called_by": [
         "main"
@@ -241,10 +241,10 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "isna",
-        "to_numeric",
         "print",
-        "sum"
+        "sum",
+        "to_numeric",
+        "isna"
       ],
       "called_by": [
         "main"
@@ -261,9 +261,9 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "rename",
+        "print",
         "sum",
-        "print"
+        "rename"
       ],
       "called_by": [
         "main"
@@ -280,11 +280,11 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
+        "keys",
         "sum",
         "isin",
-        "keys",
-        "map",
-        "print"
+        "print",
+        "map"
       ],
       "called_by": [
         "main"
@@ -304,8 +304,8 @@
         "astype",
         "sum",
         "notna",
-        "map",
-        "print"
+        "print",
+        "map"
       ],
       "called_by": [
         "main"
@@ -322,10 +322,10 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "notna",
+        "where",
         "print",
         "drop",
-        "where"
+        "notna"
       ],
       "called_by": [
         "main"
@@ -343,9 +343,9 @@
       ],
       "return_type": "None",
       "calls": [
-        "mkdir",
         "len",
         "print",
+        "mkdir",
         "to_csv"
       ],
       "called_by": []
@@ -359,16 +359,16 @@
       "args": [],
       "return_type": null,
       "calls": [
-        "filter_nis_levels",
-        "load_data",
-        "fill_nis_level_for_3021",
-        "consolidate_delivery_dates",
         "map_location",
-        "map_vendor_names",
+        "filter_valuation_classes",
+        "save_data",
+        "load_data",
+        "consolidate_delivery_dates",
+        "fill_nis_level_for_3021",
         "transform_nis_column",
         "print",
-        "filter_valuation_classes",
-        "save_data"
+        "map_vendor_names",
+        "filter_nis_levels"
       ],
       "called_by": []
     },
@@ -381,9 +381,9 @@
       "args": [],
       "return_type": null,
       "calls": [
-        "read_csv",
+        "len",
         "print",
-        "len"
+        "read_csv"
       ],
       "called_by": []
     },
@@ -399,9 +399,9 @@
       "return_type": "tuple",
       "calls": [
         "set",
-        "isin",
         "print",
-        "len"
+        "len",
+        "isin"
       ],
       "called_by": [
         "main"
@@ -419,10 +419,10 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "isin",
-        "DataFrame",
-        "print",
         "len",
+        "DataFrame",
+        "isin",
+        "print",
         "copy"
       ],
       "called_by": [
@@ -443,23 +443,23 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "to_datetime",
-        "isin",
-        "get",
-        "sort_values",
-        "rename",
-        "concat",
-        "round",
-        "set_index",
-        "iterrows",
-        "DataFrame",
-        "max",
-        "print",
-        "append",
         "len",
-        "copy",
+        "get",
+        "to_datetime",
+        "set_index",
+        "rename",
+        "print",
+        "round",
+        "append",
+        "max",
         "groupby",
-        "to_dict"
+        "concat",
+        "DataFrame",
+        "isin",
+        "to_dict",
+        "sort_values",
+        "iterrows",
+        "copy"
       ],
       "called_by": [
         "main"
@@ -477,11 +477,11 @@
       ],
       "return_type": "None",
       "calls": [
+        "len",
         "sum",
-        "to_csv",
-        "mkdir",
         "print",
-        "len"
+        "mkdir",
+        "to_csv"
       ],
       "called_by": []
     },
@@ -494,15 +494,15 @@
       "args": [],
       "return_type": null,
       "calls": [
-        "load_data",
-        "sort_values",
+        "save_data",
         "concat",
-        "classify_po_line_items",
-        "print",
-        "calculate_complex_cost_impact",
         "exists",
+        "load_data",
+        "print",
         "calculate_simple_cost_impact",
-        "save_data"
+        "calculate_complex_cost_impact",
+        "sort_values",
+        "classify_po_line_items"
       ],
       "called_by": []
     },
@@ -517,11 +517,11 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "astype",
+        "len",
         "fillna",
+        "astype",
         "read_excel",
-        "print",
-        "len"
+        "print"
       ],
       "called_by": [
         "main"
@@ -538,9 +538,9 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "read_csv",
+        "len",
         "print",
-        "len"
+        "read_csv"
       ],
       "called_by": [
         "main"
@@ -557,13 +557,13 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "sum",
         "int",
-        "str",
-        "where",
-        "notna",
         "apply",
+        "str",
+        "sum",
+        "notna",
         "DataFrame",
+        "where",
         "print",
         "copy"
       ],
@@ -583,13 +583,13 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "merge",
+        "len",
         "astype",
-        "sum",
         "match",
+        "sum",
         "notna",
-        "print",
-        "len"
+        "merge",
+        "print"
       ],
       "called_by": [
         "main"
@@ -598,7 +598,7 @@
     {
       "name": "save_data",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 101,
+      "line": 108,
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
       "docstring": "Save enriched DataFrame to CSV.",
       "args": [
@@ -607,28 +607,28 @@
       ],
       "return_type": "None",
       "calls": [
-        "to_csv",
+        "len",
         "print",
-        "len"
+        "to_csv"
       ],
       "called_by": []
     },
     {
       "name": "main",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 108,
+      "line": 115,
       "signature": "def main()",
       "docstring": null,
       "args": [],
       "return_type": null,
       "calls": [
-        "enrich_data",
         "extract_enrichment_data",
         "load_po_line_items",
-        "print",
+        "save_data",
         "exists",
+        "print",
         "load_po_details",
-        "save_data"
+        "enrich_data"
       ],
       "called_by": []
     },
@@ -641,9 +641,9 @@
       "args": [],
       "return_type": null,
       "calls": [
-        "read_csv",
+        "len",
         "print",
-        "len"
+        "read_csv"
       ],
       "called_by": []
     },
@@ -659,14 +659,14 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "merge",
-        "sum",
         "fillna",
-        "print",
-        "agg",
-        "groupby",
+        "reset_index",
+        "sum",
         "drop",
-        "reset_index"
+        "groupby",
+        "merge",
+        "print",
+        "agg"
       ],
       "called_by": [
         "main"
@@ -683,11 +683,11 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
+        "len",
         "round",
         "DataFrame",
         "items",
-        "print",
-        "len"
+        "print"
       ],
       "called_by": []
     },
@@ -703,8 +703,8 @@
       "return_type": "bool",
       "calls": [
         "isna",
-        "sum",
-        "print"
+        "print",
+        "sum"
       ],
       "called_by": []
     },
@@ -720,9 +720,9 @@
       ],
       "return_type": "None",
       "calls": [
-        "mkdir",
         "len",
         "print",
+        "mkdir",
         "to_csv"
       ],
       "called_by": []
@@ -736,13 +736,13 @@
       "args": [],
       "return_type": null,
       "calls": [
-        "load_data",
-        "validate_output",
-        "print",
+        "save_data",
         "exists",
+        "load_data",
         "map_columns",
         "calculate_open_values",
-        "save_data"
+        "print",
+        "validate_output"
       ],
       "called_by": []
     },
@@ -757,9 +757,9 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
-        "read_csv",
+        "len",
         "print",
-        "len"
+        "read_csv"
       ],
       "called_by": [
         "main"
@@ -776,11 +776,11 @@
       ],
       "return_type": "pd.DataFrame",
       "calls": [
+        "len",
         "round",
         "DataFrame",
         "items",
-        "print",
-        "len"
+        "print"
       ],
       "called_by": [
         "main"
@@ -817,11 +817,11 @@
       ],
       "return_type": "None",
       "calls": [
-        "to_csv",
-        "mkdir",
+        "len",
         "list",
         "print",
-        "len"
+        "mkdir",
+        "to_csv"
       ],
       "called_by": [
         "main"
@@ -836,12 +836,12 @@
       "args": [],
       "return_type": null,
       "calls": [
-        "load_data",
-        "validate_output",
-        "print",
+        "save_data",
         "exists",
+        "load_data",
         "map_columns",
-        "save_data"
+        "print",
+        "validate_output"
       ],
       "called_by": []
     },
@@ -877,9 +877,9 @@
       ],
       "return_type": "bool",
       "calls": [
+        "print",
         "exists",
-        "run_script",
-        "print"
+        "run_script"
       ],
       "called_by": [
         "run_pipeline"
@@ -896,16 +896,16 @@
       ],
       "return_type": "bool",
       "calls": [
+        "sorted",
         "now",
         "strftime",
-        "glob",
-        "run_stage",
-        "total_seconds",
-        "print",
         "exists",
         "enumerate",
-        "sorted",
-        "stat"
+        "glob",
+        "total_seconds",
+        "stat",
+        "print",
+        "run_stage"
       ],
       "called_by": [
         "main"
@@ -920,10 +920,10 @@
       "args": [],
       "return_type": null,
       "calls": [
+        "exit",
         "run_pipeline",
         "ArgumentParser",
         "add_argument",
-        "exit",
         "parse_args"
       ],
       "called_by": []

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-30T12:29:21.444799+00:00",
+  "generated_at": "2025-11-30T13:56:07.740957+00:00",
   "project": "cost-management-db",
   "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
   "pipeline_stages": [
@@ -606,7 +606,7 @@
           "line": 73,
           "semantics": {
             "modifies_columns": [],
-            "filters_data": false,
+            "filters_data": true,
             "aggregates": false,
             "joins_data": true,
             "renames_columns": false,
@@ -620,7 +620,7 @@
             "df",
             "filepath"
           ],
-          "line": 101,
+          "line": 108,
           "semantics": {
             "modifies_columns": [],
             "filters_data": false,
@@ -634,7 +634,7 @@
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 108,
+          "line": 115,
           "semantics": {
             "modifies_columns": [],
             "filters_data": false,
@@ -737,7 +737,7 @@
           "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
         }
       ],
-      "line_count": 144
+      "line_count": 151
     },
     {
       "name": "05_calculate_cost_impact",
@@ -2345,7 +2345,7 @@
         "location": "object",
         "sub_business_line": "object",
         "pr_number": "float64",
-        "requester": "float64",
+        "requester": "object",
         "vendor_id": "object",
         "vendor_name": "object",
         "vendor_category": "object",
@@ -2400,7 +2400,7 @@
       "row_count": 57163,
       "null_counts": {
         "pr_number": 37584,
-        "requester": 37407,
+        "requester": 37072,
         "part_number": 47632,
         "account_assignment_category": 9047,
         "wbs_number": 33327,

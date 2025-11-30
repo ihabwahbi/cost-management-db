@@ -1892,7 +1892,8 @@
       "name": "Requester",
       "created_by": [
         "scripts/stage2_transform/04_enrich_po_line_items.py:54",
-        "scripts/stage2_transform/04_enrich_po_line_items.py:91"
+        "scripts/stage2_transform/04_enrich_po_line_items.py:91",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:98"
       ]
     },
     "column:ARIBA shopping cart number : created by (Text)": {
@@ -1908,15 +1909,15 @@
         "scripts/stage2_transform/04_enrich_po_line_items.py:64"
       ]
     },
-    "column:ARIBA Shopping cart number": {
-      "id": "column:ARIBA Shopping cart number",
-      "type": "column",
-      "name": "ARIBA Shopping cart number"
-    },
     "column:Purchase Requisition Number": {
       "id": "column:Purchase Requisition Number",
       "type": "column",
       "name": "Purchase Requisition Number"
+    },
+    "column:ARIBA Shopping cart number": {
+      "id": "column:ARIBA Shopping cart number",
+      "type": "column",
+      "name": "ARIBA Shopping cart number"
     },
     "column:Total Cost Impact Qty": {
       "id": "column:Total Cost Impact Qty",
@@ -2321,7 +2322,7 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:Unit Price",
+      "source": "column:IR Effective Quantity",
       "target": "column:Invoice Amount",
       "type": "TRANSFORMS",
       "script": "03_ir_postings",
@@ -2330,7 +2331,7 @@
       "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
     },
     {
-      "source": "column:IR Effective Quantity",
+      "source": "column:Unit Price",
       "target": "column:Invoice Amount",
       "type": "TRANSFORMS",
       "script": "03_ir_postings",
@@ -2474,7 +2475,7 @@
       "operation": "details['ARIBA shopping cart number : created by (Text)']"
     },
     {
-      "source": "column:ARIBA Shopping cart number",
+      "source": "column:Purchase Requisition Number",
       "target": "column:PR Number",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -2483,7 +2484,7 @@
       "operation": "pr_number.where(pr_number.notna(), ariba_number)"
     },
     {
-      "source": "column:Purchase Requisition Number",
+      "source": "column:ARIBA Shopping cart number",
       "target": "column:PR Number",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -2894,6 +2895,12 @@
         "type": "WRITES",
         "line": 91,
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      },
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "WRITES",
+        "line": 98,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
       }
     ],
     "ARIBA shopping cart number : created by (Text)": [
@@ -2912,7 +2919,7 @@
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
       }
     ],
-    "ARIBA Shopping cart number": [
+    "Purchase Requisition Number": [
       {
         "script": "04_enrich_po_line_items",
         "type": "READS",
@@ -2920,7 +2927,7 @@
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
       }
     ],
-    "Purchase Requisition Number": [
+    "ARIBA Shopping cart number": [
       {
         "script": "04_enrich_po_line_items",
         "type": "READS",
@@ -3126,9 +3133,9 @@
       ],
       "result": [
         "PO Line ID",
-        "GR Amount",
+        "GR Posting Date",
         "GR Effective Quantity",
-        "GR Posting Date"
+        "GR Amount"
       ],
       "complex_gr": [
         "PO Line ID"
@@ -3155,6 +3162,9 @@
       ],
       "pr_str": [
         "PR Number"
+      ],
+      "is_ops_vendor": [
+        "Main Vendor SLB Vendor Category"
       ]
     },
     "06_prepare_po_line_items": {
@@ -3189,6 +3199,6 @@
       "MAPS_TO": 5
     },
     "columns_tracked": 35,
-    "variables_traced": 22
+    "variables_traced": 23
   }
 }

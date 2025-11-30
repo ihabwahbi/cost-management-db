@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-11-30T12:29:21.444799+00:00
+Generated: 2025-11-30T13:56:07.740957+00:00
 
 ## Data Flow Diagram
 
@@ -366,14 +366,14 @@ Sample data and types for each CSV file:
 | `location` | object |
 | `sub_business_line` | object |
 | `pr_number` | float64 |
-| `requester` | float64 |
+| `requester` | object |
 | `vendor_id` | object |
 | `vendor_name` | object |
 | *...* | *18 more* |
 
 **Columns with nulls:**
 - `pr_number`: 37584 nulls
-- `requester`: 37407 nulls
+- `requester`: 37072 nulls
 - `part_number`: 47632 nulls
 - `account_assignment_category`: 9047 nulls
 - `wbs_number`: 33327 nulls

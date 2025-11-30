@@ -91,6 +91,13 @@ def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame:
     enriched.loc[ms_prime_mask, 'Requester'] = 'M&S Prime'
     print(f"  Set 'M&S Prime' for {ms_prime_mask.sum():,} rows")
     
+    # Set Requester to "FMT" for OPS vendor category
+    vendor_category_col = "Main Vendor SLB Vendor Category"
+    if vendor_category_col in enriched.columns:
+        is_ops_vendor = enriched[vendor_category_col] == "OPS"
+        enriched.loc[is_ops_vendor, 'Requester'] = 'FMT'
+        print(f"  Set 'FMT' for {is_ops_vendor.sum():,} rows (OPS vendor category)")
+    
     # Stats
     print(f"  Rows with Requester: {enriched['Requester'].notna().sum():,}")
     print(f"  Rows with PR Number: {enriched['PR Number'].notna().sum():,}")

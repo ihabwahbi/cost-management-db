@@ -34,11 +34,11 @@
       "name": "04_enrich_po_line_items",
       "source_path": "scripts/stage2_transform/04_enrich_po_line_items.py",
       "skeleton_path": "pipeline-context/skeletons/stage2_transform/04_enrich_po_line_items.skeleton.py",
-      "original_lines": 144,
+      "original_lines": 151,
       "skeleton_lines": 46,
-      "original_tokens": 1201,
+      "original_tokens": 1294,
       "skeleton_tokens": 388,
-      "compression_ratio": 3.1
+      "compression_ratio": 3.34
     },
     {
       "name": "05_calculate_cost_impact",
@@ -72,10 +72,10 @@
     }
   ],
   "totals": {
-    "original_lines": 1042,
+    "original_lines": 1049,
     "skeleton_lines": 355,
-    "original_tokens": 8787,
+    "original_tokens": 8880,
     "skeleton_tokens": 2937,
-    "compression_ratio": 2.99
+    "compression_ratio": 3.02
   }
 }
