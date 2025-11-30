@@ -7,7 +7,10 @@ Two types: Simple (GLD + K/P/S/V) uses GR only, Complex uses GR/IR logic.
 Dependencies: All stage1 scripts must run first
 Input: data/intermediate/po_line_items.csv, gr_postings.csv, ir_postings.csv
 Output: data/intermediate/cost_impact.csv
-"""
+
+Column Operations:
+  WRITES: Posting Date, Posting Type, Unit Price
+  READS:  Ordered Quantity, Posting Date, Purchase Value USD"""
 import sys
 from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent

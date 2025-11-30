@@ -468,9 +468,8 @@ class LineageGraphBuilder:
         print("[6/6] Mapping columns to database...")
         self.extract_column_mappings(pipeline_map)
         
-        # Build the output
+        # Build the output (no timestamp to avoid unnecessary git changes)
         graph = {
-            "generated_at": datetime.now(timezone.utc).isoformat(),
             "version": "2.0.0",  # Version bump for new features
             "description": "Data lineage graph for Context Oracle - trace data flow with variable tracking",
             "nodes": self.nodes,

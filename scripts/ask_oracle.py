@@ -656,6 +656,72 @@ def cmd_search(args) -> Dict:
 
 
 # =============================================================================
+# WHO - Find which scripts read/write a column
+# =============================================================================
+
+def cmd_who(args) -> Dict:
+    """
+    Find which scripts read or write a specific column.
+    
+    This directly answers: "Who touches this column?"
+    Much more useful than fuzzy search when you know the column name.
+    """
+    lineage = load_lineage()
+    if not lineage:
+        return {"error": "Lineage graph not found. Run generate_context_oracle.py first."}
+    
+    column = args.column
+    column_access = lineage.get("column_access", {})
+    
+    # Try exact match first
+    accesses = column_access.get(column, [])
+    
+    # If no exact match, try case-insensitive match
+    if not accesses:
+        for col_name, col_accesses in column_access.items():
+            if col_name.lower() == column.lower():
+                accesses = col_accesses
+                column = col_name  # Use the actual column name
+                break
+    
+    if not accesses:
+        # Column not found in access patterns - suggest similar
+        similar = [c for c in column_access.keys() if column.lower() in c.lower()][:5]
+        return {
+            "found": False,
+            "column": column,
+            "suggestion": similar if similar else "Column not tracked in any script",
+            "hint": "Only columns that are explicitly read/written in pipeline scripts are tracked"
+        }
+    
+    # Group by access type
+    writers = []
+    readers = []
+    
+    for access in accesses:
+        script = access.get("script", "unknown")
+        location = f"{access.get('file', '')}:{access.get('line', '')}"
+        entry = {"script": script, "location": location}
+        
+        if access.get("type") == "WRITES":
+            writers.append(entry)
+        elif access.get("type") == "READS":
+            readers.append(entry)
+    
+    # Deduplicate (same script may access column multiple times)
+    unique_writers = list({w["script"]: w for w in writers}.values())
+    unique_readers = list({r["script"]: r for r in readers}.values())
+    
+    return {
+        "found": True,
+        "column": column,
+        "writers": unique_writers,
+        "readers": unique_readers,
+        "summary": f"{len(unique_writers)} scripts write, {len(unique_readers)} scripts read"
+    }
+
+
+# =============================================================================
 # MAIN
 # =============================================================================
 
@@ -670,6 +736,7 @@ Examples:
   python3 scripts/ask_oracle.py trace open_po_value --direction upstream
   python3 scripts/ask_oracle.py pattern pipeline_script
   python3 scripts/ask_oracle.py search calculate --limit 10
+  python3 scripts/ask_oracle.py who "Unit Price"
         """
     )
     
@@ -719,6 +786,10 @@ Examples:
         help="Type of symbol to search for (default: any)"
     )
     
+    # who subcommand - find which scripts read/write a column
+    who_parser = subparsers.add_parser("who", help="Find which scripts read/write a column")
+    who_parser.add_argument("column", help="Column name to look up (e.g., 'Unit Price', 'fmt_po')")
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -739,6 +810,8 @@ Examples:
             result = cmd_pattern(args)
         elif args.command == "search":
             result = cmd_search(args)
+        elif args.command == "who":
+            result = cmd_who(args)
         else:
             result = {"error": f"Unknown command: {args.command}"}
         

@@ -490,7 +490,6 @@ def generate_symbol_registry():
     
     # Build the registry
     registry = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
         "version": "1.0.0",
         "description": "Symbol registry for Context Oracle - verify before use",
         

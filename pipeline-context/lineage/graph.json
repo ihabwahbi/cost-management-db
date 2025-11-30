@@ -1,5 +1,4 @@
 {
-  "generated_at": "2025-11-30T13:26:32.268579+00:00",
   "version": "2.0.0",
   "description": "Data lineage graph for Context Oracle - trace data flow with variable tracking",
   "nodes": {
@@ -2322,7 +2321,7 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:IR Effective Quantity",
+      "source": "column:Unit Price",
       "target": "column:Invoice Amount",
       "type": "TRANSFORMS",
       "script": "03_ir_postings",
@@ -2331,7 +2330,7 @@
       "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
     },
     {
-      "source": "column:Unit Price",
+      "source": "column:IR Effective Quantity",
       "target": "column:Invoice Amount",
       "type": "TRANSFORMS",
       "script": "03_ir_postings",
@@ -2358,7 +2357,7 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:GR Effective Quantity",
+      "source": "column:Unit Price",
       "target": "column:GR Amount",
       "type": "TRANSFORMS",
       "script": "02_gr_postings",
@@ -2367,7 +2366,7 @@
       "operation": "(df['Unit Price'] * df['GR Effective Quantity']).round(2)"
     },
     {
-      "source": "column:Unit Price",
+      "source": "column:GR Effective Quantity",
       "target": "column:GR Amount",
       "type": "TRANSFORMS",
       "script": "02_gr_postings",
@@ -2439,7 +2438,7 @@
       "operation": "df['PO Line Item'].fillna(0).astype(int)"
     },
     {
-      "source": "column:PO Line Item",
+      "source": "column:PO Number",
       "target": "column:PO Line ID",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -2448,7 +2447,7 @@
       "operation": "df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
     },
     {
-      "source": "column:PO Number",
+      "source": "column:PO Line Item",
       "target": "column:PO Line ID",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -3126,10 +3125,10 @@
         "PO Line ID"
       ],
       "result": [
-        "GR Posting Date",
         "PO Line ID",
+        "GR Amount",
         "GR Effective Quantity",
-        "GR Amount"
+        "GR Posting Date"
       ],
       "complex_gr": [
         "PO Line ID"

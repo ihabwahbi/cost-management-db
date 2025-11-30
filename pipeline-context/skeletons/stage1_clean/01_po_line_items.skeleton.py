@@ -7,7 +7,10 @@ outputs to intermediate folder.
 Dependencies: None (first script in pipeline)
 Input: data/raw/po line items.csv
 Output: data/intermediate/po_line_items.csv
-"""
+
+Column Operations:
+  WRITES: Expected Delivery Date, Location, Main Vendor Name, NIS Level 0 Desc, Ultimate Vendor Name
+  READS:  Main Vendor ID, Plant Code, Ultimate Vendor Number"""
 import sys
 from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent

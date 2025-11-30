@@ -7,7 +7,10 @@ from the PO Details Report.
 Dependencies: 01_po_line_items.py must run first
 Input: data/intermediate/po_line_items.csv, data/raw/po details report.xlsx
 Output: data/intermediate/po_line_items.csv (updated in place)
-"""
+
+Column Operations:
+  WRITES: PO Line ID, PO Line Item, PR Number, Requester
+  READS:  ARIBA Shopping cart number, ARIBA shopping cart number : created by (Text), PO Line ID, PO Line Item, PO Number, Purchase Requisition Number"""
 import sys
 from pathlib import Path
 import pandas as pd

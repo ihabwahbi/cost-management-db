@@ -6,7 +6,10 @@ Maps cost impact data to database schema columns for po_transactions table.
 Dependencies: stage2_transform/05_calculate_cost_impact.py must run first
 Input: data/intermediate/cost_impact.csv
 Output: data/import-ready/po_transactions.csv
-"""
+
+Column Operations:
+  WRITES: amount, cost_impact_amount, cost_impact_qty, quantity
+  READS:  cost_impact_amount, cost_impact_qty, quantity"""
 import sys
 from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent

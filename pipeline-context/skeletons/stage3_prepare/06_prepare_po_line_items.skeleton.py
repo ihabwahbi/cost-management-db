@@ -7,7 +7,10 @@ derived fields (open_po_qty, open_po_value).
 Dependencies: All stage1 and stage2 scripts must run first
 Input: data/intermediate/po_line_items.csv, data/intermediate/cost_impact.csv
 Output: data/import-ready/po_line_items.csv
-"""
+
+Column Operations:
+  WRITES: Total Cost Impact Amount, Total Cost Impact Qty, fmt_po, open_po_qty, open_po_value
+  READS:  Main Vendor SLB Vendor Category, PO Line ID, Total Cost Impact Amount, Total Cost Impact Qty, open_po_qty, open_po_value"""
 import sys
 from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent

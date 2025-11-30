@@ -50,6 +50,46 @@ def compute_file_hash(filepath: Path) -> str:
     return hashlib.md5(content).hexdigest()
 
 
+def smart_write_json(filepath: Path, data: Dict, exclude_keys: Optional[list] = None) -> bool:
+    """
+    Write JSON file only if content actually changed (excluding specified keys).
+    
+    This prevents unnecessary git changes from timestamp-only differences.
+    Returns True if file was written, False if unchanged.
+    """
+    if exclude_keys is None:
+        exclude_keys = ["generated_at", "last_generated"]
+    
+    def strip_excluded(obj):
+        """Recursively remove excluded keys from dict."""
+        if isinstance(obj, dict):
+            return {k: strip_excluded(v) for k, v in obj.items() if k not in exclude_keys}
+        elif isinstance(obj, list):
+            return [strip_excluded(item) for item in obj]
+        return obj
+    
+    new_content = strip_excluded(data)
+    
+    # Check if file exists and compare content
+    if filepath.exists():
+        try:
+            with open(filepath) as f:
+                existing = json.load(f)
+            existing_content = strip_excluded(existing)
+            
+            # Compare without timestamps
+            if json.dumps(new_content, sort_keys=True) == json.dumps(existing_content, sort_keys=True):
+                return False  # No change needed
+        except (json.JSONDecodeError, IOError):
+            pass  # File corrupted or unreadable, write new
+    
+    # Write the file (with timestamps intact)
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    with open(filepath, "w") as f:
+        json.dump(data, f, indent=2)
+    return True
+
+
 def get_source_files() -> Dict[str, Path]:
     """Get all source files that affect Oracle generation."""
     source_files = {}

@@ -7,7 +7,10 @@ from intermediate PO line items.
 Dependencies: 01_po_line_items.py must run first
 Input: data/raw/invoice table.csv, data/intermediate/po_line_items.csv
 Output: data/intermediate/ir_postings.csv
-"""
+
+Column Operations:
+  WRITES: Invoice Amount, Unit Price
+  READS:  IR Effective Quantity, Ordered Quantity, PO Line ID, Purchase Value USD, Unit Price"""
 import sys
 from pathlib import Path
 import pandas as pd

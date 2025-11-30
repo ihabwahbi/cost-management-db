@@ -173,7 +173,6 @@ def build_pattern_library() -> Dict[str, Any]:
     print("=" * 60)
     
     patterns = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
         "version": "1.0.0",
         "description": "Pattern library for Context Oracle - follow conventions",
         "patterns": {}

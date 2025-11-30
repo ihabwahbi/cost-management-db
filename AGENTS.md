@@ -54,6 +54,7 @@ If regeneration fails, the Oracle will exit with an error (never uses broken con
 | Find where a column is used | `python3 scripts/ask_oracle.py trace <column> --direction both` |
 | Check if a function exists | `python3 scripts/ask_oracle.py verify <name>` |
 | Modify a pipeline script | `python3 scripts/ask_oracle.py impact <script>` first |
+| Find who uses a column | `python3 scripts/ask_oracle.py who <column>` |
 | Add new pipeline script | `python3 scripts/ask_oracle.py pattern pipeline_script` |
 | Add new DB table | `python3 scripts/ask_oracle.py pattern drizzle_schema` |
 | Find similar code | `python3 scripts/ask_oracle.py search <query>` |
@@ -91,6 +92,9 @@ rg -l "pd.merge" --type py
 
 **But prefer the Oracle first** - before blind searching:
 ```bash
+# Find which scripts read/write a column
+python3 scripts/ask_oracle.py who "Unit Price"
+
 # Better: Use Oracle to find symbols
 python3 scripts/ask_oracle.py search cost_impact
 
