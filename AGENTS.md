@@ -72,6 +72,90 @@ Regenerate after pipeline changes:
 python3 scripts/generate_pipeline_map.py
 ```
 
+## Context Oracle (AI Intelligence Layer)
+
+The Context Oracle is an active guidance system that transforms blind file operations into guided, verified, consistent code changes.
+
+### Three Pillars
+
+| Pillar | Purpose | Artifact |
+|--------|---------|----------|
+| **Symbol Registry** | Verify before use (anti-hallucination) | `pipeline-context/registry/symbols.json` |
+| **Pattern Library** | Follow conventions (anti-drift) | `pipeline-context/patterns/index.json` |
+| **Lineage Oracle** | Know impact (guided search) | `pipeline-context/lineage/graph.json` |
+
+### Generated Artifacts
+
+```
+pipeline-context/
+├── registry/
+│   └── symbols.json      # 46 functions, 10 constants, 88 columns, 10 tables
+├── skeletons/            # Compressed code views (3.3x compression)
+│   ├── stage1_clean/     # Skeleton versions of pipeline scripts
+│   ├── stage2_transform/
+│   └── stage3_prepare/
+├── patterns/
+│   └── index.json        # 4 patterns (pipeline_script, drizzle_schema, etc.)
+└── lineage/
+    └── graph.json        # 193 nodes, 68 edges tracking data flow
+```
+
+### Context Oracle CLI Tool
+
+Use `scripts/ask_oracle.py` to query the Context Oracle. All output is JSON for easy parsing.
+
+**Verify a symbol exists** (anti-hallucination):
+```bash
+python3 scripts/ask_oracle.py verify filter_valuation_classes
+# {"found":true,"type":"function","location":"scripts/stage1_clean/01_po_line_items.py:42",...}
+
+python3 scripts/ask_oracle.py verify nonexistent_function
+# {"found":false,"suggestion":"Did you mean 'filter_valuation_classes'?",...}
+```
+
+**Predict impact before modifying a script**:
+```bash
+python3 scripts/ask_oracle.py impact 05_calculate_cost_impact
+# {"script":"05_calculate_cost_impact","affected_scripts":[7 scripts],"risk_level":"high",...}
+```
+
+**Trace column lineage**:
+```bash
+python3 scripts/ask_oracle.py trace open_po_value --direction upstream
+# {"target":"open_po_value","upstream":[...],"critical_files":[...]}
+```
+
+**Get code pattern for a task**:
+```bash
+python3 scripts/ask_oracle.py pattern pipeline_script
+# {"found":true,"pattern":{"structure":[...],"conventions":[...],"function_templates":{...}}}
+```
+
+**Search for similar symbols**:
+```bash
+python3 scripts/ask_oracle.py search calculate --limit 5
+# {"query":"calculate","count":5,"results":[...]}
+```
+
+### When to Use the Oracle
+
+| Task | Command | Purpose |
+|------|---------|---------|
+| Before calling a function | `verify <name>` | Prevent hallucination |
+| Before modifying a script | `impact <script>` | Know what breaks |
+| Understanding data flow | `trace <column>` | Find dependencies |
+| Writing new code | `pattern <type>` | Follow conventions |
+| Finding existing code | `search <query>` | Avoid duplication |
+
+### Regenerate Context Oracle
+
+```bash
+python3 scripts/generate_context_oracle.py           # Full regeneration
+python3 scripts/generate_context_oracle.py --skip-pipeline-map  # Skip if pipeline-map is current
+```
+
+The pre-commit hook automatically regenerates Context Oracle when pipeline scripts or schema files change.
+
 ## Schema Management Rules
 
 ### 1. Never Use Direct SQL
@@ -199,6 +283,12 @@ data/
 ├── raw/                # Source files (never modified)
 ├── intermediate/       # Cleaned and transformed data
 └── import-ready/       # Final CSVs matching DB schema
+
+pipeline-context/        # Context Oracle artifacts (AI guidance)
+├── registry/           # Symbol registry (functions, columns, tables)
+├── skeletons/          # Compressed code views
+├── patterns/           # Code patterns and conventions
+└── lineage/            # Data flow graph
 
 __tests__/              # Vitest tests
 ```
