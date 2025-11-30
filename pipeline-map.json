@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-29T07:23:15.464268+00:00",
+  "generated_at": "2025-11-30T01:44:54.969511+00:00",
   "project": "cost-management-db",
   "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
   "pipeline_stages": [
@@ -437,7 +437,7 @@
         },
         {
           "name": "calculate_open_values",
-          "docstring": "Calculate open_po_qty and open_po_value, then derive PO Receipt Status.\n\nLogic:\n- If raw status is CLOSED PO: trust it, set open_po_qty = 0\n- If raw status is NOT closed: calculate open_po_qty, if <= 0 then close it",
+          "docstring": "Calculate open_po_qty and open_po_value based on cost impact.\n\nLogic:\n- If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0\n- Otherwise: calculate open values from ordered - cost impact",
           "args": [
             "po_df",
             "cost_df"
@@ -450,7 +450,7 @@
           "args": [
             "po_df"
           ],
-          "line": 99
+          "line": 92
         },
         {
           "name": "validate_output",
@@ -458,7 +458,7 @@
           "args": [
             "df"
           ],
-          "line": 129
+          "line": 122
         },
         {
           "name": "save_data",
@@ -467,13 +467,13 @@
             "df",
             "filepath"
           ],
-          "line": 148
+          "line": 141
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 157
+          "line": 150
         }
       ],
       "imports": [
@@ -482,7 +482,7 @@
         "pandas",
         "config.column_mappings"
       ],
-      "line_count": 192
+      "line_count": 185
     },
     {
       "name": "07_prepare_po_transactions",

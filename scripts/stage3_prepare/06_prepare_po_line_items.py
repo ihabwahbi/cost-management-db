@@ -42,11 +42,11 @@ def load_data():
 
 def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Calculate open_po_qty and open_po_value, then derive PO Receipt Status.
+    Calculate open_po_qty and open_po_value based on cost impact.
     
     Logic:
-    - If raw status is CLOSED PO: trust it, set open_po_qty = 0
-    - If raw status is NOT closed: calculate open_po_qty, if <= 0 then close it
+    - If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0
+    - Otherwise: calculate open values from ordered - cost impact
     """
     print("Calculating open PO values...")
     
@@ -80,15 +80,8 @@ def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.Data
         po_df.loc[not_closed, "Purchase Value USD"] - po_df.loc[not_closed, "Total Cost Impact Amount"]
     )
     
-    # For non-closed POs: if calculated open_po_qty <= 0, mark as closed
-    should_close = not_closed & (po_df["open_po_qty"] <= 0)
-    po_df.loc[should_close, "open_po_qty"] = 0
-    po_df.loc[should_close, "open_po_value"] = 0
-    po_df.loc[should_close, "PO Receipt Status"] = "CLOSED PO"
-    
-    print(f"  Already closed (from raw): {already_closed.sum():,}")
-    print(f"  Newly closed (calculated): {should_close.sum():,}")
-    print(f"  Remaining open: {(not_closed & ~should_close).sum():,}")
+    print(f"  Closed POs (from raw status): {already_closed.sum():,}")
+    print(f"  Open POs: {not_closed.sum():,}")
     
     # Drop intermediate columns
     po_df = po_df.drop(columns=["Total Cost Impact Qty", "Total Cost Impact Amount"])
