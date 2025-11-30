@@ -323,7 +323,7 @@ def generate_all_skeletons() -> Dict[str, Any]:
     # Save index
     index_path = SKELETONS_DIR / "index.json"
     with open(index_path, "w") as f:
-        json.dump(results, f, indent=2)
+        json.dump(results, f, indent=2, sort_keys=True)
     
     print("\n" + "=" * 60)
     print("Skeleton Generation Complete!")

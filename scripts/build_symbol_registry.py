@@ -35,6 +35,23 @@ OUTPUT_FILE = PIPELINE_CONTEXT_DIR / "registry" / "symbols.json"
 TS_EXTRACTOR = SCRIPTS_DIR / "extract-schema.ts"
 
 
+def sort_nested_lists(obj: Any) -> Any:
+    """
+    Recursively sort all lists in a nested data structure for deterministic JSON output.
+    """
+    if isinstance(obj, dict):
+        return {k: sort_nested_lists(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        sorted_items = [sort_nested_lists(item) for item in obj]
+        try:
+            return sorted(sorted_items, key=lambda x: str(x) if not isinstance(x, (str, int, float)) else x)
+        except TypeError:
+            return sorted_items
+    elif isinstance(obj, set):
+        return sorted(sort_nested_lists(item) for item in obj)
+    return obj
+
+
 @dataclass
 class FunctionSymbol:
     """Function definition extracted from Python."""
@@ -506,10 +523,11 @@ def generate_symbol_registry():
         }
     }
     
-    # Save the registry
+    # Save the registry (sort nested lists for deterministic output)
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    sorted_registry = sort_nested_lists(registry)
     with open(OUTPUT_FILE, "w") as f:
-        json.dump(registry, f, indent=2)
+        json.dump(sorted_registry, f, indent=2, sort_keys=True)
     
     print("\n" + "=" * 60)
     print("Symbol Registry Generated!")

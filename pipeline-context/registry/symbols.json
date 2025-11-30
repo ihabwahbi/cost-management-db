@@ -1,2689 +1,2689 @@
 {
-  "version": "1.0.0",
-  "description": "Symbol registry for Context Oracle - verify before use",
-  "functions": [
-    {
-      "name": "load_data",
-      "file": "scripts/stage1_clean/03_ir_postings.py",
-      "line": 26,
-      "signature": "def load_data(filepath: Path) -> pd.DataFrame",
-      "docstring": "Load the raw CSV file.",
-      "args": [
-        "filepath"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "calculate_invoice_amount",
-      "file": "scripts/stage1_clean/03_ir_postings.py",
-      "line": 34,
-      "signature": "def calculate_invoice_amount(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Calculate Invoice Amount based on unit price from PO Line Items.\nFormula: Invoice Amount = (Purchase Value USD / Ordered Quantity) * IR Effective Quantity",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "round",
-        "len",
-        "read_csv",
-        "drop_duplicates",
-        "merge",
-        "print"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage1_clean/03_ir_postings.py",
-      "line": 63,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save the cleaned DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "mkdir",
-        "print",
-        "len",
-        "to_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage1_clean/03_ir_postings.py",
-      "line": 71,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "exists",
-        "save_data",
-        "load_data",
-        "calculate_invoice_amount",
-        "print"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "load_data",
-      "file": "scripts/stage1_clean/02_gr_postings.py",
-      "line": 26,
-      "signature": "def load_data(filepath: Path) -> pd.DataFrame",
-      "docstring": "Load the raw CSV file.",
-      "args": [
-        "filepath"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "filter_zero_quantity",
-      "file": "scripts/stage1_clean/02_gr_postings.py",
-      "line": 34,
-      "signature": "def filter_zero_quantity(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Remove rows with zero GR Effective Quantity.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "print",
-        "copy"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "calculate_gr_amount",
-      "file": "scripts/stage1_clean/02_gr_postings.py",
-      "line": 43,
-      "signature": "def calculate_gr_amount(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Calculate GR Amount based on unit price from PO Line Items.\nFormula: GR Amount = (Purchase Value USD / Ordered Quantity) * GR Effective Quantity",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "round",
-        "len",
-        "read_csv",
-        "drop_duplicates",
-        "merge",
-        "print"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage1_clean/02_gr_postings.py",
-      "line": 72,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save the cleaned DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "mkdir",
-        "print",
-        "len",
-        "to_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage1_clean/02_gr_postings.py",
-      "line": 80,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "calculate_gr_amount",
-        "exists",
-        "filter_zero_quantity",
-        "save_data",
-        "load_data",
-        "print"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "load_data",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 34,
-      "signature": "def load_data(filepath: Path) -> pd.DataFrame",
-      "docstring": "Load the raw CSV file.",
-      "args": [
-        "filepath"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "filter_valuation_classes",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 42,
-      "signature": "def filter_valuation_classes(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Remove rows with excluded PO Valuation Classes.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "copy",
-        "isin",
-        "print",
-        "len",
-        "to_numeric"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "filter_nis_levels",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 53,
-      "signature": "def filter_nis_levels(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Remove rows with excluded NIS Level 0 Desc values.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "print",
-        "copy",
-        "isin"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "fill_nis_level_for_3021",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 63,
-      "signature": "def fill_nis_level_for_3021(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Set NIS Level 0 Desc to 'Materials and Supplies' for Valuation Class 3021 where null.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "print",
-        "to_numeric",
-        "isna",
-        "sum"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "transform_nis_column",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 73,
-      "signature": "def transform_nis_column(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Rename NIS Level 0 Desc to NIS Line and clean up values.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "print",
-        "rename",
-        "sum"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "map_vendor_names",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 85,
-      "signature": "def map_vendor_names(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Map Main Vendor Name and Ultimate Vendor Name based on vendor IDs.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "isin",
-        "keys",
-        "map",
-        "sum",
-        "print"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "map_location",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 100,
-      "signature": "def map_location(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Map Plant Code to Location.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "map",
-        "notna",
-        "sum",
-        "print",
-        "astype"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "consolidate_delivery_dates",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 109,
-      "signature": "def consolidate_delivery_dates(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Consolidate delivery date columns into 'Expected Delivery Date'.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "print",
-        "notna",
-        "where",
-        "drop"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 125,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save the cleaned DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "mkdir",
-        "print",
-        "len",
-        "to_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 133,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "consolidate_delivery_dates",
-        "filter_valuation_classes",
-        "map_location",
-        "transform_nis_column",
-        "filter_nis_levels",
-        "save_data",
-        "load_data",
-        "print",
-        "map_vendor_names",
-        "fill_nis_level_for_3021"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "load_data",
-      "file": "scripts/stage2_transform/06_calculate_grir.py",
-      "line": 40,
-      "signature": "def load_data()",
-      "docstring": "Load all required data files.",
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "get_simple_po_ids",
-      "file": "scripts/stage2_transform/06_calculate_grir.py",
-      "line": 56,
-      "signature": "def get_simple_po_ids(po_df: pd.DataFrame) -> set",
-      "docstring": "Get PO Line IDs for Simple POs (GLD + K/P/S/V) that are NOT closed.\nThese are the POs where we track GRIR exposure.\n\nClosed POs are excluded - no exposure if PO is already closed.",
-      "args": [
-        "po_df"
-      ],
-      "return_type": "set",
-      "calls": [
-        "isin",
-        "len",
-        "set",
-        "sum",
-        "print"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "get_unit_prices",
-      "file": "scripts/stage2_transform/06_calculate_grir.py",
-      "line": 78,
-      "signature": "def get_unit_prices(po_df: pd.DataFrame) -> dict",
-      "docstring": "Calculate unit price for each PO Line ID.",
-      "args": [
-        "po_df"
-      ],
-      "return_type": "dict",
-      "calls": [
-        "set_index",
-        "copy",
-        "to_dict"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "categorize_time_bucket",
-      "file": "scripts/stage2_transform/06_calculate_grir.py",
-      "line": 85,
-      "signature": "def categorize_time_bucket(days: int) -> str",
-      "docstring": "Categorize days into time bucket.",
-      "args": [
-        "days"
-      ],
-      "return_type": "str",
-      "calls": [
-        "sorted",
-        "items"
-      ],
-      "called_by": [
-        "calculate_grir_exposures"
-      ]
-    },
-    {
-      "name": "calculate_grir_exposures",
-      "file": "scripts/stage2_transform/06_calculate_grir.py",
-      "line": 93,
-      "signature": "def calculate_grir_exposures(gr_df: pd.DataFrame, ir_df: pd.DataFrame, simple_po_ids: set, unit_prices: dict, snapshot_date: date) -> pd.DataFrame",
-      "docstring": "Calculate GRIR exposure for each Simple PO Line ID.\n\nGRIR = IR - GR (when IR > GR)\n\nLogic:\n1. For each PO Line ID, combine GR and IR postings chronologically\n2. Track cumulative GR and IR\n3. Find first date when IR exceeded GR (first_exposure_date)\n4. Calculate current GRIR qty/value\n5. Calculate duration and time bucket",
-      "args": [
-        "gr_df",
-        "ir_df",
-        "simple_po_ids",
-        "unit_prices",
-        "snapshot_date"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "copy",
-        "float",
-        "isin",
-        "get",
-        "len",
-        "sort_values",
-        "concat",
-        "groupby",
-        "iterrows",
-        "append",
-        "categorize_time_bucket",
-        "to_datetime",
-        "strftime",
-        "round",
-        "print",
-        "rename",
-        "DataFrame",
-        "Timestamp"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage2_transform/06_calculate_grir.py",
-      "line": 199,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save GRIR exposures DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "len",
-        "to_csv",
-        "mkdir",
-        "value_counts",
-        "sum",
-        "print",
-        "items"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage2_transform/06_calculate_grir.py",
-      "line": 213,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "exists",
-        "get_unit_prices",
-        "get_simple_po_ids",
-        "load_data",
-        "save_data",
-        "print",
-        "today",
-        "calculate_grir_exposures"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "load_data",
-      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
-      "line": 31,
-      "signature": "def load_data()",
-      "docstring": "Load all required data files.",
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "classify_po_line_items",
-      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
-      "line": 47,
-      "signature": "def classify_po_line_items(po_df: pd.DataFrame) -> tuple",
-      "docstring": "Classify PO Line Items into simple (Type 1) and complex (Type 2).\n\nType 1 (Simple): Vendor Category = GLD AND Account Category IN (K, P, S, V)\nType 2 (Complex): All others",
-      "args": [
-        "po_df"
-      ],
-      "return_type": "tuple",
-      "calls": [
-        "len",
-        "print",
-        "isin",
-        "set"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "calculate_simple_cost_impact",
-      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
-      "line": 68,
-      "signature": "def calculate_simple_cost_impact(gr_df: pd.DataFrame, simple_po_ids: set) -> pd.DataFrame",
-      "docstring": "Type 1: Cost impact = GR postings only (IR ignored).",
-      "args": [
-        "gr_df",
-        "simple_po_ids"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "copy",
-        "isin",
-        "len",
-        "print",
-        "DataFrame"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "calculate_complex_cost_impact",
-      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
-      "line": 87,
-      "signature": "def calculate_complex_cost_impact(gr_df: pd.DataFrame, ir_df: pd.DataFrame, complex_po_ids: set, po_df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Type 2: Cost impact based on GR/IR chronological processing.",
-      "args": [
-        "gr_df",
-        "ir_df",
-        "complex_po_ids",
-        "po_df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "copy",
-        "isin",
-        "get",
-        "len",
-        "sort_values",
-        "concat",
-        "groupby",
-        "iterrows",
-        "append",
-        "max",
-        "to_datetime",
-        "round",
-        "set_index",
-        "print",
-        "rename",
-        "to_dict",
-        "DataFrame"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
-      "line": 159,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save cost impact DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "len",
-        "to_csv",
-        "mkdir",
-        "sum",
-        "print"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
-      "line": 168,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "calculate_complex_cost_impact",
-        "classify_po_line_items",
-        "sort_values",
-        "concat",
-        "exists",
-        "save_data",
-        "load_data",
-        "print",
-        "calculate_simple_cost_impact"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "load_po_details",
-      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 25,
-      "signature": "def load_po_details(filepath: Path) -> pd.DataFrame",
-      "docstring": "Load PO Details Report and prepare for join.",
-      "args": [
-        "filepath"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "read_excel",
-        "len",
-        "fillna",
-        "print",
-        "astype"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "load_po_line_items",
-      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 38,
-      "signature": "def load_po_line_items(filepath: Path) -> pd.DataFrame",
-      "docstring": "Load intermediate PO line items.",
-      "args": [
-        "filepath"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "extract_enrichment_data",
-      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 46,
-      "signature": "def extract_enrichment_data(details: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Extract Requester and PR Number from PO Details.",
-      "args": [
-        "details"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "copy",
-        "apply",
-        "int",
-        "str",
-        "where",
-        "notna",
-        "sum",
-        "print",
-        "DataFrame"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "enrich_data",
-      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 73,
-      "signature": "def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Left join enrichment data to PO line items.",
-      "args": [
-        "po_df",
-        "enrichment"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "match",
-        "len",
-        "notna",
-        "sum",
-        "merge",
-        "print",
-        "astype"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 108,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save enriched DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "to_csv",
-        "print",
-        "len"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 115,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "enrich_data",
-        "load_po_details",
-        "exists",
-        "save_data",
-        "extract_enrichment_data",
-        "print",
-        "load_po_line_items"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "load_data",
-      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 30,
-      "signature": "def load_data()",
-      "docstring": "Load intermediate data files.",
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "calculate_open_values",
-      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 43,
-      "signature": "def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Calculate open_po_qty and open_po_value based on cost impact.\n\nLogic:\n- If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0\n- Otherwise: calculate open values from ordered - cost impact",
-      "args": [
-        "po_df",
-        "cost_df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "agg",
-        "groupby",
-        "fillna",
-        "sum",
-        "merge",
-        "reset_index",
-        "print",
-        "drop"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "map_columns",
-      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 92,
-      "signature": "def map_columns(po_df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Map CSV columns to database column names.",
-      "args": [
-        "po_df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "round",
-        "print",
-        "DataFrame",
-        "items"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "validate_output",
-      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 123,
-      "signature": "def validate_output(df: pd.DataFrame) -> bool",
-      "docstring": "Validate required columns are present.",
-      "args": [
-        "df"
-      ],
-      "return_type": "bool",
-      "calls": [
-        "print",
-        "isna",
-        "sum"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 142,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save import-ready DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "mkdir",
-        "print",
-        "len",
-        "to_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 151,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "exists",
-        "calculate_open_values",
-        "map_columns",
-        "load_data",
-        "save_data",
-        "validate_output",
-        "print"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "load_data",
-      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 28,
-      "signature": "def load_data(filepath: Path) -> pd.DataFrame",
-      "docstring": "Load cost impact data.",
-      "args": [
-        "filepath"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "map_columns",
-      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 36,
-      "signature": "def map_columns(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Map CSV columns to database column names.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "round",
-        "print",
-        "DataFrame",
-        "items"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "validate_output",
-      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 64,
-      "signature": "def validate_output(df: pd.DataFrame) -> bool",
-      "docstring": "Validate required columns are present.",
-      "args": [
-        "df"
-      ],
-      "return_type": "bool",
-      "calls": [
-        "print",
-        "set",
-        "unique"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 85,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save import-ready DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "len",
-        "to_csv",
-        "mkdir",
-        "list",
-        "print"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 94,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "exists",
-        "map_columns",
-        "load_data",
-        "save_data",
-        "validate_output",
-        "print"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "load_data",
-      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 28,
-      "signature": "def load_data(filepath: Path) -> pd.DataFrame",
-      "docstring": "Load GRIR exposures data.",
-      "args": [
-        "filepath"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "len",
-        "print",
-        "read_csv"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "map_columns",
-      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 36,
-      "signature": "def map_columns(df: pd.DataFrame) -> pd.DataFrame",
-      "docstring": "Map CSV columns to database column names.",
-      "args": [
-        "df"
-      ],
-      "return_type": "pd.DataFrame",
-      "calls": [
-        "print",
-        "DataFrame",
-        "round",
-        "items"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "validate_output",
-      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 60,
-      "signature": "def validate_output(df: pd.DataFrame) -> bool",
-      "docstring": "Validate required columns are present.",
-      "args": [
-        "df"
-      ],
-      "return_type": "bool",
-      "calls": [
-        "get",
-        "len",
-        "sum",
-        "print",
-        "isna"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "save_data",
-      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 81,
-      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None",
-      "docstring": "Save import-ready DataFrame to CSV.",
-      "args": [
-        "df",
-        "filepath"
-      ],
-      "return_type": "None",
-      "calls": [
-        "len",
-        "to_csv",
-        "mkdir",
-        "sum",
-        "print"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "main",
-      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 100,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "len",
-        "to_csv",
-        "exists",
-        "values",
-        "mkdir",
-        "map_columns",
-        "load_data",
-        "save_data",
-        "validate_output",
-        "print",
-        "DataFrame",
-        "list"
-      ],
-      "called_by": []
-    },
-    {
-      "name": "run_script",
-      "file": "scripts/pipeline.py",
-      "line": 55,
-      "signature": "def run_script(script_path: Path, description: str) -> bool",
-      "docstring": "Run a Python script and return success status.",
-      "args": [
-        "script_path",
-        "description"
-      ],
-      "return_type": "bool",
-      "calls": [
-        "print",
-        "str",
-        "run"
-      ],
-      "called_by": [
-        "run_stage"
-      ]
-    },
-    {
-      "name": "run_stage",
-      "file": "scripts/pipeline.py",
-      "line": 74,
-      "signature": "def run_stage(stage_name: str, scripts: list) -> bool",
-      "docstring": "Run all scripts in a stage.",
-      "args": [
-        "stage_name",
-        "scripts"
-      ],
-      "return_type": "bool",
-      "calls": [
-        "print",
-        "exists",
-        "run_script"
-      ],
-      "called_by": [
-        "run_pipeline"
-      ]
-    },
-    {
-      "name": "run_pipeline",
-      "file": "scripts/pipeline.py",
-      "line": 92,
-      "signature": "def run_pipeline(max_stage: int) -> bool",
-      "docstring": "Run the pipeline up to the specified stage.",
-      "args": [
-        "max_stage"
-      ],
-      "return_type": "bool",
-      "calls": [
-        "exists",
-        "sorted",
-        "strftime",
-        "enumerate",
-        "stat",
-        "print",
-        "glob",
-        "run_stage",
-        "total_seconds",
-        "now"
-      ],
-      "called_by": [
-        "main"
-      ]
-    },
-    {
-      "name": "main",
-      "file": "scripts/pipeline.py",
-      "line": 137,
-      "signature": "def main()",
-      "docstring": null,
-      "args": [],
-      "return_type": null,
-      "calls": [
-        "run_pipeline",
-        "add_argument",
-        "parse_args",
-        "exit",
-        "ArgumentParser"
-      ],
-      "called_by": []
-    }
-  ],
-  "constants": [
-    {
-      "name": "PO_LINE_ITEMS_MAPPING",
-      "file": "scripts/config/column_mappings.py",
-      "line": 15,
-      "value_type": "dict",
-      "value_preview": "{'PO Line ID': 'po_line_id', 'PO Number': 'po_number', 'PO Document Date': 'po_creation_date', 'Plan"
-    },
-    {
-      "name": "PO_LINE_ITEMS_CALCULATED",
-      "file": "scripts/config/column_mappings.py",
-      "line": 68,
-      "value_type": "list",
-      "value_preview": "['open_po_qty', 'open_po_value', 'fmt_po']"
-    },
-    {
-      "name": "PO_TRANSACTIONS_MAPPING",
-      "file": "scripts/config/column_mappings.py",
-      "line": 78,
-      "value_type": "dict",
-      "value_preview": "{'PO Line ID': 'po_line_id', 'Posting Type': 'transaction_type', 'Posting Date': 'posting_date', 'Po"
-    },
-    {
-      "name": "REQUIRED_COLUMNS",
-      "file": "scripts/config/column_mappings.py",
-      "line": 92,
-      "value_type": "dict",
-      "value_preview": "{'po_line_items': ['po_line_id', 'po_number', 'line_item_number', 'ordered_qty', 'po_value_usd'], 'p"
-    },
-    {
-      "name": "VENDOR_NAME_MAPPING",
-      "file": "scripts/config/column_mappings.py",
-      "line": 122,
-      "value_type": "dict",
-      "value_preview": "{'P9516': 'Dubai Hub', 'P9109': 'Houston Hub', 'P9517': 'Shanghai Hub', 'P9518': 'Singapore Hub', 'P"
-    },
-    {
-      "name": "PLANT_CODE_TO_LOCATION",
-      "file": "scripts/config/column_mappings.py",
-      "line": 145,
-      "value_type": "dict",
-      "value_preview": "{'3601': 'Perth', '3606': 'Jandakot', '3608': 'Kewdale', '3609': 'Toowoomba', '3610': 'Roma', '3611'"
-    },
-    {
-      "name": "EXCLUDED_VALUATION_CLASSES",
-      "file": "scripts/config/column_mappings.py",
-      "line": 170,
-      "value_type": "list",
-      "value_preview": "[7800, 7900, 5008]"
-    },
-    {
-      "name": "EXCLUDED_NIS_LEVELS",
-      "file": "scripts/config/column_mappings.py",
-      "line": 173,
-      "value_type": "list",
-      "value_preview": "['Compensation Business Delivery', 'Compensation Business Enablement']"
-    },
-    {
-      "name": "SIMPLE_VENDOR_CATEGORY",
-      "file": "scripts/config/column_mappings.py",
-      "line": 179,
-      "value_type": "str",
-      "value_preview": "GLD"
-    },
-    {
-      "name": "SIMPLE_ACCOUNT_CATEGORIES",
-      "file": "scripts/config/column_mappings.py",
-      "line": 180,
-      "value_type": "list",
-      "value_preview": "['K', 'P', 'S', 'V']"
-    },
-    {
-      "name": "GRIR_EXPOSURES_MAPPING",
-      "file": "scripts/config/column_mappings.py",
-      "line": 186,
-      "value_type": "dict",
-      "value_preview": "{'PO Line ID': 'po_line_id', 'GRIR Qty': 'grir_qty', 'GRIR Value': 'grir_value', 'First Exposure Dat"
-    },
-    {
-      "name": "GRIR_TIME_BUCKETS",
-      "file": "scripts/config/column_mappings.py",
-      "line": 197,
-      "value_type": "dict",
-      "value_preview": "{30: '<1 month', 90: '1-3 months', 180: '3-6 months', 365: '6-12 months'}"
-    },
-    {
-      "name": "GRIR_TIME_BUCKET_MAX",
-      "file": "scripts/config/column_mappings.py",
-      "line": 203,
-      "value_type": "str",
-      "value_preview": ">1 year"
-    }
-  ],
   "columns": {
-    "PO Line ID": {
-      "name": "PO Line ID",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/invoice table.csv",
-        "data/raw/po line items.csv",
-        "data/raw/gr table.csv",
-        "data/intermediate/gr_postings.csv",
-        "data/intermediate/grir_exposures.csv",
-        "data/intermediate/ir_postings.csv",
-        "data/intermediate/cost_impact.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "06_calculate_grir",
-        "05_calculate_cost_impact",
-        "04_enrich_po_line_items"
-      ],
-      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:33"
-    },
-    "Invoice Posting Date": {
-      "name": "Invoice Posting Date",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/invoice table.csv",
-        "data/intermediate/ir_postings.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "IR Effective Quantity": {
-      "name": "IR Effective Quantity",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/invoice table.csv",
-        "data/intermediate/ir_postings.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "03_ir_postings"
-      ],
-      "created_by": null
-    },
-    "PO Document Date": {
-      "name": "PO Document Date",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Initial Output Date": {
-      "name": "PO Initial Output Date",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "SL Sub-Business Line Code (BV Lvl 3)": {
-      "name": "SL Sub-Business Line Code (BV Lvl 3)",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "Plant Code": {
-      "name": "Plant Code",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "int64",
-      "used_in": [
-        "01_po_line_items"
-      ],
-      "created_by": null
-    },
-    "PO Approval Status": {
-      "name": "PO Approval Status",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Account Assignment Category": {
-      "name": "PO Account Assignment Category",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "06_calculate_grir",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": null
-    },
-    "PO Account Assignment Category Desc": {
-      "name": "PO Account Assignment Category Desc",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO WBS Element": {
-      "name": "PO WBS Element",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Number": {
-      "name": "PO Number",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "int64",
+    "ARIBA Shopping cart number": {
+      "created_by": null,
+      "dtype": null,
+      "name": "ARIBA Shopping cart number",
+      "source_type": "script",
+      "sources": [],
       "used_in": [
         "04_enrich_po_line_items"
-      ],
-      "created_by": null
+      ]
     },
-    "PO Line": {
-      "name": "PO Line",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "int64",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Material Number": {
-      "name": "PO Material Number",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Material description": {
-      "name": "PO Material description",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Order Unit": {
-      "name": "PO Order Unit",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Valuation Class": {
-      "name": "PO Valuation Class",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "float64",
+    "ARIBA shopping cart number : created by (Text)": {
+      "created_by": null,
+      "dtype": null,
+      "name": "ARIBA shopping cart number : created by (Text)",
+      "source_type": "script",
+      "sources": [],
       "used_in": [
-        "01_po_line_items"
-      ],
-      "created_by": null
-    },
-    "PO Valuation Class Desc": {
-      "name": "PO Valuation Class Desc",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "NIS Level 0 Desc": {
-      "name": "NIS Level 0 Desc",
-      "source_type": "raw",
-      "sources": [
-        "data/raw/po line items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "01_po_line_items"
-      ],
-      "created_by": null
-    },
-    "PO Invoice Status": {
-      "name": "PO Invoice Status",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Receipt Status": {
-      "name": "PO Receipt Status",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "06_calculate_grir",
-        "06_prepare_po_line_items"
-      ],
-      "created_by": null
-    },
-    "PO Delivery Completed Indicator": {
-      "name": "PO Delivery Completed Indicator",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "Main Vendor SLB Vendor Category": {
-      "name": "Main Vendor SLB Vendor Category",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "06_calculate_grir",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": null
-    },
-    "Main Vendor ID": {
-      "name": "Main Vendor ID",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "01_po_line_items"
-      ],
-      "created_by": null
-    },
-    "Main Vendor Name": {
-      "name": "Main Vendor Name",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "Ultimate Vendor Number": {
-      "name": "Ultimate Vendor Number",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "01_po_line_items"
-      ],
-      "created_by": null
-    },
-    "Ultimate Vendor Name": {
-      "name": "Ultimate Vendor Name",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO GTS Status": {
-      "name": "PO GTS Status",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Current Supplier Requested Delivery Date": {
-      "name": "PO Current Supplier Requested Delivery Date",
-      "source_type": "raw",
-      "sources": [
-        "data/raw/po line items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "PO Current Supplier Promised Date": {
-      "name": "PO Current Supplier Promised Date",
-      "source_type": "raw",
-      "sources": [
-        "data/raw/po line items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "Ordered Quantity": {
-      "name": "Ordered Quantity",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "03_ir_postings",
-        "02_gr_postings",
-        "06_calculate_grir",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": null
-    },
-    "Purchase Value USD": {
-      "name": "Purchase Value USD",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "03_ir_postings",
-        "02_gr_postings",
-        "06_calculate_grir",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": null
-    },
-    "Open Qty": {
-      "name": "Open Qty",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/po line items.csv",
-        "data/intermediate/po_line_items.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [],
-      "created_by": null
-    },
-    "GR Posting Date": {
-      "name": "GR Posting Date",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/gr table.csv",
-        "data/intermediate/gr_postings.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "05_calculate_cost_impact"
-      ],
-      "created_by": null
-    },
-    "GR Effective Quantity": {
-      "name": "GR Effective Quantity",
-      "source_type": "intermediate",
-      "sources": [
-        "data/raw/gr table.csv",
-        "data/intermediate/gr_postings.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "02_gr_postings",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": null
-    },
-    "GR Amount": {
-      "name": "GR Amount",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/gr_postings.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "02_gr_postings",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": "scripts/stage1_clean/02_gr_postings.py:64"
-    },
-    "GRIR Qty": {
-      "name": "GRIR Qty",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/grir_exposures.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [],
-      "created_by": null
-    },
-    "GRIR Value": {
-      "name": "GRIR Value",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/grir_exposures.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "06_calculate_grir"
-      ],
-      "created_by": null
-    },
-    "First Exposure Date": {
-      "name": "First Exposure Date",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/grir_exposures.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "Days Open": {
-      "name": "Days Open",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/grir_exposures.csv"
-      ],
-      "dtype": "int64",
-      "used_in": [],
-      "created_by": null
-    },
-    "Time Bucket": {
-      "name": "Time Bucket",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/grir_exposures.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "06_calculate_grir"
-      ],
-      "created_by": null
-    },
-    "Snapshot Date": {
-      "name": "Snapshot Date",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/grir_exposures.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "Invoice Amount": {
-      "name": "Invoice Amount",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/ir_postings.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "03_ir_postings"
-      ],
-      "created_by": "scripts/stage1_clean/03_ir_postings.py:55"
-    },
-    "Posting Date": {
-      "name": "Posting Date",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/cost_impact.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "06_calculate_grir",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": "scripts/stage2_transform/06_calculate_grir.py:137"
-    },
-    "Posting Type": {
-      "name": "Posting Type",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/cost_impact.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "06_calculate_grir",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": "scripts/stage2_transform/06_calculate_grir.py:124"
-    },
-    "Posting Qty": {
-      "name": "Posting Qty",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/cost_impact.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "06_calculate_grir",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": null
-    },
-    "Cost Impact Qty": {
-      "name": "Cost Impact Qty",
-      "source_type": "intermediate",
-      "sources": [
-        "data/intermediate/cost_impact.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [],
-      "created_by": null
+        "04_enrich_po_line_items"
+      ]
     },
     "Cost Impact Amount": {
+      "created_by": null,
+      "dtype": "float64",
       "name": "Cost Impact Amount",
       "source_type": "intermediate",
       "sources": [
         "data/intermediate/cost_impact.csv"
       ],
-      "dtype": "float64",
       "used_in": [
         "05_calculate_cost_impact"
-      ],
-      "created_by": null
+      ]
     },
-    "NIS Line": {
-      "name": "NIS Line",
+    "Cost Impact Qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Cost Impact Qty",
       "source_type": "intermediate",
       "sources": [
-        "data/intermediate/po_line_items.csv"
+        "data/intermediate/cost_impact.csv"
       ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
+      "used_in": []
     },
-    "Location": {
-      "name": "Location",
+    "Days Open": {
+      "created_by": null,
+      "dtype": "int64",
+      "name": "Days Open",
       "source_type": "intermediate",
       "sources": [
-        "data/intermediate/po_line_items.csv"
+        "data/intermediate/grir_exposures.csv"
       ],
-      "dtype": "object",
-      "used_in": [
-        "01_po_line_items"
-      ],
-      "created_by": "scripts/stage1_clean/01_po_line_items.py:103"
+      "used_in": []
     },
     "Expected Delivery Date": {
+      "created_by": "scripts/stage1_clean/01_po_line_items.py:114",
+      "dtype": "object",
       "name": "Expected Delivery Date",
       "source_type": "intermediate",
       "sources": [
         "data/intermediate/po_line_items.csv"
       ],
-      "dtype": "object",
       "used_in": [
         "01_po_line_items"
-      ],
-      "created_by": "scripts/stage1_clean/01_po_line_items.py:114"
+      ]
     },
-    "Requester": {
-      "name": "Requester",
+    "First Exposure Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "First Exposure Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "used_in": []
+    },
+    "GR Amount": {
+      "created_by": "scripts/stage1_clean/02_gr_postings.py:64",
+      "dtype": "float64",
+      "name": "GR Amount",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/gr_postings.csv"
+      ],
+      "used_in": [
+        "02_gr_postings",
+        "05_calculate_cost_impact"
+      ]
+    },
+    "GR Effective Quantity": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "GR Effective Quantity",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/gr_postings.csv",
+        "data/raw/gr table.csv"
+      ],
+      "used_in": [
+        "02_gr_postings",
+        "05_calculate_cost_impact"
+      ]
+    },
+    "GR Posting Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "GR Posting Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/gr_postings.csv",
+        "data/raw/gr table.csv"
+      ],
+      "used_in": [
+        "05_calculate_cost_impact"
+      ]
+    },
+    "GRIR Qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "GRIR Qty",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "used_in": []
+    },
+    "GRIR Value": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "GRIR Value",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "used_in": [
+        "06_calculate_grir"
+      ]
+    },
+    "IR Effective Quantity": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "IR Effective Quantity",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/ir_postings.csv",
+        "data/raw/invoice table.csv"
+      ],
+      "used_in": [
+        "03_ir_postings"
+      ]
+    },
+    "Invoice Amount": {
+      "created_by": "scripts/stage1_clean/03_ir_postings.py:55",
+      "dtype": "float64",
+      "name": "Invoice Amount",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/ir_postings.csv"
+      ],
+      "used_in": [
+        "03_ir_postings"
+      ]
+    },
+    "Invoice Posting Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Invoice Posting Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/ir_postings.csv",
+        "data/raw/invoice table.csv"
+      ],
+      "used_in": []
+    },
+    "Location": {
+      "created_by": "scripts/stage1_clean/01_po_line_items.py:103",
+      "dtype": "object",
+      "name": "Location",
       "source_type": "intermediate",
       "sources": [
         "data/intermediate/po_line_items.csv"
       ],
+      "used_in": [
+        "01_po_line_items"
+      ]
+    },
+    "Main Vendor ID": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Main Vendor ID",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "01_po_line_items"
+      ]
+    },
+    "Main Vendor Name": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Main Vendor Name",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "Main Vendor SLB Vendor Category": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Main Vendor SLB Vendor Category",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
+    },
+    "NIS Level 0 Desc": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "NIS Level 0 Desc",
+      "source_type": "raw",
+      "sources": [
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "01_po_line_items"
+      ]
+    },
+    "NIS Line": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "NIS Line",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "Open Qty": {
+      "created_by": null,
       "dtype": "float64",
+      "name": "Open Qty",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "Ordered Quantity": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Ordered Quantity",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "02_gr_postings",
+        "03_ir_postings",
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
+    },
+    "PO Account Assignment Category": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Account Assignment Category",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
+    },
+    "PO Account Assignment Category Desc": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Account Assignment Category Desc",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Approval Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Approval Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Current Supplier Promised Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Current Supplier Promised Date",
+      "source_type": "raw",
+      "sources": [
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Current Supplier Requested Delivery Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Current Supplier Requested Delivery Date",
+      "source_type": "raw",
+      "sources": [
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Delivery Completed Indicator": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Delivery Completed Indicator",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Document Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Document Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO GTS Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO GTS Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Initial Output Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Initial Output Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Invoice Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Invoice Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Line": {
+      "created_by": null,
+      "dtype": "int64",
+      "name": "PO Line",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Line ID": {
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:33",
+      "dtype": "object",
+      "name": "PO Line ID",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/cost_impact.csv",
+        "data/intermediate/gr_postings.csv",
+        "data/intermediate/grir_exposures.csv",
+        "data/intermediate/ir_postings.csv",
+        "data/intermediate/po_line_items.csv",
+        "data/raw/gr table.csv",
+        "data/raw/invoice table.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "04_enrich_po_line_items",
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
+    },
+    "PO Line Item": {
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:32",
+      "dtype": null,
+      "name": "PO Line Item",
+      "source_type": "script",
+      "sources": [],
       "used_in": [
         "04_enrich_po_line_items"
+      ]
+    },
+    "PO Material Number": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Material Number",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
       ],
-      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:54"
+      "used_in": []
+    },
+    "PO Material description": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Material description",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Number": {
+      "created_by": null,
+      "dtype": "int64",
+      "name": "PO Number",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "04_enrich_po_line_items"
+      ]
+    },
+    "PO Order Unit": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Order Unit",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO Receipt Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Receipt Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "06_calculate_grir",
+        "06_prepare_po_line_items"
+      ]
+    },
+    "PO Valuation Class": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "PO Valuation Class",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "01_po_line_items"
+      ]
+    },
+    "PO Valuation Class Desc": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "PO Valuation Class Desc",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "PO WBS Element": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "PO WBS Element",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
     },
     "PR Number": {
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:64",
+      "dtype": "float64",
       "name": "PR Number",
       "source_type": "intermediate",
       "sources": [
         "data/intermediate/po_line_items.csv"
       ],
-      "dtype": "float64",
       "used_in": [
         "04_enrich_po_line_items"
-      ],
-      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:64"
+      ]
     },
-    "po_line_id": {
-      "name": "po_line_id",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_transactions.csv",
-        "data/import-ready/grir_exposures.csv",
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "transaction_type": {
-      "name": "transaction_type",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_transactions.csv"
-      ],
-      "dtype": "object",
-      "used_in": [
-        "07_prepare_po_transactions"
-      ],
-      "created_by": null
-    },
-    "posting_date": {
-      "name": "posting_date",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_transactions.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "quantity": {
-      "name": "quantity",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_transactions.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "07_prepare_po_transactions"
-      ],
-      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:54"
-    },
-    "cost_impact_qty": {
-      "name": "cost_impact_qty",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_transactions.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "07_prepare_po_transactions"
-      ],
-      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:50"
-    },
-    "cost_impact_amount": {
-      "name": "cost_impact_amount",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_transactions.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "07_prepare_po_transactions"
-      ],
-      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:52"
-    },
-    "amount": {
-      "name": "amount",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_transactions.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "07_prepare_po_transactions"
-      ],
-      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:58"
-    },
-    "grir_qty": {
-      "name": "grir_qty",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/grir_exposures.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "08_prepare_grir_exposures"
-      ],
-      "created_by": "scripts/stage3_prepare/08_prepare_grir_exposures.py:52"
-    },
-    "grir_value": {
-      "name": "grir_value",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/grir_exposures.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "08_prepare_grir_exposures"
-      ],
-      "created_by": "scripts/stage3_prepare/08_prepare_grir_exposures.py:55"
-    },
-    "first_exposure_date": {
-      "name": "first_exposure_date",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/grir_exposures.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "days_open": {
-      "name": "days_open",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/grir_exposures.csv"
-      ],
+    "Plant Code": {
+      "created_by": null,
       "dtype": "int64",
-      "used_in": [],
-      "created_by": null
-    },
-    "time_bucket": {
-      "name": "time_bucket",
-      "source_type": "import-ready",
+      "name": "Plant Code",
+      "source_type": "intermediate",
       "sources": [
-        "data/import-ready/grir_exposures.csv"
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
       ],
-      "dtype": "object",
       "used_in": [
-        "08_prepare_grir_exposures"
-      ],
-      "created_by": null
+        "01_po_line_items"
+      ]
     },
-    "snapshot_date": {
-      "name": "snapshot_date",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/grir_exposures.csv"
-      ],
+    "Posting Date": {
+      "created_by": "scripts/stage2_transform/06_calculate_grir.py:137",
       "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "po_number": {
-      "name": "po_number",
-      "source_type": "import-ready",
+      "name": "Posting Date",
+      "source_type": "intermediate",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/intermediate/cost_impact.csv"
       ],
-      "dtype": "int64",
-      "used_in": [],
-      "created_by": null
+      "used_in": [
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
     },
-    "po_creation_date": {
-      "name": "po_creation_date",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "plant_code": {
-      "name": "plant_code",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "int64",
-      "used_in": [],
-      "created_by": null
-    },
-    "location": {
-      "name": "location",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "sub_business_line": {
-      "name": "sub_business_line",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "pr_number": {
-      "name": "pr_number",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
+    "Posting Qty": {
+      "created_by": null,
       "dtype": "float64",
-      "used_in": [],
-      "created_by": null
-    },
-    "requester": {
-      "name": "requester",
-      "source_type": "import-ready",
+      "name": "Posting Qty",
+      "source_type": "intermediate",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/intermediate/cost_impact.csv"
       ],
+      "used_in": [
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
+    },
+    "Posting Type": {
+      "created_by": "scripts/stage2_transform/06_calculate_grir.py:124",
+      "dtype": "object",
+      "name": "Posting Type",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/cost_impact.csv"
+      ],
+      "used_in": [
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
+    },
+    "Purchase Requisition Number": {
+      "created_by": null,
+      "dtype": null,
+      "name": "Purchase Requisition Number",
+      "source_type": "script",
+      "sources": [],
+      "used_in": [
+        "04_enrich_po_line_items"
+      ]
+    },
+    "Purchase Value USD": {
+      "created_by": null,
       "dtype": "float64",
-      "used_in": [],
-      "created_by": null
-    },
-    "vendor_id": {
-      "name": "vendor_id",
-      "source_type": "import-ready",
+      "name": "Purchase Value USD",
+      "source_type": "intermediate",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
       ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
+      "used_in": [
+        "02_gr_postings",
+        "03_ir_postings",
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
     },
-    "vendor_name": {
-      "name": "vendor_name",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "vendor_category": {
-      "name": "vendor_category",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "ultimate_vendor_name": {
-      "name": "ultimate_vendor_name",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "line_item_number": {
-      "name": "line_item_number",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "int64",
-      "used_in": [],
-      "created_by": null
-    },
-    "part_number": {
-      "name": "part_number",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "description": {
-      "name": "description",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "ordered_qty": {
-      "name": "ordered_qty",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
+    "Requester": {
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:54",
       "dtype": "float64",
-      "used_in": [],
-      "created_by": null
-    },
-    "order_unit": {
-      "name": "order_unit",
-      "source_type": "import-ready",
+      "name": "Requester",
+      "source_type": "intermediate",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/intermediate/po_line_items.csv"
       ],
+      "used_in": [
+        "04_enrich_po_line_items"
+      ]
+    },
+    "SL Sub-Business Line Code (BV Lvl 3)": {
+      "created_by": null,
       "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "po_value_usd": {
-      "name": "po_value_usd",
-      "source_type": "import-ready",
+      "name": "SL Sub-Business Line Code (BV Lvl 3)",
+      "source_type": "intermediate",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
       ],
-      "dtype": "float64",
-      "used_in": [],
-      "created_by": null
+      "used_in": []
+    },
+    "Snapshot Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Snapshot Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "used_in": []
+    },
+    "Time Bucket": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Time Bucket",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "used_in": [
+        "06_calculate_grir"
+      ]
+    },
+    "Total Cost Impact Amount": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:65",
+      "dtype": null,
+      "name": "Total Cost Impact Amount",
+      "source_type": "script",
+      "sources": [],
+      "used_in": [
+        "06_prepare_po_line_items"
+      ]
+    },
+    "Total Cost Impact Qty": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:64",
+      "dtype": null,
+      "name": "Total Cost Impact Qty",
+      "source_type": "script",
+      "sources": [],
+      "used_in": [
+        "06_prepare_po_line_items"
+      ]
+    },
+    "Ultimate Vendor Name": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Ultimate Vendor Name",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "Ultimate Vendor Number": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Ultimate Vendor Number",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_line_items.csv",
+        "data/raw/po line items.csv"
+      ],
+      "used_in": [
+        "01_po_line_items"
+      ]
+    },
+    "Unit Price": {
+      "created_by": "scripts/stage1_clean/03_ir_postings.py:44",
+      "dtype": null,
+      "name": "Unit Price",
+      "source_type": "script",
+      "sources": [],
+      "used_in": [
+        "02_gr_postings",
+        "03_ir_postings",
+        "05_calculate_cost_impact",
+        "06_calculate_grir"
+      ]
     },
     "account_assignment_category": {
+      "created_by": null,
+      "dtype": "object",
       "name": "account_assignment_category",
       "source_type": "import-ready",
       "sources": [
         "data/import-ready/po_line_items.csv"
       ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
+      "used_in": []
     },
-    "nis_line": {
-      "name": "nis_line",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "wbs_number": {
-      "name": "wbs_number",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
+    "amount": {
+      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:58",
       "dtype": "float64",
-      "used_in": [],
-      "created_by": null
+      "name": "amount",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_transactions.csv"
+      ],
+      "used_in": [
+        "07_prepare_po_transactions"
+      ]
+    },
+    "cost_impact_amount": {
+      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:52",
+      "dtype": "float64",
+      "name": "cost_impact_amount",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_transactions.csv"
+      ],
+      "used_in": [
+        "07_prepare_po_transactions"
+      ]
+    },
+    "cost_impact_qty": {
+      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:50",
+      "dtype": "float64",
+      "name": "cost_impact_qty",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_transactions.csv"
+      ],
+      "used_in": [
+        "07_prepare_po_transactions"
+      ]
+    },
+    "days_open": {
+      "created_by": null,
+      "dtype": "int64",
+      "name": "days_open",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/grir_exposures.csv"
+      ],
+      "used_in": []
+    },
+    "description": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "description",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
     },
     "expected_delivery_date": {
+      "created_by": null,
+      "dtype": "object",
       "name": "expected_delivery_date",
       "source_type": "import-ready",
       "sources": [
         "data/import-ready/po_line_items.csv"
       ],
+      "used_in": []
+    },
+    "first_exposure_date": {
+      "created_by": null,
       "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "po_approval_status": {
-      "name": "po_approval_status",
+      "name": "first_exposure_date",
       "source_type": "import-ready",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/import-ready/grir_exposures.csv"
       ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "po_receipt_status": {
-      "name": "po_receipt_status",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "po_gts_status": {
-      "name": "po_gts_status",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "object",
-      "used_in": [],
-      "created_by": null
-    },
-    "open_po_qty": {
-      "name": "open_po_qty",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "06_prepare_po_line_items"
-      ],
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:107"
-    },
-    "open_po_value": {
-      "name": "open_po_value",
-      "source_type": "import-ready",
-      "sources": [
-        "data/import-ready/po_line_items.csv"
-      ],
-      "dtype": "float64",
-      "used_in": [
-        "06_prepare_po_line_items"
-      ],
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:109"
+      "used_in": []
     },
     "fmt_po": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:115",
+      "dtype": "bool",
       "name": "fmt_po",
       "source_type": "import-ready",
       "sources": [
         "data/import-ready/po_line_items.csv"
       ],
-      "dtype": "bool",
       "used_in": [
         "06_prepare_po_line_items"
-      ],
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:115"
+      ]
     },
-    "Unit Price": {
-      "name": "Unit Price",
-      "source_type": "script",
-      "sources": [],
-      "dtype": null,
+    "grir_qty": {
+      "created_by": "scripts/stage3_prepare/08_prepare_grir_exposures.py:52",
+      "dtype": "float64",
+      "name": "grir_qty",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/grir_exposures.csv"
+      ],
       "used_in": [
-        "03_ir_postings",
-        "02_gr_postings",
-        "06_calculate_grir",
-        "05_calculate_cost_impact"
-      ],
-      "created_by": "scripts/stage1_clean/03_ir_postings.py:44"
+        "08_prepare_grir_exposures"
+      ]
     },
-    "PO Line Item": {
-      "name": "PO Line Item",
-      "source_type": "script",
-      "sources": [],
-      "dtype": null,
+    "grir_value": {
+      "created_by": "scripts/stage3_prepare/08_prepare_grir_exposures.py:55",
+      "dtype": "float64",
+      "name": "grir_value",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/grir_exposures.csv"
+      ],
       "used_in": [
-        "04_enrich_po_line_items"
-      ],
-      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:32"
+        "08_prepare_grir_exposures"
+      ]
     },
-    "ARIBA shopping cart number : created by (Text)": {
-      "name": "ARIBA shopping cart number : created by (Text)",
-      "source_type": "script",
-      "sources": [],
-      "dtype": null,
-      "used_in": [
-        "04_enrich_po_line_items"
+    "line_item_number": {
+      "created_by": null,
+      "dtype": "int64",
+      "name": "line_item_number",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
       ],
-      "created_by": null
+      "used_in": []
     },
-    "Purchase Requisition Number": {
-      "name": "Purchase Requisition Number",
-      "source_type": "script",
-      "sources": [],
-      "dtype": null,
-      "used_in": [
-        "04_enrich_po_line_items"
+    "location": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "location",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
       ],
-      "created_by": null
+      "used_in": []
     },
-    "ARIBA Shopping cart number": {
-      "name": "ARIBA Shopping cart number",
-      "source_type": "script",
-      "sources": [],
-      "dtype": null,
-      "used_in": [
-        "04_enrich_po_line_items"
+    "nis_line": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "nis_line",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
       ],
-      "created_by": null
+      "used_in": []
     },
-    "Total Cost Impact Qty": {
-      "name": "Total Cost Impact Qty",
-      "source_type": "script",
-      "sources": [],
-      "dtype": null,
-      "used_in": [
-        "06_prepare_po_line_items"
+    "open_po_qty": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:107",
+      "dtype": "float64",
+      "name": "open_po_qty",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
       ],
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:64"
-    },
-    "Total Cost Impact Amount": {
-      "name": "Total Cost Impact Amount",
-      "source_type": "script",
-      "sources": [],
-      "dtype": null,
       "used_in": [
         "06_prepare_po_line_items"
+      ]
+    },
+    "open_po_value": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:109",
+      "dtype": "float64",
+      "name": "open_po_value",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
       ],
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:65"
+      "used_in": [
+        "06_prepare_po_line_items"
+      ]
+    },
+    "order_unit": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "order_unit",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "ordered_qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "ordered_qty",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "part_number": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "part_number",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "plant_code": {
+      "created_by": null,
+      "dtype": "int64",
+      "name": "plant_code",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "po_approval_status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "po_approval_status",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "po_creation_date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "po_creation_date",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "po_gts_status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "po_gts_status",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "po_line_id": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "po_line_id",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/grir_exposures.csv",
+        "data/import-ready/po_line_items.csv",
+        "data/import-ready/po_transactions.csv"
+      ],
+      "used_in": []
+    },
+    "po_number": {
+      "created_by": null,
+      "dtype": "int64",
+      "name": "po_number",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "po_receipt_status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "po_receipt_status",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "po_value_usd": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "po_value_usd",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "posting_date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "posting_date",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_transactions.csv"
+      ],
+      "used_in": []
+    },
+    "pr_number": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "pr_number",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "quantity": {
+      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:54",
+      "dtype": "float64",
+      "name": "quantity",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_transactions.csv"
+      ],
+      "used_in": [
+        "07_prepare_po_transactions"
+      ]
+    },
+    "requester": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "requester",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "snapshot_date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "snapshot_date",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/grir_exposures.csv"
+      ],
+      "used_in": []
+    },
+    "sub_business_line": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "sub_business_line",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "time_bucket": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "time_bucket",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/grir_exposures.csv"
+      ],
+      "used_in": [
+        "08_prepare_grir_exposures"
+      ]
+    },
+    "transaction_type": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "transaction_type",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_transactions.csv"
+      ],
+      "used_in": [
+        "07_prepare_po_transactions"
+      ]
+    },
+    "ultimate_vendor_name": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "ultimate_vendor_name",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "vendor_category": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "vendor_category",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "vendor_id": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "vendor_id",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "vendor_name": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "vendor_name",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
+    },
+    "wbs_number": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "wbs_number",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": []
     }
   },
-  "tables": [
+  "constants": [
     {
-      "name": "budget_forecasts",
-      "file": "src/schema/budget-forecasts.ts",
-      "columns": [
-        "id",
-        "forecastVersionId",
-        "costBreakdownId",
-        "forecastedCost",
-        "createdAt"
-      ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "forecastVersionId",
-          "references": "forecastVersions.id"
-        },
-        {
-          "column": "costBreakdownId",
-          "references": "costBreakdown.id"
-        }
-      ]
+      "file": "scripts/config/column_mappings.py",
+      "line": 173,
+      "name": "EXCLUDED_NIS_LEVELS",
+      "value_preview": "['Compensation Business Delivery', 'Compensation Business Enablement']",
+      "value_type": "list"
     },
     {
-      "name": "cost_breakdown",
-      "file": "src/schema/cost-breakdown.ts",
-      "columns": [
-        "id",
-        "projectId",
-        "subBusinessLine",
-        "costLine",
-        "spendType",
-        "spendSubCategory",
-        "budgetCost",
-        "createdAt",
-        "updatedAt"
-      ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "projectId",
-          "references": "projects.id"
-        }
-      ]
+      "file": "scripts/config/column_mappings.py",
+      "line": 170,
+      "name": "EXCLUDED_VALUATION_CLASSES",
+      "value_preview": "[7800, 7900, 5008]",
+      "value_type": "list"
     },
     {
-      "name": "forecast_versions",
-      "file": "src/schema/forecast-versions.ts",
-      "columns": [
-        "id",
-        "projectId",
-        "versionNumber",
-        "reasonForChange",
-        "createdAt",
-        "createdBy"
-      ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "projectId",
-          "references": "projects.id"
-        }
-      ]
+      "file": "scripts/config/column_mappings.py",
+      "line": 186,
+      "name": "GRIR_EXPOSURES_MAPPING",
+      "value_preview": "{'PO Line ID': 'po_line_id', 'GRIR Qty': 'grir_qty', 'GRIR Value': 'grir_value', 'First Exposure Dat",
+      "value_type": "dict"
     },
     {
-      "name": "grir_exposures",
-      "file": "src/schema/grir-exposures.ts",
-      "columns": [
-        "id",
-        "poLineItemId",
-        "grirQty",
-        "grirValue",
-        "firstExposureDate",
-        "daysOpen",
-        "timeBucket",
-        "snapshotDate",
-        "createdAt",
-        "updatedAt"
-      ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "poLineItemId",
-          "references": "poLineItems.id"
-        }
-      ]
+      "file": "scripts/config/column_mappings.py",
+      "line": 197,
+      "name": "GRIR_TIME_BUCKETS",
+      "value_preview": "{30: '<1 month', 90: '1-3 months', 180: '3-6 months', 365: '6-12 months'}",
+      "value_type": "dict"
     },
     {
-      "name": "po_line_items",
-      "file": "src/schema/po-line-items.ts",
-      "columns": [
-        "id",
-        "poLineId",
-        "poNumber",
-        "poCreationDate",
-        "plantCode",
-        "location",
-        "subBusinessLine",
-        "prNumber",
-        "prLine",
-        "requester",
-        "vendorId",
-        "vendorName",
-        "vendorCategory",
-        "ultimateVendorName",
-        "lineItemNumber",
-        "partNumber",
+      "file": "scripts/config/column_mappings.py",
+      "line": 203,
+      "name": "GRIR_TIME_BUCKET_MAX",
+      "value_preview": ">1 year",
+      "value_type": "str"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 145,
+      "name": "PLANT_CODE_TO_LOCATION",
+      "value_preview": "{'3601': 'Perth', '3606': 'Jandakot', '3608': 'Kewdale', '3609': 'Toowoomba', '3610': 'Roma', '3611'",
+      "value_type": "dict"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 68,
+      "name": "PO_LINE_ITEMS_CALCULATED",
+      "value_preview": "['open_po_qty', 'open_po_value', 'fmt_po']",
+      "value_type": "list"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 15,
+      "name": "PO_LINE_ITEMS_MAPPING",
+      "value_preview": "{'PO Line ID': 'po_line_id', 'PO Number': 'po_number', 'PO Document Date': 'po_creation_date', 'Plan",
+      "value_type": "dict"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 78,
+      "name": "PO_TRANSACTIONS_MAPPING",
+      "value_preview": "{'PO Line ID': 'po_line_id', 'Posting Type': 'transaction_type', 'Posting Date': 'posting_date', 'Po",
+      "value_type": "dict"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 92,
+      "name": "REQUIRED_COLUMNS",
+      "value_preview": "{'po_line_items': ['po_line_id', 'po_number', 'line_item_number', 'ordered_qty', 'po_value_usd'], 'p",
+      "value_type": "dict"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 180,
+      "name": "SIMPLE_ACCOUNT_CATEGORIES",
+      "value_preview": "['K', 'P', 'S', 'V']",
+      "value_type": "list"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 179,
+      "name": "SIMPLE_VENDOR_CATEGORY",
+      "value_preview": "GLD",
+      "value_type": "str"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 122,
+      "name": "VENDOR_NAME_MAPPING",
+      "value_preview": "{'P9516': 'Dubai Hub', 'P9109': 'Houston Hub', 'P9517': 'Shanghai Hub', 'P9518': 'Singapore Hub', 'P",
+      "value_type": "dict"
+    }
+  ],
+  "description": "Symbol registry for Context Oracle - verify before use",
+  "functions": [
+    {
+      "args": [
+        "complex_po_ids",
+        "gr_df",
+        "ir_df",
+        "po_df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "DataFrame",
+        "append",
+        "concat",
+        "copy",
+        "get",
+        "groupby",
+        "isin",
+        "iterrows",
+        "len",
+        "max",
+        "print",
+        "rename",
+        "round",
+        "set_index",
+        "sort_values",
+        "to_datetime",
+        "to_dict"
+      ],
+      "docstring": "Type 2: Cost impact based on GR/IR chronological processing.",
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 87,
+      "name": "calculate_complex_cost_impact",
+      "return_type": "pd.DataFrame",
+      "signature": "def calculate_complex_cost_impact(gr_df: pd.DataFrame, ir_df: pd.DataFrame, complex_po_ids: set, po_df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "drop_duplicates",
+        "len",
+        "merge",
+        "print",
+        "read_csv",
+        "round"
+      ],
+      "docstring": "Calculate GR Amount based on unit price from PO Line Items.\nFormula: GR Amount = (Purchase Value USD / Ordered Quantity) * GR Effective Quantity",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 43,
+      "name": "calculate_gr_amount",
+      "return_type": "pd.DataFrame",
+      "signature": "def calculate_gr_amount(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "gr_df",
+        "ir_df",
+        "simple_po_ids",
+        "snapshot_date",
+        "unit_prices"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "DataFrame",
+        "Timestamp",
+        "append",
+        "categorize_time_bucket",
+        "concat",
+        "copy",
+        "float",
+        "get",
+        "groupby",
+        "isin",
+        "iterrows",
+        "len",
+        "print",
+        "rename",
+        "round",
+        "sort_values",
+        "strftime",
+        "to_datetime"
+      ],
+      "docstring": "Calculate GRIR exposure for each Simple PO Line ID.\n\nGRIR = IR - GR (when IR > GR)\n\nLogic:\n1. For each PO Line ID, combine GR and IR postings chronologically\n2. Track cumulative GR and IR\n3. Find first date when IR exceeded GR (first_exposure_date)\n4. Calculate current GRIR qty/value\n5. Calculate duration and time bucket",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 93,
+      "name": "calculate_grir_exposures",
+      "return_type": "pd.DataFrame",
+      "signature": "def calculate_grir_exposures(gr_df: pd.DataFrame, ir_df: pd.DataFrame, simple_po_ids: set, unit_prices: dict, snapshot_date: date) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "drop_duplicates",
+        "len",
+        "merge",
+        "print",
+        "read_csv",
+        "round"
+      ],
+      "docstring": "Calculate Invoice Amount based on unit price from PO Line Items.\nFormula: Invoice Amount = (Purchase Value USD / Ordered Quantity) * IR Effective Quantity",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 34,
+      "name": "calculate_invoice_amount",
+      "return_type": "pd.DataFrame",
+      "signature": "def calculate_invoice_amount(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "cost_df",
+        "po_df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "agg",
+        "drop",
+        "fillna",
+        "groupby",
+        "merge",
+        "print",
+        "reset_index",
+        "sum"
+      ],
+      "docstring": "Calculate open_po_qty and open_po_value based on cost impact.\n\nLogic:\n- If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0\n- Otherwise: calculate open values from ordered - cost impact",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 43,
+      "name": "calculate_open_values",
+      "return_type": "pd.DataFrame",
+      "signature": "def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "gr_df",
+        "simple_po_ids"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "DataFrame",
+        "copy",
+        "isin",
+        "len",
+        "print"
+      ],
+      "docstring": "Type 1: Cost impact = GR postings only (IR ignored).",
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 68,
+      "name": "calculate_simple_cost_impact",
+      "return_type": "pd.DataFrame",
+      "signature": "def calculate_simple_cost_impact(gr_df: pd.DataFrame, simple_po_ids: set) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "days"
+      ],
+      "called_by": [
+        "calculate_grir_exposures"
+      ],
+      "calls": [
+        "items",
+        "sorted"
+      ],
+      "docstring": "Categorize days into time bucket.",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 85,
+      "name": "categorize_time_bucket",
+      "return_type": "str",
+      "signature": "def categorize_time_bucket(days: int) -> str"
+    },
+    {
+      "args": [
+        "po_df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "isin",
+        "len",
+        "print",
+        "set"
+      ],
+      "docstring": "Classify PO Line Items into simple (Type 1) and complex (Type 2).\n\nType 1 (Simple): Vendor Category = GLD AND Account Category IN (K, P, S, V)\nType 2 (Complex): All others",
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 47,
+      "name": "classify_po_line_items",
+      "return_type": "tuple",
+      "signature": "def classify_po_line_items(po_df: pd.DataFrame) -> tuple"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "drop",
+        "notna",
+        "print",
+        "where"
+      ],
+      "docstring": "Consolidate delivery date columns into 'Expected Delivery Date'.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 109,
+      "name": "consolidate_delivery_dates",
+      "return_type": "pd.DataFrame",
+      "signature": "def consolidate_delivery_dates(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "enrichment",
+        "po_df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "astype",
+        "len",
+        "match",
+        "merge",
+        "notna",
+        "print",
+        "sum"
+      ],
+      "docstring": "Left join enrichment data to PO line items.",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 73,
+      "name": "enrich_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "details"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "DataFrame",
+        "apply",
+        "copy",
+        "int",
+        "notna",
+        "print",
+        "str",
+        "sum",
+        "where"
+      ],
+      "docstring": "Extract Requester and PR Number from PO Details.",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 46,
+      "name": "extract_enrichment_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def extract_enrichment_data(details: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "isna",
+        "print",
+        "sum",
+        "to_numeric"
+      ],
+      "docstring": "Set NIS Level 0 Desc to 'Materials and Supplies' for Valuation Class 3021 where null.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 63,
+      "name": "fill_nis_level_for_3021",
+      "return_type": "pd.DataFrame",
+      "signature": "def fill_nis_level_for_3021(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "copy",
+        "isin",
+        "len",
+        "print"
+      ],
+      "docstring": "Remove rows with excluded NIS Level 0 Desc values.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 53,
+      "name": "filter_nis_levels",
+      "return_type": "pd.DataFrame",
+      "signature": "def filter_nis_levels(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "copy",
+        "isin",
+        "len",
+        "print",
+        "to_numeric"
+      ],
+      "docstring": "Remove rows with excluded PO Valuation Classes.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 42,
+      "name": "filter_valuation_classes",
+      "return_type": "pd.DataFrame",
+      "signature": "def filter_valuation_classes(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "copy",
+        "len",
+        "print"
+      ],
+      "docstring": "Remove rows with zero GR Effective Quantity.",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 34,
+      "name": "filter_zero_quantity",
+      "return_type": "pd.DataFrame",
+      "signature": "def filter_zero_quantity(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "po_df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "isin",
+        "len",
+        "print",
+        "set",
+        "sum"
+      ],
+      "docstring": "Get PO Line IDs for Simple POs (GLD + K/P/S/V) that are NOT closed.\nThese are the POs where we track GRIR exposure.\n\nClosed POs are excluded - no exposure if PO is already closed.",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 56,
+      "name": "get_simple_po_ids",
+      "return_type": "set",
+      "signature": "def get_simple_po_ids(po_df: pd.DataFrame) -> set"
+    },
+    {
+      "args": [
+        "po_df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "copy",
+        "set_index",
+        "to_dict"
+      ],
+      "docstring": "Calculate unit price for each PO Line ID.",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 78,
+      "name": "get_unit_prices",
+      "return_type": "dict",
+      "signature": "def get_unit_prices(po_df: pd.DataFrame) -> dict"
+    },
+    {
+      "args": [
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load the raw CSV file.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 34,
+      "name": "load_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_data(filepath: Path) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load the raw CSV file.",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 26,
+      "name": "load_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_data(filepath: Path) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load the raw CSV file.",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 26,
+      "name": "load_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_data(filepath: Path) -> pd.DataFrame"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load all required data files.",
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 31,
+      "name": "load_data",
+      "return_type": null,
+      "signature": "def load_data()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load all required data files.",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 40,
+      "name": "load_data",
+      "return_type": null,
+      "signature": "def load_data()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load intermediate data files.",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 30,
+      "name": "load_data",
+      "return_type": null,
+      "signature": "def load_data()"
+    },
+    {
+      "args": [
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load cost impact data.",
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 28,
+      "name": "load_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_data(filepath: Path) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "filepath"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load GRIR exposures data.",
+      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "line": 28,
+      "name": "load_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_data(filepath: Path) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "filepath"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "astype",
+        "fillna",
+        "len",
+        "print",
+        "read_excel"
+      ],
+      "docstring": "Load PO Details Report and prepare for join.",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 25,
+      "name": "load_po_details",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_po_details(filepath: Path) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "filepath"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load intermediate PO line items.",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 38,
+      "name": "load_po_line_items",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_po_line_items(filepath: Path) -> pd.DataFrame"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "ArgumentParser",
+        "add_argument",
+        "exit",
+        "parse_args",
+        "run_pipeline"
+      ],
+      "docstring": null,
+      "file": "scripts/pipeline.py",
+      "line": 137,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "consolidate_delivery_dates",
+        "fill_nis_level_for_3021",
+        "filter_nis_levels",
+        "filter_valuation_classes",
+        "load_data",
+        "map_location",
+        "map_vendor_names",
+        "print",
+        "save_data",
+        "transform_nis_column"
+      ],
+      "docstring": null,
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 133,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "calculate_gr_amount",
+        "exists",
+        "filter_zero_quantity",
+        "load_data",
+        "print",
+        "save_data"
+      ],
+      "docstring": null,
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 80,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "calculate_invoice_amount",
+        "exists",
+        "load_data",
+        "print",
+        "save_data"
+      ],
+      "docstring": null,
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 71,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "enrich_data",
+        "exists",
+        "extract_enrichment_data",
+        "load_po_details",
+        "load_po_line_items",
+        "print",
+        "save_data"
+      ],
+      "docstring": null,
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 115,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "calculate_complex_cost_impact",
+        "calculate_simple_cost_impact",
+        "classify_po_line_items",
+        "concat",
+        "exists",
+        "load_data",
+        "print",
+        "save_data",
+        "sort_values"
+      ],
+      "docstring": null,
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 168,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "calculate_grir_exposures",
+        "exists",
+        "get_simple_po_ids",
+        "get_unit_prices",
+        "load_data",
+        "print",
+        "save_data",
+        "today"
+      ],
+      "docstring": null,
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 213,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "calculate_open_values",
+        "exists",
+        "load_data",
+        "map_columns",
+        "print",
+        "save_data",
+        "validate_output"
+      ],
+      "docstring": null,
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 151,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "exists",
+        "load_data",
+        "map_columns",
+        "print",
+        "save_data",
+        "validate_output"
+      ],
+      "docstring": null,
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 94,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "DataFrame",
+        "exists",
+        "len",
+        "list",
+        "load_data",
+        "map_columns",
+        "mkdir",
+        "print",
+        "save_data",
+        "to_csv",
+        "validate_output",
+        "values"
+      ],
+      "docstring": null,
+      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "line": 100,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
+      "args": [
+        "po_df"
+      ],
+      "called_by": [],
+      "calls": [
+        "DataFrame",
+        "items",
+        "len",
+        "print",
+        "round"
+      ],
+      "docstring": "Map CSV columns to database column names.",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 92,
+      "name": "map_columns",
+      "return_type": "pd.DataFrame",
+      "signature": "def map_columns(po_df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [],
+      "calls": [
+        "DataFrame",
+        "items",
+        "len",
+        "print",
+        "round"
+      ],
+      "docstring": "Map CSV columns to database column names.",
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 36,
+      "name": "map_columns",
+      "return_type": "pd.DataFrame",
+      "signature": "def map_columns(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "DataFrame",
+        "items",
+        "print",
+        "round"
+      ],
+      "docstring": "Map CSV columns to database column names.",
+      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "line": 36,
+      "name": "map_columns",
+      "return_type": "pd.DataFrame",
+      "signature": "def map_columns(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "astype",
+        "map",
+        "notna",
+        "print",
+        "sum"
+      ],
+      "docstring": "Map Plant Code to Location.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 100,
+      "name": "map_location",
+      "return_type": "pd.DataFrame",
+      "signature": "def map_location(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "isin",
+        "keys",
+        "map",
+        "print",
+        "sum"
+      ],
+      "docstring": "Map Main Vendor Name and Ultimate Vendor Name based on vendor IDs.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 85,
+      "name": "map_vendor_names",
+      "return_type": "pd.DataFrame",
+      "signature": "def map_vendor_names(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "max_stage"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "enumerate",
+        "exists",
+        "glob",
+        "now",
+        "print",
+        "run_stage",
+        "sorted",
+        "stat",
+        "strftime",
+        "total_seconds"
+      ],
+      "docstring": "Run the pipeline up to the specified stage.",
+      "file": "scripts/pipeline.py",
+      "line": 92,
+      "name": "run_pipeline",
+      "return_type": "bool",
+      "signature": "def run_pipeline(max_stage: int) -> bool"
+    },
+    {
+      "args": [
         "description",
-        "orderedQty",
-        "orderUnit",
-        "poValueUsd",
-        "accountAssignmentCategory",
-        "nisLine",
-        "wbsNumber",
-        "assetCode",
-        "expectedDeliveryDate",
-        "poApprovalStatus",
-        "poReceiptStatus",
-        "poGtsStatus",
-        "fmtPo",
-        "openPoQty",
-        "openPoValue",
-        "createdAt",
-        "updatedAt"
+        "script_path"
       ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "wbsNumber",
-          "references": "wbsDetails.wbsNumber"
-        }
-      ]
+      "called_by": [
+        "run_stage"
+      ],
+      "calls": [
+        "print",
+        "run",
+        "str"
+      ],
+      "docstring": "Run a Python script and return success status.",
+      "file": "scripts/pipeline.py",
+      "line": 55,
+      "name": "run_script",
+      "return_type": "bool",
+      "signature": "def run_script(script_path: Path, description: str) -> bool"
     },
     {
-      "name": "po_mappings",
-      "file": "src/schema/po-mappings.ts",
-      "columns": [
-        "id",
-        "poLineItemId",
-        "costBreakdownId",
-        "mappedAmount",
-        "mappingNotes",
-        "mappedBy",
-        "mappedAt",
-        "createdAt",
-        "updatedAt"
+      "args": [
+        "scripts",
+        "stage_name"
       ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "poLineItemId",
-          "references": "poLineItems.id"
-        },
-        {
-          "column": "costBreakdownId",
-          "references": "costBreakdown.id"
-        }
-      ]
+      "called_by": [
+        "run_pipeline"
+      ],
+      "calls": [
+        "exists",
+        "print",
+        "run_script"
+      ],
+      "docstring": "Run all scripts in a stage.",
+      "file": "scripts/pipeline.py",
+      "line": 74,
+      "name": "run_stage",
+      "return_type": "bool",
+      "signature": "def run_stage(stage_name: str, scripts: list) -> bool"
     },
     {
-      "name": "po_operations",
-      "file": "src/schema/po-operations.ts",
-      "columns": [
-        "id",
-        "poLineItemId",
-        "operationType",
-        "status",
-        "requestedBy",
-        "requestedAt",
-        "approvedBy",
-        "approvedAt",
-        "completedAt",
-        "reason",
-        "oldValue",
-        "newValue",
-        "notes",
-        "createdAt",
-        "updatedAt"
+      "args": [
+        "df",
+        "filepath"
       ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "poLineItemId",
-          "references": "poLineItems.id"
-        }
-      ]
+      "called_by": [],
+      "calls": [
+        "len",
+        "mkdir",
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save the cleaned DataFrame to CSV.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 125,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
     },
     {
-      "name": "po_transactions",
-      "file": "src/schema/po-transactions.ts",
-      "columns": [
-        "id",
-        "poLineItemId",
-        "transactionType",
-        "postingDate",
-        "quantity",
-        "amount",
-        "costImpactQty",
-        "costImpactAmount",
-        "createdAt",
-        "updatedAt"
+      "args": [
+        "df",
+        "filepath"
       ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "poLineItemId",
-          "references": "poLineItems.id"
-        }
-      ]
+      "called_by": [],
+      "calls": [
+        "len",
+        "mkdir",
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save the cleaned DataFrame to CSV.",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 72,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
     },
     {
-      "name": "projects",
-      "file": "src/schema/projects.ts",
-      "columns": [
-        "id",
-        "name",
-        "subBusinessLine",
-        "createdAt",
-        "updatedAt"
+      "args": [
+        "df",
+        "filepath"
       ],
-      "primary_key": "id",
-      "foreign_keys": []
+      "called_by": [],
+      "calls": [
+        "len",
+        "mkdir",
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save the cleaned DataFrame to CSV.",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 63,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
     },
     {
-      "name": "sap_reservations",
-      "file": "src/schema/sap-reservations.ts",
-      "columns": [
-        "id",
-        "reservationNumber",
-        "reservationLineNumber",
-        "reservationRequirementDate",
-        "partNumber",
-        "description",
-        "reservationQty",
-        "reservationValue",
-        "reservationStatus",
-        "poNumber",
-        "poLineNumber",
-        "wbsNumber",
-        "assetCode",
-        "assetSerialNumber",
-        "requester",
-        "createdAt",
-        "updatedAt",
-        "poLineItemId"
+      "args": [
+        "df",
+        "filepath"
       ],
-      "primary_key": "id",
-      "foreign_keys": [
-        {
-          "column": "wbsNumber",
-          "references": "wbsDetails.wbsNumber"
-        },
-        {
-          "column": "poLineItemId",
-          "references": "poLineItems.id"
-        }
-      ]
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save enriched DataFrame to CSV.",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 108,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
     },
     {
-      "name": "wbs_details",
-      "file": "src/schema/wbs-details.ts",
-      "columns": [
-        "wbsNumber",
-        "clientName",
-        "subBusinessLine"
+      "args": [
+        "df",
+        "filepath"
       ],
-      "primary_key": "wbsNumber",
-      "foreign_keys": []
+      "called_by": [],
+      "calls": [
+        "len",
+        "mkdir",
+        "print",
+        "sum",
+        "to_csv"
+      ],
+      "docstring": "Save cost impact DataFrame to CSV.",
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 159,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
+    },
+    {
+      "args": [
+        "df",
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "items",
+        "len",
+        "mkdir",
+        "print",
+        "sum",
+        "to_csv",
+        "value_counts"
+      ],
+      "docstring": "Save GRIR exposures DataFrame to CSV.",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 199,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
+    },
+    {
+      "args": [
+        "df",
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
+        "mkdir",
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save import-ready DataFrame to CSV.",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 142,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
+    },
+    {
+      "args": [
+        "df",
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
+        "list",
+        "mkdir",
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save import-ready DataFrame to CSV.",
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 85,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
+    },
+    {
+      "args": [
+        "df",
+        "filepath"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "len",
+        "mkdir",
+        "print",
+        "sum",
+        "to_csv"
+      ],
+      "docstring": "Save import-ready DataFrame to CSV.",
+      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "line": 81,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "print",
+        "rename",
+        "sum"
+      ],
+      "docstring": "Rename NIS Level 0 Desc to NIS Line and clean up values.",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 73,
+      "name": "transform_nis_column",
+      "return_type": "pd.DataFrame",
+      "signature": "def transform_nis_column(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [],
+      "calls": [
+        "isna",
+        "print",
+        "sum"
+      ],
+      "docstring": "Validate required columns are present.",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 123,
+      "name": "validate_output",
+      "return_type": "bool",
+      "signature": "def validate_output(df: pd.DataFrame) -> bool"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [],
+      "calls": [
+        "print",
+        "set",
+        "unique"
+      ],
+      "docstring": "Validate required columns are present.",
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 64,
+      "name": "validate_output",
+      "return_type": "bool",
+      "signature": "def validate_output(df: pd.DataFrame) -> bool"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "get",
+        "isna",
+        "len",
+        "print",
+        "sum"
+      ],
+      "docstring": "Validate required columns are present.",
+      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "line": 60,
+      "name": "validate_output",
+      "return_type": "bool",
+      "signature": "def validate_output(df: pd.DataFrame) -> bool"
     }
   ],
   "stats": {
-    "total_functions": 58,
-    "total_constants": 13,
     "total_columns": 100,
+    "total_constants": 13,
+    "total_functions": 58,
     "total_tables": 11
-  }
+  },
+  "tables": [
+    {
+      "columns": [
+        "costBreakdownId",
+        "createdAt",
+        "forecastVersionId",
+        "forecastedCost",
+        "id"
+      ],
+      "file": "src/schema/budget-forecasts.ts",
+      "foreign_keys": [
+        {
+          "column": "costBreakdownId",
+          "references": "costBreakdown.id"
+        },
+        {
+          "column": "forecastVersionId",
+          "references": "forecastVersions.id"
+        }
+      ],
+      "name": "budget_forecasts",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "budgetCost",
+        "costLine",
+        "createdAt",
+        "id",
+        "projectId",
+        "spendSubCategory",
+        "spendType",
+        "subBusinessLine",
+        "updatedAt"
+      ],
+      "file": "src/schema/cost-breakdown.ts",
+      "foreign_keys": [
+        {
+          "column": "projectId",
+          "references": "projects.id"
+        }
+      ],
+      "name": "cost_breakdown",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "createdAt",
+        "createdBy",
+        "id",
+        "projectId",
+        "reasonForChange",
+        "versionNumber"
+      ],
+      "file": "src/schema/forecast-versions.ts",
+      "foreign_keys": [
+        {
+          "column": "projectId",
+          "references": "projects.id"
+        }
+      ],
+      "name": "forecast_versions",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "createdAt",
+        "daysOpen",
+        "firstExposureDate",
+        "grirQty",
+        "grirValue",
+        "id",
+        "poLineItemId",
+        "snapshotDate",
+        "timeBucket",
+        "updatedAt"
+      ],
+      "file": "src/schema/grir-exposures.ts",
+      "foreign_keys": [
+        {
+          "column": "poLineItemId",
+          "references": "poLineItems.id"
+        }
+      ],
+      "name": "grir_exposures",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "accountAssignmentCategory",
+        "assetCode",
+        "createdAt",
+        "description",
+        "expectedDeliveryDate",
+        "fmtPo",
+        "id",
+        "lineItemNumber",
+        "location",
+        "nisLine",
+        "openPoQty",
+        "openPoValue",
+        "orderUnit",
+        "orderedQty",
+        "partNumber",
+        "plantCode",
+        "poApprovalStatus",
+        "poCreationDate",
+        "poGtsStatus",
+        "poLineId",
+        "poNumber",
+        "poReceiptStatus",
+        "poValueUsd",
+        "prLine",
+        "prNumber",
+        "requester",
+        "subBusinessLine",
+        "ultimateVendorName",
+        "updatedAt",
+        "vendorCategory",
+        "vendorId",
+        "vendorName",
+        "wbsNumber"
+      ],
+      "file": "src/schema/po-line-items.ts",
+      "foreign_keys": [
+        {
+          "column": "wbsNumber",
+          "references": "wbsDetails.wbsNumber"
+        }
+      ],
+      "name": "po_line_items",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "costBreakdownId",
+        "createdAt",
+        "id",
+        "mappedAmount",
+        "mappedAt",
+        "mappedBy",
+        "mappingNotes",
+        "poLineItemId",
+        "updatedAt"
+      ],
+      "file": "src/schema/po-mappings.ts",
+      "foreign_keys": [
+        {
+          "column": "costBreakdownId",
+          "references": "costBreakdown.id"
+        },
+        {
+          "column": "poLineItemId",
+          "references": "poLineItems.id"
+        }
+      ],
+      "name": "po_mappings",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "approvedAt",
+        "approvedBy",
+        "completedAt",
+        "createdAt",
+        "id",
+        "newValue",
+        "notes",
+        "oldValue",
+        "operationType",
+        "poLineItemId",
+        "reason",
+        "requestedAt",
+        "requestedBy",
+        "status",
+        "updatedAt"
+      ],
+      "file": "src/schema/po-operations.ts",
+      "foreign_keys": [
+        {
+          "column": "poLineItemId",
+          "references": "poLineItems.id"
+        }
+      ],
+      "name": "po_operations",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "amount",
+        "costImpactAmount",
+        "costImpactQty",
+        "createdAt",
+        "id",
+        "poLineItemId",
+        "postingDate",
+        "quantity",
+        "transactionType",
+        "updatedAt"
+      ],
+      "file": "src/schema/po-transactions.ts",
+      "foreign_keys": [
+        {
+          "column": "poLineItemId",
+          "references": "poLineItems.id"
+        }
+      ],
+      "name": "po_transactions",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "createdAt",
+        "id",
+        "name",
+        "subBusinessLine",
+        "updatedAt"
+      ],
+      "file": "src/schema/projects.ts",
+      "foreign_keys": [],
+      "name": "projects",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "assetCode",
+        "assetSerialNumber",
+        "createdAt",
+        "description",
+        "id",
+        "partNumber",
+        "poLineItemId",
+        "poLineNumber",
+        "poNumber",
+        "requester",
+        "reservationLineNumber",
+        "reservationNumber",
+        "reservationQty",
+        "reservationRequirementDate",
+        "reservationStatus",
+        "reservationValue",
+        "updatedAt",
+        "wbsNumber"
+      ],
+      "file": "src/schema/sap-reservations.ts",
+      "foreign_keys": [
+        {
+          "column": "poLineItemId",
+          "references": "poLineItems.id"
+        },
+        {
+          "column": "wbsNumber",
+          "references": "wbsDetails.wbsNumber"
+        }
+      ],
+      "name": "sap_reservations",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "clientName",
+        "subBusinessLine",
+        "wbsNumber"
+      ],
+      "file": "src/schema/wbs-details.ts",
+      "foreign_keys": [],
+      "name": "wbs_details",
+      "primary_key": "wbsNumber"
+    }
+  ],
+  "version": "1.0.0"
 }

@@ -381,7 +381,7 @@ Output: {output file paths}
     # Save the pattern library
     PATTERNS_DIR.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT_FILE, "w") as f:
-        json.dump(patterns, f, indent=2)
+        json.dump(patterns, f, indent=2, sort_keys=True)
     
     print("\n" + "=" * 60)
     print("Pattern Library Generated!")

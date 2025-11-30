@@ -35,6 +35,29 @@ OUTPUT_FILE = LINEAGE_DIR / "graph.json"
 PIPELINE_MAP_FILE = PROJECT_ROOT / "pipeline-map.json"
 
 
+def sort_nested_lists(obj: Any) -> Any:
+    """
+    Recursively sort all lists in a nested data structure for deterministic JSON output.
+    
+    This ensures that json.dump produces identical output across runs,
+    preventing pre-commit hook loops from non-deterministic list ordering.
+    """
+    if isinstance(obj, dict):
+        return {k: sort_nested_lists(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        # Sort list items if they're sortable (strings, numbers)
+        sorted_items = [sort_nested_lists(item) for item in obj]
+        try:
+            # Try to sort - works for lists of strings, numbers, etc.
+            return sorted(sorted_items, key=lambda x: str(x) if not isinstance(x, (str, int, float)) else x)
+        except TypeError:
+            # If items aren't comparable, return as-is
+            return sorted_items
+    elif isinstance(obj, set):
+        return sorted(sort_nested_lists(item) for item in obj)
+    return obj
+
+
 class LineageGraphBuilder:
     """Builds a lineage graph from the codebase."""
     
@@ -676,10 +699,11 @@ def build_lineage_graph():
         print(f"Error: {graph['error']}")
         return graph
     
-    # Save the graph
+    # Save the graph (sort nested lists for deterministic output)
     LINEAGE_DIR.mkdir(parents=True, exist_ok=True)
+    sorted_graph = sort_nested_lists(graph)
     with open(OUTPUT_FILE, "w") as f:
-        json.dump(graph, f, indent=2)
+        json.dump(sorted_graph, f, indent=2, sort_keys=True)
     
     print("\n" + "=" * 60)
     print("Lineage Graph Generated!")

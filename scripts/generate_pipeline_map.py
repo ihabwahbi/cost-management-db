@@ -33,6 +33,24 @@ OUTPUT_JSON = PROJECT_ROOT / "pipeline-map.json"
 OUTPUT_MD = PROJECT_ROOT / "pipeline-map.md"
 TS_EXTRACTOR = SCRIPTS_DIR / "extract-schema.ts"
 
+
+def sort_nested_lists(obj: Any) -> Any:
+    """
+    Recursively sort all lists in a nested data structure for deterministic JSON output.
+    """
+    if isinstance(obj, dict):
+        return {k: sort_nested_lists(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        sorted_items = [sort_nested_lists(item) for item in obj]
+        try:
+            return sorted(sorted_items, key=lambda x: str(x) if not isinstance(x, (str, int, float)) else x)
+        except TypeError:
+            return sorted_items
+    elif isinstance(obj, set):
+        return sorted(sort_nested_lists(item) for item in obj)
+    return obj
+
+
 # Pandas operations we care about for understanding transformations
 PANDAS_OPS = {
     "merge": "Joins two DataFrames",
@@ -983,8 +1001,9 @@ def generate_pipeline_map():
     
     # Save JSON
     print(f"\nSaving JSON to: {OUTPUT_JSON}")
+    sorted_map = sort_nested_lists(pipeline_map)
     with open(OUTPUT_JSON, "w") as f:
-        json.dump(pipeline_map, f, indent=2)
+        json.dump(sorted_map, f, indent=2, sort_keys=True)
     
     # Generate and save Mermaid
     print(f"Saving Mermaid diagram to: {OUTPUT_MD}")

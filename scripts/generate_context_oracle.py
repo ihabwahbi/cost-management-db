@@ -86,7 +86,7 @@ def smart_write_json(filepath: Path, data: Dict, exclude_keys: Optional[list] = 
     # Write the file (with timestamps intact)
     filepath.parent.mkdir(parents=True, exist_ok=True)
     with open(filepath, "w") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, sort_keys=True)
     return True
 
 
@@ -159,7 +159,7 @@ def save_manifest(manifest: Dict) -> None:
     # Use deterministic timestamp based on source file mtimes
     manifest["last_generated"] = get_latest_source_mtime().isoformat()
     with open(MANIFEST_FILE, "w") as f:
-        json.dump(manifest, f, indent=2)
+        json.dump(manifest, f, indent=2, sort_keys=True)
 
 
 def detect_changes() -> Dict:
