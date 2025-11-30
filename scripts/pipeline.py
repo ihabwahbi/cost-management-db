@@ -19,6 +19,7 @@ Pipeline Stages:
 Output:
     data/import-ready/po_line_items.csv   → po_line_items table
     data/import-ready/po_transactions.csv → po_transactions table
+    data/import-ready/grir_exposures.csv  → grir_exposures table
 """
 
 import subprocess
@@ -41,11 +42,13 @@ STAGE1_SCRIPTS = [
 STAGE2_SCRIPTS = [
     ("stage2_transform/04_enrich_po_line_items.py", "Enrich PO Line Items"),
     ("stage2_transform/05_calculate_cost_impact.py", "Calculate Cost Impact"),
+    ("stage2_transform/06_calculate_grir.py", "Calculate GRIR Exposures"),
 ]
 
 STAGE3_SCRIPTS = [
     ("stage3_prepare/06_prepare_po_line_items.py", "Prepare PO Line Items for Import"),
     ("stage3_prepare/07_prepare_po_transactions.py", "Prepare PO Transactions for Import"),
+    ("stage3_prepare/08_prepare_grir_exposures.py", "Prepare GRIR Exposures for Import"),
 ]
 
 

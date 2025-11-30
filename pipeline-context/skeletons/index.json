@@ -51,6 +51,16 @@
       "compression_ratio": 3.71
     },
     {
+      "name": "06_calculate_grir",
+      "source_path": "scripts/stage2_transform/06_calculate_grir.py",
+      "skeleton_path": "pipeline-context/skeletons/stage2_transform/06_calculate_grir.skeleton.py",
+      "original_lines": 249,
+      "skeleton_lines": 74,
+      "original_tokens": 2185,
+      "skeleton_tokens": 648,
+      "compression_ratio": 3.37
+    },
+    {
       "name": "06_prepare_po_line_items",
       "source_path": "scripts/stage3_prepare/06_prepare_po_line_items.py",
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/06_prepare_po_line_items.skeleton.py",
@@ -69,13 +79,23 @@
       "original_tokens": 974,
       "skeleton_tokens": 333,
       "compression_ratio": 2.92
+    },
+    {
+      "name": "08_prepare_grir_exposures",
+      "source_path": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "skeleton_path": "pipeline-context/skeletons/stage3_prepare/08_prepare_grir_exposures.skeleton.py",
+      "original_lines": 139,
+      "skeleton_lines": 43,
+      "original_tokens": 1118,
+      "skeleton_tokens": 317,
+      "compression_ratio": 3.53
     }
   ],
   "totals": {
-    "original_lines": 1049,
-    "skeleton_lines": 355,
-    "original_tokens": 8880,
-    "skeleton_tokens": 2937,
-    "compression_ratio": 3.02
+    "original_lines": 1437,
+    "skeleton_lines": 472,
+    "original_tokens": 12183,
+    "skeleton_tokens": 3902,
+    "compression_ratio": 3.12
   }
 }

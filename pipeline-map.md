@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-11-30T13:56:07.740957+00:00
+Generated: 2025-11-30T14:50:47.685301+00:00
 
 ## Data Flow Diagram
 
@@ -21,30 +21,35 @@ flowchart TD
 
     subgraph INTERMEDIATE["Intermediate Data"]
         int_0["gr_postings.csv"]
-        int_1["ir_postings.csv"]
-        int_2["cost_impact.csv"]
-        int_3["po_line_items.csv"]
+        int_1["grir_exposures.csv"]
+        int_2["ir_postings.csv"]
+        int_3["cost_impact.csv"]
+        int_4["po_line_items.csv"]
     end
 
     subgraph STAGE2["Stage 2: Transform"]
         04_enrich_po_line_items["04_enrich_po_line_items"]
         05_calculate_cost_impact["05_calculate_cost_impact"]
+        06_calculate_grir["06_calculate_grir"]
     end
 
     subgraph STAGE3["Stage 3: Prepare"]
         06_prepare_po_line_items["06_prepare_po_line_items"]
         07_prepare_po_transactions["07_prepare_po_transactions"]
+        08_prepare_grir_exposures["08_prepare_grir_exposures"]
     end
 
     subgraph IMPORTREADY["Import-Ready Data"]
         ready_0["po_transactions.csv"]
-        ready_1["po_line_items.csv"]
+        ready_1["grir_exposures.csv"]
+        ready_2["po_line_items.csv"]
     end
 
     subgraph DB["Database Tables"]
         db_budget_forecasts[("budget_forecasts")]
         db_cost_breakdown[("cost_breakdown")]
         db_forecast_versions[("forecast_versions")]
+        db_grir_exposures[("grir_exposures")]
         db_po_line_items[("po_line_items")]
         db_po_mappings[("po_mappings")]
         db_po_operations[("po_operations")]
@@ -73,9 +78,11 @@ flowchart TD
 | 3 | `03_ir_postings` | stage1_clean | Stage 1: Clean IR (Invoice Receipt) Postings | invoice table.csv, po_line_items.csv, ir_postings.csv | po_line_items.csv, ir_postings.csv |
 | 4 | `04_enrich_po_line_items` | stage2_transform | Stage 2: Enrich PO Line Items | po details report.xlsx, po_line_items.csv | po_line_items.csv |
 | 5 | `05_calculate_cost_impact` | stage2_transform | Stage 2: Calculate Cost Impact | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv |
-| 6 | `06_prepare_po_line_items` | stage3_prepare | Stage 3: Prepare PO Line Items for Import | po_line_items.csv, cost_impact.csv | po_line_items.csv, cost_impact.csv |
-| 7 | `07_prepare_po_transactions` | stage3_prepare | Stage 3: Prepare PO Transactions for Import | cost_impact.csv | cost_impact.csv |
-| 8 | `pipeline` | scripts | Data Pipeline Orchestrator | - | - |
+| 6 | `06_calculate_grir` | stage2_transform | Stage 2: Calculate GRIR Exposures | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv |
+| 7 | `06_prepare_po_line_items` | stage3_prepare | Stage 3: Prepare PO Line Items for Import | po_line_items.csv, cost_impact.csv | po_line_items.csv, cost_impact.csv |
+| 8 | `07_prepare_po_transactions` | stage3_prepare | Stage 3: Prepare PO Transactions for Import | cost_impact.csv | cost_impact.csv |
+| 9 | `08_prepare_grir_exposures` | stage3_prepare | Stage 3: Prepare GRIR Exposures for Import | grir_exposures.csv | grir_exposures.csv |
+| 10 | `pipeline` | scripts | Data Pipeline Orchestrator | - | - |
 
 ## Script Dependencies
 
@@ -83,12 +90,15 @@ flowchart TD
 flowchart LR
     06_prepare_po_line_items --> 01_po_line_items
     06_prepare_po_line_items --> 02_gr_postings
-    05_calculate_cost_impact --> 02_gr_postings
+    06_calculate_grir --> 02_gr_postings
     06_prepare_po_line_items --> 03_ir_postings
-    05_calculate_cost_impact --> 03_ir_postings
+    06_calculate_grir --> 03_ir_postings
     06_prepare_po_line_items --> 04_enrich_po_line_items
     06_prepare_po_line_items --> 05_calculate_cost_impact
+    06_calculate_grir --> 05_calculate_cost_impact
     07_prepare_po_transactions --> 05_calculate_cost_impact
+    06_prepare_po_line_items --> 06_calculate_grir
+    08_prepare_grir_exposures --> 06_calculate_grir
     07_prepare_po_transactions --> 06_prepare_po_line_items
 ```
 
@@ -147,6 +157,21 @@ flowchart LR
 | `reasonForChange` | text | NOT NULL |
 | `createdAt` | timestamp | - |
 | `createdBy` | text | DEFAULT |
+
+### `grir_exposures`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `poLineItemId` | uuid | NOT NULL, FK → poLineItems.id |
+| `grirQty` | numeric | NOT NULL, DEFAULT |
+| `grirValue` | numeric | NOT NULL, DEFAULT |
+| `firstExposureDate` | date | - |
+| `daysOpen` | integer | DEFAULT |
+| `timeBucket` | varchar | - |
+| `snapshotDate` | date | NOT NULL |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
 
 ### `po_line_items`
 
@@ -325,6 +350,21 @@ Sample data and types for each CSV file:
 | `GR Posting Date` | object |
 | `GR Effective Quantity` | float64 |
 | `GR Amount` | float64 |
+
+### `grir_exposures.csv`
+
+- **Path**: `data/import-ready/grir_exposures.csv`
+- **Rows**: 67
+
+| Column | Type |
+|--------|------|
+| `po_line_id` | object |
+| `grir_qty` | float64 |
+| `grir_value` | float64 |
+| `first_exposure_date` | object |
+| `days_open` | int64 |
+| `time_bucket` | object |
+| `snapshot_date` | object |
 
 ### `ir_postings.csv`
 
@@ -511,6 +551,20 @@ Key pandas operations used in each script:
 | 124 | groupby | by: `PO Line ID` |
 | 195 | sort_values | Sorts by column values |
 
+### `06_calculate_grir`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 81 | column_assign | column: `Unit Price` |
+| 124 | column_assign | column: `Posting Type` |
+| 132 | column_assign | column: `Posting Type` |
+| 137 | column_assign | column: `Posting Date` |
+| 120 | rename | Renames columns |
+| 128 | rename | Renames columns |
+| 137 | to_datetime | Converts to datetime |
+| 138 | sort_values | Sorts by column values |
+| 143 | groupby | by: `PO Line ID` |
+
 ### `06_prepare_po_line_items`
 
 | Line | Operation | Details |
@@ -535,3 +589,12 @@ Key pandas operations used in each script:
 | 52 | column_assign | column: `cost_impact_amount` |
 | 54 | column_assign | column: `quantity` |
 | 44 | boolean_filter | Filters rows based on boolean condition |
+
+### `08_prepare_grir_exposures`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 52 | column_assign | column: `grir_qty` |
+| 55 | column_assign | column: `grir_value` |
+| 45 | boolean_filter | Filters rows based on boolean condition |
+| 95 | boolean_filter | Filters rows based on boolean condition |

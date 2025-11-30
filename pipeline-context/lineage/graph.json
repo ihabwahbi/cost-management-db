@@ -37,6 +37,13 @@
       "stage": "intermediate",
       "folder": "intermediate"
     },
+    "file:data/intermediate/grir_exposures.csv": {
+      "id": "file:data/intermediate/grir_exposures.csv",
+      "type": "file",
+      "path": "data/intermediate/grir_exposures.csv",
+      "stage": "intermediate",
+      "folder": "intermediate"
+    },
     "file:data/intermediate/ir_postings.csv": {
       "id": "file:data/intermediate/ir_postings.csv",
       "type": "file",
@@ -62,6 +69,13 @@
       "id": "file:data/import-ready/po_transactions.csv",
       "type": "file",
       "path": "data/import-ready/po_transactions.csv",
+      "stage": "output",
+      "folder": "import-ready"
+    },
+    "file:data/import-ready/grir_exposures.csv": {
+      "id": "file:data/import-ready/grir_exposures.csv",
+      "type": "file",
+      "path": "data/import-ready/grir_exposures.csv",
       "stage": "output",
       "folder": "import-ready"
     },
@@ -148,6 +162,22 @@
         "main"
       ]
     },
+    "script:06_calculate_grir": {
+      "id": "script:06_calculate_grir",
+      "type": "script",
+      "name": "06_calculate_grir",
+      "path": "scripts/stage2_transform/06_calculate_grir.py",
+      "stage": "stage2_transform",
+      "functions": [
+        "load_data",
+        "get_simple_po_ids",
+        "get_unit_prices",
+        "categorize_time_bucket",
+        "calculate_grir_exposures",
+        "save_data",
+        "main"
+      ]
+    },
     "script:06_prepare_po_line_items": {
       "id": "script:06_prepare_po_line_items",
       "type": "script",
@@ -168,6 +198,20 @@
       "type": "script",
       "name": "07_prepare_po_transactions",
       "path": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "stage": "stage3_prepare",
+      "functions": [
+        "load_data",
+        "map_columns",
+        "validate_output",
+        "save_data",
+        "main"
+      ]
+    },
+    "script:08_prepare_grir_exposures": {
+      "id": "script:08_prepare_grir_exposures",
+      "type": "script",
+      "name": "08_prepare_grir_exposures",
+      "path": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
       "stage": "stage3_prepare",
       "functions": [
         "load_data",
@@ -472,6 +516,144 @@
         "reasonForChange",
         "createdAt",
         "createdBy"
+      ]
+    },
+    "db_column:grir_exposures.id": {
+      "id": "db_column:grir_exposures.id",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:grir_exposures.poLineItemId": {
+      "id": "db_column:grir_exposures.poLineItemId",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "poLineItemId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "poLineItems.id"
+      }
+    },
+    "db_column:grir_exposures.grirQty": {
+      "id": "db_column:grir_exposures.grirQty",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "grirQty",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:grir_exposures.grirValue": {
+      "id": "db_column:grir_exposures.grirValue",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "grirValue",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:grir_exposures.firstExposureDate": {
+      "id": "db_column:grir_exposures.firstExposureDate",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "firstExposureDate",
+      "data_type": "date",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:grir_exposures.daysOpen": {
+      "id": "db_column:grir_exposures.daysOpen",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "daysOpen",
+      "data_type": "integer",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:grir_exposures.timeBucket": {
+      "id": "db_column:grir_exposures.timeBucket",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "timeBucket",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:grir_exposures.snapshotDate": {
+      "id": "db_column:grir_exposures.snapshotDate",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "snapshotDate",
+      "data_type": "date",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:grir_exposures.createdAt": {
+      "id": "db_column:grir_exposures.createdAt",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:grir_exposures.updatedAt": {
+      "id": "db_column:grir_exposures.updatedAt",
+      "type": "db_column",
+      "table": "grir_exposures",
+      "column": "updatedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:grir_exposures": {
+      "id": "table:grir_exposures",
+      "type": "table",
+      "name": "grir_exposures",
+      "file": "grir-exposures.ts",
+      "columns": [
+        "id",
+        "poLineItemId",
+        "grirQty",
+        "grirValue",
+        "firstExposureDate",
+        "daysOpen",
+        "timeBucket",
+        "snapshotDate",
+        "createdAt",
+        "updatedAt"
       ]
     },
     "db_column:po_line_items.id": {
@@ -1746,6 +1928,7 @@
       "created_by": [
         "scripts/stage1_clean/03_ir_postings.py:44",
         "scripts/stage1_clean/02_gr_postings.py:53",
+        "scripts/stage2_transform/06_calculate_grir.py:81",
         "scripts/stage2_transform/05_calculate_cost_impact.py:118"
       ]
     },
@@ -1861,6 +2044,8 @@
       "type": "column",
       "name": "Posting Type",
       "created_by": [
+        "scripts/stage2_transform/06_calculate_grir.py:124",
+        "scripts/stage2_transform/06_calculate_grir.py:132",
         "scripts/stage2_transform/05_calculate_cost_impact.py:102",
         "scripts/stage2_transform/05_calculate_cost_impact.py:110"
       ]
@@ -1870,6 +2055,7 @@
       "type": "column",
       "name": "Posting Date",
       "created_by": [
+        "scripts/stage2_transform/06_calculate_grir.py:137",
         "scripts/stage2_transform/05_calculate_cost_impact.py:114"
       ]
     },
@@ -1999,6 +2185,22 @@
       "name": "quantity",
       "created_by": [
         "scripts/stage3_prepare/07_prepare_po_transactions.py:54"
+      ]
+    },
+    "column:grir_qty": {
+      "id": "column:grir_qty",
+      "type": "column",
+      "name": "grir_qty",
+      "created_by": [
+        "scripts/stage3_prepare/08_prepare_grir_exposures.py:52"
+      ]
+    },
+    "column:grir_value": {
+      "id": "column:grir_value",
+      "type": "column",
+      "name": "grir_value",
+      "created_by": [
+        "scripts/stage3_prepare/08_prepare_grir_exposures.py:55"
       ]
     },
     "column:PO Document Date": {
@@ -2159,7 +2361,7 @@
       "type": "DEPENDS_ON"
     },
     {
-      "source": "script:05_calculate_cost_impact",
+      "source": "script:06_calculate_grir",
       "target": "script:02_gr_postings",
       "type": "DEPENDS_ON"
     },
@@ -2194,7 +2396,7 @@
       "type": "DEPENDS_ON"
     },
     {
-      "source": "script:05_calculate_cost_impact",
+      "source": "script:06_calculate_grir",
       "target": "script:03_ir_postings",
       "type": "DEPENDS_ON"
     },
@@ -2264,8 +2466,63 @@
       "type": "DEPENDS_ON"
     },
     {
+      "source": "script:06_calculate_grir",
+      "target": "script:05_calculate_cost_impact",
+      "type": "DEPENDS_ON"
+    },
+    {
       "source": "script:07_prepare_po_transactions",
       "target": "script:05_calculate_cost_impact",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "file:data/intermediate/po_line_items.csv",
+      "target": "script:06_calculate_grir",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/gr_postings.csv",
+      "target": "script:06_calculate_grir",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/ir_postings.csv",
+      "target": "script:06_calculate_grir",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/grir_exposures.csv",
+      "target": "script:06_calculate_grir",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:06_calculate_grir",
+      "target": "file:data/intermediate/po_line_items.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_calculate_grir",
+      "target": "file:data/intermediate/gr_postings.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_calculate_grir",
+      "target": "file:data/intermediate/ir_postings.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_calculate_grir",
+      "target": "file:data/intermediate/grir_exposures.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_prepare_po_line_items",
+      "target": "script:06_calculate_grir",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "script:08_prepare_grir_exposures",
+      "target": "script:06_calculate_grir",
       "type": "DEPENDS_ON"
     },
     {
@@ -2304,6 +2561,16 @@
       "type": "OUTPUT"
     },
     {
+      "source": "file:data/intermediate/grir_exposures.csv",
+      "target": "script:08_prepare_grir_exposures",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:08_prepare_grir_exposures",
+      "target": "file:data/intermediate/grir_exposures.csv",
+      "type": "OUTPUT"
+    },
+    {
       "source": "column:Ordered Quantity",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
@@ -2320,6 +2587,15 @@
       "file": "scripts/stage1_clean/03_ir_postings.py",
       "line": 44,
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:Unit Price",
+      "target": "column:Invoice Amount",
+      "type": "TRANSFORMS",
+      "script": "03_ir_postings",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 55,
+      "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
     },
     {
       "source": "column:IR Effective Quantity",
@@ -2331,15 +2607,6 @@
       "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
     },
     {
-      "source": "column:Unit Price",
-      "target": "column:Invoice Amount",
-      "type": "TRANSFORMS",
-      "script": "03_ir_postings",
-      "file": "scripts/stage1_clean/03_ir_postings.py",
-      "line": 55,
-      "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
-    },
-    {
       "source": "column:Ordered Quantity",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
@@ -2358,7 +2625,7 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:GR Effective Quantity",
+      "source": "column:Unit Price",
       "target": "column:GR Amount",
       "type": "TRANSFORMS",
       "script": "02_gr_postings",
@@ -2367,7 +2634,7 @@
       "operation": "(df['Unit Price'] * df['GR Effective Quantity']).round(2)"
     },
     {
-      "source": "column:Unit Price",
+      "source": "column:GR Effective Quantity",
       "target": "column:GR Amount",
       "type": "TRANSFORMS",
       "script": "02_gr_postings",
@@ -2401,6 +2668,33 @@
       "file": "scripts/stage1_clean/01_po_line_items.py",
       "line": 103,
       "operation": "plant_code_str.map(PLANT_CODE_TO_LOCATION)"
+    },
+    {
+      "source": "column:Ordered Quantity",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "06_calculate_grir",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 81,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:Purchase Value USD",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "06_calculate_grir",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 81,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:Posting Date",
+      "target": "column:Posting Date",
+      "type": "TRANSFORMS",
+      "script": "06_calculate_grir",
+      "file": "scripts/stage2_transform/06_calculate_grir.py",
+      "line": 137,
+      "operation": "pd.to_datetime(combined['Posting Date'])"
     },
     {
       "source": "column:Posting Date",
@@ -2439,7 +2733,7 @@
       "operation": "df['PO Line Item'].fillna(0).astype(int)"
     },
     {
-      "source": "column:PO Line Item",
+      "source": "column:PO Number",
       "target": "column:PO Line ID",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -2448,7 +2742,7 @@
       "operation": "df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
     },
     {
-      "source": "column:PO Number",
+      "source": "column:PO Line Item",
       "target": "column:PO Line ID",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -2574,6 +2868,24 @@
       "operation": "output_df['quantity'].round(4)"
     },
     {
+      "source": "column:grir_qty",
+      "target": "column:grir_qty",
+      "type": "TRANSFORMS",
+      "script": "08_prepare_grir_exposures",
+      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "line": 52,
+      "operation": "output_df['grir_qty'].round(4)"
+    },
+    {
+      "source": "column:grir_value",
+      "target": "column:grir_value",
+      "type": "TRANSFORMS",
+      "script": "08_prepare_grir_exposures",
+      "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "line": 55,
+      "operation": "output_df['grir_value'].round(2)"
+    },
+    {
       "source": "column:Location",
       "target": "db_column:po_line_items.location",
       "type": "MAPS_TO",
@@ -2631,6 +2943,12 @@
         "file": "scripts/stage1_clean/02_gr_postings.py"
       },
       {
+        "script": "06_calculate_grir",
+        "type": "WRITES",
+        "line": 81,
+        "file": "scripts/stage2_transform/06_calculate_grir.py"
+      },
+      {
         "script": "05_calculate_cost_impact",
         "type": "WRITES",
         "line": 118,
@@ -2651,6 +2969,12 @@
         "file": "scripts/stage1_clean/02_gr_postings.py"
       },
       {
+        "script": "06_calculate_grir",
+        "type": "READS",
+        "line": 81,
+        "file": "scripts/stage2_transform/06_calculate_grir.py"
+      },
+      {
         "script": "05_calculate_cost_impact",
         "type": "READS",
         "line": 118,
@@ -2669,6 +2993,12 @@
         "type": "READS",
         "line": 53,
         "file": "scripts/stage1_clean/02_gr_postings.py"
+      },
+      {
+        "script": "06_calculate_grir",
+        "type": "READS",
+        "line": 81,
+        "file": "scripts/stage2_transform/06_calculate_grir.py"
       },
       {
         "script": "05_calculate_cost_impact",
@@ -2829,6 +3159,18 @@
     ],
     "Posting Type": [
       {
+        "script": "06_calculate_grir",
+        "type": "WRITES",
+        "line": 124,
+        "file": "scripts/stage2_transform/06_calculate_grir.py"
+      },
+      {
+        "script": "06_calculate_grir",
+        "type": "WRITES",
+        "line": 132,
+        "file": "scripts/stage2_transform/06_calculate_grir.py"
+      },
+      {
         "script": "05_calculate_cost_impact",
         "type": "WRITES",
         "line": 102,
@@ -2842,6 +3184,18 @@
       }
     ],
     "Posting Date": [
+      {
+        "script": "06_calculate_grir",
+        "type": "WRITES",
+        "line": 137,
+        "file": "scripts/stage2_transform/06_calculate_grir.py"
+      },
+      {
+        "script": "06_calculate_grir",
+        "type": "READS",
+        "line": 137,
+        "file": "scripts/stage2_transform/06_calculate_grir.py"
+      },
       {
         "script": "05_calculate_cost_impact",
         "type": "WRITES",
@@ -3092,6 +3446,34 @@
         "line": 54,
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
       }
+    ],
+    "grir_qty": [
+      {
+        "script": "08_prepare_grir_exposures",
+        "type": "WRITES",
+        "line": 52,
+        "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py"
+      },
+      {
+        "script": "08_prepare_grir_exposures",
+        "type": "READS",
+        "line": 52,
+        "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py"
+      }
+    ],
+    "grir_value": [
+      {
+        "script": "08_prepare_grir_exposures",
+        "type": "WRITES",
+        "line": 55,
+        "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py"
+      },
+      {
+        "script": "08_prepare_grir_exposures",
+        "type": "READS",
+        "line": 55,
+        "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py"
+      }
     ]
   },
   "variable_sources": {
@@ -3121,6 +3503,36 @@
         "Location"
       ]
     },
+    "06_calculate_grir": {
+      "is_gld": [
+        "Main Vendor SLB Vendor Category"
+      ],
+      "is_valid_cat": [
+        "PO Account Assignment Category"
+      ],
+      "is_not_closed": [
+        "PO Receipt Status"
+      ],
+      "simple_gr": [
+        "PO Line ID"
+      ],
+      "simple_ir": [
+        "PO Line ID"
+      ],
+      "posting_type": [
+        "Posting Type"
+      ],
+      "posting_qty": [
+        "Posting Qty"
+      ],
+      "posting_date": [
+        "Posting Date"
+      ],
+      "bucket_value": [
+        "GRIR Value",
+        "Time Bucket"
+      ]
+    },
     "05_calculate_cost_impact": {
       "is_gld": [
         "Main Vendor SLB Vendor Category"
@@ -3133,9 +3545,9 @@
       ],
       "result": [
         "GR Effective Quantity",
-        "GR Amount",
         "GR Posting Date",
-        "PO Line ID"
+        "PO Line ID",
+        "GR Amount"
       ],
       "complex_gr": [
         "PO Line ID"
@@ -3179,26 +3591,31 @@
       "actual_types": [
         "transaction_type"
       ]
+    },
+    "08_prepare_grir_exposures": {
+      "bucket_df": [
+        "time_bucket"
+      ]
     }
   },
   "stats": {
-    "total_nodes": 197,
-    "total_edges": 74,
+    "total_nodes": 214,
+    "total_edges": 92,
     "nodes_by_type": {
-      "file": 10,
-      "script": 8,
-      "db_column": 113,
-      "table": 10,
-      "column": 56
+      "file": 12,
+      "script": 10,
+      "db_column": 123,
+      "table": 11,
+      "column": 58
     },
     "edges_by_type": {
-      "INPUT": 17,
-      "OUTPUT": 13,
-      "DEPENDS_ON": 9,
-      "TRANSFORMS": 30,
+      "INPUT": 22,
+      "OUTPUT": 18,
+      "DEPENDS_ON": 12,
+      "TRANSFORMS": 35,
       "MAPS_TO": 5
     },
-    "columns_tracked": 35,
-    "variables_traced": 23
+    "columns_tracked": 37,
+    "variables_traced": 33
   }
 }

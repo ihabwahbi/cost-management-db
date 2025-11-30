@@ -16,6 +16,7 @@ export * from './po-mappings';
 // PO Operations & Transactions
 export * from './po-operations';
 export * from './po-transactions';
+export * from './grir-exposures';
 
 // SAP Integration
 export * from './sap-reservations';

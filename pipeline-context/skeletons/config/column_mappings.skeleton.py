@@ -105,6 +105,12 @@ REQUIRED_COLUMNS = {
         "cost_impact_qty",
         "cost_impact_amount",
     ],
+    "grir_exposures": [
+        "po_line_id",  # Will be converted to po_line_item_id during import
+        "grir_qty",
+        "grir_value",
+        "snapshot_date",
+    ],
 }
 
 
@@ -169,6 +175,29 @@ EXCLUDED_NIS_LEVELS = [
     "Compensation Business Enablement",
 ]
 
-# Classification for simple cost impact (Type 1)
+# Classification for simple cost impact (Type 1) - also used for GRIR
 SIMPLE_VENDOR_CATEGORY = "GLD"
 SIMPLE_ACCOUNT_CATEGORIES = ["K", "P", "S", "V"]
+
+
+# =============================================================================
+# GRIR EXPOSURES: GRIR CSV → Database columns
+# =============================================================================
+GRIR_EXPOSURES_MAPPING = {
+    "PO Line ID": "po_line_id",  # Used to lookup po_line_item_id
+    "GRIR Qty": "grir_qty",
+    "GRIR Value": "grir_value",
+    "First Exposure Date": "first_exposure_date",
+    "Days Open": "days_open",
+    "Time Bucket": "time_bucket",
+    "Snapshot Date": "snapshot_date",
+}
+
+# Time bucket thresholds (in days)
+GRIR_TIME_BUCKETS = {
+    30: "<1 month",
+    90: "1-3 months",
+    180: "3-6 months",
+    365: "6-12 months",
+}
+GRIR_TIME_BUCKET_MAX = ">1 year"

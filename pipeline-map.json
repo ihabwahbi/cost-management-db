@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-30T13:56:07.740957+00:00",
+  "generated_at": "2025-11-30T14:50:47.685301+00:00",
   "project": "cost-management-db",
   "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
   "pipeline_stages": [
@@ -291,7 +291,7 @@
       ],
       "dependencies": [
         "06_prepare_po_line_items",
-        "05_calculate_cost_impact"
+        "06_calculate_grir"
       ],
       "functions": [
         {
@@ -424,7 +424,7 @@
       ],
       "dependencies": [
         "06_prepare_po_line_items",
-        "05_calculate_cost_impact"
+        "06_calculate_grir"
       ],
       "functions": [
         {
@@ -758,6 +758,7 @@
       ],
       "dependencies": [
         "06_prepare_po_line_items",
+        "06_calculate_grir",
         "07_prepare_po_transactions"
       ],
       "functions": [
@@ -947,6 +948,225 @@
         }
       ],
       "line_count": 206
+    },
+    {
+      "name": "06_calculate_grir",
+      "path": "scripts/stage2_transform/06_calculate_grir.py",
+      "stage": "stage2_transform",
+      "docstring": "Stage 2: Calculate GRIR Exposures\n\nCalculates GRIR (Goods Receipt/Invoice Receipt variance) for Simple POs\n(GLD vendor + K/P/S/V account assignment). GRIR = IR - GR when IR > GR.\n\nThis tracks balance sheet exposure from invoices received but not yet\ngoods-receipted, which will eventually hit the Net Income Statement.\n\nDependencies: All stage1 scripts + 05_calculate_cost_impact.py must run first\nInput: data/intermediate/po_line_items.csv, gr_postings.csv, ir_postings.csv\nOutput: data/intermediate/grir_exposures.csv",
+      "inputs": [
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/gr_postings.csv",
+        "data/intermediate/ir_postings.csv",
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "outputs": [
+        "data/intermediate/po_line_items.csv",
+        "data/intermediate/gr_postings.csv",
+        "data/intermediate/ir_postings.csv",
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "dependencies": [
+        "06_prepare_po_line_items",
+        "08_prepare_grir_exposures"
+      ],
+      "functions": [
+        {
+          "name": "load_data",
+          "docstring": "Load all required data files.",
+          "args": [],
+          "line": 40,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "get_simple_po_ids",
+          "docstring": "Get PO Line IDs for Simple POs (GLD + K/P/S/V) that are NOT closed.\nThese are the POs where we track GRIR exposure.\n\nClosed POs are excluded - no exposure if PO is already closed.",
+          "args": [
+            "po_df"
+          ],
+          "line": 56,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "get_unit_prices",
+          "docstring": "Calculate unit price for each PO Line ID.",
+          "args": [
+            "po_df"
+          ],
+          "line": 78,
+          "semantics": {
+            "modifies_columns": [
+              "Unit Price"
+            ],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "categorize_time_bucket",
+          "docstring": "Categorize days into time bucket.",
+          "args": [
+            "days"
+          ],
+          "line": 85,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "calculate_grir_exposures",
+          "docstring": "Calculate GRIR exposure for each Simple PO Line ID.\n\nGRIR = IR - GR (when IR > GR)\n\nLogic:\n1. For each PO Line ID, combine GR and IR postings chronologically\n2. Track cumulative GR and IR\n3. Find first date when IR exceeded GR (first_exposure_date)\n4. Calculate current GRIR qty/value\n5. Calculate duration and time bucket",
+          "args": [
+            "gr_df",
+            "ir_df",
+            "simple_po_ids",
+            "unit_prices",
+            "snapshot_date"
+          ],
+          "line": 93,
+          "semantics": {
+            "modifies_columns": [
+              "Posting Type",
+              "Posting Date"
+            ],
+            "filters_data": true,
+            "aggregates": true,
+            "joins_data": false,
+            "renames_columns": true,
+            "type_conversions": true
+          }
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save GRIR exposures DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 199,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 213,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "datetime",
+        "pandas",
+        "config.column_mappings"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Unit Price'",
+          "column": "Unit Price",
+          "line": 81,
+          "code_snippet": "po_df[\"Unit Price\"] = po_df[\"Purchase Value USD\"] / po_df[\"Ordered Quantity\"]"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Posting Type'",
+          "column": "Posting Type",
+          "line": 124,
+          "code_snippet": "simple_gr[\"Posting Type\"] = \"GR\""
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Posting Type'",
+          "column": "Posting Type",
+          "line": 132,
+          "code_snippet": "simple_ir[\"Posting Type\"] = \"IR\""
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Posting Date'",
+          "column": "Posting Date",
+          "line": 137,
+          "code_snippet": "combined[\"Posting Date\"] = pd.to_datetime(combined[\"Posting Date\"])"
+        },
+        {
+          "operation": "rename",
+          "description": "Renames columns",
+          "line": 120,
+          "code_snippet": "simple_gr = simple_gr.rename(columns={",
+          "column_renames": {
+            "GR Posting Date": "Posting Date",
+            "GR Effective Quantity": "Posting Qty"
+          }
+        },
+        {
+          "operation": "rename",
+          "description": "Renames columns",
+          "line": 128,
+          "code_snippet": "simple_ir = simple_ir.rename(columns={",
+          "column_renames": {
+            "Invoice Posting Date": "Posting Date",
+            "IR Effective Quantity": "Posting Qty"
+          }
+        },
+        {
+          "operation": "to_datetime",
+          "description": "Converts to datetime",
+          "line": 137,
+          "code_snippet": "combined[\"Posting Date\"] = pd.to_datetime(combined[\"Posting Date\"])"
+        },
+        {
+          "operation": "sort_values",
+          "description": "Sorts by column values",
+          "line": 138,
+          "code_snippet": "combined = combined.sort_values([\"PO Line ID\", \"Posting Date\", \"Posting Type\"])"
+        },
+        {
+          "operation": "groupby",
+          "description": "Groups data for aggregation",
+          "line": 143,
+          "code_snippet": "for po_line_id, group in combined.groupby(\"PO Line ID\"):",
+          "group_column": "PO Line ID"
+        }
+      ],
+      "line_count": 249
     },
     {
       "name": "06_prepare_po_line_items",
@@ -1305,10 +1525,142 @@
       "line_count": 123
     },
     {
+      "name": "08_prepare_grir_exposures",
+      "path": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
+      "stage": "stage3_prepare",
+      "docstring": "Stage 3: Prepare GRIR Exposures for Import\n\nMaps intermediate GRIR columns to database schema columns.\n\nDependencies: stage2_transform/06_calculate_grir.py must run first\nInput: data/intermediate/grir_exposures.csv\nOutput: data/import-ready/grir_exposures.csv",
+      "inputs": [
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "outputs": [
+        "data/intermediate/grir_exposures.csv"
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "load_data",
+          "docstring": "Load GRIR exposures data.",
+          "args": [
+            "filepath"
+          ],
+          "line": 28,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "map_columns",
+          "docstring": "Map CSV columns to database column names.",
+          "args": [
+            "df"
+          ],
+          "line": 36,
+          "semantics": {
+            "modifies_columns": [
+              "grir_qty",
+              "grir_value"
+            ],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "validate_output",
+          "docstring": "Validate required columns are present.",
+          "args": [
+            "df"
+          ],
+          "line": 60,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "save_data",
+          "docstring": "Save import-ready DataFrame to CSV.",
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "line": 81,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "name": "main",
+          "docstring": null,
+          "args": [],
+          "line": 100,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        }
+      ],
+      "imports": [
+        "sys",
+        "pathlib",
+        "pandas",
+        "config.column_mappings"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'grir_qty'",
+          "column": "grir_qty",
+          "line": 52,
+          "code_snippet": "output_df[\"grir_qty\"] = output_df[\"grir_qty\"].round(4)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'grir_value'",
+          "column": "grir_value",
+          "line": 55,
+          "code_snippet": "output_df[\"grir_value\"] = output_df[\"grir_value\"].round(2)"
+        },
+        {
+          "operation": "boolean_filter",
+          "description": "Filters rows based on boolean condition",
+          "line": 45,
+          "code_snippet": "output_df[db_col] = df[csv_col]"
+        },
+        {
+          "operation": "boolean_filter",
+          "description": "Filters rows based on boolean condition",
+          "line": 95,
+          "code_snippet": "bucket_df = df[df[\"time_bucket\"] == bucket]"
+        }
+      ],
+      "line_count": 139
+    },
+    {
       "name": "pipeline",
       "path": "scripts/pipeline.py",
       "stage": "scripts",
-      "docstring": "Data Pipeline Orchestrator\n\nRuns all data transformation scripts in the correct order to produce\nimport-ready CSV files from raw data.\n\nUsage:\n    python3 scripts/pipeline.py           # Run full pipeline\n    python3 scripts/pipeline.py --stage1  # Run only stage 1\n    python3 scripts/pipeline.py --stage2  # Run stages 1-2\n    python3 scripts/pipeline.py --stage3  # Run all stages (same as full)\n\nPipeline Stages:\n    Stage 1 (Clean):     Raw data \u2192 Intermediate (cleaned)\n    Stage 2 (Transform): Intermediate \u2192 Intermediate (enriched + cost impact)\n    Stage 3 (Prepare):   Intermediate \u2192 Import-ready (DB schema mapped)\n\nOutput:\n    data/import-ready/po_line_items.csv   \u2192 po_line_items table\n    data/import-ready/po_transactions.csv \u2192 po_transactions table",
+      "docstring": "Data Pipeline Orchestrator\n\nRuns all data transformation scripts in the correct order to produce\nimport-ready CSV files from raw data.\n\nUsage:\n    python3 scripts/pipeline.py           # Run full pipeline\n    python3 scripts/pipeline.py --stage1  # Run only stage 1\n    python3 scripts/pipeline.py --stage2  # Run stages 1-2\n    python3 scripts/pipeline.py --stage3  # Run all stages (same as full)\n\nPipeline Stages:\n    Stage 1 (Clean):     Raw data \u2192 Intermediate (cleaned)\n    Stage 2 (Transform): Intermediate \u2192 Intermediate (enriched + cost impact)\n    Stage 3 (Prepare):   Intermediate \u2192 Import-ready (DB schema mapped)\n\nOutput:\n    data/import-ready/po_line_items.csv   \u2192 po_line_items table\n    data/import-ready/po_transactions.csv \u2192 po_transactions table\n    data/import-ready/grir_exposures.csv  \u2192 grir_exposures table",
       "inputs": [],
       "outputs": [],
       "dependencies": [],
@@ -1320,7 +1672,7 @@
             "script_path",
             "description"
           ],
-          "line": 52,
+          "line": 55,
           "semantics": {
             "modifies_columns": [],
             "filters_data": false,
@@ -1337,7 +1689,7 @@
             "stage_name",
             "scripts"
           ],
-          "line": 71,
+          "line": 74,
           "semantics": {
             "modifies_columns": [],
             "filters_data": false,
@@ -1353,7 +1705,7 @@
           "args": [
             "max_stage"
           ],
-          "line": 89,
+          "line": 92,
           "semantics": {
             "modifies_columns": [],
             "filters_data": false,
@@ -1367,7 +1719,7 @@
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 134,
+          "line": 137,
           "semantics": {
             "modifies_columns": [],
             "filters_data": false,
@@ -1386,7 +1738,7 @@
         "datetime"
       ],
       "pandas_operations": [],
-      "line_count": 167
+      "line_count": 170
     }
   ],
   "column_mappings": {
@@ -1451,6 +1803,15 @@
       "P9066": "SWTC",
       "P9562": "QRTC",
       "P9032": "FCS"
+    },
+    "GRIR_EXPOSURES_MAPPING": {
+      "PO Line ID": "po_line_id",
+      "GRIR Qty": "grir_qty",
+      "GRIR Value": "grir_value",
+      "First Exposure Date": "first_exposure_date",
+      "Days Open": "days_open",
+      "Time Bucket": "time_bucket",
+      "Snapshot Date": "snapshot_date"
     },
     "EXCLUDED_NIS_LEVELS": [
       "Compensation Business Delivery",
@@ -1583,6 +1944,62 @@
           "name": "createdBy",
           "type": "text",
           "has_default": true
+        }
+      ],
+      "extraction_method": "ts-ast"
+    },
+    {
+      "name": "grir_exposures",
+      "file": "grir-exposures.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "primary_key": true
+        },
+        {
+          "name": "poLineItemId",
+          "type": "uuid",
+          "not_null": true,
+          "references": "poLineItems.id"
+        },
+        {
+          "name": "grirQty",
+          "type": "numeric",
+          "not_null": true,
+          "has_default": true
+        },
+        {
+          "name": "grirValue",
+          "type": "numeric",
+          "not_null": true,
+          "has_default": true
+        },
+        {
+          "name": "firstExposureDate",
+          "type": "date"
+        },
+        {
+          "name": "daysOpen",
+          "type": "integer",
+          "has_default": true
+        },
+        {
+          "name": "timeBucket",
+          "type": "varchar"
+        },
+        {
+          "name": "snapshotDate",
+          "type": "date",
+          "not_null": true
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
         }
       ],
       "extraction_method": "ts-ast"
@@ -2065,12 +2482,14 @@
     ],
     "intermediate": [
       "gr_postings.csv",
+      "grir_exposures.csv",
       "ir_postings.csv",
       "cost_impact.csv",
       "po_line_items.csv"
     ],
     "import-ready": [
       "po_transactions.csv",
+      "grir_exposures.csv",
       "po_line_items.csv"
     ]
   },
@@ -2251,6 +2670,38 @@
         "GR Amount": 1489.44
       },
       "row_count": 55810,
+      "null_counts": {}
+    },
+    "grir_exposures.csv": {
+      "path": "data/import-ready/grir_exposures.csv",
+      "columns": [
+        "po_line_id",
+        "grir_qty",
+        "grir_value",
+        "first_exposure_date",
+        "days_open",
+        "time_bucket",
+        "snapshot_date"
+      ],
+      "dtypes": {
+        "po_line_id": "object",
+        "grir_qty": "float64",
+        "grir_value": "float64",
+        "first_exposure_date": "object",
+        "days_open": "int64",
+        "time_bucket": "object",
+        "snapshot_date": "object"
+      },
+      "sample_row": {
+        "po_line_id": "4584221231-13",
+        "grir_qty": 4.0,
+        "grir_value": 9576.8,
+        "first_exposure_date": "2025-11-19",
+        "days_open": 11,
+        "time_bucket": "<1 month",
+        "snapshot_date": "2025-11-30"
+      },
+      "row_count": 67,
       "null_counts": {}
     },
     "ir_postings.csv": {
