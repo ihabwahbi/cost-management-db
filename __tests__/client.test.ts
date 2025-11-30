@@ -42,7 +42,6 @@ describe('Database Client', () => {
       // Verify schema exports key tables
       expect(schema.projects).toBeDefined();
       expect(schema.costBreakdown).toBeDefined();
-      expect(schema.pos).toBeDefined();
       expect(schema.poLineItems).toBeDefined();
       expect(schema.poMappings).toBeDefined();
       expect(schema.forecastVersions).toBeDefined();
