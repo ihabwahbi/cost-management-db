@@ -188,8 +188,24 @@ pipeline-context/
 ├── patterns/
 │   └── index.json        # 4 patterns (pipeline_script, drizzle_schema, etc.)
 └── lineage/
-    └── graph.json        # 193 nodes, 68 edges tracking data flow
+    └── graph.json        # Data flow graph with variable tracing
 ```
+
+### Skeleton Column Annotations
+
+Each skeleton file includes a column summary in its docstring:
+
+```python
+"""
+Stage 3: Prepare PO Line Items for Import
+...
+Column Operations:
+  WRITES: fmt_po, open_po_qty, open_po_value
+  READS:  Main Vendor SLB Vendor Category, PO Line ID, PO Receipt Status
+"""
+```
+
+This tells you at a glance which columns a script touches without reading full source.
 
 ### Context Oracle CLI Tool
 
@@ -204,13 +220,29 @@ python3 scripts/ask_oracle.py verify nonexistent_function
 # {"found":false,"suggestion":"Did you mean 'filter_valuation_classes'?",...}
 ```
 
-**Predict impact before modifying a script**:
+**Predict impact before modifying a script** (with tiered classification):
 ```bash
 python3 scripts/ask_oracle.py impact 05_calculate_cost_impact
-# {"script":"05_calculate_cost_impact","affected_scripts":[7 scripts],"risk_level":"high",...}
+# {"script":"05_calculate_cost_impact",
+#  "columns_modified":["Unit Price","Cost Impact Qty"],
+#  "tiered_impact":{
+#    "column_readers":["02_gr_postings","03_ir_postings"],  # Scripts that READ your columns
+#    "file_consumers":["06_prepare_po_line_items"]          # Scripts that consume output files
+#  },
+#  "risk_level":"high",
+#  "recommendation":"Test affected scripts: ['02_gr_postings','03_ir_postings']"}
 ```
 
-**Trace column lineage**:
+**Find which scripts read/write a column**:
+```bash
+python3 scripts/ask_oracle.py who "Unit Price"
+# {"column":"Unit Price",
+#  "writers":[{"script":"02_gr_postings","location":"...py:53"}],
+#  "readers":[{"script":"02_gr_postings","location":"...py:64"}],
+#  "summary":"3 scripts write, 2 scripts read"}
+```
+
+**Trace column lineage** (now with variable tracing):
 ```bash
 python3 scripts/ask_oracle.py trace open_po_value --direction upstream
 # {"target":"open_po_value","upstream":[...],"critical_files":[...]}
@@ -234,6 +266,7 @@ python3 scripts/ask_oracle.py search calculate --limit 5
 |------|---------|---------|
 | Before calling a function | `verify <name>` | Prevent hallucination |
 | Before modifying a script | `impact <script>` | Know what breaks |
+| Find who touches a column | `who <column>` | Direct read/write info |
 | Understanding data flow | `trace <column>` | Find dependencies |
 | Writing new code | `pattern <type>` | Follow conventions |
 | Finding existing code | `search <query>` | Avoid duplication |
