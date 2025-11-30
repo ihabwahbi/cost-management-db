@@ -50,6 +50,36 @@ python3 scripts/ask_oracle.py pattern drizzle_schema
 | `src/schema/index.ts` | All database table exports |
 | `scripts/config/column_mappings.py` | CSV to DB column mappings |
 
+### Searching the Codebase
+
+**Always use `rg` (ripgrep) instead of `grep`** - it's faster and has better defaults:
+
+```bash
+# Search for a function/variable
+rg "filter_valuation" --type py
+
+# Search with context (3 lines before/after)
+rg "cost_impact" --type py -C 3
+
+# Search in specific directory
+rg "open_po_value" scripts/stage3_prepare/
+
+# Case-insensitive search
+rg -i "purchase" --type py
+
+# List files containing pattern (no content)
+rg -l "pd.merge" --type py
+```
+
+**But prefer the Oracle first** - before blind searching:
+```bash
+# Better: Use Oracle to find symbols
+python3 scripts/ask_oracle.py search cost_impact
+
+# Better: Trace data lineage
+python3 scripts/ask_oracle.py trace open_po_value --direction both
+```
+
 ---
 
 ## Environment Setup
