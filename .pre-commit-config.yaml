@@ -5,19 +5,11 @@
 repos:
   - repo: local
     hooks:
-      # Regenerate pipeline map when pipeline-related files change
-      - id: update-pipeline-map
-        name: Update Pipeline Map
-        entry: python3 scripts/generate_pipeline_map.py
-        language: system
-        files: ^scripts/(stage[123]_|config/).*\.py$|^src/schema/.*\.ts$
-        pass_filenames: false
-        stages: [pre-commit]
-      
-      # Regenerate Context Oracle artifacts when source files change
+      # Regenerate Context Oracle when pipeline-related files change
+      # This runs all generators: pipeline-map (internal), symbols, skeletons, patterns, lineage
       - id: update-context-oracle
         name: Update Context Oracle
-        entry: python3 scripts/generate_context_oracle.py --skip-pipeline-map
+        entry: python3 scripts/generate_context_oracle.py
         language: system
         files: ^scripts/(stage[123]_|config/).*\.py$|^src/schema/.*\.ts$
         pass_filenames: false

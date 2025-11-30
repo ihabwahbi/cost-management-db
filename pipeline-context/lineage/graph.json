@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-30T11:14:49.515776+00:00",
+  "generated_at": "2025-11-30T11:47:41.482160+00:00",
   "version": "1.0.0",
   "description": "Data lineage graph for Context Oracle - trace data flow",
   "nodes": {
@@ -2377,7 +2377,7 @@
       "operation": "df['PO Line Item'].fillna(0).astype(int)"
     },
     {
-      "source": "column:PO Number",
+      "source": "column:PO Line Item",
       "target": "column:PO Line ID",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -2386,7 +2386,7 @@
       "operation": "df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
     },
     {
-      "source": "column:PO Line Item",
+      "source": "column:PO Number",
       "target": "column:PO Line ID",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",

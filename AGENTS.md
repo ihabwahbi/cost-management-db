@@ -2,6 +2,56 @@
 
 Isolated PostgreSQL schema (`dev_v3`) for database development using Drizzle ORM.
 
+---
+
+## QUICK START (AI Agents - Read First)
+
+### Step 1: Understand the Codebase (30 seconds)
+```bash
+# Read the skeleton index - shows all scripts with compression stats
+cat pipeline-context/skeletons/index.json
+```
+
+### Step 2: Before ANY Code Change
+```bash
+# Verify symbols exist before using them
+python3 scripts/ask_oracle.py verify <function_or_column_name>
+
+# Check impact before modifying a script
+python3 scripts/ask_oracle.py impact <script_name>
+```
+
+### Step 3: Follow Patterns
+```bash
+# Get the pattern for the type of code you're writing
+python3 scripts/ask_oracle.py pattern pipeline_script
+python3 scripts/ask_oracle.py pattern drizzle_schema
+```
+
+### Decision Tree
+
+| Task | First Action |
+|------|--------------|
+| Understand a pipeline script | Read `pipeline-context/skeletons/<stage>/<script>.skeleton.py` |
+| Find where a column is used | `python3 scripts/ask_oracle.py trace <column> --direction both` |
+| Check if a function exists | `python3 scripts/ask_oracle.py verify <name>` |
+| Modify a pipeline script | `python3 scripts/ask_oracle.py impact <script>` first |
+| Add new pipeline script | `python3 scripts/ask_oracle.py pattern pipeline_script` |
+| Add new DB table | `python3 scripts/ask_oracle.py pattern drizzle_schema` |
+| Find similar code | `python3 scripts/ask_oracle.py search <query>` |
+
+### Key Files to Know
+
+| File | Purpose |
+|------|---------|
+| `pipeline-context/skeletons/index.json` | Overview of all scripts (read first) |
+| `pipeline-context/registry/symbols.json` | All functions, columns, constants, tables |
+| `pipeline-context/lineage/graph.json` | Data flow between scripts |
+| `src/schema/index.ts` | All database table exports |
+| `scripts/config/column_mappings.py` | CSV to DB column mappings |
+
+---
+
 ## Environment Setup
 
 **Database credentials are in `.env` file (NOT auto-loaded by scripts)**
@@ -60,17 +110,6 @@ python3 scripts/pipeline.py --stage2  # Run stages 1-2 (clean + transform)
 - Output CSVs in `data/import-ready/` match database table names
 
 **Note:** Static type checker warnings (Pyright/Pylance) for pandas code can be ignored - they're false positives due to pandas' dynamic typing. Runtime behavior is what matters.
-
-### Pipeline Map (AI Context)
-For AI agents working on the pipeline, read `pipeline-map.json` at session start. It contains:
-- All scripts with their inputs/outputs and dependencies
-- Column mappings (CSV → DB schema)
-- Function definitions and data flow
-
-Regenerate after pipeline changes:
-```bash
-python3 scripts/generate_pipeline_map.py
-```
 
 ## Context Oracle (AI Intelligence Layer)
 
@@ -150,11 +189,21 @@ python3 scripts/ask_oracle.py search calculate --limit 5
 ### Regenerate Context Oracle
 
 ```bash
-python3 scripts/generate_context_oracle.py           # Full regeneration
-python3 scripts/generate_context_oracle.py --skip-pipeline-map  # Skip if pipeline-map is current
+python3 scripts/generate_context_oracle.py    # Full regeneration
 ```
 
 The pre-commit hook automatically regenerates Context Oracle when pipeline scripts or schema files change.
+
+### Known Limitations (Be Aware)
+
+| Limitation | Impact | Mitigation |
+|------------|--------|------------|
+| **Voluntary compliance** | Agent can skip Oracle and make blind changes | Always run `verify` and `impact` before writing code |
+| **Stale after edits** | After modifying files, artifacts are outdated until regenerated | Run `generate_context_oracle.py` after major changes, or commit to trigger pre-commit |
+| **Static analysis only** | Dynamic column names (`df[f"col_{i}"]`) not captured | Check actual code if lineage seems incomplete |
+| **Python/TS only** | SQL in strings, config files may be missed | Manually verify database-related changes |
+
+**Critical Rule**: The Oracle is a guide, not a safety net. Always verify your understanding by reading the actual source code before making changes.
 
 ## Schema Management Rules
 
@@ -217,25 +266,25 @@ Types: feat, fix, refactor, docs, chore, test
 ```
 
 ### Pre-commit Hooks
-This project uses pre-commit hooks. When committing changes to pipeline scripts or schema files, the pipeline map is automatically regenerated.
+This project uses pre-commit hooks. When committing changes to pipeline scripts or schema files, the Context Oracle is automatically regenerated.
 
 ```bash
 # Install pre-commit (one-time setup)
 pip install pre-commit
 pre-commit install
 
-# If pre-commit blocks your commit, the pipeline map was updated
+# If pre-commit blocks your commit, Context Oracle artifacts were updated
 # Stage the updated files and commit again:
-git add pipeline-map.json pipeline-map.md
+git add pipeline-context/
 git commit -m "your message"
 ```
 
-### What Triggers Pipeline Map Regeneration
+### What Triggers Context Oracle Regeneration
 - Any change to `scripts/*.py`
 - Any change to `scripts/config/*.py`  
 - Any change to `src/schema/*.ts`
 
-The hook ensures `pipeline-map.json` and `pipeline-map.md` stay in sync with the codebase.
+The hook ensures Context Oracle artifacts stay in sync with the codebase.
 
 ## Development Workflow
 
