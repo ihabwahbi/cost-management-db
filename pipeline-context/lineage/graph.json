@@ -1749,15 +1749,15 @@
         "scripts/stage2_transform/05_calculate_cost_impact.py:118"
       ]
     },
-    "column:Purchase Value USD": {
-      "id": "column:Purchase Value USD",
-      "type": "column",
-      "name": "Purchase Value USD"
-    },
     "column:Ordered Quantity": {
       "id": "column:Ordered Quantity",
       "type": "column",
       "name": "Ordered Quantity"
+    },
+    "column:Purchase Value USD": {
+      "id": "column:Purchase Value USD",
+      "type": "column",
+      "name": "Purchase Value USD"
     },
     "column:Invoice Amount": {
       "id": "column:Invoice Amount",
@@ -2304,7 +2304,7 @@
       "type": "OUTPUT"
     },
     {
-      "source": "column:Purchase Value USD",
+      "source": "column:Ordered Quantity",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
       "script": "03_ir_postings",
@@ -2313,7 +2313,7 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:Ordered Quantity",
+      "source": "column:Purchase Value USD",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
       "script": "03_ir_postings",
@@ -2340,15 +2340,6 @@
       "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
     },
     {
-      "source": "column:Purchase Value USD",
-      "target": "column:Unit Price",
-      "type": "TRANSFORMS",
-      "script": "02_gr_postings",
-      "file": "scripts/stage1_clean/02_gr_postings.py",
-      "line": 53,
-      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
-    },
-    {
       "source": "column:Ordered Quantity",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
@@ -2358,7 +2349,16 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:Unit Price",
+      "source": "column:Purchase Value USD",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "02_gr_postings",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 53,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:GR Effective Quantity",
       "target": "column:GR Amount",
       "type": "TRANSFORMS",
       "script": "02_gr_postings",
@@ -2367,7 +2367,7 @@
       "operation": "(df['Unit Price'] * df['GR Effective Quantity']).round(2)"
     },
     {
-      "source": "column:GR Effective Quantity",
+      "source": "column:Unit Price",
       "target": "column:GR Amount",
       "type": "TRANSFORMS",
       "script": "02_gr_postings",
@@ -2412,7 +2412,7 @@
       "operation": "pd.to_datetime(combined['Posting Date'])"
     },
     {
-      "source": "column:Purchase Value USD",
+      "source": "column:Ordered Quantity",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
       "script": "05_calculate_cost_impact",
@@ -2421,7 +2421,7 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:Ordered Quantity",
+      "source": "column:Purchase Value USD",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
       "script": "05_calculate_cost_impact",
@@ -2439,7 +2439,7 @@
       "operation": "df['PO Line Item'].fillna(0).astype(int)"
     },
     {
-      "source": "column:PO Number",
+      "source": "column:PO Line Item",
       "target": "column:PO Line ID",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -2448,7 +2448,7 @@
       "operation": "df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
     },
     {
-      "source": "column:PO Line Item",
+      "source": "column:PO Number",
       "target": "column:PO Line ID",
       "type": "TRANSFORMS",
       "script": "04_enrich_po_line_items",
@@ -2637,7 +2637,7 @@
         "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
       }
     ],
-    "Purchase Value USD": [
+    "Ordered Quantity": [
       {
         "script": "03_ir_postings",
         "type": "READS",
@@ -2657,7 +2657,7 @@
         "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
       }
     ],
-    "Ordered Quantity": [
+    "Purchase Value USD": [
       {
         "script": "03_ir_postings",
         "type": "READS",
@@ -3132,10 +3132,10 @@
         "PO Line ID"
       ],
       "result": [
-        "PO Line ID",
-        "GR Posting Date",
         "GR Effective Quantity",
-        "GR Amount"
+        "GR Amount",
+        "GR Posting Date",
+        "PO Line ID"
       ],
       "complex_gr": [
         "PO Line ID"

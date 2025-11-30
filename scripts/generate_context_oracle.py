@@ -130,10 +130,34 @@ def load_manifest() -> Dict:
         return {"files": {}, "last_generated": None}
 
 
+def get_latest_source_mtime() -> datetime:
+    """Get the latest modification time of all source files.
+    
+    This makes the generated timestamp deterministic - it only changes
+    when source files actually change, preventing infinite loops in
+    pre-commit hooks.
+    """
+    latest_mtime = 0.0
+    
+    source_files = get_source_files()
+    for path in source_files.values():
+        if path.exists():
+            mtime = path.stat().st_mtime
+            if mtime > latest_mtime:
+                latest_mtime = mtime
+    
+    return datetime.fromtimestamp(latest_mtime, tz=timezone.utc)
+
+
 def save_manifest(manifest: Dict) -> None:
-    """Save the manifest of file hashes."""
+    """Save the manifest of file hashes.
+    
+    Uses deterministic timestamp based on source file mtimes to prevent
+    pre-commit hook loops.
+    """
     PIPELINE_CONTEXT_DIR.mkdir(parents=True, exist_ok=True)
-    manifest["last_generated"] = datetime.now(timezone.utc).isoformat()
+    # Use deterministic timestamp based on source file mtimes
+    manifest["last_generated"] = get_latest_source_mtime().isoformat()
     with open(MANIFEST_FILE, "w") as f:
         json.dump(manifest, f, indent=2)
 
@@ -272,6 +296,7 @@ def generate_all(skip_pipeline_map: bool = False, incremental: bool = False, for
     
     # Summary
     total_time = time.time() - start_time
+    deterministic_timestamp = get_latest_source_mtime().isoformat()
     
     print("""
     ╔═══════════════════════════════════════════════════════════════╗
@@ -279,7 +304,7 @@ def generate_all(skip_pipeline_map: bool = False, incremental: bool = False, for
     ╚═══════════════════════════════════════════════════════════════╝
     """)
     print(f"Total time: {total_time:.2f}s")
-    print(f"Generated at: {datetime.now(timezone.utc).isoformat()}")
+    print(f"Generated at: {deterministic_timestamp}")
     print()
     print("Generated artifacts in pipeline-context/:")
     print("  registry/symbols.json     - Symbol Registry (functions, columns)")
