@@ -1,7 +1,7 @@
 {
-  "generated_at": "2025-11-30T11:47:41.482160+00:00",
-  "version": "1.0.0",
-  "description": "Data lineage graph for Context Oracle - trace data flow",
+  "generated_at": "2025-11-30T13:26:32.268579+00:00",
+  "version": "2.0.0",
+  "description": "Data lineage graph for Context Oracle - trace data flow with variable tracking",
   "nodes": {
     "file:data/raw/po details report.xlsx": {
       "id": "file:data/raw/po details report.xlsx",
@@ -1750,15 +1750,15 @@
         "scripts/stage2_transform/05_calculate_cost_impact.py:118"
       ]
     },
-    "column:Ordered Quantity": {
-      "id": "column:Ordered Quantity",
-      "type": "column",
-      "name": "Ordered Quantity"
-    },
     "column:Purchase Value USD": {
       "id": "column:Purchase Value USD",
       "type": "column",
       "name": "Purchase Value USD"
+    },
+    "column:Ordered Quantity": {
+      "id": "column:Ordered Quantity",
+      "type": "column",
+      "name": "Ordered Quantity"
     },
     "column:Invoice Amount": {
       "id": "column:Invoice Amount",
@@ -1801,6 +1801,41 @@
       "type": "column",
       "name": "GR Effective Quantity"
     },
+    "column:NIS Level 0 Desc": {
+      "id": "column:NIS Level 0 Desc",
+      "type": "column",
+      "name": "NIS Level 0 Desc",
+      "created_by": [
+        "scripts/stage1_clean/01_po_line_items.py:68",
+        "scripts/stage1_clean/01_po_line_items.py:77"
+      ]
+    },
+    "column:Main Vendor Name": {
+      "id": "column:Main Vendor Name",
+      "type": "column",
+      "name": "Main Vendor Name",
+      "created_by": [
+        "scripts/stage1_clean/01_po_line_items.py:89"
+      ]
+    },
+    "column:Main Vendor ID": {
+      "id": "column:Main Vendor ID",
+      "type": "column",
+      "name": "Main Vendor ID"
+    },
+    "column:Ultimate Vendor Name": {
+      "id": "column:Ultimate Vendor Name",
+      "type": "column",
+      "name": "Ultimate Vendor Name",
+      "created_by": [
+        "scripts/stage1_clean/01_po_line_items.py:94"
+      ]
+    },
+    "column:Ultimate Vendor Number": {
+      "id": "column:Ultimate Vendor Number",
+      "type": "column",
+      "name": "Ultimate Vendor Number"
+    },
     "column:Location": {
       "id": "column:Location",
       "type": "column",
@@ -1808,6 +1843,11 @@
       "created_by": [
         "scripts/stage1_clean/01_po_line_items.py:103"
       ]
+    },
+    "column:Plant Code": {
+      "id": "column:Plant Code",
+      "type": "column",
+      "name": "Plant Code"
     },
     "column:Expected Delivery Date": {
       "id": "column:Expected Delivery Date",
@@ -1852,7 +1892,8 @@
       "type": "column",
       "name": "Requester",
       "created_by": [
-        "scripts/stage2_transform/04_enrich_po_line_items.py:54"
+        "scripts/stage2_transform/04_enrich_po_line_items.py:54",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:91"
       ]
     },
     "column:ARIBA shopping cart number : created by (Text)": {
@@ -1867,6 +1908,16 @@
       "created_by": [
         "scripts/stage2_transform/04_enrich_po_line_items.py:64"
       ]
+    },
+    "column:ARIBA Shopping cart number": {
+      "id": "column:ARIBA Shopping cart number",
+      "type": "column",
+      "name": "ARIBA Shopping cart number"
+    },
+    "column:Purchase Requisition Number": {
+      "id": "column:Purchase Requisition Number",
+      "type": "column",
+      "name": "Purchase Requisition Number"
     },
     "column:Total Cost Impact Qty": {
       "id": "column:Total Cost Impact Qty",
@@ -1889,6 +1940,8 @@
       "type": "column",
       "name": "open_po_qty",
       "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:72",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:76",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:107"
       ]
     },
@@ -1897,6 +1950,8 @@
       "type": "column",
       "name": "open_po_value",
       "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:73",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:79",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:109"
       ]
     },
@@ -1905,9 +1960,14 @@
       "type": "column",
       "name": "fmt_po",
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:114",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:116"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:115",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:117"
       ]
+    },
+    "column:Main Vendor SLB Vendor Category": {
+      "id": "column:Main Vendor SLB Vendor Category",
+      "type": "column",
+      "name": "Main Vendor SLB Vendor Category"
     },
     "column:amount": {
       "id": "column:amount",
@@ -1946,11 +2006,6 @@
       "type": "column",
       "name": "PO Document Date"
     },
-    "column:Plant Code": {
-      "id": "column:Plant Code",
-      "type": "column",
-      "name": "Plant Code"
-    },
     "column:SL Sub-Business Line Code (BV Lvl 3)": {
       "id": "column:SL Sub-Business Line Code (BV Lvl 3)",
       "type": "column",
@@ -1960,26 +2015,6 @@
       "id": "column:PR Line",
       "type": "column",
       "name": "PR Line"
-    },
-    "column:Main Vendor ID": {
-      "id": "column:Main Vendor ID",
-      "type": "column",
-      "name": "Main Vendor ID"
-    },
-    "column:Main Vendor Name": {
-      "id": "column:Main Vendor Name",
-      "type": "column",
-      "name": "Main Vendor Name"
-    },
-    "column:Main Vendor SLB Vendor Category": {
-      "id": "column:Main Vendor SLB Vendor Category",
-      "type": "column",
-      "name": "Main Vendor SLB Vendor Category"
-    },
-    "column:Ultimate Vendor Name": {
-      "id": "column:Ultimate Vendor Name",
-      "type": "column",
-      "name": "Ultimate Vendor Name"
     },
     "column:PO Line": {
       "id": "column:PO Line",
@@ -2269,15 +2304,6 @@
       "type": "OUTPUT"
     },
     {
-      "source": "column:Ordered Quantity",
-      "target": "column:Unit Price",
-      "type": "TRANSFORMS",
-      "script": "03_ir_postings",
-      "file": "scripts/stage1_clean/03_ir_postings.py",
-      "line": 44,
-      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
-    },
-    {
       "source": "column:Purchase Value USD",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
@@ -2287,13 +2313,13 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:Unit Price",
-      "target": "column:Invoice Amount",
+      "source": "column:Ordered Quantity",
+      "target": "column:Unit Price",
       "type": "TRANSFORMS",
       "script": "03_ir_postings",
       "file": "scripts/stage1_clean/03_ir_postings.py",
-      "line": 55,
-      "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
+      "line": 44,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
       "source": "column:IR Effective Quantity",
@@ -2305,13 +2331,13 @@
       "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
     },
     {
-      "source": "column:Ordered Quantity",
-      "target": "column:Unit Price",
+      "source": "column:Unit Price",
+      "target": "column:Invoice Amount",
       "type": "TRANSFORMS",
-      "script": "02_gr_postings",
-      "file": "scripts/stage1_clean/02_gr_postings.py",
-      "line": 53,
-      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+      "script": "03_ir_postings",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 55,
+      "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
     },
     {
       "source": "column:Purchase Value USD",
@@ -2323,13 +2349,13 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:Unit Price",
-      "target": "column:GR Amount",
+      "source": "column:Ordered Quantity",
+      "target": "column:Unit Price",
       "type": "TRANSFORMS",
       "script": "02_gr_postings",
       "file": "scripts/stage1_clean/02_gr_postings.py",
-      "line": 64,
-      "operation": "(df['Unit Price'] * df['GR Effective Quantity']).round(2)"
+      "line": 53,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
       "source": "column:GR Effective Quantity",
@@ -2341,6 +2367,42 @@
       "operation": "(df['Unit Price'] * df['GR Effective Quantity']).round(2)"
     },
     {
+      "source": "column:Unit Price",
+      "target": "column:GR Amount",
+      "type": "TRANSFORMS",
+      "script": "02_gr_postings",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 64,
+      "operation": "(df['Unit Price'] * df['GR Effective Quantity']).round(2)"
+    },
+    {
+      "source": "column:Main Vendor ID",
+      "target": "column:Main Vendor Name",
+      "type": "TRANSFORMS",
+      "script": "01_po_line_items",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 89,
+      "operation": "df.loc[main_mask, 'Main Vendor ID'].map(VENDOR_NAME_MAPPING)"
+    },
+    {
+      "source": "column:Ultimate Vendor Number",
+      "target": "column:Ultimate Vendor Name",
+      "type": "TRANSFORMS",
+      "script": "01_po_line_items",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 94,
+      "operation": "df.loc[ultimate_mask, 'Ultimate Vendor Number'].map(VENDOR_NAME_MAPPING)"
+    },
+    {
+      "source": "column:Plant Code",
+      "target": "column:Location",
+      "type": "TRANSFORMS",
+      "script": "01_po_line_items",
+      "file": "scripts/stage1_clean/01_po_line_items.py",
+      "line": 103,
+      "operation": "plant_code_str.map(PLANT_CODE_TO_LOCATION)"
+    },
+    {
       "source": "column:Posting Date",
       "target": "column:Posting Date",
       "type": "TRANSFORMS",
@@ -2350,7 +2412,7 @@
       "operation": "pd.to_datetime(combined['Posting Date'])"
     },
     {
-      "source": "column:Ordered Quantity",
+      "source": "column:Purchase Value USD",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
       "script": "05_calculate_cost_impact",
@@ -2359,7 +2421,7 @@
       "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
     },
     {
-      "source": "column:Purchase Value USD",
+      "source": "column:Ordered Quantity",
       "target": "column:Unit Price",
       "type": "TRANSFORMS",
       "script": "05_calculate_cost_impact",
@@ -2413,6 +2475,24 @@
       "operation": "details['ARIBA shopping cart number : created by (Text)']"
     },
     {
+      "source": "column:ARIBA Shopping cart number",
+      "target": "column:PR Number",
+      "type": "TRANSFORMS",
+      "script": "04_enrich_po_line_items",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 64,
+      "operation": "pr_number.where(pr_number.notna(), ariba_number)"
+    },
+    {
+      "source": "column:Purchase Requisition Number",
+      "target": "column:PR Number",
+      "type": "TRANSFORMS",
+      "script": "04_enrich_po_line_items",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 64,
+      "operation": "pr_number.where(pr_number.notna(), ariba_number)"
+    },
+    {
       "source": "column:Total Cost Impact Qty",
       "target": "column:Total Cost Impact Qty",
       "type": "TRANSFORMS",
@@ -2447,6 +2527,15 @@
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
       "line": 109,
       "operation": "po_df['open_po_value'].round(2)"
+    },
+    {
+      "source": "column:Main Vendor SLB Vendor Category",
+      "target": "column:fmt_po",
+      "type": "TRANSFORMS",
+      "script": "06_prepare_po_line_items",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 115,
+      "operation": "is_ops_vendor"
     },
     {
       "source": "column:cost_impact_amount",
@@ -2515,22 +2604,592 @@
       "table": "po_transactions"
     }
   ],
+  "column_access": {
+    "Unit Price": [
+      {
+        "script": "03_ir_postings",
+        "type": "WRITES",
+        "line": 44,
+        "file": "scripts/stage1_clean/03_ir_postings.py"
+      },
+      {
+        "script": "03_ir_postings",
+        "type": "READS",
+        "line": 55,
+        "file": "scripts/stage1_clean/03_ir_postings.py"
+      },
+      {
+        "script": "02_gr_postings",
+        "type": "WRITES",
+        "line": 53,
+        "file": "scripts/stage1_clean/02_gr_postings.py"
+      },
+      {
+        "script": "02_gr_postings",
+        "type": "READS",
+        "line": 64,
+        "file": "scripts/stage1_clean/02_gr_postings.py"
+      },
+      {
+        "script": "05_calculate_cost_impact",
+        "type": "WRITES",
+        "line": 118,
+        "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
+      }
+    ],
+    "Purchase Value USD": [
+      {
+        "script": "03_ir_postings",
+        "type": "READS",
+        "line": 44,
+        "file": "scripts/stage1_clean/03_ir_postings.py"
+      },
+      {
+        "script": "02_gr_postings",
+        "type": "READS",
+        "line": 53,
+        "file": "scripts/stage1_clean/02_gr_postings.py"
+      },
+      {
+        "script": "05_calculate_cost_impact",
+        "type": "READS",
+        "line": 118,
+        "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
+      }
+    ],
+    "Ordered Quantity": [
+      {
+        "script": "03_ir_postings",
+        "type": "READS",
+        "line": 44,
+        "file": "scripts/stage1_clean/03_ir_postings.py"
+      },
+      {
+        "script": "02_gr_postings",
+        "type": "READS",
+        "line": 53,
+        "file": "scripts/stage1_clean/02_gr_postings.py"
+      },
+      {
+        "script": "05_calculate_cost_impact",
+        "type": "READS",
+        "line": 118,
+        "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
+      }
+    ],
+    "Invoice Amount": [
+      {
+        "script": "03_ir_postings",
+        "type": "WRITES",
+        "line": 55,
+        "file": "scripts/stage1_clean/03_ir_postings.py"
+      }
+    ],
+    "IR Effective Quantity": [
+      {
+        "script": "03_ir_postings",
+        "type": "READS",
+        "line": 55,
+        "file": "scripts/stage1_clean/03_ir_postings.py"
+      }
+    ],
+    "PO Line ID": [
+      {
+        "script": "03_ir_postings",
+        "type": "READS",
+        "line": 50,
+        "file": "scripts/stage1_clean/03_ir_postings.py",
+        "context": "merge_join"
+      },
+      {
+        "script": "02_gr_postings",
+        "type": "READS",
+        "line": 59,
+        "file": "scripts/stage1_clean/02_gr_postings.py",
+        "context": "merge_join"
+      },
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "WRITES",
+        "line": 33,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      },
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "WRITES",
+        "line": 51,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      },
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "READS",
+        "line": 51,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      },
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "READS",
+        "line": 80,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+        "context": "merge_join"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "READS",
+        "line": 61,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "context": "merge_join"
+      }
+    ],
+    "GR Amount": [
+      {
+        "script": "02_gr_postings",
+        "type": "WRITES",
+        "line": 64,
+        "file": "scripts/stage1_clean/02_gr_postings.py"
+      }
+    ],
+    "GR Effective Quantity": [
+      {
+        "script": "02_gr_postings",
+        "type": "READS",
+        "line": 64,
+        "file": "scripts/stage1_clean/02_gr_postings.py"
+      }
+    ],
+    "NIS Level 0 Desc": [
+      {
+        "script": "01_po_line_items",
+        "type": "WRITES",
+        "line": 68,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      },
+      {
+        "script": "01_po_line_items",
+        "type": "WRITES",
+        "line": 77,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      }
+    ],
+    "Main Vendor Name": [
+      {
+        "script": "01_po_line_items",
+        "type": "WRITES",
+        "line": 89,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      }
+    ],
+    "Main Vendor ID": [
+      {
+        "script": "01_po_line_items",
+        "type": "READS",
+        "line": 89,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      }
+    ],
+    "Ultimate Vendor Name": [
+      {
+        "script": "01_po_line_items",
+        "type": "WRITES",
+        "line": 94,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      }
+    ],
+    "Ultimate Vendor Number": [
+      {
+        "script": "01_po_line_items",
+        "type": "READS",
+        "line": 94,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      }
+    ],
+    "Location": [
+      {
+        "script": "01_po_line_items",
+        "type": "WRITES",
+        "line": 103,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      }
+    ],
+    "Plant Code": [
+      {
+        "script": "01_po_line_items",
+        "type": "READS",
+        "line": 103,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      }
+    ],
+    "Expected Delivery Date": [
+      {
+        "script": "01_po_line_items",
+        "type": "WRITES",
+        "line": 114,
+        "file": "scripts/stage1_clean/01_po_line_items.py"
+      }
+    ],
+    "Posting Type": [
+      {
+        "script": "05_calculate_cost_impact",
+        "type": "WRITES",
+        "line": 102,
+        "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
+      },
+      {
+        "script": "05_calculate_cost_impact",
+        "type": "WRITES",
+        "line": 110,
+        "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
+      }
+    ],
+    "Posting Date": [
+      {
+        "script": "05_calculate_cost_impact",
+        "type": "WRITES",
+        "line": 114,
+        "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
+      },
+      {
+        "script": "05_calculate_cost_impact",
+        "type": "READS",
+        "line": 114,
+        "file": "scripts/stage2_transform/05_calculate_cost_impact.py"
+      }
+    ],
+    "PO Line Item": [
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "WRITES",
+        "line": 32,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      },
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "READS",
+        "line": 32,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      },
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "READS",
+        "line": 33,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      }
+    ],
+    "PO Number": [
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "READS",
+        "line": 33,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      }
+    ],
+    "Requester": [
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "WRITES",
+        "line": 54,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      },
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "WRITES",
+        "line": 91,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      }
+    ],
+    "ARIBA shopping cart number : created by (Text)": [
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "READS",
+        "line": 54,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      }
+    ],
+    "PR Number": [
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "WRITES",
+        "line": 64,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      }
+    ],
+    "ARIBA Shopping cart number": [
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "READS",
+        "line": 64,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      }
+    ],
+    "Purchase Requisition Number": [
+      {
+        "script": "04_enrich_po_line_items",
+        "type": "READS",
+        "line": 64,
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py"
+      }
+    ],
+    "Total Cost Impact Qty": [
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 64,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "READS",
+        "line": 64,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      }
+    ],
+    "Total Cost Impact Amount": [
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 65,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "READS",
+        "line": 65,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      }
+    ],
+    "open_po_qty": [
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 72,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 76,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 107,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "READS",
+        "line": 107,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      }
+    ],
+    "open_po_value": [
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 73,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 79,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 109,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "READS",
+        "line": 109,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      }
+    ],
+    "fmt_po": [
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 115,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      },
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES",
+        "line": 117,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      }
+    ],
+    "Main Vendor SLB Vendor Category": [
+      {
+        "script": "06_prepare_po_line_items",
+        "type": "READS",
+        "line": 115,
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py"
+      }
+    ],
+    "amount": [
+      {
+        "script": "07_prepare_po_transactions",
+        "type": "WRITES",
+        "line": 58,
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
+      }
+    ],
+    "cost_impact_amount": [
+      {
+        "script": "07_prepare_po_transactions",
+        "type": "READS",
+        "line": 58,
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
+      },
+      {
+        "script": "07_prepare_po_transactions",
+        "type": "WRITES",
+        "line": 52,
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
+      },
+      {
+        "script": "07_prepare_po_transactions",
+        "type": "READS",
+        "line": 52,
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
+      }
+    ],
+    "cost_impact_qty": [
+      {
+        "script": "07_prepare_po_transactions",
+        "type": "WRITES",
+        "line": 50,
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
+      },
+      {
+        "script": "07_prepare_po_transactions",
+        "type": "READS",
+        "line": 50,
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
+      }
+    ],
+    "quantity": [
+      {
+        "script": "07_prepare_po_transactions",
+        "type": "WRITES",
+        "line": 54,
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
+      },
+      {
+        "script": "07_prepare_po_transactions",
+        "type": "READS",
+        "line": 54,
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py"
+      }
+    ]
+  },
+  "variable_sources": {
+    "03_ir_postings": {},
+    "02_gr_postings": {
+      "df_filtered": [
+        "GR Effective Quantity"
+      ]
+    },
+    "01_po_line_items": {
+      "valuation_class": [
+        "PO Valuation Class"
+      ],
+      "mask": [
+        "NIS Level 0 Desc"
+      ],
+      "main_mask": [
+        "Main Vendor ID"
+      ],
+      "ultimate_mask": [
+        "Ultimate Vendor Number"
+      ],
+      "plant_code_str": [
+        "Plant Code"
+      ],
+      "mapped_count": [
+        "Location"
+      ]
+    },
+    "05_calculate_cost_impact": {
+      "is_gld": [
+        "Main Vendor SLB Vendor Category"
+      ],
+      "is_valid_cat": [
+        "PO Account Assignment Category"
+      ],
+      "simple_gr": [
+        "PO Line ID"
+      ],
+      "result": [
+        "GR Posting Date",
+        "PO Line ID",
+        "GR Effective Quantity",
+        "GR Amount"
+      ],
+      "complex_gr": [
+        "PO Line ID"
+      ],
+      "complex_ir": [
+        "PO Line ID"
+      ],
+      "unit_prices": [
+        "Unit Price"
+      ],
+      "posting_type": [
+        "Posting Type"
+      ],
+      "posting_qty": [
+        "Posting Qty"
+      ]
+    },
+    "04_enrich_po_line_items": {
+      "pr_number": [
+        "Purchase Requisition Number"
+      ],
+      "ariba_number": [
+        "ARIBA Shopping cart number"
+      ],
+      "pr_str": [
+        "PR Number"
+      ]
+    },
+    "06_prepare_po_line_items": {
+      "already_closed": [
+        "PO Receipt Status"
+      ],
+      "is_ops_vendor": [
+        "Main Vendor SLB Vendor Category"
+      ]
+    },
+    "07_prepare_po_transactions": {
+      "actual_types": [
+        "transaction_type"
+      ]
+    }
+  },
   "stats": {
-    "total_nodes": 193,
-    "total_edges": 68,
+    "total_nodes": 197,
+    "total_edges": 74,
     "nodes_by_type": {
       "file": 10,
       "script": 8,
       "db_column": 113,
       "table": 10,
-      "column": 52
+      "column": 56
     },
     "edges_by_type": {
       "INPUT": 17,
       "OUTPUT": 13,
       "DEPENDS_ON": 9,
-      "TRANSFORMS": 24,
+      "TRANSFORMS": 30,
       "MAPS_TO": 5
-    }
+    },
+    "columns_tracked": 35,
+    "variables_traced": 22
   }
 }

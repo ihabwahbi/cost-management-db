@@ -111,7 +111,8 @@ def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
     # Set fmt_po = True when vendor category is OPS
     vendor_category_col = "Main Vendor SLB Vendor Category"
     if vendor_category_col in po_df.columns:
-        output_df["fmt_po"] = po_df[vendor_category_col] == "OPS"
+        is_ops_vendor = po_df[vendor_category_col] == "OPS"
+        output_df["fmt_po"] = is_ops_vendor
     else:
         output_df["fmt_po"] = False
     

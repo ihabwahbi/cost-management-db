@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-11-30T06:59:20.970601+00:00
+Generated: 2025-11-30T12:29:21.444799+00:00
 
 ## Data Flow Diagram
 
@@ -523,8 +523,8 @@ Key pandas operations used in each script:
 | 87 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
 | 107 | column_assign | column: `open_po_qty` |
 | 109 | column_assign | column: `open_po_value` |
-| 114 | column_assign | column: `fmt_po` |
-| 116 | column_assign | column: `fmt_po` |
+| 115 | column_assign | column: `fmt_po` |
+| 117 | column_assign | column: `fmt_po` |
 
 ### `07_prepare_po_transactions`
 

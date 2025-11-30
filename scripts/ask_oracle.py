@@ -38,11 +38,98 @@ PIPELINE_CONTEXT_DIR = PROJECT_ROOT / "pipeline-context"
 REGISTRY_FILE = PIPELINE_CONTEXT_DIR / "registry" / "symbols.json"
 LINEAGE_FILE = PIPELINE_CONTEXT_DIR / "lineage" / "graph.json"
 PATTERNS_FILE = PIPELINE_CONTEXT_DIR / "patterns" / "index.json"
+SKELETONS_INDEX = PIPELINE_CONTEXT_DIR / "skeletons" / "index.json"
+
+# Source directories to monitor for freshness
+SOURCE_DIRS = [
+    SCRIPTS_DIR / "stage1_clean",
+    SCRIPTS_DIR / "stage2_transform",
+    SCRIPTS_DIR / "stage3_prepare",
+    SCRIPTS_DIR / "config",
+    PROJECT_ROOT / "src" / "schema",
+]
 
 
 def output_json(data: Dict) -> None:
     """Output JSON to stdout (strict, minified for agents)."""
     print(json.dumps(data, separators=(',', ':')))
+
+
+def get_latest_source_mtime() -> float:
+    """Get the most recent modification time of any source file."""
+    latest_mtime = 0.0
+    
+    for source_dir in SOURCE_DIRS:
+        if not source_dir.exists():
+            continue
+        # Check Python files in pipeline scripts
+        for pattern in ["*.py", "*.ts"]:
+            for filepath in source_dir.glob(pattern):
+                mtime = filepath.stat().st_mtime
+                if mtime > latest_mtime:
+                    latest_mtime = mtime
+    
+    return latest_mtime
+
+
+def get_artifacts_mtime() -> float:
+    """Get the modification time of the artifacts (use registry as proxy)."""
+    if not REGISTRY_FILE.exists():
+        return 0.0
+    return REGISTRY_FILE.stat().st_mtime
+
+
+def check_and_regenerate_if_stale(silent: bool = False) -> bool:
+    """
+    Check if artifacts are stale and regenerate if needed.
+    
+    Returns True if regeneration occurred, False otherwise.
+    Exits with code 1 if regeneration fails (prevents agent from using broken context).
+    """
+    import subprocess
+    
+    source_mtime = get_latest_source_mtime()
+    artifacts_mtime = get_artifacts_mtime()
+    
+    # Also check if the generator script itself changed
+    generator_script = SCRIPTS_DIR / "generate_context_oracle.py"
+    if generator_script.exists():
+        gen_mtime = generator_script.stat().st_mtime
+        if gen_mtime > artifacts_mtime:
+            source_mtime = max(source_mtime, gen_mtime)
+    
+    # Check root scripts directory for pipeline.py etc
+    for root_script in SCRIPTS_DIR.glob("*.py"):
+        if root_script.name.startswith("__"):
+            continue
+        script_mtime = root_script.stat().st_mtime
+        if script_mtime > source_mtime:
+            source_mtime = script_mtime
+    
+    needs_regen = artifacts_mtime == 0.0 or source_mtime > artifacts_mtime
+    
+    if needs_regen:
+        if not silent:
+            if artifacts_mtime == 0.0:
+                print("Oracle artifacts not found. Generating...", file=sys.stderr)
+            else:
+                print("Oracle artifacts are stale. Regenerating...", file=sys.stderr)
+        
+        try:
+            subprocess.run(
+                [sys.executable, str(generator_script)],
+                capture_output=True,
+                text=True,
+                cwd=PROJECT_ROOT,
+                check=True  # Raise CalledProcessError on failure
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"CRITICAL: Oracle generation failed!\n{e.stderr}", file=sys.stderr)
+            sys.exit(1)  # Hard stop - don't let agent continue with broken context
+        
+        return True
+    
+    return False
 
 
 def load_registry() -> Optional[Dict]:
@@ -226,7 +313,15 @@ def trace_downstream(edges: List[Dict], node_id: str, max_depth: int = 10) -> Li
 
 
 def cmd_impact(args) -> Dict:
-    """Predict impact of changing a script."""
+    """
+    Predict impact of changing a script.
+    
+    Fix 3: Returns tiered impact classification:
+      - direct_writers: Scripts that WRITE to the same columns
+      - column_readers: Scripts that READ columns this script WRITES
+      - file_consumers: Scripts that consume output files
+      - passthrough: Scripts that just pass data through
+    """
     lineage = load_lineage()
     if not lineage:
         return {"error": "Lineage graph not found. Run generate_context_oracle.py first."}
@@ -240,6 +335,7 @@ def cmd_impact(args) -> Dict:
     script_id = f"script:{script_name}"
     nodes = lineage.get("nodes", {})
     edges = lineage.get("edges", [])
+    column_access = lineage.get("column_access", {})
     
     if script_id not in nodes:
         # Try to find similar script names
@@ -255,11 +351,34 @@ def cmd_impact(args) -> Dict:
         if edge["source"] == script_id and edge["type"] == "OUTPUT":
             outputs.append(edge["target"].replace("file:", ""))
     
-    # Find all downstream dependencies
-    affected_scripts = set()
-    affected_columns = set()
-    affected_tables = set()
+    # Fix 3: Find columns this script WRITES
+    columns_written = set()
+    columns_read = set()
+    for col, accesses in column_access.items():
+        for access in accesses:
+            if access.get("script") == script_name:
+                if access.get("type") == "WRITES":
+                    columns_written.add(col)
+                elif access.get("type") == "READS":
+                    columns_read.add(col)
     
+    # Fix 3: Tiered impact classification
+    direct_writers = set()      # Scripts that also WRITE to same columns
+    column_readers = set()       # Scripts that READ columns we WRITE
+    file_consumers = set()       # Scripts that consume our output files
+    
+    # Find scripts that interact with columns we write
+    for col in columns_written:
+        if col in column_access:
+            for access in column_access[col]:
+                other_script = access.get("script", "")
+                if other_script and other_script != script_name:
+                    if access.get("type") == "WRITES":
+                        direct_writers.add(other_script)
+                    elif access.get("type") == "READS":
+                        column_readers.add(other_script)
+    
+    # Find scripts that consume output files (legacy traversal)
     for output in outputs:
         output_id = f"file:{output}"
         downstream = trace_downstream(edges, output_id)
@@ -267,33 +386,50 @@ def cmd_impact(args) -> Dict:
         for item in downstream:
             node = item["node"]
             if node.startswith("script:"):
-                affected_scripts.add(node.replace("script:", ""))
-            elif node.startswith("column:"):
-                affected_columns.add(node.replace("column:", ""))
-            elif node.startswith("table:"):
-                affected_tables.add(node.replace("table:", ""))
+                other_script = node.replace("script:", "")
+                if other_script != script_name:
+                    # If not already a column reader/writer, it's a file consumer
+                    if other_script not in column_readers and other_script not in direct_writers:
+                        file_consumers.add(other_script)
     
-    # Calculate risk level
+    # All affected scripts
+    all_affected = direct_writers | column_readers | file_consumers
+    
+    # Calculate risk level based on tiered impact
     risk_level = "low"
-    if len(affected_scripts) >= 3 or len(affected_tables) >= 2:
+    if len(column_readers) >= 2 or len(direct_writers) >= 1:
         risk_level = "high"
-    elif len(affected_scripts) >= 1 or len(affected_columns) >= 2:
+    elif len(column_readers) >= 1 or len(file_consumers) >= 2:
         risk_level = "medium"
     
-    # Generate recommendation
+    # Generate detailed recommendation
     if risk_level == "high":
-        recommendation = f"High-risk change: affects {len(affected_scripts)} downstream scripts and {len(affected_tables)} tables. Test all stages thoroughly."
+        parts = []
+        if direct_writers:
+            parts.append(f"{len(direct_writers)} scripts also write to same columns")
+        if column_readers:
+            parts.append(f"{len(column_readers)} scripts read columns you modify")
+        detail = "; ".join(parts) if parts else f"affects {len(columns_written)} columns"
+        scripts_to_test = list(column_readers)[:3]
+        recommendation = f"High-risk change: {detail}. Test affected scripts: {scripts_to_test}"
     elif risk_level == "medium":
-        recommendation = "Medium-risk change: verify downstream transformations after modification."
+        recommendation = f"Medium-risk change: {len(column_readers)} downstream readers. Verify transformations."
     else:
         recommendation = "Low-risk change: limited downstream impact."
     
     return {
         "script": script_name,
         "outputs": outputs,
-        "affected_scripts": sorted(affected_scripts),
-        "affected_columns": sorted(affected_columns),
-        "affected_tables": sorted(affected_tables),
+        "columns_modified": sorted(columns_written),
+        "columns_read": sorted(columns_read),
+        # Fix 3: Tiered classification
+        "tiered_impact": {
+            "direct_writers": sorted(direct_writers),
+            "column_readers": sorted(column_readers),
+            "file_consumers": sorted(file_consumers)
+        },
+        # Legacy format for backward compatibility
+        "affected_scripts": sorted(all_affected),
         "risk_level": risk_level,
         "recommendation": recommendation
     }
@@ -588,6 +724,9 @@ Examples:
     if not args.command:
         parser.print_help()
         sys.exit(0)
+    
+    # Freshness Guard: Auto-regenerate stale artifacts before any command
+    check_and_regenerate_if_stale(silent=False)
     
     try:
         if args.command == "verify":

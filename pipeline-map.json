@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-30T06:59:20.970601+00:00",
+  "generated_at": "2025-11-30T12:29:21.444799+00:00",
   "project": "cost-management-db",
   "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
   "pipeline_stages": [
@@ -1025,7 +1025,7 @@
           "args": [
             "df"
           ],
-          "line": 122,
+          "line": 123,
           "semantics": {
             "modifies_columns": [],
             "filters_data": true,
@@ -1042,7 +1042,7 @@
             "df",
             "filepath"
           ],
-          "line": 141,
+          "line": 142,
           "semantics": {
             "modifies_columns": [],
             "filters_data": false,
@@ -1056,7 +1056,7 @@
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 150,
+          "line": 151,
           "semantics": {
             "modifies_columns": [],
             "filters_data": false,
@@ -1136,14 +1136,14 @@
           "operation": "column_assign",
           "description": "Creates/modifies column 'fmt_po'",
           "column": "fmt_po",
-          "line": 114,
-          "code_snippet": "output_df[\"fmt_po\"] = po_df[vendor_category_col] == \"OPS\""
+          "line": 115,
+          "code_snippet": "output_df[\"fmt_po\"] = is_ops_vendor"
         },
         {
           "operation": "column_assign",
           "description": "Creates/modifies column 'fmt_po'",
           "column": "fmt_po",
-          "line": 116,
+          "line": 117,
           "code_snippet": "output_df[\"fmt_po\"] = False"
         },
         {
@@ -1160,7 +1160,7 @@
           "group_column": "PO Line ID"
         }
       ],
-      "line_count": 185
+      "line_count": 186
     },
     {
       "name": "07_prepare_po_transactions",

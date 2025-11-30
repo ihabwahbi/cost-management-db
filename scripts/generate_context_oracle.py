@@ -9,24 +9,139 @@ Generates all Context Oracle artifacts in the correct order:
   4. Pattern Library - Code patterns and conventions
   5. Lineage Graph - Data flow and impact prediction
 
+Fix 4: Supports incremental updates - only regenerates for changed files.
+
 Output: pipeline-context/
 
 Usage:
     python3 scripts/generate_context_oracle.py
     python3 scripts/generate_context_oracle.py --skip-pipeline-map  # If already up to date
+    python3 scripts/generate_context_oracle.py --incremental        # Only regenerate changed
+    python3 scripts/generate_context_oracle.py --force              # Force full regeneration
 """
 
 import sys
 import argparse
 import time
+import hashlib
+import json
 from pathlib import Path
 from datetime import datetime, timezone
+from typing import Dict, Set, Optional
 
 SCRIPTS_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPTS_DIR.parent
+PIPELINE_CONTEXT_DIR = PROJECT_ROOT / "pipeline-context"
+MANIFEST_FILE = PIPELINE_CONTEXT_DIR / ".manifest.json"
 
 # Add scripts directory to path for imports
 sys.path.insert(0, str(SCRIPTS_DIR))
+
+
+# =============================================================================
+# Fix 4: Incremental Update Support
+# =============================================================================
+
+def compute_file_hash(filepath: Path) -> str:
+    """Compute MD5 hash of a file for change detection."""
+    if not filepath.exists():
+        return ""
+    content = filepath.read_bytes()
+    return hashlib.md5(content).hexdigest()
+
+
+def get_source_files() -> Dict[str, Path]:
+    """Get all source files that affect Oracle generation."""
+    source_files = {}
+    
+    # Pipeline scripts
+    for stage_dir in ["stage1_clean", "stage2_transform", "stage3_prepare", "config"]:
+        stage_path = SCRIPTS_DIR / stage_dir
+        if stage_path.exists():
+            for py_file in stage_path.glob("*.py"):
+                key = str(py_file.relative_to(PROJECT_ROOT))
+                source_files[key] = py_file
+    
+    # Schema files
+    schema_dir = PROJECT_ROOT / "src" / "schema"
+    if schema_dir.exists():
+        for ts_file in schema_dir.glob("*.ts"):
+            key = str(ts_file.relative_to(PROJECT_ROOT))
+            source_files[key] = ts_file
+    
+    # Generator scripts themselves
+    for gen_script in SCRIPTS_DIR.glob("*.py"):
+        if gen_script.name.startswith(("generate_", "build_", "extract_")):
+            key = str(gen_script.relative_to(PROJECT_ROOT))
+            source_files[key] = gen_script
+    
+    return source_files
+
+
+def load_manifest() -> Dict:
+    """Load the existing manifest of file hashes."""
+    if not MANIFEST_FILE.exists():
+        return {"files": {}, "last_generated": None}
+    
+    try:
+        with open(MANIFEST_FILE) as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return {"files": {}, "last_generated": None}
+
+
+def save_manifest(manifest: Dict) -> None:
+    """Save the manifest of file hashes."""
+    PIPELINE_CONTEXT_DIR.mkdir(parents=True, exist_ok=True)
+    manifest["last_generated"] = datetime.now(timezone.utc).isoformat()
+    with open(MANIFEST_FILE, "w") as f:
+        json.dump(manifest, f, indent=2)
+
+
+def detect_changes() -> Dict:
+    """
+    Detect which files have changed since last generation.
+    
+    Returns dict with:
+      - changed: Set of changed file paths
+      - added: Set of new file paths  
+      - removed: Set of removed file paths
+      - current_hashes: Dict of current file hashes
+    """
+    manifest = load_manifest()
+    old_hashes = manifest.get("files", {})
+    
+    source_files = get_source_files()
+    current_hashes = {key: compute_file_hash(path) for key, path in source_files.items()}
+    
+    changed: Set[str] = set()
+    added: Set[str] = set()
+    removed: Set[str] = set()
+    
+    # Find changed and added files
+    for key, new_hash in current_hashes.items():
+        old_hash = old_hashes.get(key)
+        if old_hash is None:
+            added.add(key)
+        elif old_hash != new_hash:
+            changed.add(key)
+    
+    # Find removed files
+    for key in old_hashes:
+        if key not in current_hashes:
+            removed.add(key)
+    
+    return {
+        "changed": changed,
+        "added": added,
+        "removed": removed,
+        "current_hashes": current_hashes
+    }
+
+
+def needs_regeneration(changes: Dict[str, Set[str]]) -> bool:
+    """Check if any regeneration is needed."""
+    return bool(changes["changed"] or changes["added"] or changes["removed"])
 
 
 def run_generator(name: str, generator_func, *args, **kwargs):
@@ -47,8 +162,32 @@ def run_generator(name: str, generator_func, *args, **kwargs):
         raise
 
 
-def generate_all(skip_pipeline_map: bool = False):
-    """Generate all Context Oracle artifacts."""
+def generate_all(skip_pipeline_map: bool = False, incremental: bool = False, force: bool = False):
+    """
+    Generate all Context Oracle artifacts.
+    
+    Args:
+        skip_pipeline_map: Skip pipeline map generation
+        incremental: Only regenerate if files changed (Fix 4)
+        force: Force full regeneration even if no changes
+    """
+    # Fix 4: Check for changes in incremental mode
+    if incremental and not force:
+        changes = detect_changes()
+        if not needs_regeneration(changes):
+            print("No changes detected. Oracle artifacts are up to date.")
+            return
+        
+        total_changed = len(changes["changed"]) + len(changes["added"])
+        print(f"\n[Incremental Mode] Detected {total_changed} changed files:")
+        for f in sorted(changes["changed"] | changes["added"])[:10]:
+            print(f"  - {f}")
+        if total_changed > 10:
+            print(f"  ... and {total_changed - 10} more")
+        print()
+    else:
+        changes = None
+    
     print("""
     ╔═══════════════════════════════════════════════════════════════╗
     ║             CONTEXT ORACLE - MASTER GENERATOR                ║
@@ -82,6 +221,15 @@ def generate_all(skip_pipeline_map: bool = False):
     from build_lineage_graph import build_lineage_graph
     run_generator("Lineage Graph", build_lineage_graph)
     
+    # Fix 4: Update manifest with current file hashes
+    if changes:
+        manifest = {"files": changes["current_hashes"]}
+    else:
+        # Full regeneration - compute all hashes
+        source_files = get_source_files()
+        manifest = {"files": {key: compute_file_hash(path) for key, path in source_files.items()}}
+    save_manifest(manifest)
+    
     # Summary
     total_time = time.time() - start_time
     
@@ -94,15 +242,18 @@ def generate_all(skip_pipeline_map: bool = False):
     print(f"Generated at: {datetime.now(timezone.utc).isoformat()}")
     print()
     print("Generated artifacts in pipeline-context/:")
-    print("  registry/symbols.json     - Symbol Registry (46 functions, 88 columns)")
+    print("  registry/symbols.json     - Symbol Registry (functions, columns)")
     print("  skeletons/                - Code Skeletons (3.3x compression)")
-    print("  patterns/index.json       - Pattern Library (4 patterns)")
-    print("  lineage/graph.json        - Lineage Graph (193 nodes, 68 edges)")
+    print("  patterns/index.json       - Pattern Library (patterns)")
+    print("  lineage/graph.json        - Lineage Graph (with variable tracing)")
     print()
     print("The Three Pillars of the Context Oracle:")
     print("  1. Symbol Registry  → Verify before use (anti-hallucination)")
     print("  2. Pattern Library  → Follow conventions (anti-drift)")
     print("  3. Lineage Oracle   → Know impact (guided search)")
+    print()
+    if incremental:
+        print("Fix 4: Manifest saved for incremental updates.")
     
 
 def main():
@@ -114,9 +265,23 @@ def main():
         action="store_true",
         help="Skip pipeline map generation (use existing)"
     )
+    parser.add_argument(
+        "--incremental",
+        action="store_true",
+        help="Fix 4: Only regenerate if source files changed"
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Force full regeneration even if no changes detected"
+    )
     
     args = parser.parse_args()
-    generate_all(skip_pipeline_map=args.skip_pipeline_map)
+    generate_all(
+        skip_pipeline_map=args.skip_pipeline_map,
+        incremental=args.incremental,
+        force=args.force
+    )
 
 
 if __name__ == "__main__":

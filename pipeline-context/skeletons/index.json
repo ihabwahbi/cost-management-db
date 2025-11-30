@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-30T11:47:41.440778+00:00",
+  "generated_at": "2025-11-30T13:26:32.197245+00:00",
   "scripts": [
     {
       "name": "01_po_line_items",
@@ -55,11 +55,11 @@
       "name": "06_prepare_po_line_items",
       "source_path": "scripts/stage3_prepare/06_prepare_po_line_items.py",
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/06_prepare_po_line_items.skeleton.py",
-      "original_lines": 185,
+      "original_lines": 186,
       "skeleton_lines": 52,
-      "original_tokens": 1564,
+      "original_tokens": 1573,
       "skeleton_tokens": 412,
-      "compression_ratio": 3.8
+      "compression_ratio": 3.82
     },
     {
       "name": "07_prepare_po_transactions",
@@ -73,10 +73,10 @@
     }
   ],
   "totals": {
-    "original_lines": 1041,
+    "original_lines": 1042,
     "skeleton_lines": 334,
-    "original_tokens": 8778,
+    "original_tokens": 8787,
     "skeleton_tokens": 2633,
-    "compression_ratio": 3.33
+    "compression_ratio": 3.34
   }
 }

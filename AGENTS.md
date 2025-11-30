@@ -28,6 +28,24 @@ python3 scripts/ask_oracle.py pattern pipeline_script
 python3 scripts/ask_oracle.py pattern drizzle_schema
 ```
 
+### Step 4: Read Full Source Before Writing Code
+**Mandatory:** Before writing any code changes, read the full content of the target file.
+Do not rely solely on skeletons - they show structure but hide implementation details
+(NaN handling, edge cases, pandas quirks).
+
+```bash
+# After identifying the target file via skeleton/oracle:
+cat scripts/stage3_prepare/06_prepare_po_line_items.py
+```
+
+### Freshness Guard (Automatic)
+The Oracle CLI automatically regenerates stale artifacts. If you see:
+```
+Oracle artifacts are stale. Regenerating...
+```
+This is normal - it means source files changed and context is being updated.
+If regeneration fails, the Oracle will exit with an error (never uses broken context).
+
 ### Decision Tree
 
 | Task | First Action |

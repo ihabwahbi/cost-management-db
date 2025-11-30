@@ -42,6 +42,10 @@ class LineageGraphBuilder:
         self.nodes: Dict[str, Dict] = {}
         self.edges: List[Dict] = []
         self.column_operations: List[Dict] = []
+        # Fix 2: Track variable-to-column mappings for data flow analysis
+        self.variable_sources: Dict[str, Dict[str, Set[str]]] = {}  # {script: {var: {columns}}}
+        # Fix 3: Track column access patterns for tiered impact
+        self.column_access: Dict[str, List[Dict]] = defaultdict(list)  # {column: [{script, type}]}
     
     def add_node(self, node_id: str, node_type: str, **properties):
         """Add a node to the graph."""
@@ -178,14 +182,19 @@ class LineageGraphBuilder:
         except SyntaxError:
             return
         
+        # Fix 2: First pass - build variable-to-column mapping for this script
+        script_vars = self._build_variable_mapping(tree, script_name)
+        self.variable_sources[script_name] = script_vars
+        
         for node in ast.walk(tree):
             # Column assignments: df["col"] = expression
             if isinstance(node, ast.Assign):
                 for target in node.targets:
                     if isinstance(target, ast.Subscript):
-                        if isinstance(target.slice, ast.Constant) and isinstance(target.slice.value, str):
-                            target_col = target.slice.value
-                            source_cols = self._find_source_columns(node.value)
+                        target_col = self._extract_column_from_subscript(target)
+                        if target_col:
+                            # Fix 2: Get source columns including variable tracing
+                            source_cols = self._find_source_columns_with_vars(node.value, script_vars)
                             
                             # Create/update column node
                             col_node_id = f"column:{target_col}"
@@ -198,11 +207,27 @@ class LineageGraphBuilder:
                                 f"{rel_path}:{node.lineno}"
                             )
                             
+                            # Fix 3: Track column access pattern (WRITES)
+                            self.column_access[target_col].append({
+                                "script": script_name,
+                                "type": "WRITES",
+                                "line": node.lineno,
+                                "file": rel_path
+                            })
+                            
                             # Add TRANSFORMS edges from source columns
                             for source_col in source_cols:
                                 source_node_id = f"column:{source_col}"
                                 if source_node_id not in self.nodes:
                                     self.add_node(source_node_id, "column", name=source_col)
+                                
+                                # Fix 3: Track column access pattern (READS)
+                                self.column_access[source_col].append({
+                                    "script": script_name,
+                                    "type": "READS",
+                                    "line": node.lineno,
+                                    "file": rel_path
+                                })
                                 
                                 # Try to extract operation
                                 try:
@@ -219,6 +244,26 @@ class LineageGraphBuilder:
                                     line=node.lineno,
                                     operation=operation
                                 )
+                            
+                            # Fix 2: If no source columns found but value is a variable, create edge from variable sources
+                            if not source_cols and isinstance(node.value, ast.Name):
+                                var_name = node.value.id
+                                if var_name in script_vars:
+                                    for var_source_col in script_vars[var_name]:
+                                        source_node_id = f"column:{var_source_col}"
+                                        if source_node_id not in self.nodes:
+                                            self.add_node(source_node_id, "column", name=var_source_col)
+                                        
+                                        self.add_edge(
+                                            source_node_id,
+                                            col_node_id,
+                                            "TRANSFORMS",
+                                            script=script_name,
+                                            file=rel_path,
+                                            line=node.lineno,
+                                            operation=f"via variable '{var_name}'",
+                                            traced_variable=var_name
+                                        )
             
             # Merge operations create implicit column dependencies
             if isinstance(node, ast.Call):
@@ -227,14 +272,132 @@ class LineageGraphBuilder:
                     for kw in node.keywords:
                         if kw.arg == "on":
                             if isinstance(kw.value, ast.Constant):
-                                join_col = kw.value.value
-                                col_node_id = f"column:{join_col}"
-                                if col_node_id not in self.nodes:
-                                    self.add_node(col_node_id, "column", name=join_col)
-                                self.nodes[col_node_id].setdefault("used_in_joins", [])
-                                self.nodes[col_node_id]["used_in_joins"].append(
-                                    f"{rel_path}:{node.lineno}"
-                                )
+                                join_col_val = kw.value.value
+                                if isinstance(join_col_val, str):
+                                    join_col: str = join_col_val
+                                    col_node_id = f"column:{join_col}"
+                                    if col_node_id not in self.nodes:
+                                        self.add_node(col_node_id, "column", name=join_col)
+                                    self.nodes[col_node_id].setdefault("used_in_joins", [])
+                                    self.nodes[col_node_id]["used_in_joins"].append(
+                                        f"{rel_path}:{node.lineno}"
+                                    )
+                                    # Fix 3: Track as READS for merge operations
+                                    self.column_access[join_col].append({
+                                        "script": script_name,
+                                        "type": "READS",
+                                        "line": node.lineno,
+                                        "file": rel_path,
+                                        "context": "merge_join"
+                                    })
+    
+    def _extract_column_from_subscript(self, target: ast.Subscript) -> Optional[str]:
+        """
+        Extract column name from subscript target.
+        
+        Fix 1: Handles both:
+          - df["col"] = value  (slice is Constant)
+          - df.loc[mask, "col"] = value  (slice is Tuple)
+        """
+        # Simple case: df["col"]
+        if isinstance(target.slice, ast.Constant):
+            val = target.slice.value
+            if isinstance(val, str):
+                return val
+        
+        # Fix 1: Handle df.loc[mask, "col"] - slice is a Tuple
+        if isinstance(target.slice, ast.Tuple):
+            for elt in target.slice.elts:
+                if isinstance(elt, ast.Constant):
+                    val = elt.value
+                    if isinstance(val, str):
+                        # Return the first string constant (the column name)
+                        return val
+        
+        return None
+    
+    def _build_variable_mapping(self, tree: ast.AST, script_name: str) -> Dict[str, Set[str]]:
+        """
+        Fix 2: Build a mapping of variable names to the columns they reference.
+        
+        This enables tracing through intermediate variables like:
+            is_ops_vendor = po_df["Main Vendor SLB Vendor Category"] == "OPS"
+            output_df["fmt_po"] = is_ops_vendor
+        
+        We can now trace: fmt_po <- Main Vendor SLB Vendor Category
+        
+        Also handles:
+            vendor_category_col = "Main Vendor SLB Vendor Category"
+            is_ops = df[vendor_category_col] == "OPS"
+        """
+        var_to_cols: Dict[str, Set[str]] = {}
+        # Track string constant variables for column name resolution
+        string_vars: Dict[str, str] = {}
+        
+        # First pass: collect string constant assignments
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if isinstance(target, ast.Name):
+                        var_name = target.id
+                        # Check if assigning a string constant (likely a column name)
+                        if isinstance(node.value, ast.Constant):
+                            val = node.value.value
+                            if isinstance(val, str):
+                                string_vars[var_name] = val
+        
+        # Second pass: build variable-to-column mapping
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if isinstance(target, ast.Name):
+                        var_name = target.id
+                        # Find all column references in the right-hand side
+                        cols = self._find_source_columns_extended(node.value, string_vars)
+                        if cols:
+                            var_to_cols[var_name] = cols
+        
+        return var_to_cols
+    
+    def _find_source_columns_extended(self, node: ast.AST, string_vars: Dict[str, str]) -> Set[str]:
+        """
+        Find all column references including those using variable names.
+        
+        Handles:
+            df["column"]           -> "column"
+            df[column_var]         -> resolve column_var from string_vars
+        """
+        columns = set()
+        
+        for child in ast.walk(node):
+            if isinstance(child, ast.Subscript):
+                # Case 1: Direct string literal df["column"]
+                if isinstance(child.slice, ast.Constant):
+                    val = child.slice.value
+                    if isinstance(val, str):
+                        columns.add(val)
+                # Case 2: Variable reference df[column_var]
+                elif isinstance(child.slice, ast.Name):
+                    var_name = child.slice.id
+                    if var_name in string_vars:
+                        columns.add(string_vars[var_name])
+        
+        return columns
+    
+    def _find_source_columns_with_vars(self, node: ast.AST, script_vars: Dict[str, Set[str]]) -> Set[str]:
+        """
+        Fix 2: Find source columns, including those referenced through variables.
+        """
+        columns = self._find_source_columns(node)
+        
+        # Also check for variable references
+        for child in ast.walk(node):
+            if isinstance(child, ast.Name):
+                var_name = child.id
+                if var_name in script_vars:
+                    columns.update(script_vars[var_name])
+        
+        return columns
     
     def _find_source_columns(self, node: ast.AST) -> Set[str]:
         """Find all column references in an expression."""
@@ -308,15 +471,24 @@ class LineageGraphBuilder:
         # Build the output
         graph = {
             "generated_at": datetime.now(timezone.utc).isoformat(),
-            "version": "1.0.0",
-            "description": "Data lineage graph for Context Oracle - trace data flow",
+            "version": "2.0.0",  # Version bump for new features
+            "description": "Data lineage graph for Context Oracle - trace data flow with variable tracking",
             "nodes": self.nodes,
             "edges": self.edges,
+            # Fix 3: Include column access patterns for tiered impact analysis
+            "column_access": {col: accesses for col, accesses in self.column_access.items()},
+            # Fix 2: Include variable-to-column mappings
+            "variable_sources": {
+                script: {var: list(cols) for var, cols in var_map.items()}
+                for script, var_map in self.variable_sources.items()
+            },
             "stats": {
                 "total_nodes": len(self.nodes),
                 "total_edges": len(self.edges),
                 "nodes_by_type": self._count_by_type(self.nodes),
-                "edges_by_type": self._count_edges_by_type(self.edges)
+                "edges_by_type": self._count_edges_by_type(self.edges),
+                "columns_tracked": len(self.column_access),
+                "variables_traced": sum(len(v) for v in self.variable_sources.values())
             }
         }
         
@@ -387,7 +559,15 @@ class LineageGraphBuilder:
         return result
     
     def predict_impact(self, script_name: str) -> Dict:
-        """Predict the impact of changing a script."""
+        """
+        Predict the impact of changing a script.
+        
+        Fix 3: Returns tiered impact classification:
+          - direct_writers: Scripts that WRITE to the same columns
+          - column_readers: Scripts that READ columns this script WRITES
+          - file_consumers: Scripts that consume output files
+          - passthrough: Scripts that just pass data through
+        """
         script_id = f"script:{script_name}"
         
         if script_id not in self.nodes:
@@ -399,40 +579,91 @@ class LineageGraphBuilder:
             if edge["source"] == script_id and edge["type"] == "OUTPUT":
                 outputs.append(edge["target"])
         
-        # Find all scripts/columns that depend on these outputs
-        affected_scripts = set()
-        affected_columns = set()
+        # Fix 3: Find columns this script WRITES
+        columns_written = set()
+        for col, accesses in self.column_access.items():
+            for access in accesses:
+                if access["script"] == script_name and access["type"] == "WRITES":
+                    columns_written.add(col)
         
+        # Fix 3: Tiered impact classification
+        direct_writers = set()      # Scripts that also WRITE to same columns
+        column_readers = set()       # Scripts that READ columns we WRITE
+        file_consumers = set()       # Scripts that consume our output files
+        passthrough_scripts = set()  # Scripts that just pass through
+        
+        # Find scripts that interact with columns we write
+        for col in columns_written:
+            if col in self.column_access:
+                for access in self.column_access[col]:
+                    other_script = access["script"]
+                    if other_script != script_name:
+                        if access["type"] == "WRITES":
+                            direct_writers.add(other_script)
+                        elif access["type"] == "READS":
+                            column_readers.add(other_script)
+        
+        # Find scripts that consume output files
         for output in outputs:
             downstream = self.trace_downstream(output)
             for item in downstream:
                 if item["node"].startswith("script:"):
-                    affected_scripts.add(item["node"].replace("script:", ""))
-                elif item["node"].startswith("column:"):
-                    affected_columns.add(item["node"].replace("column:", ""))
+                    other_script = item["node"].replace("script:", "")
+                    if other_script != script_name:
+                        # If not already a column reader/writer, it's a file consumer
+                        if other_script not in column_readers and other_script not in direct_writers:
+                            file_consumers.add(other_script)
         
-        # Calculate risk level
+        # All affected scripts
+        all_affected = direct_writers | column_readers | file_consumers
+        
+        # Find passthrough (scripts in dependency chain but not directly interacting)
+        for edge in self.edges:
+            if edge["type"] == "DEPENDS_ON":
+                dep_script = edge["source"].replace("script:", "")
+                if dep_script == script_name:
+                    downstream_script = edge["target"].replace("script:", "")
+                    if downstream_script not in all_affected:
+                        passthrough_scripts.add(downstream_script)
+        
+        # Calculate risk level based on tiered impact
         risk_level = "low"
-        if len(affected_scripts) >= 3 or len(affected_columns) >= 5:
+        if len(column_readers) >= 2 or len(direct_writers) >= 1:
             risk_level = "high"
-        elif len(affected_scripts) >= 1 or len(affected_columns) >= 2:
+        elif len(column_readers) >= 1 or len(file_consumers) >= 2:
             risk_level = "medium"
         
         return {
             "script": script_name,
             "outputs": [o.replace("file:", "") for o in outputs],
-            "affected_scripts": list(affected_scripts),
-            "affected_columns": list(affected_columns),
+            "columns_modified": list(columns_written),
+            # Fix 3: Tiered classification
+            "tiered_impact": {
+                "direct_writers": list(direct_writers),
+                "column_readers": list(column_readers),
+                "file_consumers": list(file_consumers),
+                "passthrough": list(passthrough_scripts)
+            },
+            # Legacy format for backward compatibility
+            "affected_scripts": list(all_affected),
+            "affected_columns": list(columns_written),
             "risk_level": risk_level,
-            "recommendation": self._get_recommendation(risk_level, affected_scripts)
+            "recommendation": self._get_recommendation(risk_level, column_readers, direct_writers, columns_written)
         }
     
-    def _get_recommendation(self, risk_level: str, affected_scripts: Set[str]) -> str:
-        """Generate recommendation based on risk level."""
+    def _get_recommendation(self, risk_level: str, column_readers: Set[str], 
+                           direct_writers: Set[str], columns_written: Set[str]) -> str:
+        """Generate recommendation based on tiered impact."""
         if risk_level == "high":
-            return f"High-risk change: affects {len(affected_scripts)} downstream scripts. Test all stages thoroughly."
+            parts = []
+            if direct_writers:
+                parts.append(f"{len(direct_writers)} scripts also write to same columns")
+            if column_readers:
+                parts.append(f"{len(column_readers)} scripts read columns you modify")
+            detail = "; ".join(parts) if parts else f"affects {len(columns_written)} columns"
+            return f"High-risk change: {detail}. Test affected scripts: {list(column_readers)[:3]}"
         elif risk_level == "medium":
-            return "Medium-risk change: verify downstream transformations after modification."
+            return f"Medium-risk change: {len(column_readers)} downstream readers. Verify transformations."
         else:
             return "Low-risk change: limited downstream impact."
 
