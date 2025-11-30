@@ -1,0 +1,52 @@
+"""
+Stage 3: Prepare PO Line Items for Import
+
+Maps intermediate columns to database schema columns and calculates
+derived fields (open_po_qty, open_po_value).
+
+Dependencies: All stage1 and stage2 scripts must run first
+Input: data/intermediate/po_line_items.csv, data/intermediate/cost_impact.csv
+Output: data/import-ready/po_line_items.csv
+"""
+import sys
+from pathlib import Path
+SCRIPTS_DIR = Path(__file__).parent.parent
+sys.path.insert(0, str(SCRIPTS_DIR))
+import pandas as pd
+from config.column_mappings import PO_LINE_ITEMS_MAPPING
+PROJECT_ROOT = SCRIPTS_DIR.parent
+PO_LINE_ITEMS_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'po_line_items.csv'
+COST_IMPACT_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'cost_impact.csv'
+OUTPUT_FILE = PROJECT_ROOT / 'data' / 'import-ready' / 'po_line_items.csv'
+
+def load_data():
+    """Load intermediate data files."""
+    ...
+
+def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate open_po_qty and open_po_value based on cost impact.
+    
+    Logic:
+    - If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0
+    - Otherwise: calculate open values from ordered - cost impact
+    """
+    ...
+
+def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
+    """Map CSV columns to database column names."""
+    ...
+
+def validate_output(df: pd.DataFrame) -> bool:
+    """Validate required columns are present."""
+    ...
+
+def save_data(df: pd.DataFrame, filepath: Path) -> None:
+    """Save import-ready DataFrame to CSV."""
+    ...
+
+def main():
+    ...
+if __name__ == '__main__':
+    success = main()
+    sys.exit(0 if success else 1)

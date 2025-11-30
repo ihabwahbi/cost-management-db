@@ -1,0 +1,2536 @@
+{
+  "generated_at": "2025-11-30T11:14:49.515776+00:00",
+  "version": "1.0.0",
+  "description": "Data lineage graph for Context Oracle - trace data flow",
+  "nodes": {
+    "file:data/raw/po details report.xlsx": {
+      "id": "file:data/raw/po details report.xlsx",
+      "type": "file",
+      "path": "data/raw/po details report.xlsx",
+      "stage": "source",
+      "folder": "raw"
+    },
+    "file:data/raw/invoice table.csv": {
+      "id": "file:data/raw/invoice table.csv",
+      "type": "file",
+      "path": "data/raw/invoice table.csv",
+      "stage": "source",
+      "folder": "raw"
+    },
+    "file:data/raw/po line items.csv": {
+      "id": "file:data/raw/po line items.csv",
+      "type": "file",
+      "path": "data/raw/po line items.csv",
+      "stage": "source",
+      "folder": "raw"
+    },
+    "file:data/raw/gr table.csv": {
+      "id": "file:data/raw/gr table.csv",
+      "type": "file",
+      "path": "data/raw/gr table.csv",
+      "stage": "source",
+      "folder": "raw"
+    },
+    "file:data/intermediate/gr_postings.csv": {
+      "id": "file:data/intermediate/gr_postings.csv",
+      "type": "file",
+      "path": "data/intermediate/gr_postings.csv",
+      "stage": "intermediate",
+      "folder": "intermediate"
+    },
+    "file:data/intermediate/ir_postings.csv": {
+      "id": "file:data/intermediate/ir_postings.csv",
+      "type": "file",
+      "path": "data/intermediate/ir_postings.csv",
+      "stage": "intermediate",
+      "folder": "intermediate"
+    },
+    "file:data/intermediate/cost_impact.csv": {
+      "id": "file:data/intermediate/cost_impact.csv",
+      "type": "file",
+      "path": "data/intermediate/cost_impact.csv",
+      "stage": "intermediate",
+      "folder": "intermediate"
+    },
+    "file:data/intermediate/po_line_items.csv": {
+      "id": "file:data/intermediate/po_line_items.csv",
+      "type": "file",
+      "path": "data/intermediate/po_line_items.csv",
+      "stage": "intermediate",
+      "folder": "intermediate"
+    },
+    "file:data/import-ready/po_transactions.csv": {
+      "id": "file:data/import-ready/po_transactions.csv",
+      "type": "file",
+      "path": "data/import-ready/po_transactions.csv",
+      "stage": "output",
+      "folder": "import-ready"
+    },
+    "file:data/import-ready/po_line_items.csv": {
+      "id": "file:data/import-ready/po_line_items.csv",
+      "type": "file",
+      "path": "data/import-ready/po_line_items.csv",
+      "stage": "output",
+      "folder": "import-ready"
+    },
+    "script:01_po_line_items": {
+      "id": "script:01_po_line_items",
+      "type": "script",
+      "name": "01_po_line_items",
+      "path": "scripts/stage1_clean/01_po_line_items.py",
+      "stage": "stage1_clean",
+      "functions": [
+        "load_data",
+        "filter_valuation_classes",
+        "filter_nis_levels",
+        "fill_nis_level_for_3021",
+        "transform_nis_column",
+        "map_vendor_names",
+        "map_location",
+        "consolidate_delivery_dates",
+        "save_data",
+        "main"
+      ]
+    },
+    "script:02_gr_postings": {
+      "id": "script:02_gr_postings",
+      "type": "script",
+      "name": "02_gr_postings",
+      "path": "scripts/stage1_clean/02_gr_postings.py",
+      "stage": "stage1_clean",
+      "functions": [
+        "load_data",
+        "filter_zero_quantity",
+        "calculate_gr_amount",
+        "save_data",
+        "main"
+      ]
+    },
+    "script:03_ir_postings": {
+      "id": "script:03_ir_postings",
+      "type": "script",
+      "name": "03_ir_postings",
+      "path": "scripts/stage1_clean/03_ir_postings.py",
+      "stage": "stage1_clean",
+      "functions": [
+        "load_data",
+        "calculate_invoice_amount",
+        "save_data",
+        "main"
+      ]
+    },
+    "script:04_enrich_po_line_items": {
+      "id": "script:04_enrich_po_line_items",
+      "type": "script",
+      "name": "04_enrich_po_line_items",
+      "path": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "stage": "stage2_transform",
+      "functions": [
+        "load_po_details",
+        "load_po_line_items",
+        "extract_enrichment_data",
+        "enrich_data",
+        "save_data",
+        "main"
+      ]
+    },
+    "script:05_calculate_cost_impact": {
+      "id": "script:05_calculate_cost_impact",
+      "type": "script",
+      "name": "05_calculate_cost_impact",
+      "path": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "stage": "stage2_transform",
+      "functions": [
+        "load_data",
+        "classify_po_line_items",
+        "calculate_simple_cost_impact",
+        "calculate_complex_cost_impact",
+        "save_data",
+        "main"
+      ]
+    },
+    "script:06_prepare_po_line_items": {
+      "id": "script:06_prepare_po_line_items",
+      "type": "script",
+      "name": "06_prepare_po_line_items",
+      "path": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "stage": "stage3_prepare",
+      "functions": [
+        "load_data",
+        "calculate_open_values",
+        "map_columns",
+        "validate_output",
+        "save_data",
+        "main"
+      ]
+    },
+    "script:07_prepare_po_transactions": {
+      "id": "script:07_prepare_po_transactions",
+      "type": "script",
+      "name": "07_prepare_po_transactions",
+      "path": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "stage": "stage3_prepare",
+      "functions": [
+        "load_data",
+        "map_columns",
+        "validate_output",
+        "save_data",
+        "main"
+      ]
+    },
+    "script:pipeline": {
+      "id": "script:pipeline",
+      "type": "script",
+      "name": "pipeline",
+      "path": "scripts/pipeline.py",
+      "stage": "scripts",
+      "functions": [
+        "run_script",
+        "run_stage",
+        "run_pipeline",
+        "main"
+      ]
+    },
+    "db_column:budget_forecasts.id": {
+      "id": "db_column:budget_forecasts.id",
+      "type": "db_column",
+      "table": "budget_forecasts",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:budget_forecasts.forecastVersionId": {
+      "id": "db_column:budget_forecasts.forecastVersionId",
+      "type": "db_column",
+      "table": "budget_forecasts",
+      "column": "forecastVersionId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "forecastVersions.id"
+      }
+    },
+    "db_column:budget_forecasts.costBreakdownId": {
+      "id": "db_column:budget_forecasts.costBreakdownId",
+      "type": "db_column",
+      "table": "budget_forecasts",
+      "column": "costBreakdownId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "costBreakdown.id"
+      }
+    },
+    "db_column:budget_forecasts.forecastedCost": {
+      "id": "db_column:budget_forecasts.forecastedCost",
+      "type": "db_column",
+      "table": "budget_forecasts",
+      "column": "forecastedCost",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:budget_forecasts.createdAt": {
+      "id": "db_column:budget_forecasts.createdAt",
+      "type": "db_column",
+      "table": "budget_forecasts",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:budget_forecasts": {
+      "id": "table:budget_forecasts",
+      "type": "table",
+      "name": "budget_forecasts",
+      "file": "budget-forecasts.ts",
+      "columns": [
+        "id",
+        "forecastVersionId",
+        "costBreakdownId",
+        "forecastedCost",
+        "createdAt"
+      ]
+    },
+    "db_column:cost_breakdown.id": {
+      "id": "db_column:cost_breakdown.id",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:cost_breakdown.projectId": {
+      "id": "db_column:cost_breakdown.projectId",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "projectId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "projects.id"
+      }
+    },
+    "db_column:cost_breakdown.subBusinessLine": {
+      "id": "db_column:cost_breakdown.subBusinessLine",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "subBusinessLine",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:cost_breakdown.costLine": {
+      "id": "db_column:cost_breakdown.costLine",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "costLine",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:cost_breakdown.spendType": {
+      "id": "db_column:cost_breakdown.spendType",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "spendType",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:cost_breakdown.spendSubCategory": {
+      "id": "db_column:cost_breakdown.spendSubCategory",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "spendSubCategory",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:cost_breakdown.budgetCost": {
+      "id": "db_column:cost_breakdown.budgetCost",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "budgetCost",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:cost_breakdown.createdAt": {
+      "id": "db_column:cost_breakdown.createdAt",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:cost_breakdown.updatedAt": {
+      "id": "db_column:cost_breakdown.updatedAt",
+      "type": "db_column",
+      "table": "cost_breakdown",
+      "column": "updatedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:cost_breakdown": {
+      "id": "table:cost_breakdown",
+      "type": "table",
+      "name": "cost_breakdown",
+      "file": "cost-breakdown.ts",
+      "columns": [
+        "id",
+        "projectId",
+        "subBusinessLine",
+        "costLine",
+        "spendType",
+        "spendSubCategory",
+        "budgetCost",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "db_column:forecast_versions.id": {
+      "id": "db_column:forecast_versions.id",
+      "type": "db_column",
+      "table": "forecast_versions",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:forecast_versions.projectId": {
+      "id": "db_column:forecast_versions.projectId",
+      "type": "db_column",
+      "table": "forecast_versions",
+      "column": "projectId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "projects.id"
+      }
+    },
+    "db_column:forecast_versions.versionNumber": {
+      "id": "db_column:forecast_versions.versionNumber",
+      "type": "db_column",
+      "table": "forecast_versions",
+      "column": "versionNumber",
+      "data_type": "integer",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:forecast_versions.reasonForChange": {
+      "id": "db_column:forecast_versions.reasonForChange",
+      "type": "db_column",
+      "table": "forecast_versions",
+      "column": "reasonForChange",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:forecast_versions.createdAt": {
+      "id": "db_column:forecast_versions.createdAt",
+      "type": "db_column",
+      "table": "forecast_versions",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:forecast_versions.createdBy": {
+      "id": "db_column:forecast_versions.createdBy",
+      "type": "db_column",
+      "table": "forecast_versions",
+      "column": "createdBy",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:forecast_versions": {
+      "id": "table:forecast_versions",
+      "type": "table",
+      "name": "forecast_versions",
+      "file": "forecast-versions.ts",
+      "columns": [
+        "id",
+        "projectId",
+        "versionNumber",
+        "reasonForChange",
+        "createdAt",
+        "createdBy"
+      ]
+    },
+    "db_column:po_line_items.id": {
+      "id": "db_column:po_line_items.id",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.poLineId": {
+      "id": "db_column:po_line_items.poLineId",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "poLineId",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.poNumber": {
+      "id": "db_column:po_line_items.poNumber",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "poNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.poCreationDate": {
+      "id": "db_column:po_line_items.poCreationDate",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "poCreationDate",
+      "data_type": "date",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.plantCode": {
+      "id": "db_column:po_line_items.plantCode",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "plantCode",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.location": {
+      "id": "db_column:po_line_items.location",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "location",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.subBusinessLine": {
+      "id": "db_column:po_line_items.subBusinessLine",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "subBusinessLine",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.prNumber": {
+      "id": "db_column:po_line_items.prNumber",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "prNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.prLine": {
+      "id": "db_column:po_line_items.prLine",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "prLine",
+      "data_type": "integer",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.requester": {
+      "id": "db_column:po_line_items.requester",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "requester",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.vendorId": {
+      "id": "db_column:po_line_items.vendorId",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "vendorId",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.vendorName": {
+      "id": "db_column:po_line_items.vendorName",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "vendorName",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.vendorCategory": {
+      "id": "db_column:po_line_items.vendorCategory",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "vendorCategory",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.ultimateVendorName": {
+      "id": "db_column:po_line_items.ultimateVendorName",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "ultimateVendorName",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.lineItemNumber": {
+      "id": "db_column:po_line_items.lineItemNumber",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "lineItemNumber",
+      "data_type": "integer",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.partNumber": {
+      "id": "db_column:po_line_items.partNumber",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "partNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.description": {
+      "id": "db_column:po_line_items.description",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "description",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.orderedQty": {
+      "id": "db_column:po_line_items.orderedQty",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "orderedQty",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.orderUnit": {
+      "id": "db_column:po_line_items.orderUnit",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "orderUnit",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.poValueUsd": {
+      "id": "db_column:po_line_items.poValueUsd",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "poValueUsd",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.accountAssignmentCategory": {
+      "id": "db_column:po_line_items.accountAssignmentCategory",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "accountAssignmentCategory",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.nisLine": {
+      "id": "db_column:po_line_items.nisLine",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "nisLine",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.wbsNumber": {
+      "id": "db_column:po_line_items.wbsNumber",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "wbsNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": "wbsDetails.wbsNumber"
+      }
+    },
+    "db_column:po_line_items.assetCode": {
+      "id": "db_column:po_line_items.assetCode",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "assetCode",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.expectedDeliveryDate": {
+      "id": "db_column:po_line_items.expectedDeliveryDate",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "expectedDeliveryDate",
+      "data_type": "date",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.poApprovalStatus": {
+      "id": "db_column:po_line_items.poApprovalStatus",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "poApprovalStatus",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.poReceiptStatus": {
+      "id": "db_column:po_line_items.poReceiptStatus",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "poReceiptStatus",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.poGtsStatus": {
+      "id": "db_column:po_line_items.poGtsStatus",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "poGtsStatus",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.fmtPo": {
+      "id": "db_column:po_line_items.fmtPo",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "fmtPo",
+      "data_type": "boolean",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.openPoQty": {
+      "id": "db_column:po_line_items.openPoQty",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "openPoQty",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.openPoValue": {
+      "id": "db_column:po_line_items.openPoValue",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "openPoValue",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.createdAt": {
+      "id": "db_column:po_line_items.createdAt",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_line_items.updatedAt": {
+      "id": "db_column:po_line_items.updatedAt",
+      "type": "db_column",
+      "table": "po_line_items",
+      "column": "updatedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:po_line_items": {
+      "id": "table:po_line_items",
+      "type": "table",
+      "name": "po_line_items",
+      "file": "po-line-items.ts",
+      "columns": [
+        "id",
+        "poLineId",
+        "poNumber",
+        "poCreationDate",
+        "plantCode",
+        "location",
+        "subBusinessLine",
+        "prNumber",
+        "prLine",
+        "requester",
+        "vendorId",
+        "vendorName",
+        "vendorCategory",
+        "ultimateVendorName",
+        "lineItemNumber",
+        "partNumber",
+        "description",
+        "orderedQty",
+        "orderUnit",
+        "poValueUsd",
+        "accountAssignmentCategory",
+        "nisLine",
+        "wbsNumber",
+        "assetCode",
+        "expectedDeliveryDate",
+        "poApprovalStatus",
+        "poReceiptStatus",
+        "poGtsStatus",
+        "fmtPo",
+        "openPoQty",
+        "openPoValue",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "db_column:po_mappings.id": {
+      "id": "db_column:po_mappings.id",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_mappings.poLineItemId": {
+      "id": "db_column:po_mappings.poLineItemId",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "poLineItemId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "poLineItems.id"
+      }
+    },
+    "db_column:po_mappings.costBreakdownId": {
+      "id": "db_column:po_mappings.costBreakdownId",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "costBreakdownId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "costBreakdown.id"
+      }
+    },
+    "db_column:po_mappings.mappedAmount": {
+      "id": "db_column:po_mappings.mappedAmount",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "mappedAmount",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_mappings.mappingNotes": {
+      "id": "db_column:po_mappings.mappingNotes",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "mappingNotes",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_mappings.mappedBy": {
+      "id": "db_column:po_mappings.mappedBy",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "mappedBy",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_mappings.mappedAt": {
+      "id": "db_column:po_mappings.mappedAt",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "mappedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_mappings.createdAt": {
+      "id": "db_column:po_mappings.createdAt",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_mappings.updatedAt": {
+      "id": "db_column:po_mappings.updatedAt",
+      "type": "db_column",
+      "table": "po_mappings",
+      "column": "updatedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:po_mappings": {
+      "id": "table:po_mappings",
+      "type": "table",
+      "name": "po_mappings",
+      "file": "po-mappings.ts",
+      "columns": [
+        "id",
+        "poLineItemId",
+        "costBreakdownId",
+        "mappedAmount",
+        "mappingNotes",
+        "mappedBy",
+        "mappedAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "db_column:po_operations.id": {
+      "id": "db_column:po_operations.id",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_operations.poLineItemId": {
+      "id": "db_column:po_operations.poLineItemId",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "poLineItemId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "poLineItems.id"
+      }
+    },
+    "db_column:po_operations.operationType": {
+      "id": "db_column:po_operations.operationType",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "operationType",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_operations.status": {
+      "id": "db_column:po_operations.status",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "status",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_operations.requestedBy": {
+      "id": "db_column:po_operations.requestedBy",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "requestedBy",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_operations.requestedAt": {
+      "id": "db_column:po_operations.requestedAt",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "requestedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_operations.approvedBy": {
+      "id": "db_column:po_operations.approvedBy",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "approvedBy",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_operations.approvedAt": {
+      "id": "db_column:po_operations.approvedAt",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "approvedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_operations.completedAt": {
+      "id": "db_column:po_operations.completedAt",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "completedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_operations.reason": {
+      "id": "db_column:po_operations.reason",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "reason",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_operations.oldValue": {
+      "id": "db_column:po_operations.oldValue",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "oldValue",
+      "data_type": "jsonb",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_operations.newValue": {
+      "id": "db_column:po_operations.newValue",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "newValue",
+      "data_type": "jsonb",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_operations.notes": {
+      "id": "db_column:po_operations.notes",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "notes",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_operations.createdAt": {
+      "id": "db_column:po_operations.createdAt",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_operations.updatedAt": {
+      "id": "db_column:po_operations.updatedAt",
+      "type": "db_column",
+      "table": "po_operations",
+      "column": "updatedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:po_operations": {
+      "id": "table:po_operations",
+      "type": "table",
+      "name": "po_operations",
+      "file": "po-operations.ts",
+      "columns": [
+        "id",
+        "poLineItemId",
+        "operationType",
+        "status",
+        "requestedBy",
+        "requestedAt",
+        "approvedBy",
+        "approvedAt",
+        "completedAt",
+        "reason",
+        "oldValue",
+        "newValue",
+        "notes",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "db_column:po_transactions.id": {
+      "id": "db_column:po_transactions.id",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_transactions.poLineItemId": {
+      "id": "db_column:po_transactions.poLineItemId",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "poLineItemId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": "poLineItems.id"
+      }
+    },
+    "db_column:po_transactions.transactionType": {
+      "id": "db_column:po_transactions.transactionType",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "transactionType",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_transactions.postingDate": {
+      "id": "db_column:po_transactions.postingDate",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "postingDate",
+      "data_type": "date",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_transactions.quantity": {
+      "id": "db_column:po_transactions.quantity",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "quantity",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_transactions.amount": {
+      "id": "db_column:po_transactions.amount",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "amount",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_transactions.costImpactQty": {
+      "id": "db_column:po_transactions.costImpactQty",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "costImpactQty",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_transactions.costImpactAmount": {
+      "id": "db_column:po_transactions.costImpactAmount",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "costImpactAmount",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:po_transactions.createdAt": {
+      "id": "db_column:po_transactions.createdAt",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:po_transactions.updatedAt": {
+      "id": "db_column:po_transactions.updatedAt",
+      "type": "db_column",
+      "table": "po_transactions",
+      "column": "updatedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:po_transactions": {
+      "id": "table:po_transactions",
+      "type": "table",
+      "name": "po_transactions",
+      "file": "po-transactions.ts",
+      "columns": [
+        "id",
+        "poLineItemId",
+        "transactionType",
+        "postingDate",
+        "quantity",
+        "amount",
+        "costImpactQty",
+        "costImpactAmount",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "db_column:projects.id": {
+      "id": "db_column:projects.id",
+      "type": "db_column",
+      "table": "projects",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:projects.name": {
+      "id": "db_column:projects.name",
+      "type": "db_column",
+      "table": "projects",
+      "column": "name",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:projects.subBusinessLine": {
+      "id": "db_column:projects.subBusinessLine",
+      "type": "db_column",
+      "table": "projects",
+      "column": "subBusinessLine",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:projects.createdAt": {
+      "id": "db_column:projects.createdAt",
+      "type": "db_column",
+      "table": "projects",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:projects.updatedAt": {
+      "id": "db_column:projects.updatedAt",
+      "type": "db_column",
+      "table": "projects",
+      "column": "updatedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:projects": {
+      "id": "table:projects",
+      "type": "table",
+      "name": "projects",
+      "file": "projects.ts",
+      "columns": [
+        "id",
+        "name",
+        "subBusinessLine",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "db_column:sap_reservations.id": {
+      "id": "db_column:sap_reservations.id",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "id",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.reservationNumber": {
+      "id": "db_column:sap_reservations.reservationNumber",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "reservationNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.reservationLineNumber": {
+      "id": "db_column:sap_reservations.reservationLineNumber",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "reservationLineNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": true,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.reservationRequirementDate": {
+      "id": "db_column:sap_reservations.reservationRequirementDate",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "reservationRequirementDate",
+      "data_type": "date",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.partNumber": {
+      "id": "db_column:sap_reservations.partNumber",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "partNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.description": {
+      "id": "db_column:sap_reservations.description",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "description",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.reservationQty": {
+      "id": "db_column:sap_reservations.reservationQty",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "reservationQty",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.reservationValue": {
+      "id": "db_column:sap_reservations.reservationValue",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "reservationValue",
+      "data_type": "numeric",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.reservationStatus": {
+      "id": "db_column:sap_reservations.reservationStatus",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "reservationStatus",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.poNumber": {
+      "id": "db_column:sap_reservations.poNumber",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "poNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.poLineNumber": {
+      "id": "db_column:sap_reservations.poLineNumber",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "poLineNumber",
+      "data_type": "integer",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.wbsNumber": {
+      "id": "db_column:sap_reservations.wbsNumber",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "wbsNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": "wbsDetails.wbsNumber"
+      }
+    },
+    "db_column:sap_reservations.assetCode": {
+      "id": "db_column:sap_reservations.assetCode",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "assetCode",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.assetSerialNumber": {
+      "id": "db_column:sap_reservations.assetSerialNumber",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "assetSerialNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.requester": {
+      "id": "db_column:sap_reservations.requester",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "requester",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.createdAt": {
+      "id": "db_column:sap_reservations.createdAt",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "createdAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.updatedAt": {
+      "id": "db_column:sap_reservations.updatedAt",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "updatedAt",
+      "data_type": "timestamp",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:sap_reservations.poLineItemId": {
+      "id": "db_column:sap_reservations.poLineItemId",
+      "type": "db_column",
+      "table": "sap_reservations",
+      "column": "poLineItemId",
+      "data_type": "uuid",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": "poLineItems.id"
+      }
+    },
+    "table:sap_reservations": {
+      "id": "table:sap_reservations",
+      "type": "table",
+      "name": "sap_reservations",
+      "file": "sap-reservations.ts",
+      "columns": [
+        "id",
+        "reservationNumber",
+        "reservationLineNumber",
+        "reservationRequirementDate",
+        "partNumber",
+        "description",
+        "reservationQty",
+        "reservationValue",
+        "reservationStatus",
+        "poNumber",
+        "poLineNumber",
+        "wbsNumber",
+        "assetCode",
+        "assetSerialNumber",
+        "requester",
+        "createdAt",
+        "updatedAt",
+        "poLineItemId"
+      ]
+    },
+    "db_column:wbs_details.wbsNumber": {
+      "id": "db_column:wbs_details.wbsNumber",
+      "type": "db_column",
+      "table": "wbs_details",
+      "column": "wbsNumber",
+      "data_type": "varchar",
+      "constraints": {
+        "primary_key": true,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:wbs_details.clientName": {
+      "id": "db_column:wbs_details.clientName",
+      "type": "db_column",
+      "table": "wbs_details",
+      "column": "clientName",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "db_column:wbs_details.subBusinessLine": {
+      "id": "db_column:wbs_details.subBusinessLine",
+      "type": "db_column",
+      "table": "wbs_details",
+      "column": "subBusinessLine",
+      "data_type": "text",
+      "constraints": {
+        "primary_key": false,
+        "not_null": false,
+        "references": null
+      }
+    },
+    "table:wbs_details": {
+      "id": "table:wbs_details",
+      "type": "table",
+      "name": "wbs_details",
+      "file": "wbs-details.ts",
+      "columns": [
+        "wbsNumber",
+        "clientName",
+        "subBusinessLine"
+      ]
+    },
+    "column:Unit Price": {
+      "id": "column:Unit Price",
+      "type": "column",
+      "name": "Unit Price",
+      "created_by": [
+        "scripts/stage1_clean/03_ir_postings.py:44",
+        "scripts/stage1_clean/02_gr_postings.py:53",
+        "scripts/stage2_transform/05_calculate_cost_impact.py:118"
+      ]
+    },
+    "column:Ordered Quantity": {
+      "id": "column:Ordered Quantity",
+      "type": "column",
+      "name": "Ordered Quantity"
+    },
+    "column:Purchase Value USD": {
+      "id": "column:Purchase Value USD",
+      "type": "column",
+      "name": "Purchase Value USD"
+    },
+    "column:Invoice Amount": {
+      "id": "column:Invoice Amount",
+      "type": "column",
+      "name": "Invoice Amount",
+      "created_by": [
+        "scripts/stage1_clean/03_ir_postings.py:55"
+      ]
+    },
+    "column:IR Effective Quantity": {
+      "id": "column:IR Effective Quantity",
+      "type": "column",
+      "name": "IR Effective Quantity"
+    },
+    "column:PO Line ID": {
+      "id": "column:PO Line ID",
+      "type": "column",
+      "name": "PO Line ID",
+      "used_in_joins": [
+        "scripts/stage1_clean/03_ir_postings.py:50",
+        "scripts/stage1_clean/02_gr_postings.py:59",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:80",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:61"
+      ],
+      "created_by": [
+        "scripts/stage2_transform/04_enrich_po_line_items.py:33",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:51"
+      ]
+    },
+    "column:GR Amount": {
+      "id": "column:GR Amount",
+      "type": "column",
+      "name": "GR Amount",
+      "created_by": [
+        "scripts/stage1_clean/02_gr_postings.py:64"
+      ]
+    },
+    "column:GR Effective Quantity": {
+      "id": "column:GR Effective Quantity",
+      "type": "column",
+      "name": "GR Effective Quantity"
+    },
+    "column:Location": {
+      "id": "column:Location",
+      "type": "column",
+      "name": "Location",
+      "created_by": [
+        "scripts/stage1_clean/01_po_line_items.py:103"
+      ]
+    },
+    "column:Expected Delivery Date": {
+      "id": "column:Expected Delivery Date",
+      "type": "column",
+      "name": "Expected Delivery Date",
+      "created_by": [
+        "scripts/stage1_clean/01_po_line_items.py:114"
+      ]
+    },
+    "column:Posting Type": {
+      "id": "column:Posting Type",
+      "type": "column",
+      "name": "Posting Type",
+      "created_by": [
+        "scripts/stage2_transform/05_calculate_cost_impact.py:102",
+        "scripts/stage2_transform/05_calculate_cost_impact.py:110"
+      ]
+    },
+    "column:Posting Date": {
+      "id": "column:Posting Date",
+      "type": "column",
+      "name": "Posting Date",
+      "created_by": [
+        "scripts/stage2_transform/05_calculate_cost_impact.py:114"
+      ]
+    },
+    "column:PO Line Item": {
+      "id": "column:PO Line Item",
+      "type": "column",
+      "name": "PO Line Item",
+      "created_by": [
+        "scripts/stage2_transform/04_enrich_po_line_items.py:32"
+      ]
+    },
+    "column:PO Number": {
+      "id": "column:PO Number",
+      "type": "column",
+      "name": "PO Number"
+    },
+    "column:Requester": {
+      "id": "column:Requester",
+      "type": "column",
+      "name": "Requester",
+      "created_by": [
+        "scripts/stage2_transform/04_enrich_po_line_items.py:54"
+      ]
+    },
+    "column:ARIBA shopping cart number : created by (Text)": {
+      "id": "column:ARIBA shopping cart number : created by (Text)",
+      "type": "column",
+      "name": "ARIBA shopping cart number : created by (Text)"
+    },
+    "column:PR Number": {
+      "id": "column:PR Number",
+      "type": "column",
+      "name": "PR Number",
+      "created_by": [
+        "scripts/stage2_transform/04_enrich_po_line_items.py:64"
+      ]
+    },
+    "column:Total Cost Impact Qty": {
+      "id": "column:Total Cost Impact Qty",
+      "type": "column",
+      "name": "Total Cost Impact Qty",
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:64"
+      ]
+    },
+    "column:Total Cost Impact Amount": {
+      "id": "column:Total Cost Impact Amount",
+      "type": "column",
+      "name": "Total Cost Impact Amount",
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:65"
+      ]
+    },
+    "column:open_po_qty": {
+      "id": "column:open_po_qty",
+      "type": "column",
+      "name": "open_po_qty",
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:107"
+      ]
+    },
+    "column:open_po_value": {
+      "id": "column:open_po_value",
+      "type": "column",
+      "name": "open_po_value",
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:109"
+      ]
+    },
+    "column:fmt_po": {
+      "id": "column:fmt_po",
+      "type": "column",
+      "name": "fmt_po",
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:114",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:116"
+      ]
+    },
+    "column:amount": {
+      "id": "column:amount",
+      "type": "column",
+      "name": "amount",
+      "created_by": [
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:58"
+      ]
+    },
+    "column:cost_impact_amount": {
+      "id": "column:cost_impact_amount",
+      "type": "column",
+      "name": "cost_impact_amount",
+      "created_by": [
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:52"
+      ]
+    },
+    "column:cost_impact_qty": {
+      "id": "column:cost_impact_qty",
+      "type": "column",
+      "name": "cost_impact_qty",
+      "created_by": [
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:50"
+      ]
+    },
+    "column:quantity": {
+      "id": "column:quantity",
+      "type": "column",
+      "name": "quantity",
+      "created_by": [
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:54"
+      ]
+    },
+    "column:PO Document Date": {
+      "id": "column:PO Document Date",
+      "type": "column",
+      "name": "PO Document Date"
+    },
+    "column:Plant Code": {
+      "id": "column:Plant Code",
+      "type": "column",
+      "name": "Plant Code"
+    },
+    "column:SL Sub-Business Line Code (BV Lvl 3)": {
+      "id": "column:SL Sub-Business Line Code (BV Lvl 3)",
+      "type": "column",
+      "name": "SL Sub-Business Line Code (BV Lvl 3)"
+    },
+    "column:PR Line": {
+      "id": "column:PR Line",
+      "type": "column",
+      "name": "PR Line"
+    },
+    "column:Main Vendor ID": {
+      "id": "column:Main Vendor ID",
+      "type": "column",
+      "name": "Main Vendor ID"
+    },
+    "column:Main Vendor Name": {
+      "id": "column:Main Vendor Name",
+      "type": "column",
+      "name": "Main Vendor Name"
+    },
+    "column:Main Vendor SLB Vendor Category": {
+      "id": "column:Main Vendor SLB Vendor Category",
+      "type": "column",
+      "name": "Main Vendor SLB Vendor Category"
+    },
+    "column:Ultimate Vendor Name": {
+      "id": "column:Ultimate Vendor Name",
+      "type": "column",
+      "name": "Ultimate Vendor Name"
+    },
+    "column:PO Line": {
+      "id": "column:PO Line",
+      "type": "column",
+      "name": "PO Line"
+    },
+    "column:PO Material Number": {
+      "id": "column:PO Material Number",
+      "type": "column",
+      "name": "PO Material Number"
+    },
+    "column:PO Material description": {
+      "id": "column:PO Material description",
+      "type": "column",
+      "name": "PO Material description"
+    },
+    "column:PO Order Unit": {
+      "id": "column:PO Order Unit",
+      "type": "column",
+      "name": "PO Order Unit"
+    },
+    "column:PO Account Assignment Category": {
+      "id": "column:PO Account Assignment Category",
+      "type": "column",
+      "name": "PO Account Assignment Category"
+    },
+    "column:NIS Line": {
+      "id": "column:NIS Line",
+      "type": "column",
+      "name": "NIS Line"
+    },
+    "column:PO WBS Element": {
+      "id": "column:PO WBS Element",
+      "type": "column",
+      "name": "PO WBS Element"
+    },
+    "column:Asset Code": {
+      "id": "column:Asset Code",
+      "type": "column",
+      "name": "Asset Code"
+    },
+    "column:PO Approval Status": {
+      "id": "column:PO Approval Status",
+      "type": "column",
+      "name": "PO Approval Status"
+    },
+    "column:PO Receipt Status": {
+      "id": "column:PO Receipt Status",
+      "type": "column",
+      "name": "PO Receipt Status"
+    },
+    "column:PO GTS Status": {
+      "id": "column:PO GTS Status",
+      "type": "column",
+      "name": "PO GTS Status"
+    },
+    "column:FMT PO": {
+      "id": "column:FMT PO",
+      "type": "column",
+      "name": "FMT PO"
+    },
+    "column:Open PO Qty": {
+      "id": "column:Open PO Qty",
+      "type": "column",
+      "name": "Open PO Qty"
+    },
+    "column:Open PO Value": {
+      "id": "column:Open PO Value",
+      "type": "column",
+      "name": "Open PO Value"
+    },
+    "column:Posting Qty": {
+      "id": "column:Posting Qty",
+      "type": "column",
+      "name": "Posting Qty"
+    },
+    "column:Posting Amount": {
+      "id": "column:Posting Amount",
+      "type": "column",
+      "name": "Posting Amount"
+    },
+    "column:Cost Impact Qty": {
+      "id": "column:Cost Impact Qty",
+      "type": "column",
+      "name": "Cost Impact Qty"
+    },
+    "column:Cost Impact Amount": {
+      "id": "column:Cost Impact Amount",
+      "type": "column",
+      "name": "Cost Impact Amount"
+    }
+  },
+  "edges": [
+    {
+      "source": "file:data/raw/po line items.csv",
+      "target": "script:01_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/po_line_items.csv",
+      "target": "script:01_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:01_po_line_items",
+      "target": "file:data/intermediate/po_line_items.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_prepare_po_line_items",
+      "target": "script:01_po_line_items",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "file:data/raw/gr table.csv",
+      "target": "script:02_gr_postings",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/po_line_items.csv",
+      "target": "script:02_gr_postings",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/gr_postings.csv",
+      "target": "script:02_gr_postings",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:02_gr_postings",
+      "target": "file:data/intermediate/po_line_items.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:02_gr_postings",
+      "target": "file:data/intermediate/gr_postings.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_prepare_po_line_items",
+      "target": "script:02_gr_postings",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "script:05_calculate_cost_impact",
+      "target": "script:02_gr_postings",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "file:data/raw/invoice table.csv",
+      "target": "script:03_ir_postings",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/po_line_items.csv",
+      "target": "script:03_ir_postings",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/ir_postings.csv",
+      "target": "script:03_ir_postings",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:03_ir_postings",
+      "target": "file:data/intermediate/po_line_items.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:03_ir_postings",
+      "target": "file:data/intermediate/ir_postings.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_prepare_po_line_items",
+      "target": "script:03_ir_postings",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "script:05_calculate_cost_impact",
+      "target": "script:03_ir_postings",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "file:data/raw/po details report.xlsx",
+      "target": "script:04_enrich_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/po_line_items.csv",
+      "target": "script:04_enrich_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:04_enrich_po_line_items",
+      "target": "file:data/intermediate/po_line_items.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_prepare_po_line_items",
+      "target": "script:04_enrich_po_line_items",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "file:data/intermediate/po_line_items.csv",
+      "target": "script:05_calculate_cost_impact",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/gr_postings.csv",
+      "target": "script:05_calculate_cost_impact",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/ir_postings.csv",
+      "target": "script:05_calculate_cost_impact",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/cost_impact.csv",
+      "target": "script:05_calculate_cost_impact",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:05_calculate_cost_impact",
+      "target": "file:data/intermediate/po_line_items.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:05_calculate_cost_impact",
+      "target": "file:data/intermediate/gr_postings.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:05_calculate_cost_impact",
+      "target": "file:data/intermediate/ir_postings.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:05_calculate_cost_impact",
+      "target": "file:data/intermediate/cost_impact.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_prepare_po_line_items",
+      "target": "script:05_calculate_cost_impact",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "script:07_prepare_po_transactions",
+      "target": "script:05_calculate_cost_impact",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "file:data/intermediate/po_line_items.csv",
+      "target": "script:06_prepare_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/cost_impact.csv",
+      "target": "script:06_prepare_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:06_prepare_po_line_items",
+      "target": "file:data/intermediate/po_line_items.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:06_prepare_po_line_items",
+      "target": "file:data/intermediate/cost_impact.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:07_prepare_po_transactions",
+      "target": "script:06_prepare_po_line_items",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "file:data/intermediate/cost_impact.csv",
+      "target": "script:07_prepare_po_transactions",
+      "type": "INPUT"
+    },
+    {
+      "source": "script:07_prepare_po_transactions",
+      "target": "file:data/intermediate/cost_impact.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "column:Ordered Quantity",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "03_ir_postings",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 44,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:Purchase Value USD",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "03_ir_postings",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 44,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:Unit Price",
+      "target": "column:Invoice Amount",
+      "type": "TRANSFORMS",
+      "script": "03_ir_postings",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 55,
+      "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
+    },
+    {
+      "source": "column:IR Effective Quantity",
+      "target": "column:Invoice Amount",
+      "type": "TRANSFORMS",
+      "script": "03_ir_postings",
+      "file": "scripts/stage1_clean/03_ir_postings.py",
+      "line": 55,
+      "operation": "(df['Unit Price'] * df['IR Effective Quantity']).round(2)"
+    },
+    {
+      "source": "column:Ordered Quantity",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "02_gr_postings",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 53,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:Purchase Value USD",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "02_gr_postings",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 53,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:Unit Price",
+      "target": "column:GR Amount",
+      "type": "TRANSFORMS",
+      "script": "02_gr_postings",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 64,
+      "operation": "(df['Unit Price'] * df['GR Effective Quantity']).round(2)"
+    },
+    {
+      "source": "column:GR Effective Quantity",
+      "target": "column:GR Amount",
+      "type": "TRANSFORMS",
+      "script": "02_gr_postings",
+      "file": "scripts/stage1_clean/02_gr_postings.py",
+      "line": 64,
+      "operation": "(df['Unit Price'] * df['GR Effective Quantity']).round(2)"
+    },
+    {
+      "source": "column:Posting Date",
+      "target": "column:Posting Date",
+      "type": "TRANSFORMS",
+      "script": "05_calculate_cost_impact",
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 114,
+      "operation": "pd.to_datetime(combined['Posting Date'])"
+    },
+    {
+      "source": "column:Ordered Quantity",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "05_calculate_cost_impact",
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 118,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:Purchase Value USD",
+      "target": "column:Unit Price",
+      "type": "TRANSFORMS",
+      "script": "05_calculate_cost_impact",
+      "file": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "line": 118,
+      "operation": "po_df['Purchase Value USD'] / po_df['Ordered Quantity']"
+    },
+    {
+      "source": "column:PO Line Item",
+      "target": "column:PO Line Item",
+      "type": "TRANSFORMS",
+      "script": "04_enrich_po_line_items",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 32,
+      "operation": "df['PO Line Item'].fillna(0).astype(int)"
+    },
+    {
+      "source": "column:PO Number",
+      "target": "column:PO Line ID",
+      "type": "TRANSFORMS",
+      "script": "04_enrich_po_line_items",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 33,
+      "operation": "df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
+    },
+    {
+      "source": "column:PO Line Item",
+      "target": "column:PO Line ID",
+      "type": "TRANSFORMS",
+      "script": "04_enrich_po_line_items",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 33,
+      "operation": "df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
+    },
+    {
+      "source": "column:PO Line ID",
+      "target": "column:PO Line ID",
+      "type": "TRANSFORMS",
+      "script": "04_enrich_po_line_items",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 51,
+      "operation": "details['PO Line ID']"
+    },
+    {
+      "source": "column:ARIBA shopping cart number : created by (Text)",
+      "target": "column:Requester",
+      "type": "TRANSFORMS",
+      "script": "04_enrich_po_line_items",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 54,
+      "operation": "details['ARIBA shopping cart number : created by (Text)']"
+    },
+    {
+      "source": "column:Total Cost Impact Qty",
+      "target": "column:Total Cost Impact Qty",
+      "type": "TRANSFORMS",
+      "script": "06_prepare_po_line_items",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 64,
+      "operation": "po_df['Total Cost Impact Qty'].fillna(0)"
+    },
+    {
+      "source": "column:Total Cost Impact Amount",
+      "target": "column:Total Cost Impact Amount",
+      "type": "TRANSFORMS",
+      "script": "06_prepare_po_line_items",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 65,
+      "operation": "po_df['Total Cost Impact Amount'].fillna(0)"
+    },
+    {
+      "source": "column:open_po_qty",
+      "target": "column:open_po_qty",
+      "type": "TRANSFORMS",
+      "script": "06_prepare_po_line_items",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 107,
+      "operation": "po_df['open_po_qty'].round(4)"
+    },
+    {
+      "source": "column:open_po_value",
+      "target": "column:open_po_value",
+      "type": "TRANSFORMS",
+      "script": "06_prepare_po_line_items",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 109,
+      "operation": "po_df['open_po_value'].round(2)"
+    },
+    {
+      "source": "column:cost_impact_amount",
+      "target": "column:amount",
+      "type": "TRANSFORMS",
+      "script": "07_prepare_po_transactions",
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 58,
+      "operation": "output_df['cost_impact_amount']"
+    },
+    {
+      "source": "column:cost_impact_qty",
+      "target": "column:cost_impact_qty",
+      "type": "TRANSFORMS",
+      "script": "07_prepare_po_transactions",
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 50,
+      "operation": "output_df['cost_impact_qty'].round(4)"
+    },
+    {
+      "source": "column:cost_impact_amount",
+      "target": "column:cost_impact_amount",
+      "type": "TRANSFORMS",
+      "script": "07_prepare_po_transactions",
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 52,
+      "operation": "output_df['cost_impact_amount'].round(2)"
+    },
+    {
+      "source": "column:quantity",
+      "target": "column:quantity",
+      "type": "TRANSFORMS",
+      "script": "07_prepare_po_transactions",
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 54,
+      "operation": "output_df['quantity'].round(4)"
+    },
+    {
+      "source": "column:Location",
+      "target": "db_column:po_line_items.location",
+      "type": "MAPS_TO",
+      "table": "po_line_items"
+    },
+    {
+      "source": "column:Requester",
+      "target": "db_column:po_line_items.requester",
+      "type": "MAPS_TO",
+      "table": "po_line_items"
+    },
+    {
+      "source": "column:PO Material description",
+      "target": "db_column:po_line_items.description",
+      "type": "MAPS_TO",
+      "table": "po_line_items"
+    },
+    {
+      "source": "column:Posting Qty",
+      "target": "db_column:po_transactions.quantity",
+      "type": "MAPS_TO",
+      "table": "po_transactions"
+    },
+    {
+      "source": "column:Posting Amount",
+      "target": "db_column:po_transactions.amount",
+      "type": "MAPS_TO",
+      "table": "po_transactions"
+    }
+  ],
+  "stats": {
+    "total_nodes": 193,
+    "total_edges": 68,
+    "nodes_by_type": {
+      "file": 10,
+      "script": 8,
+      "db_column": 113,
+      "table": 10,
+      "column": 52
+    },
+    "edges_by_type": {
+      "INPUT": 17,
+      "OUTPUT": 13,
+      "DEPENDS_ON": 9,
+      "TRANSFORMS": 24,
+      "MAPS_TO": 5
+    }
+  }
+}

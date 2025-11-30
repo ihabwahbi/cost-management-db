@@ -10,6 +10,15 @@ repos:
         name: Update Pipeline Map
         entry: python3 scripts/generate_pipeline_map.py
         language: system
-        files: ^scripts/.*\.py$|^src/schema/.*\.ts$|^scripts/config/.*\.py$
+        files: ^scripts/(stage[123]_|config/).*\.py$|^src/schema/.*\.ts$
+        pass_filenames: false
+        stages: [pre-commit]
+      
+      # Regenerate Context Oracle artifacts when source files change
+      - id: update-context-oracle
+        name: Update Context Oracle
+        entry: python3 scripts/generate_context_oracle.py --skip-pipeline-map
+        language: system
+        files: ^scripts/(stage[123]_|config/).*\.py$|^src/schema/.*\.ts$
         pass_filenames: false
         stages: [pre-commit]

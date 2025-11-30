@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 """
-Pipeline Map Generator
+Pipeline Map Generator (Enhanced)
 
 Generates a comprehensive map of the data pipeline for AI agent context.
+Includes:
+  - Script metadata with function signatures and line numbers
+  - Pandas operation extraction (merge, groupby, filter, etc.)
+  - Sample data profiles (dtypes, sample rows, null counts)
+  - TypeScript schema extraction (via ts-morph or fallback regex)
+  - Common error scenarios for debugging guidance
+
 Outputs:
   - pipeline-map.json: Machine-readable pipeline structure
   - pipeline-map.md: Mermaid diagram for visualization
@@ -14,6 +21,7 @@ Usage:
 import ast
 import json
 import re
+import subprocess
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
@@ -23,6 +31,299 @@ SCRIPTS_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPTS_DIR.parent
 OUTPUT_JSON = PROJECT_ROOT / "pipeline-map.json"
 OUTPUT_MD = PROJECT_ROOT / "pipeline-map.md"
+TS_EXTRACTOR = SCRIPTS_DIR / "extract-schema.ts"
+
+# Pandas operations we care about for understanding transformations
+PANDAS_OPS = {
+    "merge": "Joins two DataFrames",
+    "groupby": "Groups data for aggregation",
+    "filter": "Filters rows based on condition",
+    "drop": "Removes columns or rows",
+    "dropna": "Removes null values",
+    "fillna": "Fills null values",
+    "rename": "Renames columns",
+    "astype": "Converts column types",
+    "apply": "Applies function to data",
+    "map": "Maps values using dictionary or function",
+    "sort_values": "Sorts by column values",
+    "to_datetime": "Converts to datetime",
+    "str": "String operations",
+}
+
+
+def extract_pandas_operations(tree: ast.AST, content: str) -> List[Dict[str, Any]]:
+    """Extract pandas operations from AST for semantic understanding.
+    
+    Extracts operations with their arguments and actual code snippets where useful.
+    """
+    operations = []
+    content_lines = content.splitlines()
+    
+    def get_code_snippet(lineno: int) -> str:
+        """Get the actual line of code for context."""
+        if 0 < lineno <= len(content_lines):
+            return content_lines[lineno - 1].strip()
+        return ""
+    
+    def extract_list_or_constant(node) -> Any:
+        """Extract value from AST node (handles both single values and lists)."""
+        if isinstance(node, ast.Constant):
+            return node.value
+        elif isinstance(node, ast.List):
+            return [e.value for e in node.elts if isinstance(e, ast.Constant)]
+        return None
+    
+    for node in ast.walk(tree):
+        # Look for method calls like df.merge(), df.groupby(), etc.
+        if isinstance(node, ast.Call):
+            if isinstance(node.func, ast.Attribute):
+                method_name = node.func.attr
+                if method_name in PANDAS_OPS:
+                    op_info = {
+                        "operation": method_name,
+                        "description": PANDAS_OPS[method_name],
+                        "line": node.lineno,
+                        "code_snippet": get_code_snippet(node.lineno),
+                    }
+                    
+                    # Try to extract key arguments
+                    if method_name == "merge":
+                        for kw in node.keywords:
+                            if kw.arg == "on":
+                                on_val = extract_list_or_constant(kw.value)
+                                if isinstance(on_val, list):
+                                    op_info["on_columns"] = on_val
+                                elif on_val:
+                                    op_info["on_column"] = on_val
+                            elif kw.arg == "how" and isinstance(kw.value, ast.Constant):
+                                op_info["join_type"] = kw.value.value
+                            elif kw.arg in ["left_on", "right_on"]:
+                                val = extract_list_or_constant(kw.value)
+                                if val:
+                                    op_info[kw.arg] = val
+                    
+                    elif method_name == "groupby":
+                        if node.args:
+                            val = extract_list_or_constant(node.args[0])
+                            if isinstance(val, list):
+                                op_info["group_columns"] = val
+                            elif val:
+                                op_info["group_column"] = val
+                    
+                    elif method_name == "drop":
+                        for kw in node.keywords:
+                            if kw.arg == "columns":
+                                cols = extract_list_or_constant(kw.value)
+                                if cols:
+                                    op_info["dropped_columns"] = cols if isinstance(cols, list) else [cols]
+                    
+                    elif method_name == "rename":
+                        for kw in node.keywords:
+                            if kw.arg == "columns" and isinstance(kw.value, ast.Dict):
+                                renames = {}
+                                for k, v in zip(kw.value.keys, kw.value.values):
+                                    if isinstance(k, ast.Constant) and isinstance(v, ast.Constant):
+                                        renames[k.value] = v.value
+                                if renames:
+                                    op_info["column_renames"] = renames
+                    
+                    operations.append(op_info)
+        
+        # Look for column assignments: df['new_col'] = ...
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Subscript):
+                    if isinstance(target.slice, ast.Constant):
+                        col_name = target.slice.value
+                        snippet = get_code_snippet(node.lineno)
+                        operations.append({
+                            "operation": "column_assign",
+                            "description": f"Creates/modifies column '{col_name}'",
+                            "column": col_name,
+                            "line": node.lineno,
+                            "code_snippet": snippet,
+                        })
+        
+        # Look for boolean filtering: df[mask] or df[condition]
+        if isinstance(node, ast.Assign):
+            # Check if RHS is a subscript with a boolean condition
+            if isinstance(node.value, ast.Subscript):
+                slice_node = node.value.slice
+                is_filter = False
+                
+                # df[mask] where mask is a variable
+                if isinstance(slice_node, ast.Name):
+                    is_filter = True
+                # df[~mask]
+                elif isinstance(slice_node, ast.UnaryOp) and isinstance(slice_node.op, ast.Invert):
+                    is_filter = True
+                # df[df['col'] == val]
+                elif isinstance(slice_node, ast.Compare):
+                    is_filter = True
+                
+                if is_filter:
+                    snippet = get_code_snippet(node.lineno)
+                    # Avoid duplicate if already captured as column_assign
+                    if not any(op.get("line") == node.lineno and op.get("operation") == "column_assign" for op in operations):
+                        operations.append({
+                            "operation": "boolean_filter",
+                            "description": "Filters rows based on boolean condition",
+                            "line": node.lineno,
+                            "code_snippet": snippet,
+                        })
+    
+    return operations
+
+
+def extract_transformation_semantics(func_node: ast.FunctionDef, content: str) -> Dict[str, Any]:
+    """Extract semantic meaning from a function's implementation."""
+    semantics = {
+        "modifies_columns": [],
+        "filters_data": False,
+        "aggregates": False,
+        "joins_data": False,
+        "renames_columns": False,
+        "type_conversions": False,
+    }
+    
+    # Get the source code of the function for pattern matching
+    try:
+        func_source = ast.unparse(func_node) if hasattr(ast, 'unparse') else ""
+    except Exception:
+        func_source = ""
+    
+    for node in ast.walk(func_node):
+        if isinstance(node, ast.Call):
+            # Check for method calls
+            if isinstance(node.func, ast.Attribute):
+                method = node.func.attr
+                
+                if method in ["merge", "join"]:
+                    semantics["joins_data"] = True
+                elif method in ["groupby"]:
+                    semantics["aggregates"] = True
+                elif method in ["filter", "query"]:
+                    semantics["filters_data"] = True
+                elif method in ["drop", "dropna"]:
+                    semantics["filters_data"] = True
+                elif method in ["rename"]:
+                    semantics["renames_columns"] = True
+                elif method in ["astype", "to_datetime", "to_numeric"]:
+                    semantics["type_conversions"] = True
+                elif method in ["isin"]:
+                    semantics["filters_data"] = True
+                elif method == "copy":
+                    # df[mask].copy() pattern - indicates filtering
+                    pass
+            
+            # Check for pd.to_datetime, pd.to_numeric calls
+            elif isinstance(node.func, ast.Attribute):
+                if node.func.attr in ["to_datetime", "to_numeric"]:
+                    semantics["type_conversions"] = True
+        
+        # Detect boolean indexing: df[mask], df[~mask], df[df['col'] == val]
+        if isinstance(node, ast.Subscript):
+            if isinstance(node.slice, ast.Name):
+                # Pattern: df[mask] where mask is a boolean series
+                semantics["filters_data"] = True
+            elif isinstance(node.slice, ast.UnaryOp) and isinstance(node.slice.op, ast.Invert):
+                # Pattern: df[~mask]
+                semantics["filters_data"] = True
+            elif isinstance(node.slice, ast.Compare):
+                # Pattern: df[df['col'] == value]
+                semantics["filters_data"] = True
+        
+        # Track column modifications: df['col'] = ...
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Subscript) and isinstance(target.slice, ast.Constant):
+                    col = target.slice.value
+                    if col not in semantics["modifies_columns"]:
+                        semantics["modifies_columns"].append(col)
+    
+    # Also check for common patterns in source
+    if func_source:
+        if ".copy()" in func_source and "[" in func_source:
+            semantics["filters_data"] = True
+    
+    return semantics
+
+
+def get_data_profiles() -> Dict[str, Any]:
+    """Extract data profiles from CSV files (dtypes, sample rows, null counts).
+    
+    Efficiently reads each file only once using chunked reading for large files.
+    """
+    try:
+        import pandas as pd
+    except ImportError:
+        return {"error": "pandas not available for profiling"}
+    
+    profiles = {}
+    data_dir = PROJECT_ROOT / "data"
+    
+    # Size threshold for chunked reading (10MB)
+    CHUNK_THRESHOLD = 10 * 1024 * 1024
+    
+    for folder in ["raw", "intermediate", "import-ready"]:
+        folder_path = data_dir / folder
+        if not folder_path.exists():
+            continue
+        
+        for csv_file in folder_path.glob("*.csv"):
+            try:
+                file_size = csv_file.stat().st_size
+                
+                if file_size > CHUNK_THRESHOLD:
+                    # Large file: use chunked reading
+                    row_count = 0
+                    null_counts: Dict[str, int] = {}
+                    sample_row = {}
+                    dtypes = {}
+                    columns = []
+                    
+                    for i, chunk in enumerate(pd.read_csv(csv_file, chunksize=10000, low_memory=False)):
+                        row_count += len(chunk)
+                        
+                        # Get sample and dtypes from first chunk
+                        if i == 0:
+                            columns = list(chunk.columns)
+                            dtypes = {col: str(dtype) for col, dtype in chunk.dtypes.items()}
+                            sample_row = chunk.iloc[0].to_dict() if len(chunk) > 0 else {}
+                        
+                        # Accumulate null counts
+                        chunk_nulls = chunk.isnull().sum()
+                        for col, count in chunk_nulls.items():
+                            null_counts[col] = null_counts.get(col, 0) + int(count)
+                    
+                    profile = {
+                        "path": f"data/{folder}/{csv_file.name}",
+                        "columns": columns,
+                        "dtypes": dtypes,
+                        "sample_row": sample_row,
+                        "row_count": row_count,
+                        "null_counts": {col: count for col, count in null_counts.items() if count > 0},
+                    }
+                else:
+                    # Small file: read all at once (more efficient)
+                    df = pd.read_csv(csv_file, low_memory=False)
+                    
+                    null_counts = df.isnull().sum()
+                    profile = {
+                        "path": f"data/{folder}/{csv_file.name}",
+                        "columns": list(df.columns),
+                        "dtypes": {col: str(dtype) for col, dtype in df.dtypes.items()},
+                        "sample_row": df.iloc[0].to_dict() if len(df) > 0 else {},
+                        "row_count": len(df),
+                        "null_counts": {col: int(count) for col, count in null_counts.items() if count > 0},
+                    }
+                
+                profiles[csv_file.name] = profile
+                
+            except Exception as e:
+                profiles[csv_file.name] = {"error": str(e)}
+    
+    return profiles
 
 
 def extract_script_metadata(script_path: Path) -> Dict[str, Any]:
@@ -39,6 +340,7 @@ def extract_script_metadata(script_path: Path) -> Dict[str, Any]:
         "dependencies": [],
         "functions": [],
         "imports": [],
+        "pandas_operations": [],
         "line_count": len(content.splitlines()),
     }
     
@@ -48,6 +350,9 @@ def extract_script_metadata(script_path: Path) -> Dict[str, Any]:
         # Extract module docstring
         if (ast.get_docstring(tree)):
             metadata["docstring"] = ast.get_docstring(tree)
+        
+        # Extract pandas operations for semantic understanding
+        metadata["pandas_operations"] = extract_pandas_operations(tree, content)
         
         # Walk the AST
         for node in ast.walk(tree):
@@ -59,13 +364,14 @@ def extract_script_metadata(script_path: Path) -> Dict[str, Any]:
                 if node.module:
                     metadata["imports"].append(node.module)
             
-            # Extract function definitions
+            # Extract function definitions with enhanced semantics
             elif isinstance(node, ast.FunctionDef):
                 func_info = {
                     "name": node.name,
                     "docstring": ast.get_docstring(node),
                     "args": [arg.arg for arg in node.args.args],
                     "line": node.lineno,
+                    "semantics": extract_transformation_semantics(node, content),
                 }
                 metadata["functions"].append(func_info)
     except SyntaxError:
@@ -173,39 +479,91 @@ def get_column_mappings() -> Dict[str, Any]:
 
 
 def get_schema_tables() -> List[Dict[str, Any]]:
-    """Extract database schema information."""
-    schema_dir = PROJECT_ROOT / "src" / "schema"
-    if not schema_dir.exists():
-        return []
+    """Extract database schema using TypeScript AST parser (extract-schema.ts)."""
+    if not TS_EXTRACTOR.exists():
+        raise FileNotFoundError(f"TypeScript schema extractor not found: {TS_EXTRACTOR}")
     
-    tables = []
-    for schema_file in schema_dir.glob("*.ts"):
-        if schema_file.name in ["_schema.ts", "index.ts"]:
-            continue
-        
-        content = schema_file.read_text()
-        
-        # Extract table name
-        table_match = re.search(r"\.table\('(\w+)'", content)
-        if not table_match:
-            continue
-        
-        table_name = table_match.group(1)
-        
-        # Extract columns
-        columns = []
-        col_pattern = r"(\w+):\s*(uuid|varchar|text|numeric|integer|date|timestamp|boolean)\("
-        for match in re.finditer(col_pattern, content):
-            col_name, col_type = match.groups()
-            columns.append({"name": col_name, "type": col_type})
-        
-        tables.append({
-            "name": table_name,
-            "file": schema_file.name,
-            "columns": columns,
-        })
+    result = subprocess.run(
+        ["npx", "ts-node", str(TS_EXTRACTOR)],
+        capture_output=True,
+        text=True,
+        cwd=PROJECT_ROOT,
+        timeout=60,
+    )
+    
+    if result.returncode != 0:
+        raise RuntimeError(f"Schema extraction failed: {result.stderr}")
+    
+    tables = json.loads(result.stdout)
+    
+    # Add extraction metadata
+    for table in tables:
+        table["extraction_method"] = "ts-ast"
     
     return tables
+
+
+def get_common_errors() -> Dict[str, Any]:
+    """Define common errors and their solutions for AI guidance."""
+    return {
+        "KeyError": {
+            "pattern": "KeyError: '(.+)'",
+            "causes": [
+                "Column doesn't exist in DataFrame",
+                "Previous script in pipeline didn't run",
+                "Column name has different casing or spacing",
+            ],
+            "solutions": [
+                "Check column_mappings.py for correct column names",
+                "Run full pipeline: python3 scripts/pipeline.py",
+                "Use df.columns.tolist() to see actual column names",
+            ],
+        },
+        "MergeError": {
+            "pattern": "merge.*dtype",
+            "causes": [
+                "Join columns have different dtypes (int vs str)",
+                "One side has NaN values causing type inference issues",
+            ],
+            "solutions": [
+                "Ensure both join columns are same type: df['col'] = df['col'].astype(str)",
+                "Check for nulls before merge: df['col'].isnull().sum()",
+            ],
+        },
+        "FileNotFoundError": {
+            "pattern": "No such file or directory.*data/",
+            "causes": [
+                "Previous pipeline stage didn't run",
+                "Raw data files missing",
+            ],
+            "solutions": [
+                "Run earlier stages first: python3 scripts/pipeline.py --stage1",
+                "Check data/raw/ for source files",
+            ],
+        },
+        "ValueError_date": {
+            "pattern": "time data.*does not match format",
+            "causes": [
+                "Date column has inconsistent formats",
+                "Non-date values in date column",
+            ],
+            "solutions": [
+                "Use pd.to_datetime with errors='coerce'",
+                "Check for non-date values: df[pd.to_datetime(df['col'], errors='coerce').isna()]",
+            ],
+        },
+        "SchemaValidationError": {
+            "pattern": "column.*not found|missing required column",
+            "causes": [
+                "Database schema changed but CSV mapping not updated",
+                "Column dropped in earlier transformation",
+            ],
+            "solutions": [
+                "Compare column_mappings.py with src/schema/*.ts",
+                "Run npm run type-check after schema changes",
+            ],
+        },
+    }
 
 
 def get_data_files() -> Dict[str, List[str]]:
@@ -361,13 +719,98 @@ def generate_mermaid_diagram(pipeline_map: Dict) -> str:
     for table in pipeline_map["schema_tables"]:
         lines.append(f"### `{table['name']}`")
         lines.append("")
-        lines.append("| Column | Type |")
-        lines.append("|--------|------|")
+        lines.append("| Column | Type | Constraints |")
+        lines.append("|--------|------|-------------|")
         for col in table["columns"][:15]:
-            lines.append(f"| `{col['name']}` | {col['type']} |")
+            constraints = []
+            if col.get("primary_key"):
+                constraints.append("PK")
+            if col.get("not_null"):
+                constraints.append("NOT NULL")
+            if col.get("references"):
+                constraints.append(f"FK → {col['references']}")
+            if col.get("has_default"):
+                constraints.append("DEFAULT")
+            constraint_str = ", ".join(constraints) if constraints else "-"
+            lines.append(f"| `{col['name']}` | {col['type']} | {constraint_str} |")
         if len(table["columns"]) > 15:
-            lines.append(f"| *...* | *{len(table['columns']) - 15} more* |")
+            lines.append(f"| *...* | *{len(table['columns']) - 15} more* | |")
         lines.append("")
+    
+    # Add data profiles section
+    if pipeline_map.get("data_profiles"):
+        lines.append("## Data Profiles")
+        lines.append("")
+        lines.append("Sample data and types for each CSV file:")
+        lines.append("")
+        
+        for filename, profile in pipeline_map["data_profiles"].items():
+            if "error" in profile:
+                continue
+            lines.append(f"### `{filename}`")
+            lines.append("")
+            lines.append(f"- **Path**: `{profile.get('path', 'N/A')}`")
+            lines.append(f"- **Rows**: {profile.get('row_count', 'N/A')}")
+            lines.append("")
+            
+            # Show dtypes
+            if profile.get("dtypes"):
+                lines.append("| Column | Type |")
+                lines.append("|--------|------|")
+                for col, dtype in list(profile["dtypes"].items())[:10]:
+                    lines.append(f"| `{col}` | {dtype} |")
+                if len(profile["dtypes"]) > 10:
+                    lines.append(f"| *...* | *{len(profile['dtypes']) - 10} more* |")
+                lines.append("")
+            
+            # Show null counts if any
+            if profile.get("null_counts"):
+                lines.append("**Columns with nulls:**")
+                for col, count in profile["null_counts"].items():
+                    lines.append(f"- `{col}`: {count} nulls")
+                lines.append("")
+    
+    # Add common errors section
+    if pipeline_map.get("common_errors"):
+        lines.append("## Common Errors & Solutions")
+        lines.append("")
+        for error_type, info in pipeline_map["common_errors"].items():
+            lines.append(f"### {error_type}")
+            lines.append("")
+            lines.append("**Causes:**")
+            for cause in info["causes"]:
+                lines.append(f"- {cause}")
+            lines.append("")
+            lines.append("**Solutions:**")
+            for solution in info["solutions"]:
+                lines.append(f"- {solution}")
+            lines.append("")
+    
+    # Add pandas operations summary
+    lines.append("## Transformation Operations")
+    lines.append("")
+    lines.append("Key pandas operations used in each script:")
+    lines.append("")
+    for script in pipeline_map["scripts"]:
+        if script.get("pandas_operations"):
+            lines.append(f"### `{script['name']}`")
+            lines.append("")
+            lines.append("| Line | Operation | Details |")
+            lines.append("|------|-----------|---------|")
+            for op in script["pandas_operations"][:10]:
+                details = ""
+                if op.get("column"):
+                    details = f"column: `{op['column']}`"
+                elif op.get("on_column"):
+                    details = f"on: `{op['on_column']}`"
+                elif op.get("group_column"):
+                    details = f"by: `{op['group_column']}`"
+                elif op.get("group_columns"):
+                    details = f"by: `{', '.join(op['group_columns'])}`"
+                elif op.get("dropped_columns"):
+                    details = f"cols: `{', '.join(op['dropped_columns'])}`"
+                lines.append(f"| {op['line']} | {op['operation']} | {details or op.get('description', '-')} |")
+            lines.append("")
     
     return "\n".join(lines)
 
@@ -395,6 +838,12 @@ def get_latest_source_mtime() -> datetime:
     pipeline_script = SCRIPTS_DIR / "pipeline.py"
     if pipeline_script.exists():
         mtime = pipeline_script.stat().st_mtime
+        if mtime > latest_mtime:
+            latest_mtime = mtime
+    
+    # Check the schema extractor
+    if TS_EXTRACTOR.exists():
+        mtime = TS_EXTRACTOR.stat().st_mtime
         if mtime > latest_mtime:
             latest_mtime = mtime
     
@@ -449,6 +898,14 @@ def generate_pipeline_map():
     print("Listing data files...")
     data_files = get_data_files()
     
+    # Get data profiles (sample data, dtypes)
+    print("Profiling data files...")
+    data_profiles = get_data_profiles()
+    
+    # Get common error patterns
+    print("Adding error guidance...")
+    common_errors = get_common_errors()
+    
     # Build the map
     # Use deterministic timestamp based on source file mtimes
     source_mtime = get_latest_source_mtime()
@@ -492,6 +949,8 @@ def generate_pipeline_map():
         "column_mappings": column_mappings,
         "schema_tables": schema_tables,
         "data_files": data_files,
+        "data_profiles": data_profiles,
+        "common_errors": common_errors,
         
         "key_files": {
             "orchestrator": "scripts/pipeline.py",

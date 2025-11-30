@@ -1,0 +1,82 @@
+{
+  "generated_at": "2025-11-30T11:14:49.476766+00:00",
+  "scripts": [
+    {
+      "name": "01_po_line_items",
+      "source_path": "scripts/stage1_clean/01_po_line_items.py",
+      "skeleton_path": "pipeline-context/skeletons/stage1_clean/01_po_line_items.skeleton.py",
+      "original_lines": 173,
+      "skeleton_lines": 61,
+      "original_tokens": 1488,
+      "skeleton_tokens": 489,
+      "compression_ratio": 3.04
+    },
+    {
+      "name": "02_gr_postings",
+      "source_path": "scripts/stage1_clean/02_gr_postings.py",
+      "skeleton_path": "pipeline-context/skeletons/stage1_clean/02_gr_postings.skeleton.py",
+      "original_lines": 111,
+      "skeleton_lines": 43,
+      "original_tokens": 899,
+      "skeleton_tokens": 331,
+      "compression_ratio": 2.72
+    },
+    {
+      "name": "03_ir_postings",
+      "source_path": "scripts/stage1_clean/03_ir_postings.py",
+      "skeleton_path": "pipeline-context/skeletons/stage1_clean/03_ir_postings.skeleton.py",
+      "original_lines": 99,
+      "skeleton_lines": 39,
+      "original_tokens": 804,
+      "skeleton_tokens": 306,
+      "compression_ratio": 2.63
+    },
+    {
+      "name": "04_enrich_po_line_items",
+      "source_path": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "skeleton_path": "pipeline-context/skeletons/stage2_transform/04_enrich_po_line_items.skeleton.py",
+      "original_lines": 144,
+      "skeleton_lines": 43,
+      "original_tokens": 1201,
+      "skeleton_tokens": 331,
+      "compression_ratio": 3.63
+    },
+    {
+      "name": "05_calculate_cost_impact",
+      "source_path": "scripts/stage2_transform/05_calculate_cost_impact.py",
+      "skeleton_path": "pipeline-context/skeletons/stage2_transform/05_calculate_cost_impact.skeleton.py",
+      "original_lines": 206,
+      "skeleton_lines": 56,
+      "original_tokens": 1848,
+      "skeleton_tokens": 466,
+      "compression_ratio": 3.97
+    },
+    {
+      "name": "06_prepare_po_line_items",
+      "source_path": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "skeleton_path": "pipeline-context/skeletons/stage3_prepare/06_prepare_po_line_items.skeleton.py",
+      "original_lines": 185,
+      "skeleton_lines": 52,
+      "original_tokens": 1564,
+      "skeleton_tokens": 412,
+      "compression_ratio": 3.8
+    },
+    {
+      "name": "07_prepare_po_transactions",
+      "source_path": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "skeleton_path": "pipeline-context/skeletons/stage3_prepare/07_prepare_po_transactions.skeleton.py",
+      "original_lines": 123,
+      "skeleton_lines": 40,
+      "original_tokens": 974,
+      "skeleton_tokens": 298,
+      "compression_ratio": 3.27
+    }
+  ],
+  "totals": {
+    "original_lines": 1041,
+    "skeleton_lines": 334,
+    "original_tokens": 8778,
+    "skeleton_tokens": 2633,
+    "compression_ratio": 3.33
+  }
+}

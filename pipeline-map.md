@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-11-30T01:44:54.969511+00:00
+Generated: 2025-11-30T06:59:20.970601+00:00
 
 ## Data Flow Diagram
 
@@ -42,16 +42,16 @@ flowchart TD
     end
 
     subgraph DB["Database Tables"]
-        db_po_transactions[("po_transactions")]
-        db_sap_reservations[("sap_reservations")]
-        db_wbs_details[("wbs_details")]
-        db_po_line_items[("po_line_items")]
-        db_projects[("projects")]
-        db_po_operations[("po_operations")]
+        db_budget_forecasts[("budget_forecasts")]
         db_cost_breakdown[("cost_breakdown")]
         db_forecast_versions[("forecast_versions")]
+        db_po_line_items[("po_line_items")]
         db_po_mappings[("po_mappings")]
-        db_budget_forecasts[("budget_forecasts")]
+        db_po_operations[("po_operations")]
+        db_po_transactions[("po_transactions")]
+        db_projects[("projects")]
+        db_sap_reservations[("sap_reservations")]
+        db_wbs_details[("wbs_details")]
     end
 
     %% Data Flow Connections
@@ -113,144 +113,425 @@ flowchart LR
 
 ## Database Schema
 
-### `po_transactions`
+### `budget_forecasts`
 
-| Column | Type |
-|--------|------|
-| `id` | uuid |
-| `poLineItemId` | uuid |
-| `transactionType` | varchar |
-| `postingDate` | date |
-| `quantity` | numeric |
-| `amount` | numeric |
-| `costImpactQty` | numeric |
-| `costImpactAmount` | numeric |
-| `createdAt` | timestamp |
-| `updatedAt` | timestamp |
-
-### `sap_reservations`
-
-| Column | Type |
-|--------|------|
-| `id` | uuid |
-| `reservationNumber` | varchar |
-| `reservationLineNumber` | varchar |
-| `reservationRequirementDate` | date |
-| `partNumber` | varchar |
-| `description` | text |
-| `reservationQty` | numeric |
-| `reservationValue` | numeric |
-| `reservationStatus` | varchar |
-| `poNumber` | varchar |
-| `poLineNumber` | integer |
-| `wbsNumber` | varchar |
-| `assetCode` | varchar |
-| `assetSerialNumber` | varchar |
-| `requester` | varchar |
-| *...* | *3 more* |
-
-### `wbs_details`
-
-| Column | Type |
-|--------|------|
-| `wbsNumber` | varchar |
-| `clientName` | text |
-| `subBusinessLine` | text |
-
-### `po_line_items`
-
-| Column | Type |
-|--------|------|
-| `id` | uuid |
-| `poLineId` | varchar |
-| `poNumber` | varchar |
-| `poCreationDate` | date |
-| `plantCode` | varchar |
-| `location` | varchar |
-| `subBusinessLine` | varchar |
-| `prNumber` | varchar |
-| `prLine` | integer |
-| `requester` | varchar |
-| `vendorId` | varchar |
-| `vendorName` | varchar |
-| `vendorCategory` | varchar |
-| `ultimateVendorName` | varchar |
-| `lineItemNumber` | integer |
-| *...* | *18 more* |
-
-### `projects`
-
-| Column | Type |
-|--------|------|
-| `id` | uuid |
-| `name` | text |
-| `subBusinessLine` | text |
-| `createdAt` | timestamp |
-| `updatedAt` | timestamp |
-
-### `po_operations`
-
-| Column | Type |
-|--------|------|
-| `id` | uuid |
-| `poLineItemId` | uuid |
-| `operationType` | varchar |
-| `status` | varchar |
-| `requestedBy` | varchar |
-| `requestedAt` | timestamp |
-| `approvedBy` | varchar |
-| `approvedAt` | timestamp |
-| `completedAt` | timestamp |
-| `reason` | text |
-| `notes` | text |
-| `createdAt` | timestamp |
-| `updatedAt` | timestamp |
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `forecastVersionId` | uuid | NOT NULL, FK → forecastVersions.id |
+| `costBreakdownId` | uuid | NOT NULL, FK → costBreakdown.id |
+| `forecastedCost` | numeric | NOT NULL, DEFAULT |
+| `createdAt` | timestamp | - |
 
 ### `cost_breakdown`
 
-| Column | Type |
-|--------|------|
-| `id` | uuid |
-| `projectId` | uuid |
-| `subBusinessLine` | text |
-| `costLine` | text |
-| `spendType` | text |
-| `spendSubCategory` | text |
-| `budgetCost` | numeric |
-| `createdAt` | timestamp |
-| `updatedAt` | timestamp |
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `projectId` | uuid | NOT NULL, FK → projects.id |
+| `subBusinessLine` | text | NOT NULL |
+| `costLine` | text | NOT NULL |
+| `spendType` | text | NOT NULL |
+| `spendSubCategory` | text | NOT NULL |
+| `budgetCost` | numeric | NOT NULL, DEFAULT |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
 
 ### `forecast_versions`
 
-| Column | Type |
-|--------|------|
-| `id` | uuid |
-| `projectId` | uuid |
-| `versionNumber` | integer |
-| `reasonForChange` | text |
-| `createdAt` | timestamp |
-| `createdBy` | text |
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `projectId` | uuid | NOT NULL, FK → projects.id |
+| `versionNumber` | integer | NOT NULL |
+| `reasonForChange` | text | NOT NULL |
+| `createdAt` | timestamp | - |
+| `createdBy` | text | DEFAULT |
+
+### `po_line_items`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `poLineId` | varchar | NOT NULL |
+| `poNumber` | varchar | NOT NULL |
+| `poCreationDate` | date | - |
+| `plantCode` | varchar | - |
+| `location` | varchar | - |
+| `subBusinessLine` | varchar | - |
+| `prNumber` | varchar | - |
+| `prLine` | integer | - |
+| `requester` | varchar | - |
+| `vendorId` | varchar | - |
+| `vendorName` | varchar | - |
+| `vendorCategory` | varchar | - |
+| `ultimateVendorName` | varchar | - |
+| `lineItemNumber` | integer | NOT NULL |
+| *...* | *18 more* | |
 
 ### `po_mappings`
 
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `poLineItemId` | uuid | NOT NULL, FK → poLineItems.id |
+| `costBreakdownId` | uuid | NOT NULL, FK → costBreakdown.id |
+| `mappedAmount` | numeric | NOT NULL |
+| `mappingNotes` | text | - |
+| `mappedBy` | varchar | - |
+| `mappedAt` | timestamp | - |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
+
+### `po_operations`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `poLineItemId` | uuid | NOT NULL, FK → poLineItems.id |
+| `operationType` | varchar | NOT NULL |
+| `status` | varchar | NOT NULL, DEFAULT |
+| `requestedBy` | varchar | NOT NULL |
+| `requestedAt` | timestamp | NOT NULL |
+| `approvedBy` | varchar | - |
+| `approvedAt` | timestamp | - |
+| `completedAt` | timestamp | - |
+| `reason` | text | NOT NULL |
+| `oldValue` | jsonb | - |
+| `newValue` | jsonb | - |
+| `notes` | text | - |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
+
+### `po_transactions`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `poLineItemId` | uuid | NOT NULL, FK → poLineItems.id |
+| `transactionType` | varchar | NOT NULL |
+| `postingDate` | date | NOT NULL |
+| `quantity` | numeric | NOT NULL, DEFAULT |
+| `amount` | numeric | NOT NULL, DEFAULT |
+| `costImpactQty` | numeric | NOT NULL, DEFAULT |
+| `costImpactAmount` | numeric | NOT NULL, DEFAULT |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
+
+### `projects`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `name` | text | NOT NULL |
+| `subBusinessLine` | text | NOT NULL |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
+
+### `sap_reservations`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `reservationNumber` | varchar | NOT NULL |
+| `reservationLineNumber` | varchar | NOT NULL |
+| `reservationRequirementDate` | date | - |
+| `partNumber` | varchar | - |
+| `description` | text | - |
+| `reservationQty` | numeric | - |
+| `reservationValue` | numeric | - |
+| `reservationStatus` | varchar | - |
+| `poNumber` | varchar | - |
+| `poLineNumber` | integer | - |
+| `wbsNumber` | varchar | FK → wbsDetails.wbsNumber |
+| `assetCode` | varchar | - |
+| `assetSerialNumber` | varchar | - |
+| `requester` | varchar | - |
+| *...* | *3 more* | |
+
+### `wbs_details`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `wbsNumber` | varchar | PK |
+| `clientName` | text | - |
+| `subBusinessLine` | text | - |
+
+## Data Profiles
+
+Sample data and types for each CSV file:
+
+### `invoice table.csv`
+
+- **Path**: `data/raw/invoice table.csv`
+- **Rows**: 66956
+
 | Column | Type |
 |--------|------|
-| `id` | uuid |
-| `poLineItemId` | uuid |
-| `costBreakdownId` | uuid |
-| `mappedAmount` | numeric |
-| `mappingNotes` | text |
-| `mappedBy` | varchar |
-| `mappedAt` | timestamp |
-| `createdAt` | timestamp |
-| `updatedAt` | timestamp |
+| `PO Line ID` | object |
+| `Invoice Posting Date` | object |
+| `IR Effective Quantity` | float64 |
 
-### `budget_forecasts`
+### `po line items.csv`
+
+- **Path**: `data/raw/po line items.csv`
+- **Rows**: 64538
 
 | Column | Type |
 |--------|------|
-| `id` | uuid |
-| `forecastVersionId` | uuid |
-| `costBreakdownId` | uuid |
-| `forecastedCost` | numeric |
-| `createdAt` | timestamp |
+| `PO Document Date` | object |
+| `PO Initial Output Date` | object |
+| `SL Sub-Business Line Code (BV Lvl 3)` | object |
+| `Plant Code` | int64 |
+| `PO Approval Status` | object |
+| `PO Account Assignment Category` | object |
+| `PO Account Assignment Category Desc` | object |
+| `PO WBS Element` | object |
+| `PO Number` | int64 |
+| `PO Line` | int64 |
+| *...* | *21 more* |
+
+**Columns with nulls:**
+- `PO Initial Output Date`: 192 nulls
+- `PO Account Assignment Category`: 11334 nulls
+- `PO Account Assignment Category Desc`: 11334 nulls
+- `PO WBS Element`: 40646 nulls
+- `PO Material Number`: 49731 nulls
+- `PO Valuation Class`: 49731 nulls
+- `PO Valuation Class Desc`: 49731 nulls
+- `NIS Level 0 Desc`: 13096 nulls
+- `PO GTS Status`: 106 nulls
+- `PO Current Supplier Promised Date`: 35248 nulls
+
+### `gr table.csv`
+
+- **Path**: `data/raw/gr table.csv`
+- **Rows**: 79425
+
+| Column | Type |
+|--------|------|
+| `PO Line ID` | object |
+| `GR Posting Date` | object |
+| `GR Effective Quantity` | float64 |
+
+### `gr_postings.csv`
+
+- **Path**: `data/intermediate/gr_postings.csv`
+- **Rows**: 55810
+
+| Column | Type |
+|--------|------|
+| `PO Line ID` | object |
+| `GR Posting Date` | object |
+| `GR Effective Quantity` | float64 |
+| `GR Amount` | float64 |
+
+### `ir_postings.csv`
+
+- **Path**: `data/intermediate/ir_postings.csv`
+- **Rows**: 55519
+
+| Column | Type |
+|--------|------|
+| `PO Line ID` | object |
+| `Invoice Posting Date` | object |
+| `IR Effective Quantity` | float64 |
+| `Invoice Amount` | float64 |
+
+### `cost_impact.csv`
+
+- **Path**: `data/intermediate/cost_impact.csv`
+- **Rows**: 109586
+
+| Column | Type |
+|--------|------|
+| `PO Line ID` | object |
+| `Posting Date` | object |
+| `Posting Type` | object |
+| `Posting Qty` | float64 |
+| `Cost Impact Qty` | float64 |
+| `Cost Impact Amount` | float64 |
+
+### `po_line_items.csv`
+
+- **Path**: `data/import-ready/po_line_items.csv`
+- **Rows**: 57163
+
+| Column | Type |
+|--------|------|
+| `po_line_id` | object |
+| `po_number` | int64 |
+| `po_creation_date` | object |
+| `plant_code` | int64 |
+| `location` | object |
+| `sub_business_line` | object |
+| `pr_number` | float64 |
+| `requester` | float64 |
+| `vendor_id` | object |
+| `vendor_name` | object |
+| *...* | *18 more* |
+
+**Columns with nulls:**
+- `pr_number`: 37584 nulls
+- `requester`: 37407 nulls
+- `part_number`: 47632 nulls
+- `account_assignment_category`: 9047 nulls
+- `wbs_number`: 33327 nulls
+- `po_gts_status`: 64 nulls
+
+### `po_transactions.csv`
+
+- **Path**: `data/import-ready/po_transactions.csv`
+- **Rows**: 109586
+
+| Column | Type |
+|--------|------|
+| `po_line_id` | object |
+| `transaction_type` | object |
+| `posting_date` | object |
+| `quantity` | float64 |
+| `cost_impact_qty` | float64 |
+| `cost_impact_amount` | float64 |
+| `amount` | float64 |
+
+## Common Errors & Solutions
+
+### KeyError
+
+**Causes:**
+- Column doesn't exist in DataFrame
+- Previous script in pipeline didn't run
+- Column name has different casing or spacing
+
+**Solutions:**
+- Check column_mappings.py for correct column names
+- Run full pipeline: python3 scripts/pipeline.py
+- Use df.columns.tolist() to see actual column names
+
+### MergeError
+
+**Causes:**
+- Join columns have different dtypes (int vs str)
+- One side has NaN values causing type inference issues
+
+**Solutions:**
+- Ensure both join columns are same type: df['col'] = df['col'].astype(str)
+- Check for nulls before merge: df['col'].isnull().sum()
+
+### FileNotFoundError
+
+**Causes:**
+- Previous pipeline stage didn't run
+- Raw data files missing
+
+**Solutions:**
+- Run earlier stages first: python3 scripts/pipeline.py --stage1
+- Check data/raw/ for source files
+
+### ValueError_date
+
+**Causes:**
+- Date column has inconsistent formats
+- Non-date values in date column
+
+**Solutions:**
+- Use pd.to_datetime with errors='coerce'
+- Check for non-date values: df[pd.to_datetime(df['col'], errors='coerce').isna()]
+
+### SchemaValidationError
+
+**Causes:**
+- Database schema changed but CSV mapping not updated
+- Column dropped in earlier transformation
+
+**Solutions:**
+- Compare column_mappings.py with src/schema/*.ts
+- Run npm run type-check after schema changes
+
+## Transformation Operations
+
+Key pandas operations used in each script:
+
+### `01_po_line_items`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 103 | column_assign | column: `Location` |
+| 114 | column_assign | column: `Expected Delivery Date` |
+| 81 | rename | Renames columns |
+| 89 | map | Maps values using dictionary or function |
+| 94 | map | Maps values using dictionary or function |
+| 102 | astype | Converts column types |
+| 103 | map | Maps values using dictionary or function |
+| 120 | drop | Removes columns or rows |
+
+### `02_gr_postings`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 53 | column_assign | column: `Unit Price` |
+| 64 | column_assign | column: `GR Amount` |
+| 59 | merge | on: `PO Line ID` |
+
+### `03_ir_postings`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 44 | column_assign | column: `Unit Price` |
+| 55 | column_assign | column: `Invoice Amount` |
+| 50 | merge | on: `PO Line ID` |
+
+### `04_enrich_po_line_items`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 32 | column_assign | column: `PO Line Item` |
+| 33 | column_assign | column: `PO Line ID` |
+| 51 | column_assign | column: `PO Line ID` |
+| 54 | column_assign | column: `Requester` |
+| 64 | column_assign | column: `PR Number` |
+| 32 | astype | Converts column types |
+| 61 | apply | Applies function to data |
+| 62 | apply | Applies function to data |
+| 80 | merge | on: `PO Line ID` |
+| 89 | astype | Converts column types |
+
+### `05_calculate_cost_impact`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 102 | column_assign | column: `Posting Type` |
+| 110 | column_assign | column: `Posting Type` |
+| 114 | column_assign | column: `Posting Date` |
+| 118 | column_assign | column: `Unit Price` |
+| 97 | rename | Renames columns |
+| 105 | rename | Renames columns |
+| 114 | to_datetime | Converts to datetime |
+| 115 | sort_values | Sorts by column values |
+| 124 | groupby | by: `PO Line ID` |
+| 195 | sort_values | Sorts by column values |
+
+### `06_prepare_po_line_items`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 64 | column_assign | column: `Total Cost Impact Qty` |
+| 65 | column_assign | column: `Total Cost Impact Amount` |
+| 61 | merge | on: `PO Line ID` |
+| 64 | fillna | Fills null values |
+| 65 | fillna | Fills null values |
+| 87 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
+| 107 | column_assign | column: `open_po_qty` |
+| 109 | column_assign | column: `open_po_value` |
+| 114 | column_assign | column: `fmt_po` |
+| 116 | column_assign | column: `fmt_po` |
+
+### `07_prepare_po_transactions`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 58 | column_assign | column: `amount` |
+| 50 | column_assign | column: `cost_impact_qty` |
+| 52 | column_assign | column: `cost_impact_amount` |
+| 54 | column_assign | column: `quantity` |
+| 44 | boolean_filter | Filters rows based on boolean condition |

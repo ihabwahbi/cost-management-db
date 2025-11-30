@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-30T01:44:54.969511+00:00",
+  "generated_at": "2025-11-30T06:59:20.970601+00:00",
   "project": "cost-management-db",
   "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
   "pipeline_stages": [
@@ -54,7 +54,15 @@
           "args": [
             "filepath"
           ],
-          "line": 34
+          "line": 34,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "filter_valuation_classes",
@@ -62,7 +70,15 @@
           "args": [
             "df"
           ],
-          "line": 42
+          "line": 42,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": true
+          }
         },
         {
           "name": "filter_nis_levels",
@@ -70,7 +86,15 @@
           "args": [
             "df"
           ],
-          "line": 53
+          "line": 53,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "fill_nis_level_for_3021",
@@ -78,7 +102,15 @@
           "args": [
             "df"
           ],
-          "line": 63
+          "line": 63,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": true
+          }
         },
         {
           "name": "transform_nis_column",
@@ -86,7 +118,15 @@
           "args": [
             "df"
           ],
-          "line": 73
+          "line": 73,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": true,
+            "type_conversions": false
+          }
         },
         {
           "name": "map_vendor_names",
@@ -94,7 +134,15 @@
           "args": [
             "df"
           ],
-          "line": 85
+          "line": 85,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "map_location",
@@ -102,7 +150,17 @@
           "args": [
             "df"
           ],
-          "line": 100
+          "line": 100,
+          "semantics": {
+            "modifies_columns": [
+              "Location"
+            ],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": true
+          }
         },
         {
           "name": "consolidate_delivery_dates",
@@ -110,7 +168,17 @@
           "args": [
             "df"
           ],
-          "line": 109
+          "line": 109,
+          "semantics": {
+            "modifies_columns": [
+              "Expected Delivery Date"
+            ],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "save_data",
@@ -119,13 +187,29 @@
             "df",
             "filepath"
           ],
-          "line": 125
+          "line": 125,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 133
+          "line": 133,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         }
       ],
       "imports": [
@@ -133,6 +217,61 @@
         "pathlib",
         "pandas",
         "config.column_mappings"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Location'",
+          "column": "Location",
+          "line": 103,
+          "code_snippet": "df[\"Location\"] = plant_code_str.map(PLANT_CODE_TO_LOCATION)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Expected Delivery Date'",
+          "column": "Expected Delivery Date",
+          "line": 114,
+          "code_snippet": "df[\"Expected Delivery Date\"] = df[promised_col].where("
+        },
+        {
+          "operation": "rename",
+          "description": "Renames columns",
+          "line": 81,
+          "code_snippet": "df = df.rename(columns={\"NIS Level 0 Desc\": \"NIS Line\"})",
+          "column_renames": {
+            "NIS Level 0 Desc": "NIS Line"
+          }
+        },
+        {
+          "operation": "map",
+          "description": "Maps values using dictionary or function",
+          "line": 89,
+          "code_snippet": "df.loc[main_mask, \"Main Vendor Name\"] = df.loc[main_mask, \"Main Vendor ID\"].map(VENDOR_NAME_MAPPING)"
+        },
+        {
+          "operation": "map",
+          "description": "Maps values using dictionary or function",
+          "line": 94,
+          "code_snippet": "df.loc[ultimate_mask, \"Ultimate Vendor Name\"] = df.loc[ultimate_mask, \"Ultimate Vendor Number\"].map(VENDOR_NAME_MAPPING)"
+        },
+        {
+          "operation": "astype",
+          "description": "Converts column types",
+          "line": 102,
+          "code_snippet": "plant_code_str = df[\"Plant Code\"].astype(str)"
+        },
+        {
+          "operation": "map",
+          "description": "Maps values using dictionary or function",
+          "line": 103,
+          "code_snippet": "df[\"Location\"] = plant_code_str.map(PLANT_CODE_TO_LOCATION)"
+        },
+        {
+          "operation": "drop",
+          "description": "Removes columns or rows",
+          "line": 120,
+          "code_snippet": "df = df.drop(columns=[requested_col, promised_col])"
+        }
       ],
       "line_count": 173
     },
@@ -161,7 +300,15 @@
           "args": [
             "filepath"
           ],
-          "line": 26
+          "line": 26,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "filter_zero_quantity",
@@ -169,7 +316,15 @@
           "args": [
             "df"
           ],
-          "line": 34
+          "line": 34,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "calculate_gr_amount",
@@ -177,7 +332,18 @@
           "args": [
             "df"
           ],
-          "line": 43
+          "line": 43,
+          "semantics": {
+            "modifies_columns": [
+              "Unit Price",
+              "GR Amount"
+            ],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": true,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "save_data",
@@ -186,19 +352,59 @@
             "df",
             "filepath"
           ],
-          "line": 72
+          "line": 72,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 80
+          "line": 80,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         }
       ],
       "imports": [
         "sys",
         "pathlib",
         "pandas"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Unit Price'",
+          "column": "Unit Price",
+          "line": 53,
+          "code_snippet": "po_df[\"Unit Price\"] = po_df[\"Purchase Value USD\"] / po_df[\"Ordered Quantity\"]"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'GR Amount'",
+          "column": "GR Amount",
+          "line": 64,
+          "code_snippet": "df[\"GR Amount\"] = (df[\"Unit Price\"] * df[\"GR Effective Quantity\"]).round(2)"
+        },
+        {
+          "operation": "merge",
+          "description": "Joins two DataFrames",
+          "line": 59,
+          "code_snippet": "df = df.merge(unit_price_lookup, on=\"PO Line ID\", how=\"inner\")",
+          "on_column": "PO Line ID",
+          "join_type": "inner"
+        }
       ],
       "line_count": 111
     },
@@ -227,7 +433,15 @@
           "args": [
             "filepath"
           ],
-          "line": 26
+          "line": 26,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "calculate_invoice_amount",
@@ -235,7 +449,18 @@
           "args": [
             "df"
           ],
-          "line": 34
+          "line": 34,
+          "semantics": {
+            "modifies_columns": [
+              "Unit Price",
+              "Invoice Amount"
+            ],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": true,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "save_data",
@@ -244,19 +469,59 @@
             "df",
             "filepath"
           ],
-          "line": 63
+          "line": 63,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 71
+          "line": 71,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         }
       ],
       "imports": [
         "sys",
         "pathlib",
         "pandas"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Unit Price'",
+          "column": "Unit Price",
+          "line": 44,
+          "code_snippet": "po_df[\"Unit Price\"] = po_df[\"Purchase Value USD\"] / po_df[\"Ordered Quantity\"]"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Invoice Amount'",
+          "column": "Invoice Amount",
+          "line": 55,
+          "code_snippet": "df[\"Invoice Amount\"] = (df[\"Unit Price\"] * df[\"IR Effective Quantity\"]).round(2)"
+        },
+        {
+          "operation": "merge",
+          "description": "Joins two DataFrames",
+          "line": 50,
+          "code_snippet": "df = df.merge(unit_price_lookup, on=\"PO Line ID\", how=\"inner\")",
+          "on_column": "PO Line ID",
+          "join_type": "inner"
+        }
       ],
       "line_count": 99
     },
@@ -282,7 +547,18 @@
           "args": [
             "filepath"
           ],
-          "line": 25
+          "line": 25,
+          "semantics": {
+            "modifies_columns": [
+              "PO Line Item",
+              "PO Line ID"
+            ],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": true
+          }
         },
         {
           "name": "load_po_line_items",
@@ -290,7 +566,15 @@
           "args": [
             "filepath"
           ],
-          "line": 38
+          "line": 38,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "extract_enrichment_data",
@@ -298,7 +582,19 @@
           "args": [
             "details"
           ],
-          "line": 46
+          "line": 46,
+          "semantics": {
+            "modifies_columns": [
+              "PO Line ID",
+              "Requester",
+              "PR Number"
+            ],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "enrich_data",
@@ -307,7 +603,15 @@
             "po_df",
             "enrichment"
           ],
-          "line": 73
+          "line": 73,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": true,
+            "renames_columns": false,
+            "type_conversions": true
+          }
         },
         {
           "name": "save_data",
@@ -316,19 +620,122 @@
             "df",
             "filepath"
           ],
-          "line": 101
+          "line": 101,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 108
+          "line": 108,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         }
       ],
       "imports": [
         "sys",
         "pathlib",
         "pandas"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'PO Line Item'",
+          "column": "PO Line Item",
+          "line": 32,
+          "code_snippet": "df['PO Line Item'] = df['PO Line Item'].fillna(0).astype(int)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'PO Line ID'",
+          "column": "PO Line ID",
+          "line": 33,
+          "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'PO Line ID'",
+          "column": "PO Line ID",
+          "line": 51,
+          "code_snippet": "enrichment['PO Line ID'] = details['PO Line ID']"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Requester'",
+          "column": "Requester",
+          "line": 54,
+          "code_snippet": "enrichment['Requester'] = details['ARIBA shopping cart number : created by (Text)']"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'PR Number'",
+          "column": "PR Number",
+          "line": 64,
+          "code_snippet": "enrichment['PR Number'] = pr_number.where(pr_number.notna(), ariba_number)"
+        },
+        {
+          "operation": "astype",
+          "description": "Converts column types",
+          "line": 32,
+          "code_snippet": "df['PO Line Item'] = df['PO Line Item'].fillna(0).astype(int)"
+        },
+        {
+          "operation": "apply",
+          "description": "Applies function to data",
+          "line": 61,
+          "code_snippet": "pr_number = pr_number.apply(lambda x: str(int(x)) if pd.notna(x) else None)"
+        },
+        {
+          "operation": "apply",
+          "description": "Applies function to data",
+          "line": 62,
+          "code_snippet": "ariba_number = ariba_number.apply(lambda x: str(x) if pd.notna(x) else None)"
+        },
+        {
+          "operation": "merge",
+          "description": "Joins two DataFrames",
+          "line": 80,
+          "code_snippet": "enriched = po_df.merge(",
+          "on_column": "PO Line ID",
+          "join_type": "left"
+        },
+        {
+          "operation": "astype",
+          "description": "Converts column types",
+          "line": 89,
+          "code_snippet": "pr_str = enriched['PR Number'].astype(str)"
+        },
+        {
+          "operation": "astype",
+          "description": "Converts column types",
+          "line": 33,
+          "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
+        },
+        {
+          "operation": "fillna",
+          "description": "Fills null values",
+          "line": 32,
+          "code_snippet": "df['PO Line Item'] = df['PO Line Item'].fillna(0).astype(int)"
+        },
+        {
+          "operation": "astype",
+          "description": "Converts column types",
+          "line": 33,
+          "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)"
+        }
       ],
       "line_count": 144
     },
@@ -358,7 +765,15 @@
           "name": "load_data",
           "docstring": "Load all required data files.",
           "args": [],
-          "line": 31
+          "line": 31,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "classify_po_line_items",
@@ -366,7 +781,15 @@
           "args": [
             "po_df"
           ],
-          "line": 47
+          "line": 47,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "calculate_simple_cost_impact",
@@ -375,7 +798,15 @@
             "gr_df",
             "simple_po_ids"
           ],
-          "line": 68
+          "line": 68,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "calculate_complex_cost_impact",
@@ -386,7 +817,19 @@
             "complex_po_ids",
             "po_df"
           ],
-          "line": 87
+          "line": 87,
+          "semantics": {
+            "modifies_columns": [
+              "Posting Type",
+              "Posting Date",
+              "Unit Price"
+            ],
+            "filters_data": true,
+            "aggregates": true,
+            "joins_data": false,
+            "renames_columns": true,
+            "type_conversions": true
+          }
         },
         {
           "name": "save_data",
@@ -395,13 +838,29 @@
             "df",
             "filepath"
           ],
-          "line": 159
+          "line": 159,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 168
+          "line": 168,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         }
       ],
       "imports": [
@@ -409,6 +868,83 @@
         "pathlib",
         "pandas",
         "config.column_mappings"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Posting Type'",
+          "column": "Posting Type",
+          "line": 102,
+          "code_snippet": "complex_gr[\"Posting Type\"] = \"GR\""
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Posting Type'",
+          "column": "Posting Type",
+          "line": 110,
+          "code_snippet": "complex_ir[\"Posting Type\"] = \"IR\""
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Posting Date'",
+          "column": "Posting Date",
+          "line": 114,
+          "code_snippet": "combined[\"Posting Date\"] = pd.to_datetime(combined[\"Posting Date\"])"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Unit Price'",
+          "column": "Unit Price",
+          "line": 118,
+          "code_snippet": "po_df[\"Unit Price\"] = po_df[\"Purchase Value USD\"] / po_df[\"Ordered Quantity\"]"
+        },
+        {
+          "operation": "rename",
+          "description": "Renames columns",
+          "line": 97,
+          "code_snippet": "complex_gr = complex_gr.rename(columns={",
+          "column_renames": {
+            "GR Posting Date": "Posting Date",
+            "GR Effective Quantity": "Posting Qty",
+            "GR Amount": "Posting Amount"
+          }
+        },
+        {
+          "operation": "rename",
+          "description": "Renames columns",
+          "line": 105,
+          "code_snippet": "complex_ir = complex_ir.rename(columns={",
+          "column_renames": {
+            "Invoice Posting Date": "Posting Date",
+            "IR Effective Quantity": "Posting Qty",
+            "Invoice Amount": "Posting Amount"
+          }
+        },
+        {
+          "operation": "to_datetime",
+          "description": "Converts to datetime",
+          "line": 114,
+          "code_snippet": "combined[\"Posting Date\"] = pd.to_datetime(combined[\"Posting Date\"])"
+        },
+        {
+          "operation": "sort_values",
+          "description": "Sorts by column values",
+          "line": 115,
+          "code_snippet": "combined = combined.sort_values([\"PO Line ID\", \"Posting Date\", \"Posting Type\"])"
+        },
+        {
+          "operation": "groupby",
+          "description": "Groups data for aggregation",
+          "line": 124,
+          "code_snippet": "for po_line_id, group in combined.groupby(\"PO Line ID\"):",
+          "group_column": "PO Line ID"
+        },
+        {
+          "operation": "sort_values",
+          "description": "Sorts by column values",
+          "line": 195,
+          "code_snippet": "all_impact = all_impact.sort_values([\"PO Line ID\", \"Posting Date\"])"
+        }
       ],
       "line_count": 206
     },
@@ -433,7 +969,15 @@
           "name": "load_data",
           "docstring": "Load intermediate data files.",
           "args": [],
-          "line": 30
+          "line": 30,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "calculate_open_values",
@@ -442,7 +986,18 @@
             "po_df",
             "cost_df"
           ],
-          "line": 43
+          "line": 43,
+          "semantics": {
+            "modifies_columns": [
+              "Total Cost Impact Qty",
+              "Total Cost Impact Amount"
+            ],
+            "filters_data": true,
+            "aggregates": true,
+            "joins_data": true,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "map_columns",
@@ -450,7 +1005,19 @@
           "args": [
             "po_df"
           ],
-          "line": 92
+          "line": 92,
+          "semantics": {
+            "modifies_columns": [
+              "open_po_qty",
+              "open_po_value",
+              "fmt_po"
+            ],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "validate_output",
@@ -458,7 +1025,15 @@
           "args": [
             "df"
           ],
-          "line": 122
+          "line": 122,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "save_data",
@@ -467,13 +1042,29 @@
             "df",
             "filepath"
           ],
-          "line": 141
+          "line": 141,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 150
+          "line": 150,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         }
       ],
       "imports": [
@@ -481,6 +1072,93 @@
         "pathlib",
         "pandas",
         "config.column_mappings"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Total Cost Impact Qty'",
+          "column": "Total Cost Impact Qty",
+          "line": 64,
+          "code_snippet": "po_df[\"Total Cost Impact Qty\"] = po_df[\"Total Cost Impact Qty\"].fillna(0)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'Total Cost Impact Amount'",
+          "column": "Total Cost Impact Amount",
+          "line": 65,
+          "code_snippet": "po_df[\"Total Cost Impact Amount\"] = po_df[\"Total Cost Impact Amount\"].fillna(0)"
+        },
+        {
+          "operation": "merge",
+          "description": "Joins two DataFrames",
+          "line": 61,
+          "code_snippet": "po_df = po_df.merge(cost_agg, on=\"PO Line ID\", how=\"left\")",
+          "on_column": "PO Line ID",
+          "join_type": "left"
+        },
+        {
+          "operation": "fillna",
+          "description": "Fills null values",
+          "line": 64,
+          "code_snippet": "po_df[\"Total Cost Impact Qty\"] = po_df[\"Total Cost Impact Qty\"].fillna(0)"
+        },
+        {
+          "operation": "fillna",
+          "description": "Fills null values",
+          "line": 65,
+          "code_snippet": "po_df[\"Total Cost Impact Amount\"] = po_df[\"Total Cost Impact Amount\"].fillna(0)"
+        },
+        {
+          "operation": "drop",
+          "description": "Removes columns or rows",
+          "line": 87,
+          "code_snippet": "po_df = po_df.drop(columns=[\"Total Cost Impact Qty\", \"Total Cost Impact Amount\"])",
+          "dropped_columns": [
+            "Total Cost Impact Qty",
+            "Total Cost Impact Amount"
+          ]
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'open_po_qty'",
+          "column": "open_po_qty",
+          "line": 107,
+          "code_snippet": "output_df[\"open_po_qty\"] = po_df[\"open_po_qty\"].round(4)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'open_po_value'",
+          "column": "open_po_value",
+          "line": 109,
+          "code_snippet": "output_df[\"open_po_value\"] = po_df[\"open_po_value\"].round(2)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'fmt_po'",
+          "column": "fmt_po",
+          "line": 114,
+          "code_snippet": "output_df[\"fmt_po\"] = po_df[vendor_category_col] == \"OPS\""
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'fmt_po'",
+          "column": "fmt_po",
+          "line": 116,
+          "code_snippet": "output_df[\"fmt_po\"] = False"
+        },
+        {
+          "operation": "boolean_filter",
+          "description": "Filters rows based on boolean condition",
+          "line": 101,
+          "code_snippet": "output_df[db_col] = po_df[csv_col]"
+        },
+        {
+          "operation": "groupby",
+          "description": "Groups data for aggregation",
+          "line": 54,
+          "code_snippet": "cost_agg = cost_df.groupby(\"PO Line ID\").agg({",
+          "group_column": "PO Line ID"
+        }
       ],
       "line_count": 185
     },
@@ -503,7 +1181,15 @@
           "args": [
             "filepath"
           ],
-          "line": 28
+          "line": 28,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "map_columns",
@@ -511,7 +1197,20 @@
           "args": [
             "df"
           ],
-          "line": 36
+          "line": 36,
+          "semantics": {
+            "modifies_columns": [
+              "amount",
+              "cost_impact_qty",
+              "cost_impact_amount",
+              "quantity"
+            ],
+            "filters_data": true,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "validate_output",
@@ -519,7 +1218,15 @@
           "args": [
             "df"
           ],
-          "line": 64
+          "line": 64,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "save_data",
@@ -528,13 +1235,29 @@
             "df",
             "filepath"
           ],
-          "line": 85
+          "line": 85,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 94
+          "line": 94,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         }
       ],
       "imports": [
@@ -542,6 +1265,42 @@
         "pathlib",
         "pandas",
         "config.column_mappings"
+      ],
+      "pandas_operations": [
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'amount'",
+          "column": "amount",
+          "line": 58,
+          "code_snippet": "output_df[\"amount\"] = output_df[\"cost_impact_amount\"]"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'cost_impact_qty'",
+          "column": "cost_impact_qty",
+          "line": 50,
+          "code_snippet": "output_df[\"cost_impact_qty\"] = output_df[\"cost_impact_qty\"].round(4)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'cost_impact_amount'",
+          "column": "cost_impact_amount",
+          "line": 52,
+          "code_snippet": "output_df[\"cost_impact_amount\"] = output_df[\"cost_impact_amount\"].round(2)"
+        },
+        {
+          "operation": "column_assign",
+          "description": "Creates/modifies column 'quantity'",
+          "column": "quantity",
+          "line": 54,
+          "code_snippet": "output_df[\"quantity\"] = output_df[\"quantity\"].round(4)"
+        },
+        {
+          "operation": "boolean_filter",
+          "description": "Filters rows based on boolean condition",
+          "line": 44,
+          "code_snippet": "output_df[db_col] = df[csv_col]"
+        }
       ],
       "line_count": 123
     },
@@ -561,7 +1320,15 @@
             "script_path",
             "description"
           ],
-          "line": 52
+          "line": 52,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "run_stage",
@@ -570,7 +1337,15 @@
             "stage_name",
             "scripts"
           ],
-          "line": 71
+          "line": 71,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "run_pipeline",
@@ -578,13 +1353,29 @@
           "args": [
             "max_stage"
           ],
-          "line": 89
+          "line": 89,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         },
         {
           "name": "main",
           "docstring": null,
           "args": [],
-          "line": 134
+          "line": 134,
+          "semantics": {
+            "modifies_columns": [],
+            "filters_data": false,
+            "aggregates": false,
+            "joins_data": false,
+            "renames_columns": false,
+            "type_conversions": false
+          }
         }
       ],
       "imports": [
@@ -594,6 +1385,7 @@
         "pathlib",
         "datetime"
       ],
+      "pandas_operations": [],
       "line_count": 167
     }
   ],
@@ -673,146 +1465,127 @@
   },
   "schema_tables": [
     {
-      "name": "po_transactions",
-      "file": "po-transactions.ts",
+      "name": "budget_forecasts",
+      "file": "budget-forecasts.ts",
       "columns": [
         {
           "name": "id",
-          "type": "uuid"
+          "type": "uuid",
+          "primary_key": true
         },
         {
-          "name": "poLineItemId",
-          "type": "uuid"
+          "name": "forecastVersionId",
+          "type": "uuid",
+          "not_null": true,
+          "references": "forecastVersions.id"
         },
         {
-          "name": "transactionType",
-          "type": "varchar"
+          "name": "costBreakdownId",
+          "type": "uuid",
+          "not_null": true,
+          "references": "costBreakdown.id"
         },
         {
-          "name": "postingDate",
-          "type": "date"
-        },
-        {
-          "name": "quantity",
-          "type": "numeric"
-        },
-        {
-          "name": "amount",
-          "type": "numeric"
-        },
-        {
-          "name": "costImpactQty",
-          "type": "numeric"
-        },
-        {
-          "name": "costImpactAmount",
-          "type": "numeric"
+          "name": "forecastedCost",
+          "type": "numeric",
+          "not_null": true,
+          "has_default": true
         },
         {
           "name": "createdAt",
           "type": "timestamp"
-        },
-        {
-          "name": "updatedAt",
-          "type": "timestamp"
         }
-      ]
+      ],
+      "extraction_method": "ts-ast"
     },
     {
-      "name": "sap_reservations",
-      "file": "sap-reservations.ts",
+      "name": "cost_breakdown",
+      "file": "cost-breakdown.ts",
       "columns": [
         {
           "name": "id",
-          "type": "uuid"
+          "type": "uuid",
+          "primary_key": true
         },
         {
-          "name": "reservationNumber",
-          "type": "varchar"
-        },
-        {
-          "name": "reservationLineNumber",
-          "type": "varchar"
-        },
-        {
-          "name": "reservationRequirementDate",
-          "type": "date"
-        },
-        {
-          "name": "partNumber",
-          "type": "varchar"
-        },
-        {
-          "name": "description",
-          "type": "text"
-        },
-        {
-          "name": "reservationQty",
-          "type": "numeric"
-        },
-        {
-          "name": "reservationValue",
-          "type": "numeric"
-        },
-        {
-          "name": "reservationStatus",
-          "type": "varchar"
-        },
-        {
-          "name": "poNumber",
-          "type": "varchar"
-        },
-        {
-          "name": "poLineNumber",
-          "type": "integer"
-        },
-        {
-          "name": "wbsNumber",
-          "type": "varchar"
-        },
-        {
-          "name": "assetCode",
-          "type": "varchar"
-        },
-        {
-          "name": "assetSerialNumber",
-          "type": "varchar"
-        },
-        {
-          "name": "requester",
-          "type": "varchar"
-        },
-        {
-          "name": "createdAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "updatedAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "poLineItemId",
-          "type": "uuid"
-        }
-      ]
-    },
-    {
-      "name": "wbs_details",
-      "file": "wbs-details.ts",
-      "columns": [
-        {
-          "name": "wbsNumber",
-          "type": "varchar"
-        },
-        {
-          "name": "clientName",
-          "type": "text"
+          "name": "projectId",
+          "type": "uuid",
+          "not_null": true,
+          "references": "projects.id"
         },
         {
           "name": "subBusinessLine",
-          "type": "text"
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "costLine",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "spendType",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "spendSubCategory",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "budgetCost",
+          "type": "numeric",
+          "not_null": true,
+          "has_default": true
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
         }
-      ]
+      ],
+      "extraction_method": "ts-ast"
+    },
+    {
+      "name": "forecast_versions",
+      "file": "forecast-versions.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "primary_key": true
+        },
+        {
+          "name": "projectId",
+          "type": "uuid",
+          "not_null": true,
+          "references": "projects.id"
+        },
+        {
+          "name": "versionNumber",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "reasonForChange",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "createdBy",
+          "type": "text",
+          "has_default": true
+        }
+      ],
+      "extraction_method": "ts-ast"
     },
     {
       "name": "po_line_items",
@@ -820,15 +1593,19 @@
       "columns": [
         {
           "name": "id",
-          "type": "uuid"
+          "type": "uuid",
+          "primary_key": true
         },
         {
           "name": "poLineId",
-          "type": "varchar"
+          "type": "varchar",
+          "not_null": true,
+          "unique": true
         },
         {
           "name": "poNumber",
-          "type": "varchar"
+          "type": "varchar",
+          "not_null": true
         },
         {
           "name": "poCreationDate",
@@ -876,7 +1653,8 @@
         },
         {
           "name": "lineItemNumber",
-          "type": "integer"
+          "type": "integer",
+          "not_null": true
         },
         {
           "name": "partNumber",
@@ -888,7 +1666,8 @@
         },
         {
           "name": "orderedQty",
-          "type": "numeric"
+          "type": "numeric",
+          "not_null": true
         },
         {
           "name": "orderUnit",
@@ -896,7 +1675,8 @@
         },
         {
           "name": "poValueUsd",
-          "type": "numeric"
+          "type": "numeric",
+          "not_null": true
         },
         {
           "name": "accountAssignmentCategory",
@@ -908,7 +1688,8 @@
         },
         {
           "name": "wbsNumber",
-          "type": "varchar"
+          "type": "varchar",
+          "references": "wbsDetails.wbsNumber"
         },
         {
           "name": "assetCode",
@@ -932,7 +1713,9 @@
         },
         {
           "name": "fmtPo",
-          "type": "boolean"
+          "type": "boolean",
+          "not_null": true,
+          "has_default": true
         },
         {
           "name": "openPoQty",
@@ -950,163 +1733,8 @@
           "name": "updatedAt",
           "type": "timestamp"
         }
-      ]
-    },
-    {
-      "name": "projects",
-      "file": "projects.ts",
-      "columns": [
-        {
-          "name": "id",
-          "type": "uuid"
-        },
-        {
-          "name": "name",
-          "type": "text"
-        },
-        {
-          "name": "subBusinessLine",
-          "type": "text"
-        },
-        {
-          "name": "createdAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "updatedAt",
-          "type": "timestamp"
-        }
-      ]
-    },
-    {
-      "name": "po_operations",
-      "file": "po-operations.ts",
-      "columns": [
-        {
-          "name": "id",
-          "type": "uuid"
-        },
-        {
-          "name": "poLineItemId",
-          "type": "uuid"
-        },
-        {
-          "name": "operationType",
-          "type": "varchar"
-        },
-        {
-          "name": "status",
-          "type": "varchar"
-        },
-        {
-          "name": "requestedBy",
-          "type": "varchar"
-        },
-        {
-          "name": "requestedAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "approvedBy",
-          "type": "varchar"
-        },
-        {
-          "name": "approvedAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "completedAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "reason",
-          "type": "text"
-        },
-        {
-          "name": "notes",
-          "type": "text"
-        },
-        {
-          "name": "createdAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "updatedAt",
-          "type": "timestamp"
-        }
-      ]
-    },
-    {
-      "name": "cost_breakdown",
-      "file": "cost-breakdown.ts",
-      "columns": [
-        {
-          "name": "id",
-          "type": "uuid"
-        },
-        {
-          "name": "projectId",
-          "type": "uuid"
-        },
-        {
-          "name": "subBusinessLine",
-          "type": "text"
-        },
-        {
-          "name": "costLine",
-          "type": "text"
-        },
-        {
-          "name": "spendType",
-          "type": "text"
-        },
-        {
-          "name": "spendSubCategory",
-          "type": "text"
-        },
-        {
-          "name": "budgetCost",
-          "type": "numeric"
-        },
-        {
-          "name": "createdAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "updatedAt",
-          "type": "timestamp"
-        }
-      ]
-    },
-    {
-      "name": "forecast_versions",
-      "file": "forecast-versions.ts",
-      "columns": [
-        {
-          "name": "id",
-          "type": "uuid"
-        },
-        {
-          "name": "projectId",
-          "type": "uuid"
-        },
-        {
-          "name": "versionNumber",
-          "type": "integer"
-        },
-        {
-          "name": "reasonForChange",
-          "type": "text"
-        },
-        {
-          "name": "createdAt",
-          "type": "timestamp"
-        },
-        {
-          "name": "createdBy",
-          "type": "text"
-        }
-      ]
+      ],
+      "extraction_method": "ts-ast"
     },
     {
       "name": "po_mappings",
@@ -1114,19 +1742,25 @@
       "columns": [
         {
           "name": "id",
-          "type": "uuid"
+          "type": "uuid",
+          "primary_key": true
         },
         {
           "name": "poLineItemId",
-          "type": "uuid"
+          "type": "uuid",
+          "not_null": true,
+          "references": "poLineItems.id"
         },
         {
           "name": "costBreakdownId",
-          "type": "uuid"
+          "type": "uuid",
+          "not_null": true,
+          "references": "costBreakdown.id"
         },
         {
           "name": "mappedAmount",
-          "type": "numeric"
+          "type": "numeric",
+          "not_null": true
         },
         {
           "name": "mappingNotes",
@@ -1148,33 +1782,278 @@
           "name": "updatedAt",
           "type": "timestamp"
         }
-      ]
+      ],
+      "extraction_method": "ts-ast"
     },
     {
-      "name": "budget_forecasts",
-      "file": "budget-forecasts.ts",
+      "name": "po_operations",
+      "file": "po-operations.ts",
       "columns": [
         {
           "name": "id",
-          "type": "uuid"
+          "type": "uuid",
+          "primary_key": true
         },
         {
-          "name": "forecastVersionId",
-          "type": "uuid"
+          "name": "poLineItemId",
+          "type": "uuid",
+          "not_null": true,
+          "references": "poLineItems.id"
         },
         {
-          "name": "costBreakdownId",
-          "type": "uuid"
+          "name": "operationType",
+          "type": "varchar",
+          "not_null": true
         },
         {
-          "name": "forecastedCost",
-          "type": "numeric"
+          "name": "status",
+          "type": "varchar",
+          "not_null": true,
+          "has_default": true
+        },
+        {
+          "name": "requestedBy",
+          "type": "varchar",
+          "not_null": true
+        },
+        {
+          "name": "requestedAt",
+          "type": "timestamp",
+          "not_null": true
+        },
+        {
+          "name": "approvedBy",
+          "type": "varchar"
+        },
+        {
+          "name": "approvedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "completedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "oldValue",
+          "type": "jsonb"
+        },
+        {
+          "name": "newValue",
+          "type": "jsonb"
+        },
+        {
+          "name": "notes",
+          "type": "text"
         },
         {
           "name": "createdAt",
           "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
         }
-      ]
+      ],
+      "extraction_method": "ts-ast"
+    },
+    {
+      "name": "po_transactions",
+      "file": "po-transactions.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "primary_key": true
+        },
+        {
+          "name": "poLineItemId",
+          "type": "uuid",
+          "not_null": true,
+          "references": "poLineItems.id"
+        },
+        {
+          "name": "transactionType",
+          "type": "varchar",
+          "not_null": true
+        },
+        {
+          "name": "postingDate",
+          "type": "date",
+          "not_null": true
+        },
+        {
+          "name": "quantity",
+          "type": "numeric",
+          "not_null": true,
+          "has_default": true
+        },
+        {
+          "name": "amount",
+          "type": "numeric",
+          "not_null": true,
+          "has_default": true
+        },
+        {
+          "name": "costImpactQty",
+          "type": "numeric",
+          "not_null": true,
+          "has_default": true
+        },
+        {
+          "name": "costImpactAmount",
+          "type": "numeric",
+          "not_null": true,
+          "has_default": true
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ],
+      "extraction_method": "ts-ast"
+    },
+    {
+      "name": "projects",
+      "file": "projects.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "primary_key": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "subBusinessLine",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ],
+      "extraction_method": "ts-ast"
+    },
+    {
+      "name": "sap_reservations",
+      "file": "sap-reservations.ts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "primary_key": true
+        },
+        {
+          "name": "reservationNumber",
+          "type": "varchar",
+          "not_null": true
+        },
+        {
+          "name": "reservationLineNumber",
+          "type": "varchar",
+          "not_null": true
+        },
+        {
+          "name": "reservationRequirementDate",
+          "type": "date"
+        },
+        {
+          "name": "partNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "reservationQty",
+          "type": "numeric"
+        },
+        {
+          "name": "reservationValue",
+          "type": "numeric"
+        },
+        {
+          "name": "reservationStatus",
+          "type": "varchar"
+        },
+        {
+          "name": "poNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "poLineNumber",
+          "type": "integer"
+        },
+        {
+          "name": "wbsNumber",
+          "type": "varchar",
+          "references": "wbsDetails.wbsNumber"
+        },
+        {
+          "name": "assetCode",
+          "type": "varchar"
+        },
+        {
+          "name": "assetSerialNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "requester",
+          "type": "varchar"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "poLineItemId",
+          "type": "uuid",
+          "references": "poLineItems.id"
+        }
+      ],
+      "extraction_method": "ts-ast"
+    },
+    {
+      "name": "wbs_details",
+      "file": "wbs-details.ts",
+      "columns": [
+        {
+          "name": "wbsNumber",
+          "type": "varchar",
+          "primary_key": true
+        },
+        {
+          "name": "clientName",
+          "type": "text"
+        },
+        {
+          "name": "subBusinessLine",
+          "type": "text"
+        }
+      ],
+      "extraction_method": "ts-ast"
     }
   ],
   "data_files": {
@@ -1194,6 +2073,431 @@
       "po_transactions.csv",
       "po_line_items.csv"
     ]
+  },
+  "data_profiles": {
+    "invoice table.csv": {
+      "path": "data/raw/invoice table.csv",
+      "columns": [
+        "PO Line ID",
+        "Invoice Posting Date",
+        "IR Effective Quantity"
+      ],
+      "dtypes": {
+        "PO Line ID": "object",
+        "Invoice Posting Date": "object",
+        "IR Effective Quantity": "float64"
+      },
+      "sample_row": {
+        "PO Line ID": "4581717940-1",
+        "Invoice Posting Date": "2023-06-06 00:00:00.000",
+        "IR Effective Quantity": 2.0
+      },
+      "row_count": 66956,
+      "null_counts": {}
+    },
+    "po line items.csv": {
+      "path": "data/raw/po line items.csv",
+      "columns": [
+        "PO Document Date",
+        "PO Initial Output Date",
+        "SL Sub-Business Line Code (BV Lvl 3)",
+        "Plant Code",
+        "PO Approval Status",
+        "PO Account Assignment Category",
+        "PO Account Assignment Category Desc",
+        "PO WBS Element",
+        "PO Number",
+        "PO Line",
+        "PO Line ID",
+        "PO Material Number",
+        "PO Material description",
+        "PO Order Unit",
+        "PO Valuation Class",
+        "PO Valuation Class Desc",
+        "NIS Level 0 Desc",
+        "PO Invoice Status",
+        "PO Receipt Status",
+        "PO Delivery Completed Indicator",
+        "Main Vendor SLB Vendor Category",
+        "Main Vendor ID",
+        "Main Vendor Name",
+        "Ultimate Vendor Number",
+        "Ultimate Vendor Name",
+        "PO GTS Status",
+        "PO Current Supplier Requested Delivery Date",
+        "PO Current Supplier Promised Date",
+        "Ordered Quantity",
+        "Purchase Value USD",
+        "Open Qty"
+      ],
+      "dtypes": {
+        "PO Document Date": "object",
+        "PO Initial Output Date": "object",
+        "SL Sub-Business Line Code (BV Lvl 3)": "object",
+        "Plant Code": "int64",
+        "PO Approval Status": "object",
+        "PO Account Assignment Category": "object",
+        "PO Account Assignment Category Desc": "object",
+        "PO WBS Element": "object",
+        "PO Number": "int64",
+        "PO Line": "int64",
+        "PO Line ID": "object",
+        "PO Material Number": "object",
+        "PO Material description": "object",
+        "PO Order Unit": "object",
+        "PO Valuation Class": "float64",
+        "PO Valuation Class Desc": "object",
+        "NIS Level 0 Desc": "object",
+        "PO Invoice Status": "object",
+        "PO Receipt Status": "object",
+        "PO Delivery Completed Indicator": "object",
+        "Main Vendor SLB Vendor Category": "object",
+        "Main Vendor ID": "object",
+        "Main Vendor Name": "object",
+        "Ultimate Vendor Number": "object",
+        "Ultimate Vendor Name": "object",
+        "PO GTS Status": "object",
+        "PO Current Supplier Requested Delivery Date": "object",
+        "PO Current Supplier Promised Date": "object",
+        "Ordered Quantity": "float64",
+        "Purchase Value USD": "float64",
+        "Open Qty": "float64"
+      },
+      "sample_row": {
+        "PO Document Date": "2022-12-01 00:00:00.000",
+        "PO Initial Output Date": "2022-12-01 00:00:00.000",
+        "SL Sub-Business Line Code (BV Lvl 3)": "DHT",
+        "Plant Code": 3606,
+        "PO Approval Status": "Approved",
+        "PO Account Assignment Category": "A",
+        "PO Account Assignment Category Desc": "SLB Asset Transfer",
+        "PO WBS Element": NaN,
+        "PO Number": 4581848878,
+        "PO Line": 1,
+        "PO Line ID": "4581848878-1",
+        "PO Material Number": "H710794",
+        "PO Material description": "SJB-FB; JOINT, SAFETY, BOWEN, 15K, H2S,~",
+        "PO Order Unit": "EA",
+        "PO Valuation Class": 7800.0,
+        "PO Valuation Class Desc": "Asset",
+        "NIS Level 0 Desc": NaN,
+        "PO Invoice Status": "Partially Paid",
+        "PO Receipt Status": "CLOSED PO",
+        "PO Delivery Completed Indicator": "Yes",
+        "Main Vendor SLB Vendor Category": "OPS",
+        "Main Vendor ID": "P3791",
+        "Main Vendor Name": "CIKARANG, 3791",
+        "Ultimate Vendor Number": "P3791",
+        "Ultimate Vendor Name": "CIKARANG, 3791",
+        "PO GTS Status": "PO Not blocked by GTS",
+        "PO Current Supplier Requested Delivery Date": "2022-12-09 00:00:00.000",
+        "PO Current Supplier Promised Date": "2022-12-12 00:00:00.000",
+        "Ordered Quantity": 1.0,
+        "Purchase Value USD": 9819.96,
+        "Open Qty": 0.0
+      },
+      "row_count": 64538,
+      "null_counts": {
+        "PO Initial Output Date": 192,
+        "PO Account Assignment Category": 11334,
+        "PO Account Assignment Category Desc": 11334,
+        "PO WBS Element": 40646,
+        "PO Material Number": 49731,
+        "PO Valuation Class": 49731,
+        "PO Valuation Class Desc": 49731,
+        "NIS Level 0 Desc": 13096,
+        "PO GTS Status": 106,
+        "PO Current Supplier Promised Date": 35248
+      }
+    },
+    "gr table.csv": {
+      "path": "data/raw/gr table.csv",
+      "columns": [
+        "PO Line ID",
+        "GR Posting Date",
+        "GR Effective Quantity"
+      ],
+      "dtypes": {
+        "PO Line ID": "object",
+        "GR Posting Date": "object",
+        "GR Effective Quantity": "float64"
+      },
+      "sample_row": {
+        "PO Line ID": "4581717940-1",
+        "GR Posting Date": "2023-06-06 00:00:00.000",
+        "GR Effective Quantity": 0.0
+      },
+      "row_count": 79425,
+      "null_counts": {}
+    },
+    "gr_postings.csv": {
+      "path": "data/intermediate/gr_postings.csv",
+      "columns": [
+        "PO Line ID",
+        "GR Posting Date",
+        "GR Effective Quantity",
+        "GR Amount"
+      ],
+      "dtypes": {
+        "PO Line ID": "object",
+        "GR Posting Date": "object",
+        "GR Effective Quantity": "float64",
+        "GR Amount": "float64"
+      },
+      "sample_row": {
+        "PO Line ID": "4581850069-1",
+        "GR Posting Date": "2023-01-06 00:00:00.000",
+        "GR Effective Quantity": 1.0,
+        "GR Amount": 1489.44
+      },
+      "row_count": 55810,
+      "null_counts": {}
+    },
+    "ir_postings.csv": {
+      "path": "data/intermediate/ir_postings.csv",
+      "columns": [
+        "PO Line ID",
+        "Invoice Posting Date",
+        "IR Effective Quantity",
+        "Invoice Amount"
+      ],
+      "dtypes": {
+        "PO Line ID": "object",
+        "Invoice Posting Date": "object",
+        "IR Effective Quantity": "float64",
+        "Invoice Amount": "float64"
+      },
+      "sample_row": {
+        "PO Line ID": "4581850069-1",
+        "Invoice Posting Date": "2022-12-26 00:00:00.000",
+        "IR Effective Quantity": 1.0,
+        "Invoice Amount": 1489.44
+      },
+      "row_count": 55519,
+      "null_counts": {}
+    },
+    "cost_impact.csv": {
+      "path": "data/intermediate/cost_impact.csv",
+      "columns": [
+        "PO Line ID",
+        "Posting Date",
+        "Posting Type",
+        "Posting Qty",
+        "Cost Impact Qty",
+        "Cost Impact Amount"
+      ],
+      "dtypes": {
+        "PO Line ID": "object",
+        "Posting Date": "object",
+        "Posting Type": "object",
+        "Posting Qty": "float64",
+        "Cost Impact Qty": "float64",
+        "Cost Impact Amount": "float64"
+      },
+      "sample_row": {
+        "PO Line ID": "4581850069-1",
+        "Posting Date": "2022-12-26 00:00:00",
+        "Posting Type": "IR",
+        "Posting Qty": 1.0,
+        "Cost Impact Qty": 1.0,
+        "Cost Impact Amount": 1489.44
+      },
+      "row_count": 109586,
+      "null_counts": {}
+    },
+    "po_line_items.csv": {
+      "path": "data/import-ready/po_line_items.csv",
+      "columns": [
+        "po_line_id",
+        "po_number",
+        "po_creation_date",
+        "plant_code",
+        "location",
+        "sub_business_line",
+        "pr_number",
+        "requester",
+        "vendor_id",
+        "vendor_name",
+        "vendor_category",
+        "ultimate_vendor_name",
+        "line_item_number",
+        "part_number",
+        "description",
+        "ordered_qty",
+        "order_unit",
+        "po_value_usd",
+        "account_assignment_category",
+        "nis_line",
+        "wbs_number",
+        "expected_delivery_date",
+        "po_approval_status",
+        "po_receipt_status",
+        "po_gts_status",
+        "open_po_qty",
+        "open_po_value",
+        "fmt_po"
+      ],
+      "dtypes": {
+        "po_line_id": "object",
+        "po_number": "int64",
+        "po_creation_date": "object",
+        "plant_code": "int64",
+        "location": "object",
+        "sub_business_line": "object",
+        "pr_number": "float64",
+        "requester": "float64",
+        "vendor_id": "object",
+        "vendor_name": "object",
+        "vendor_category": "object",
+        "ultimate_vendor_name": "object",
+        "line_item_number": "int64",
+        "part_number": "object",
+        "description": "object",
+        "ordered_qty": "float64",
+        "order_unit": "object",
+        "po_value_usd": "float64",
+        "account_assignment_category": "object",
+        "nis_line": "object",
+        "wbs_number": "object",
+        "expected_delivery_date": "object",
+        "po_approval_status": "object",
+        "po_receipt_status": "object",
+        "po_gts_status": "object",
+        "open_po_qty": "float64",
+        "open_po_value": "float64",
+        "fmt_po": "bool"
+      },
+      "sample_row": {
+        "po_line_id": "4791459949-10001",
+        "po_number": 4791459949,
+        "po_creation_date": "2022-12-01 00:00:00.000",
+        "plant_code": 3606,
+        "location": "Jandakot",
+        "sub_business_line": "TSW",
+        "pr_number": NaN,
+        "requester": NaN,
+        "vendor_id": "1000038084",
+        "vendor_name": "BULLIVANTS PTY LIMITED",
+        "vendor_category": "3rd Party",
+        "ultimate_vendor_name": "BULLIVANTS PTY LIMITED",
+        "line_item_number": 10001,
+        "part_number": NaN,
+        "description": "Service Item",
+        "ordered_qty": 1.0,
+        "order_unit": "AU",
+        "po_value_usd": 1529.17,
+        "account_assignment_category": "K",
+        "nis_line": "Materials and Supplies",
+        "wbs_number": NaN,
+        "expected_delivery_date": "2022-12-15 00:00:00.000",
+        "po_approval_status": "Approved",
+        "po_receipt_status": "CLOSED PO",
+        "po_gts_status": "PO Not blocked by GTS",
+        "open_po_qty": 0.0,
+        "open_po_value": 0.0,
+        "fmt_po": false
+      },
+      "row_count": 57163,
+      "null_counts": {
+        "pr_number": 37584,
+        "requester": 37407,
+        "part_number": 47632,
+        "account_assignment_category": 9047,
+        "wbs_number": 33327,
+        "po_gts_status": 64
+      }
+    },
+    "po_transactions.csv": {
+      "path": "data/import-ready/po_transactions.csv",
+      "columns": [
+        "po_line_id",
+        "transaction_type",
+        "posting_date",
+        "quantity",
+        "cost_impact_qty",
+        "cost_impact_amount",
+        "amount"
+      ],
+      "dtypes": {
+        "po_line_id": "object",
+        "transaction_type": "object",
+        "posting_date": "object",
+        "quantity": "float64",
+        "cost_impact_qty": "float64",
+        "cost_impact_amount": "float64",
+        "amount": "float64"
+      },
+      "sample_row": {
+        "po_line_id": "4581850069-1",
+        "transaction_type": "IR",
+        "posting_date": "2022-12-26 00:00:00",
+        "quantity": 1.0,
+        "cost_impact_qty": 1.0,
+        "cost_impact_amount": 1489.44,
+        "amount": 1489.44
+      },
+      "row_count": 109586,
+      "null_counts": {}
+    }
+  },
+  "common_errors": {
+    "KeyError": {
+      "pattern": "KeyError: '(.+)'",
+      "causes": [
+        "Column doesn't exist in DataFrame",
+        "Previous script in pipeline didn't run",
+        "Column name has different casing or spacing"
+      ],
+      "solutions": [
+        "Check column_mappings.py for correct column names",
+        "Run full pipeline: python3 scripts/pipeline.py",
+        "Use df.columns.tolist() to see actual column names"
+      ]
+    },
+    "MergeError": {
+      "pattern": "merge.*dtype",
+      "causes": [
+        "Join columns have different dtypes (int vs str)",
+        "One side has NaN values causing type inference issues"
+      ],
+      "solutions": [
+        "Ensure both join columns are same type: df['col'] = df['col'].astype(str)",
+        "Check for nulls before merge: df['col'].isnull().sum()"
+      ]
+    },
+    "FileNotFoundError": {
+      "pattern": "No such file or directory.*data/",
+      "causes": [
+        "Previous pipeline stage didn't run",
+        "Raw data files missing"
+      ],
+      "solutions": [
+        "Run earlier stages first: python3 scripts/pipeline.py --stage1",
+        "Check data/raw/ for source files"
+      ]
+    },
+    "ValueError_date": {
+      "pattern": "time data.*does not match format",
+      "causes": [
+        "Date column has inconsistent formats",
+        "Non-date values in date column"
+      ],
+      "solutions": [
+        "Use pd.to_datetime with errors='coerce'",
+        "Check for non-date values: df[pd.to_datetime(df['col'], errors='coerce').isna()]"
+      ]
+    },
+    "SchemaValidationError": {
+      "pattern": "column.*not found|missing required column",
+      "causes": [
+        "Database schema changed but CSV mapping not updated",
+        "Column dropped in earlier transformation"
+      ],
+      "solutions": [
+        "Compare column_mappings.py with src/schema/*.ts",
+        "Run npm run type-check after schema changes"
+      ]
+    }
   },
   "key_files": {
     "orchestrator": "scripts/pipeline.py",

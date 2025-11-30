@@ -1,0 +1,140 @@
+{
+  "generated_at": "2025-11-30T11:14:49.492693+00:00",
+  "version": "1.0.0",
+  "description": "Pattern library for Context Oracle - follow conventions",
+  "patterns": {
+    "pipeline_script": {
+      "name": "pipeline_script",
+      "description": "Pattern for data pipeline transformation scripts",
+      "file_type": "python",
+      "structure": [
+        "Module docstring with Dependencies/Input/Output",
+        "sys.path setup for imports",
+        "Import statements (sys, pathlib, pandas)",
+        "Project-relative imports (from config.column_mappings)",
+        "PROJECT_ROOT and file path constants",
+        "load_data() function - loads input file",
+        "transformation functions (filter_*, calculate_*, map_*)",
+        "save_data() function - saves output file",
+        "main() orchestrator function",
+        "if __name__ == '__main__' guard with sys.exit"
+      ],
+      "conventions": [
+        "Use PROJECT_ROOT for all file paths",
+        "Print progress messages with row counts",
+        "Return DataFrame from transformation functions",
+        "Use .copy() when filtering to avoid SettingWithCopyWarning",
+        "Document dependencies in module docstring",
+        "Name files with numeric prefix for execution order"
+      ],
+      "docstring_template": "\"\"\"\nStage {N}: {Title}\n\n{Description}\n\nDependencies: {list of scripts that must run first}\nInput: {input file paths}\nOutput: {output file paths}\n\"\"\"",
+      "function_templates": {
+        "load_data": "def load_data(filepath: Path) -> pd.DataFrame:\n    \"\"\"Load the raw CSV file.\"\"\"\n    df = pd.read_csv(filepath, low_memory=False)\n    print(f\"  Loaded {len(df):,} rows from {filepath.name}\")\n    return df",
+        "save_data": "def save_data(df: pd.DataFrame, filepath: Path) -> None:\n    \"\"\"Save the cleaned DataFrame to CSV.\"\"\"\n    filepath.parent.mkdir(parents=True, exist_ok=True)\n    df.to_csv(filepath, index=False)\n    print(f\"  Saved {len(df):,} rows to {filepath.name}\")",
+        "filter_template": "def filter_{what}(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Remove rows with {condition}.\"\"\"\n    initial_count = len(df)\n    mask = {mask_expression}\n    df_filtered = df[mask].copy()\n    removed_count = initial_count - len(df_filtered)\n    print(f\"  Removed {removed_count:,} rows with {reason}\")\n    return df_filtered",
+        "main": "def main():\n    print(\"=\" * 60)\n    print(\"Stage {N}: {Title}\")\n    print(\"=\" * 60)\n    \n    # Load\n    print(\"\\nLoading data...\")\n    df = load_data(INPUT_FILE)\n    \n    # Transform\n    print(\"\\nApplying transformations...\")\n    df = transform_1(df)\n    df = transform_2(df)\n    \n    # Save\n    print(\"\\nSaving output...\")\n    save_data(df, OUTPUT_FILE)\n    \n    print(\"\\nDone!\")\n    return True"
+      },
+      "examples": [
+        "scripts/stage1_clean/01_po_line_items.py",
+        "scripts/stage1_clean/02_gr_postings.py",
+        "scripts/stage2_transform/05_calculate_cost_impact.py"
+      ],
+      "skeleton_reference": "pipeline-context/skeletons/stage1_clean/01_po_line_items.skeleton.py"
+    },
+    "drizzle_schema": {
+      "name": "drizzle_schema",
+      "description": "Pattern for Drizzle ORM table definitions",
+      "file_type": "typescript",
+      "structure": [
+        "Import types from 'drizzle-orm/pg-core'",
+        "Import devV3Schema from './_schema'",
+        "Import related tables if needed",
+        "",
+        "Export const tableName = devV3Schema.table('snake_case_name', {",
+        "  // Primary key",
+        "  id: uuid('id').primaryKey().defaultRandom(),",
+        "  ",
+        "  // Business fields with snake_case DB names",
+        "  fieldName: type('db_column_name').constraints(),",
+        "  ",
+        "  // Timestamps",
+        "  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),",
+        "  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),",
+        "}, (table) => [",
+        "  // Indexes",
+        "]);",
+        "",
+        "// Type exports",
+        "export type TableName = typeof tableName.$inferSelect;",
+        "export type NewTableName = typeof tableName.$inferInsert;"
+      ],
+      "conventions": [
+        "Always import devV3Schema from './_schema' - never create new pgSchema instances",
+        "Use snake_case for database column names",
+        "Use camelCase for TypeScript property names",
+        "Include id as uuid().primaryKey().defaultRandom()",
+        "Include createdAt and updatedAt timestamps",
+        "Export both Select and Insert types",
+        "Add indexes for frequently queried columns"
+      ],
+      "examples": [
+        "src/schema/po-line-items.ts",
+        "src/schema/po-transactions.ts",
+        "src/schema/projects.ts"
+      ],
+      "template_reference": "pipeline-context/skeletons/config/column_mappings.skeleton.py"
+    },
+    "data_filtering": {
+      "name": "data_filtering",
+      "description": "Pattern for filtering DataFrame rows based on conditions",
+      "file_type": "python",
+      "signature": "def filter_{what}(df: pd.DataFrame) -> pd.DataFrame:",
+      "structure": [
+        "Docstring describing what is filtered",
+        "Get initial_count = len(df)",
+        "Create boolean mask",
+        "Apply filter: df_filtered = df[mask].copy()",
+        "Calculate removed_count",
+        "Print progress message",
+        "Return filtered DataFrame"
+      ],
+      "conventions": [
+        "Always use .copy() to avoid SettingWithCopyWarning",
+        "Always print the count of removed rows",
+        "Use descriptive function names: filter_zero_quantity, filter_valuation_classes",
+        "Return the filtered DataFrame (don't modify in place)"
+      ],
+      "template": "def filter_{what}(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Remove rows with {condition}.\"\"\"\n    initial_count = len(df)\n    mask = {mask_expression}\n    df_filtered = df[mask].copy()\n    removed_count = initial_count - len(df_filtered)\n    print(f\"  Removed {removed_count:,} rows with {reason}\")\n    return df_filtered",
+      "example_code": "def filter_valuation_classes(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Remove rows with excluded PO Valuation Classes.\"\"\"\n    initial_count = len(df)\n    valuation_class = pd.to_numeric(df[\"PO Valuation Class\"], errors=\"coerce\")\n    mask = ~valuation_class.isin(EXCLUDED_VALUATION_CLASSES)\n    df_filtered = df[mask].copy()\n    removed_count = initial_count - len(df_filtered)\n    print(f\"  Removed {removed_count:,} rows with Valuation Classes {EXCLUDED_VALUATION_CLASSES}\")\n    return df_filtered",
+      "examples": [
+        "scripts/stage1_clean/01_po_line_items.py:filter_valuation_classes",
+        "scripts/stage1_clean/01_po_line_items.py:filter_nis_levels",
+        "scripts/stage1_clean/02_gr_postings.py:filter_zero_quantity"
+      ]
+    },
+    "column_mapping": {
+      "name": "column_mapping",
+      "description": "Pattern for CSV to database column mappings",
+      "file_type": "python",
+      "file_location": "scripts/config/column_mappings.py",
+      "structure": [
+        "Module docstring explaining the mapping purpose",
+        "Dictionary with CSV column as key, DB column as value",
+        "Group related columns with comments",
+        "Use # comments for columns not yet implemented",
+        "Separate dictionaries for each table"
+      ],
+      "conventions": [
+        "CSV column names: Original from source (mixed case, spaces)",
+        "DB column names: snake_case matching Drizzle schema",
+        "Group by category (header fields, vendor info, etc.)",
+        "Keep commented-out columns for future reference"
+      ],
+      "template": "# {TABLE_NAME}: Source CSV \u2192 Database columns\n{TABLE_NAME}_MAPPING = {\n    # Business key\n    \"CSV Column Name\": \"db_column_name\",\n    \n    # Category 1\n    \"Another CSV Column\": \"another_db_column\",\n    \n    # Category 2 (not yet implemented)\n    # \"Future Column\": \"future_column\",\n}",
+      "examples": [
+        "scripts/config/column_mappings.py:PO_LINE_ITEMS_MAPPING",
+        "scripts/config/column_mappings.py:PO_TRANSACTIONS_MAPPING"
+      ]
+    }
+  }
+}
