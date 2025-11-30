@@ -104,6 +104,74 @@ python3 scripts/ask_oracle.py trace open_po_value --direction both
 
 ---
 
+## PROTOCOL: Before Implementing New Features
+
+**This protocol prevents blind assumptions about data that cause bugs.**
+
+### Step 1: Profile Filter/Transform Columns
+
+Before writing any code that filters or transforms data, profile the relevant columns:
+
+```bash
+# Profile a specific column to see its values
+python3 scripts/profile_data.py data/intermediate/po_line_items.csv "PO Receipt Status"
+
+# Profile entire file to see all columns
+python3 scripts/profile_data.py data/intermediate/po_line_items.csv
+```
+
+### Step 2: State Assumptions Explicitly
+
+After profiling, list your assumptions based on what you found:
+
+```
+ASSUMPTIONS (based on data profile):
+- Column "PO Receipt Status" has values: CLOSED PO, OPEN PO, PO does not require GR
+- I will EXCLUDE "CLOSED PO" because [reason]
+- I will INCLUDE "OPEN PO" and "PO does not require GR" because [reason]
+```
+
+### Step 3: Confidence-Based Proceeding
+
+| Confidence | Action |
+|------------|--------|
+| **High** | Profile shows expected values, proceed and log assumption |
+| **Medium** | Unexpected values found, state assumption and proceed |
+| **Low** | Ambiguous/critical values found, ask user before proceeding |
+
+**Low Confidence Examples (STOP and ask):**
+- Filter column has unexpected values not mentioned in requirements
+- Numeric column has negative values when expecting positive
+- Date column has future dates when expecting historical
+- Categorical has >10 unique values when expecting few
+
+### Step 4: Run Impact Analysis
+
+```bash
+# Before modifying existing script
+python3 scripts/ask_oracle.py impact <script_name>
+
+# Check what else uses columns you're touching
+python3 scripts/ask_oracle.py who "<column_name>"
+```
+
+### Example: GRIR Implementation (What Should Have Happened)
+
+```bash
+# 1. Profile the filter columns
+python3 scripts/profile_data.py data/intermediate/po_line_items.csv "PO Receipt Status"
+# Output: CLOSED PO (53039), OPEN PO (3939), PO does not require GR (185)
+
+# 2. State assumption
+# "I see CLOSED PO is 93% of data. Since we're tracking exposure, 
+#  CLOSED POs have no exposure. I will EXCLUDE CLOSED PO."
+
+# 3. Confidence: HIGH (clear business logic)
+# Proceed with implementation including the filter.
+```
+
+---
+
 ## Environment Setup
 
 **Database credentials are in `.env` file (NOT auto-loaded by scripts)**
