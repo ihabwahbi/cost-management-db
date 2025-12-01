@@ -22,6 +22,10 @@ GR Table + Invoice Table
    [Cost Impact Calculation]
         ↓
 Cost Impact Data  →  po_transactions table
+        ↓
+   [GRIR Exposure Calculation] (Type 1 POs only)
+        ↓
+GRIR Exposures  →  grir_exposures table
 ```
 
 ---
@@ -140,6 +144,77 @@ Last Cumulative Cost Impact += Cost Impact Qty
 
 ---
 
+## GRIR Exposure Tracking
+
+### What is GRIR?
+
+GRIR (Goods Receipt / Invoice Receipt) exposure tracks the difference between invoiced quantities and goods-received quantities for Type 1 (Simple) POs.
+
+**Why it matters:**
+- For Type 1 POs, cost impact is recognized only on GR (IR is ignored for NIS)
+- But IR still happens - when IR > GR, we have invoiced value not yet goods-received
+- This value sits on the **balance sheet** as an accrual
+- Eventually, when GR catches up, this will hit the **Net Income Statement**
+- Long-standing GRIR = "timed bomb" of future NIS impact
+
+### GRIR Calculation
+
+**Applies to:** Type 1 (Simple) POs only
+- Vendor Category = "GLD"
+- Account Assignment Category IN ("K", "P", "S", "V")
+- PO Receipt Status ≠ "CLOSED PO" (closed POs have no exposure)
+
+**Formula:**
+```
+GRIR Qty = Cumulative IR Qty - Cumulative GR Qty
+GRIR Value = GRIR Qty × Unit Price
+
+Only tracked when GRIR Qty > 0 (IR exceeds GR)
+```
+
+### Time Bucket Aging
+
+GRIR exposures are categorized by age to identify risk:
+
+| Time Bucket | Days Open | Risk Level | Action |
+|-------------|-----------|------------|--------|
+| < 1 month | 0-30 | Normal | Within same period, acceptable |
+| 1-3 months | 31-90 | Monitor | Track for resolution |
+| 3-6 months | 91-180 | Investigate | Why hasn't GR happened? |
+| 6-12 months | 181-365 | Escalate | Requires management attention |
+| > 1 year | 366+ | Critical | Potential write-off or adjustment needed |
+
+### First Exposure Date
+
+The system tracks when the exposure first occurred:
+- Walk through GR and IR postings chronologically
+- Record the first date when Cumulative IR > Cumulative GR
+- If GR later catches up (GR ≥ IR), reset the exposure date
+- If IR exceeds GR again, record new exposure date
+
+### Example
+
+| Date | Type | Qty | Cum GR | Cum IR | GRIR Qty | First Exposure |
+|------|------|-----|--------|--------|----------|----------------|
+| Jan | GR | 10 | 10 | 0 | 0 | — |
+| Feb | IR | 15 | 10 | 15 | **5** | Feb (IR > GR) |
+| Mar | GR | 3 | 13 | 15 | **2** | Feb (still exposed) |
+| Apr | GR | 5 | 18 | 15 | 0 | — (GR caught up) |
+| May | IR | 10 | 18 | 25 | **7** | May (new exposure) |
+
+**Final State:** GRIR Qty = 7, First Exposure = May, Days Open = (Today - May)
+
+### Why Only Type 1 POs?
+
+Type 2 (Complex) POs recognize cost impact from **both** GR and IR. The GRIR concept doesn't apply because:
+- IR already triggers cost impact when it exceeds GR
+- There's no "hidden" balance sheet exposure
+- The NIS impact is immediate
+
+Type 1 POs ignore IR for cost impact, creating the exposure situation.
+
+---
+
 ## GR and Invoice Table Processing
 
 ### GR Table
@@ -186,8 +261,9 @@ Unit Price = Purchase Value USD / Ordered Quantity
 - `pos` table was removed - data merged into `po_line_items`
 - `po_line_items.po_line_id` is the business key matching source system (e.g., "4581848878-1")
 - `po_transactions` stores GR/IR postings with calculated `cost_impact_qty` and `cost_impact_amount`
+- `grir_exposures` stores balance sheet exposure for Type 1 POs where IR > GR
 - `vendor_category` and `account_assignment_category` are used for Type 1/Type 2 classification
 
 ---
 
-*Last updated: November 2024*
+*Last updated: December 2024*
