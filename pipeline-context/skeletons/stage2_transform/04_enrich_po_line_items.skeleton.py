@@ -12,8 +12,8 @@ Caching: Extracts enrichment data from xlsx to CSV cache. Only reprocesses
 xlsx if the source file is newer than the cache.
 
 Column Operations:
-  WRITES: PO Line ID, PO Line Item, PR Number, Requester
-  READS:  ARIBA Shopping cart number, ARIBA shopping cart number : created by (Text), PO Line ID, PO Line Item, PO Number, Purchase Requisition Number"""
+  WRITES: PO Line ID, PO Line Item, PR Line, PR Number, Requester
+  READS:  ARIBA Shopping cart number, ARIBA shopping cart number : created by (Text), PO Line ID, PO Line Item, PO Number, Purchase Requisition Item, Purchase Requisition Number"""
 import sys
 from pathlib import Path
 import pandas as pd
@@ -44,7 +44,7 @@ def load_po_line_items(filepath: Path) -> pd.DataFrame:
     ...
 
 def extract_enrichment_data(details: pd.DataFrame) -> pd.DataFrame:
-    """Extract Requester and PR Number from PO Details."""
+    """Extract Requester, PR Number, and PR Line from PO Details."""
     ...
 
 def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame:

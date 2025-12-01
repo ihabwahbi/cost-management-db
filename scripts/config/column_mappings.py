@@ -25,7 +25,7 @@ PO_LINE_ITEMS_MAPPING = {
     
     # Purchase Requisition
     "PR Number": "pr_number",
-    # "PR Line": "pr_line",  # Not in current CSV, added later if available
+    "PR Line": "pr_line",
     "Requester": "requester",
     
     # Vendor information

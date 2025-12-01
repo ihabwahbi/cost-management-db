@@ -76,7 +76,7 @@ def load_po_line_items(filepath: Path) -> pd.DataFrame:
 
 
 def extract_enrichment_data(details: pd.DataFrame) -> pd.DataFrame:
-    """Extract Requester and PR Number from PO Details."""
+    """Extract Requester, PR Number, and PR Line from PO Details."""
     print("Extracting enrichment data...")
     
     enrichment = pd.DataFrame()
@@ -95,9 +95,16 @@ def extract_enrichment_data(details: pd.DataFrame) -> pd.DataFrame:
     
     enrichment['PR Number'] = pr_number.where(pr_number.notna(), ariba_number)
     
+    # PR Line: Purchase Requisition Item (nullable integer)
+    # SAP PR line items are typically 10, 20, 30, etc.
+    enrichment['PR Line'] = pd.to_numeric(
+        details['Purchase Requisition Item'], errors='coerce'
+    ).astype('Int64')
+    
     # Stats
     print(f"  Requester values: {enrichment['Requester'].notna().sum():,}")
     print(f"  PR Number values: {enrichment['PR Number'].notna().sum():,}")
+    print(f"  PR Line values: {enrichment['PR Line'].notna().sum():,}")
     
     return enrichment
 
@@ -109,14 +116,14 @@ def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame:
     initial_count = len(po_df)
     
     # Drop existing enrichment columns if present (from previous runs)
-    cols_to_drop = [col for col in ['Requester', 'PR Number'] if col in po_df.columns]
+    cols_to_drop = [col for col in ['Requester', 'PR Number', 'PR Line'] if col in po_df.columns]
     if cols_to_drop:
         po_df = po_df.drop(columns=cols_to_drop)
         print(f"  Dropped existing columns: {cols_to_drop}")
     
     # Left join to preserve all PO line items
     enriched = po_df.merge(
-        enrichment[['PO Line ID', 'Requester', 'PR Number']],
+        enrichment[['PO Line ID', 'Requester', 'PR Number', 'PR Line']],
         on='PO Line ID',
         how='left'
     )
@@ -139,6 +146,7 @@ def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame:
     # Stats
     print(f"  Rows with Requester: {enriched['Requester'].notna().sum():,}")
     print(f"  Rows with PR Number: {enriched['PR Number'].notna().sum():,}")
+    print(f"  Rows with PR Line: {enriched['PR Line'].notna().sum():,}")
     
     return enriched
 

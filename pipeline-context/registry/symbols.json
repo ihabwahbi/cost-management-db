@@ -520,6 +520,19 @@
       ],
       "used_in": []
     },
+    "PR Line": {
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:100",
+      "dtype": "int64",
+      "name": "PR Line",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/po_details_enrichment.csv",
+        "data/intermediate/po_line_items.csv"
+      ],
+      "used_in": [
+        "04_enrich_po_line_items"
+      ]
+    },
     "PR Number": {
       "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:96",
       "dtype": "int64",
@@ -583,6 +596,16 @@
       "used_in": [
         "05_calculate_cost_impact",
         "06_calculate_grir"
+      ]
+    },
+    "Purchase Requisition Item": {
+      "created_by": null,
+      "dtype": null,
+      "name": "Purchase Requisition Item",
+      "source_type": "script",
+      "sources": [],
+      "used_in": [
+        "04_enrich_po_line_items"
       ]
     },
     "Purchase Requisition Number": {
@@ -1009,6 +1032,16 @@
       "source_type": "import-ready",
       "sources": [
         "data/import-ready/po_transactions.csv"
+      ],
+      "used_in": []
+    },
+    "pr_line": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "pr_line",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
       ],
       "used_in": []
     },
@@ -1477,7 +1510,7 @@
       ],
       "docstring": "Left join enrichment data to PO line items.",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 105,
+      "line": 112,
       "name": "enrich_data",
       "return_type": "pd.DataFrame",
       "signature": "def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame"
@@ -1492,15 +1525,17 @@
       "calls": [
         "DataFrame",
         "apply",
+        "astype",
         "copy",
         "int",
         "notna",
         "print",
         "str",
         "sum",
+        "to_numeric",
         "where"
       ],
-      "docstring": "Extract Requester and PR Number from PO Details.",
+      "docstring": "Extract Requester, PR Number, and PR Line from PO Details.",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
       "line": 78,
       "name": "extract_enrichment_data",
@@ -1923,7 +1958,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 153,
+      "line": 161,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -2266,7 +2301,7 @@
       ],
       "docstring": "Save enriched DataFrame to CSV.",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 146,
+      "line": 154,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -2468,7 +2503,7 @@
     }
   ],
   "stats": {
-    "total_columns": 100,
+    "total_columns": 103,
     "total_constants": 13,
     "total_functions": 61,
     "total_tables": 11

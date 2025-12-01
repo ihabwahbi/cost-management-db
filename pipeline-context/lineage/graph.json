@@ -146,7 +146,7 @@
       {
         "context": "merge_join",
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 118,
+        "line": 125,
         "script": "04_enrich_po_line_items",
         "type": "READS"
       },
@@ -202,6 +202,14 @@
         "line": 65,
         "script": "04_enrich_po_line_items",
         "type": "READS"
+      }
+    ],
+    "PR Line": [
+      {
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+        "line": 100,
+        "script": "04_enrich_po_line_items",
+        "type": "WRITES"
       }
     ],
     "PR Number": [
@@ -272,6 +280,14 @@
         "type": "WRITES"
       }
     ],
+    "Purchase Requisition Item": [
+      {
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+        "line": 100,
+        "script": "04_enrich_po_line_items",
+        "type": "READS"
+      }
+    ],
     "Purchase Requisition Number": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
@@ -309,13 +325,13 @@
     "Requester": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 129,
+        "line": 136,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 136,
+        "line": 143,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       },
@@ -737,6 +753,15 @@
       "table": "po_transactions",
       "target": "db_column:po_transactions.quantity",
       "type": "MAPS_TO"
+    },
+    {
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 100,
+      "operation": "pd.to_numeric(details['Purchase Requisition Item'], errors='coerce').astype('Int64')",
+      "script": "04_enrich_po_line_items",
+      "source": "column:Purchase Requisition Item",
+      "target": "column:PR Line",
+      "type": "TRANSFORMS"
     },
     {
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
@@ -1333,7 +1358,7 @@
       "used_in_joins": [
         "scripts/stage1_clean/02_gr_postings.py:59",
         "scripts/stage1_clean/03_ir_postings.py:50",
-        "scripts/stage2_transform/04_enrich_po_line_items.py:118",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:125",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:61"
       ]
     },
@@ -1376,6 +1401,9 @@
       "type": "column"
     },
     "column:PR Line": {
+      "created_by": [
+        "scripts/stage2_transform/04_enrich_po_line_items.py:100"
+      ],
       "id": "column:PR Line",
       "name": "PR Line",
       "type": "column"
@@ -1423,6 +1451,11 @@
       "name": "Posting Type",
       "type": "column"
     },
+    "column:Purchase Requisition Item": {
+      "id": "column:Purchase Requisition Item",
+      "name": "Purchase Requisition Item",
+      "type": "column"
+    },
     "column:Purchase Requisition Number": {
       "id": "column:Purchase Requisition Number",
       "name": "Purchase Requisition Number",
@@ -1435,8 +1468,8 @@
     },
     "column:Requester": {
       "created_by": [
-        "scripts/stage2_transform/04_enrich_po_line_items.py:129",
         "scripts/stage2_transform/04_enrich_po_line_items.py:136",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:143",
         "scripts/stage2_transform/04_enrich_po_line_items.py:86"
       ],
       "id": "column:Requester",
@@ -3496,23 +3529,23 @@
     }
   },
   "stats": {
-    "columns_tracked": 37,
+    "columns_tracked": 39,
     "edges_by_type": {
       "DEPENDS_ON": 12,
       "INPUT": 23,
       "MAPS_TO": 5,
       "OUTPUT": 19,
-      "TRANSFORMS": 35
+      "TRANSFORMS": 36
     },
     "nodes_by_type": {
-      "column": 58,
+      "column": 59,
       "db_column": 123,
       "file": 13,
       "script": 10,
       "table": 11
     },
-    "total_edges": 94,
-    "total_nodes": 215,
+    "total_edges": 95,
+    "total_nodes": 216,
     "variables_traced": 33
   },
   "variable_sources": {

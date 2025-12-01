@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-01T00:15:51.688258+00:00
+Generated: 2025-12-01T02:50:57.243670+00:00
 
 ## Data Flow Diagram
 
@@ -389,10 +389,12 @@ Sample data and types for each CSV file:
 | `PO Line ID` | object |
 | `Requester` | object |
 | `PR Number` | object |
+| `PR Line` | float64 |
 
 **Columns with nulls:**
 - `Requester`: 2423 nulls
 - `PR Number`: 444 nulls
+- `PR Line`: 2 nulls
 
 ### `cost_impact.csv`
 
@@ -422,13 +424,14 @@ Sample data and types for each CSV file:
 | `location` | object |
 | `sub_business_line` | object |
 | `pr_number` | float64 |
+| `pr_line` | float64 |
 | `requester` | object |
 | `vendor_id` | object |
-| `vendor_name` | object |
-| *...* | *18 more* |
+| *...* | *19 more* |
 
 **Columns with nulls:**
 - `pr_number`: 37584 nulls
+- `pr_line`: 37165 nulls
 - `requester`: 37072 nulls
 - `part_number`: 47632 nulls
 - `account_assignment_category`: 9047 nulls
@@ -546,11 +549,11 @@ Key pandas operations used in each script:
 | 83 | column_assign | column: `PO Line ID` |
 | 86 | column_assign | column: `Requester` |
 | 96 | column_assign | column: `PR Number` |
+| 100 | column_assign | column: `PR Line` |
 | 64 | astype | Converts column types |
 | 93 | apply | Applies function to data |
 | 94 | apply | Applies function to data |
-| 118 | merge | on: `PO Line ID` |
-| 127 | astype | Converts column types |
+| 100 | astype | Converts column types |
 
 ### `05_calculate_cost_impact`
 

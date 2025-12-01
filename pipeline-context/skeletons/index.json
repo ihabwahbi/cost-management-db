@@ -31,13 +31,13 @@
       "source_path": "scripts/stage1_clean/03_ir_postings.py"
     },
     {
-      "compression_ratio": 3.26,
+      "compression_ratio": 3.38,
       "name": "04_enrich_po_line_items",
-      "original_lines": 193,
-      "original_tokens": 1732,
+      "original_lines": 201,
+      "original_tokens": 1838,
       "skeleton_lines": 62,
       "skeleton_path": "pipeline-context/skeletons/stage2_transform/04_enrich_po_line_items.skeleton.py",
-      "skeleton_tokens": 531,
+      "skeleton_tokens": 543,
       "source_path": "scripts/stage2_transform/04_enrich_po_line_items.py"
     },
     {
@@ -92,10 +92,10 @@
     }
   ],
   "totals": {
-    "compression_ratio": 3.12,
-    "original_lines": 1479,
-    "original_tokens": 12621,
+    "compression_ratio": 3.14,
+    "original_lines": 1487,
+    "original_tokens": 12727,
     "skeleton_lines": 488,
-    "skeleton_tokens": 4045
+    "skeleton_tokens": 4057
   }
 }

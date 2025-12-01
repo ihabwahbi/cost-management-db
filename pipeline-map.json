@@ -279,12 +279,12 @@
       "path": "data/import-ready/grir_exposures.csv",
       "row_count": 67,
       "sample_row": {
-        "days_open": 11,
+        "days_open": 12,
         "first_exposure_date": "2025-11-19",
         "grir_qty": 4.0,
         "grir_value": 9576.8,
         "po_line_id": "4584221231-13",
-        "snapshot_date": "2025-11-30",
+        "snapshot_date": "2025-12-01",
         "time_bucket": "<1 month"
       }
     },
@@ -449,15 +449,18 @@
     "po_details_enrichment.csv": {
       "columns": [
         "PO Line ID",
+        "PR Line",
         "PR Number",
         "Requester"
       ],
       "dtypes": {
         "PO Line ID": "object",
+        "PR Line": "float64",
         "PR Number": "object",
         "Requester": "object"
       },
       "null_counts": {
+        "PR Line": 2,
         "PR Number": 444,
         "Requester": 2423
       },
@@ -465,6 +468,7 @@
       "row_count": 22150,
       "sample_row": {
         "PO Line ID": "4584576859-1",
+        "PR Line": 10.0,
         "PR Number": "1002991198",
         "Requester": "Walid Benmehidi"
       }
@@ -491,6 +495,7 @@
         "po_number",
         "po_receipt_status",
         "po_value_usd",
+        "pr_line",
         "pr_number",
         "requester",
         "sub_business_line",
@@ -521,6 +526,7 @@
         "po_number": "int64",
         "po_receipt_status": "object",
         "po_value_usd": "float64",
+        "pr_line": "float64",
         "pr_number": "float64",
         "requester": "object",
         "sub_business_line": "object",
@@ -534,6 +540,7 @@
         "account_assignment_category": 9047,
         "part_number": 47632,
         "po_gts_status": 64,
+        "pr_line": 37165,
         "pr_number": 37584,
         "requester": 37072,
         "wbs_number": 33327
@@ -561,6 +568,7 @@
         "po_number": 4791459949,
         "po_receipt_status": "CLOSED PO",
         "po_value_usd": 1529.17,
+        "pr_line": NaN,
         "pr_number": NaN,
         "requester": NaN,
         "sub_business_line": "TSW",
@@ -614,7 +622,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-01T00:15:51.688258+00:00",
+  "generated_at": "2025-12-01T02:50:57.243670+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1796,7 +1804,7 @@
             "po_df"
           ],
           "docstring": "Left join enrichment data to PO line items.",
-          "line": 105,
+          "line": 112,
           "name": "enrich_data",
           "semantics": {
             "aggregates": false,
@@ -1811,7 +1819,7 @@
           "args": [
             "details"
           ],
-          "docstring": "Extract Requester and PR Number from PO Details.",
+          "docstring": "Extract Requester, PR Number, and PR Line from PO Details.",
           "line": 78,
           "name": "extract_enrichment_data",
           "semantics": {
@@ -1820,11 +1828,12 @@
             "joins_data": false,
             "modifies_columns": [
               "PO Line ID",
+              "PR Line",
               "PR Number",
               "Requester"
             ],
             "renames_columns": false,
-            "type_conversions": false
+            "type_conversions": true
           }
         },
         {
@@ -1893,7 +1902,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 153,
+          "line": 161,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -1910,7 +1919,7 @@
             "filepath"
           ],
           "docstring": "Save enriched DataFrame to CSV.",
-          "line": 146,
+          "line": 154,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -1948,7 +1957,7 @@
         "data/intermediate/po_line_items.csv",
         "data/raw/po details report.xlsx"
       ],
-      "line_count": 193,
+      "line_count": 201,
       "name": "04_enrich_po_line_items",
       "outputs": [
         "data/intermediate/po_details_enrichment.csv",
@@ -1968,9 +1977,15 @@
           "operation": "apply"
         },
         {
+          "code_snippet": "enrichment['PR Line'] = pd.to_numeric(",
+          "description": "Converts column types",
+          "line": 100,
+          "operation": "astype"
+        },
+        {
           "code_snippet": "pr_str = enriched['PR Number'].astype(str)",
           "description": "Converts column types",
-          "line": 127,
+          "line": 134,
           "operation": "astype"
         },
         {
@@ -2013,6 +2028,13 @@
           "operation": "column_assign"
         },
         {
+          "code_snippet": "enrichment['PR Line'] = pd.to_numeric(",
+          "column": "PR Line",
+          "description": "Creates/modifies column 'PR Line'",
+          "line": 100,
+          "operation": "column_assign"
+        },
+        {
           "code_snippet": "enrichment['PR Number'] = pr_number.where(pr_number.notna(), ariba_number)",
           "column": "PR Number",
           "description": "Creates/modifies column 'PR Number'",
@@ -2029,7 +2051,7 @@
         {
           "code_snippet": "po_df = po_df.drop(columns=cols_to_drop)",
           "description": "Removes columns or rows",
-          "line": 114,
+          "line": 121,
           "operation": "drop"
         },
         {
@@ -2042,7 +2064,7 @@
           "code_snippet": "enriched = po_df.merge(",
           "description": "Joins two DataFrames",
           "join_type": "left",
-          "line": 118,
+          "line": 125,
           "on_column": "PO Line ID",
           "operation": "merge"
         }
