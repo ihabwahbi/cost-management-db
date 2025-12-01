@@ -1,5 +1,4 @@
 import { uuid, integer, varchar, text, numeric, timestamp, date, index, boolean } from 'drizzle-orm/pg-core';
-import { wbsDetails } from './wbs-details';
 import { devV3Schema } from './_schema';
 
 /**
@@ -44,7 +43,8 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   // Cost classification
   accountAssignmentCategory: varchar('account_assignment_category'),
   nisLine: varchar('nis_line'),
-  wbsNumber: varchar('wbs_number').references(() => wbsDetails.wbsNumber),
+  // WBS reference (no FK - wbsNumber is not PK anymore, use for lookups)
+  wbsNumber: varchar('wbs_number'),
   
   // Asset reference (for maintenance POs)
   assetCode: varchar('asset_code'),

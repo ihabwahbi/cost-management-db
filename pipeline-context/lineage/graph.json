@@ -508,6 +508,32 @@
         "type": "WRITES"
       }
     ],
+    "location": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 244,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+        "line": 107,
+        "script": "10_wbs_from_projects",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage1_clean/11_wbs_from_operations.py",
+        "line": 114,
+        "script": "11_wbs_from_operations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
+        "line": 115,
+        "script": "12_wbs_from_ops_activities",
+        "type": "WRITES"
+      }
+    ],
     "open_po_qty": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
@@ -560,6 +586,50 @@
         "type": "WRITES"
       }
     ],
+    "operation_number": [
+      {
+        "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+        "line": 139,
+        "script": "10_wbs_from_projects",
+        "type": "WRITES"
+      }
+    ],
+    "ops_activity_number": [
+      {
+        "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+        "line": 140,
+        "script": "10_wbs_from_projects",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage1_clean/11_wbs_from_operations.py",
+        "line": 111,
+        "script": "11_wbs_from_operations",
+        "type": "WRITES"
+      }
+    ],
+    "ops_district": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 244,
+        "script": "07_process_wbs",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+        "line": 107,
+        "script": "10_wbs_from_projects",
+        "type": "READS"
+      }
+    ],
+    "project_type": [
+      {
+        "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+        "line": 123,
+        "script": "10_wbs_from_projects",
+        "type": "READS"
+      }
+    ],
     "quantity": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
@@ -571,6 +641,188 @@
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
         "line": 54,
         "script": "07_prepare_po_transactions",
+        "type": "WRITES"
+      }
+    ],
+    "rig": [
+      {
+        "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+        "line": 123,
+        "script": "10_wbs_from_projects",
+        "type": "WRITES"
+      }
+    ],
+    "rigs": [
+      {
+        "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+        "line": 123,
+        "script": "10_wbs_from_projects",
+        "type": "READS"
+      }
+    ],
+    "sap_wbs_raw": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 156,
+        "script": "07_process_wbs",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 197,
+        "script": "07_process_wbs",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 198,
+        "script": "07_process_wbs",
+        "type": "READS"
+      }
+    ],
+    "sub_business_line_from_wbs": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 136,
+        "script": "07_process_wbs",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 217,
+        "script": "07_process_wbs",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 223,
+        "script": "07_process_wbs",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 198,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      }
+    ],
+    "sub_business_line_mapped": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 136,
+        "script": "07_process_wbs",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 217,
+        "script": "07_process_wbs",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 202,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      }
+    ],
+    "sub_business_line_raw": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 202,
+        "script": "07_process_wbs",
+        "type": "READS"
+      }
+    ],
+    "sub_business_lines": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 136,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 166,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 172,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 217,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 223,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/09_prepare_wbs_details.py",
+        "line": 110,
+        "script": "09_prepare_wbs_details",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/09_prepare_wbs_details.py",
+        "line": 110,
+        "script": "09_prepare_wbs_details",
+        "type": "WRITES"
+      }
+    ],
+    "sub_business_lines_raw": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 166,
+        "script": "07_process_wbs",
+        "type": "READS"
+      }
+    ],
+    "wbs_number": [
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 134,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 156,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage2_transform/07_process_wbs.py",
+        "line": 197,
+        "script": "07_process_wbs",
+        "type": "WRITES"
+      }
+    ],
+    "wbs_source": [
+      {
+        "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+        "line": 138,
+        "script": "10_wbs_from_projects",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage1_clean/11_wbs_from_operations.py",
+        "line": 110,
+        "script": "11_wbs_from_operations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
+        "line": 112,
+        "script": "12_wbs_from_ops_activities",
         "type": "WRITES"
       }
     ]
@@ -923,12 +1175,147 @@
       "type": "TRANSFORMS"
     },
     {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 244,
+      "operation": "df['ops_district'].map(OPS_DISTRICT_TO_LOCATION)",
+      "script": "07_process_wbs",
+      "source": "column:ops_district",
+      "target": "column:location",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+      "line": 107,
+      "operation": "df['ops_district'].map(OPS_DISTRICT_TO_LOCATION)",
+      "script": "10_wbs_from_projects",
+      "source": "column:ops_district",
+      "target": "column:location",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+      "line": 123,
+      "operation": "df['rigs'].where(df['rigs'].notna() & (df['rigs'].astype(str).str.strip() != ''), df['project_type']",
+      "script": "10_wbs_from_projects",
+      "source": "column:project_type",
+      "target": "column:rig",
+      "type": "TRANSFORMS"
+    },
+    {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
       "line": 54,
       "operation": "output_df['quantity'].round(4)",
       "script": "07_prepare_po_transactions",
       "source": "column:quantity",
       "target": "column:quantity",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage1_clean/10_wbs_from_projects.py",
+      "line": 123,
+      "operation": "df['rigs'].where(df['rigs'].notna() & (df['rigs'].astype(str).str.strip() != ''), df['project_type']",
+      "script": "10_wbs_from_projects",
+      "source": "column:rigs",
+      "target": "column:rig",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 198,
+      "operation": "parsed[1]",
+      "script": "07_process_wbs",
+      "source": "column:sap_wbs_raw",
+      "target": "column:sub_business_line_from_wbs",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 156,
+      "operation": "parsed[0]",
+      "script": "07_process_wbs",
+      "source": "column:sap_wbs_raw",
+      "target": "column:wbs_number",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 197,
+      "operation": "parsed[0]",
+      "script": "07_process_wbs",
+      "source": "column:sap_wbs_raw",
+      "target": "column:wbs_number",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 136,
+      "operation": "to_sbl_array([sbl_code]) if sbl_code else None",
+      "script": "07_process_wbs",
+      "source": "column:sub_business_line_from_wbs",
+      "target": "column:sub_business_lines",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 217,
+      "operation": "sbl_code.apply(lambda x: to_sbl_array([x]) if pd.notna(x) else None)",
+      "script": "07_process_wbs",
+      "source": "column:sub_business_line_from_wbs",
+      "target": "column:sub_business_lines",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 223,
+      "operation": "df['sub_business_line_from_wbs'].apply(lambda x: to_sbl_array([x]) if pd.notna(x) else None)",
+      "script": "07_process_wbs",
+      "source": "column:sub_business_line_from_wbs",
+      "target": "column:sub_business_lines",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 136,
+      "operation": "to_sbl_array([sbl_code]) if sbl_code else None",
+      "script": "07_process_wbs",
+      "source": "column:sub_business_line_mapped",
+      "target": "column:sub_business_lines",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 217,
+      "operation": "sbl_code.apply(lambda x: to_sbl_array([x]) if pd.notna(x) else None)",
+      "script": "07_process_wbs",
+      "source": "column:sub_business_line_mapped",
+      "target": "column:sub_business_lines",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 202,
+      "operation": "df['sub_business_line_raw'].map(SBL_NAME_TO_CODE)",
+      "script": "07_process_wbs",
+      "source": "column:sub_business_line_raw",
+      "target": "column:sub_business_line_mapped",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/09_prepare_wbs_details.py",
+      "line": 110,
+      "operation": "output_df['sub_business_lines'].apply(json_to_pg_array)",
+      "script": "09_prepare_wbs_details",
+      "source": "column:sub_business_lines",
+      "target": "column:sub_business_lines",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage2_transform/07_process_wbs.py",
+      "line": 166,
+      "operation": "df['sub_business_lines_raw'].apply(parse_sbl_codes)",
+      "script": "07_process_wbs",
+      "source": "column:sub_business_lines_raw",
+      "target": "column:sub_business_lines",
       "type": "TRANSFORMS"
     },
     {
@@ -1024,6 +1411,41 @@
     {
       "source": "file:data/intermediate/po_line_items.csv",
       "target": "script:06_prepare_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/wbs_from_operations.csv",
+      "target": "script:11_wbs_from_operations",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/wbs_from_ops_activities.csv",
+      "target": "script:12_wbs_from_ops_activities",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/wbs_from_projects.csv",
+      "target": "script:10_wbs_from_projects",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/wbs_processed.csv",
+      "target": "script:09_prepare_wbs_details",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/raw/fdp",
+      "target": "script:10_wbs_from_projects",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/raw/fdp",
+      "target": "script:11_wbs_from_operations",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/raw/fdp",
+      "target": "script:12_wbs_from_ops_activities",
       "type": "INPUT"
     },
     {
@@ -1200,6 +1622,26 @@
       "source": "script:08_prepare_grir_exposures",
       "target": "script:06_calculate_grir",
       "type": "DEPENDS_ON"
+    },
+    {
+      "source": "script:09_prepare_wbs_details",
+      "target": "file:data/intermediate/wbs_processed.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:10_wbs_from_projects",
+      "target": "file:data/intermediate/wbs_from_projects.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:11_wbs_from_operations",
+      "target": "file:data/intermediate/wbs_from_operations.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:12_wbs_from_ops_activities",
+      "target": "file:data/intermediate/wbs_from_ops_activities.csv",
+      "type": "OUTPUT"
     }
   ],
   "nodes": {
@@ -1570,6 +2012,17 @@
       "name": "grir_value",
       "type": "column"
     },
+    "column:location": {
+      "created_by": [
+        "scripts/stage1_clean/10_wbs_from_projects.py:107",
+        "scripts/stage1_clean/11_wbs_from_operations.py:114",
+        "scripts/stage1_clean/12_wbs_from_ops_activities.py:115",
+        "scripts/stage2_transform/07_process_wbs.py:244"
+      ],
+      "id": "column:location",
+      "name": "location",
+      "type": "column"
+    },
     "column:open_po_qty": {
       "created_by": [
         "scripts/stage3_prepare/06_prepare_po_line_items.py:107",
@@ -1590,12 +2043,116 @@
       "name": "open_po_value",
       "type": "column"
     },
+    "column:operation_number": {
+      "created_by": [
+        "scripts/stage1_clean/10_wbs_from_projects.py:139"
+      ],
+      "id": "column:operation_number",
+      "name": "operation_number",
+      "type": "column"
+    },
+    "column:ops_activity_number": {
+      "created_by": [
+        "scripts/stage1_clean/10_wbs_from_projects.py:140",
+        "scripts/stage1_clean/11_wbs_from_operations.py:111"
+      ],
+      "id": "column:ops_activity_number",
+      "name": "ops_activity_number",
+      "type": "column"
+    },
+    "column:ops_district": {
+      "id": "column:ops_district",
+      "name": "ops_district",
+      "type": "column"
+    },
+    "column:project_type": {
+      "id": "column:project_type",
+      "name": "project_type",
+      "type": "column"
+    },
     "column:quantity": {
       "created_by": [
         "scripts/stage3_prepare/07_prepare_po_transactions.py:54"
       ],
       "id": "column:quantity",
       "name": "quantity",
+      "type": "column"
+    },
+    "column:rig": {
+      "created_by": [
+        "scripts/stage1_clean/10_wbs_from_projects.py:123"
+      ],
+      "id": "column:rig",
+      "name": "rig",
+      "type": "column"
+    },
+    "column:rigs": {
+      "id": "column:rigs",
+      "name": "rigs",
+      "type": "column"
+    },
+    "column:sap_wbs_raw": {
+      "id": "column:sap_wbs_raw",
+      "name": "sap_wbs_raw",
+      "type": "column"
+    },
+    "column:sub_business_line_from_wbs": {
+      "created_by": [
+        "scripts/stage2_transform/07_process_wbs.py:198"
+      ],
+      "id": "column:sub_business_line_from_wbs",
+      "name": "sub_business_line_from_wbs",
+      "type": "column"
+    },
+    "column:sub_business_line_mapped": {
+      "created_by": [
+        "scripts/stage2_transform/07_process_wbs.py:202"
+      ],
+      "id": "column:sub_business_line_mapped",
+      "name": "sub_business_line_mapped",
+      "type": "column"
+    },
+    "column:sub_business_line_raw": {
+      "id": "column:sub_business_line_raw",
+      "name": "sub_business_line_raw",
+      "type": "column"
+    },
+    "column:sub_business_lines": {
+      "created_by": [
+        "scripts/stage2_transform/07_process_wbs.py:136",
+        "scripts/stage2_transform/07_process_wbs.py:166",
+        "scripts/stage2_transform/07_process_wbs.py:172",
+        "scripts/stage2_transform/07_process_wbs.py:217",
+        "scripts/stage2_transform/07_process_wbs.py:223",
+        "scripts/stage3_prepare/09_prepare_wbs_details.py:110"
+      ],
+      "id": "column:sub_business_lines",
+      "name": "sub_business_lines",
+      "type": "column"
+    },
+    "column:sub_business_lines_raw": {
+      "id": "column:sub_business_lines_raw",
+      "name": "sub_business_lines_raw",
+      "type": "column"
+    },
+    "column:wbs_number": {
+      "created_by": [
+        "scripts/stage2_transform/07_process_wbs.py:134",
+        "scripts/stage2_transform/07_process_wbs.py:156",
+        "scripts/stage2_transform/07_process_wbs.py:197"
+      ],
+      "id": "column:wbs_number",
+      "name": "wbs_number",
+      "type": "column"
+    },
+    "column:wbs_source": {
+      "created_by": [
+        "scripts/stage1_clean/10_wbs_from_projects.py:138",
+        "scripts/stage1_clean/11_wbs_from_operations.py:110",
+        "scripts/stage1_clean/12_wbs_from_ops_activities.py:112"
+      ],
+      "id": "column:wbs_source",
+      "name": "wbs_source",
       "type": "column"
     },
     "db_column:budget_forecasts.costBreakdownId": {
@@ -2347,7 +2904,7 @@
       "constraints": {
         "not_null": false,
         "primary_key": false,
-        "references": "wbsDetails.wbsNumber"
+        "references": null
       },
       "data_type": "varchar",
       "id": "db_column:po_line_items.wbsNumber",
@@ -3031,7 +3588,7 @@
       "constraints": {
         "not_null": false,
         "primary_key": false,
-        "references": "wbsDetails.wbsNumber"
+        "references": null
       },
       "data_type": "varchar",
       "id": "db_column:sap_reservations.wbsNumber",
@@ -3050,15 +3607,123 @@
       "table": "wbs_details",
       "type": "db_column"
     },
-    "db_column:wbs_details.subBusinessLine": {
-      "column": "subBusinessLine",
+    "db_column:wbs_details.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:wbs_details.createdAt",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.location": {
+      "column": "location",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:wbs_details.location",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.operationNumber": {
+      "column": "operationNumber",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:wbs_details.operationNumber",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.opsActivityNumber": {
+      "column": "opsActivityNumber",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:wbs_details.opsActivityNumber",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.opsDistrict": {
+      "column": "opsDistrict",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:wbs_details.opsDistrict",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.projectNumber": {
+      "column": "projectNumber",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:wbs_details.projectNumber",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.rig": {
+      "column": "rig",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:wbs_details.rig",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.subBusinessLines": {
+      "column": "subBusinessLines",
       "constraints": {
         "not_null": false,
         "primary_key": false,
         "references": null
       },
       "data_type": "text",
-      "id": "db_column:wbs_details.subBusinessLine",
+      "id": "db_column:wbs_details.subBusinessLines",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.updatedAt": {
+      "column": "updatedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:wbs_details.updatedAt",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.wbsName": {
+      "column": "wbsName",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:wbs_details.wbsName",
       "table": "wbs_details",
       "type": "db_column"
     },
@@ -3071,6 +3736,18 @@
       },
       "data_type": "varchar",
       "id": "db_column:wbs_details.wbsNumber",
+      "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:wbs_details.wbsSource": {
+      "column": "wbsSource",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:wbs_details.wbsSource",
       "table": "wbs_details",
       "type": "db_column"
     },
@@ -3092,6 +3769,13 @@
       "folder": "import-ready",
       "id": "file:data/import-ready/po_transactions.csv",
       "path": "data/import-ready/po_transactions.csv",
+      "stage": "output",
+      "type": "file"
+    },
+    "file:data/import-ready/wbs_details.csv": {
+      "folder": "import-ready",
+      "id": "file:data/import-ready/wbs_details.csv",
+      "path": "data/import-ready/wbs_details.csv",
       "stage": "output",
       "type": "file"
     },
@@ -3135,6 +3819,39 @@
       "id": "file:data/intermediate/po_line_items.csv",
       "path": "data/intermediate/po_line_items.csv",
       "stage": "intermediate",
+      "type": "file"
+    },
+    "file:data/intermediate/wbs_from_operations.csv": {
+      "folder": "intermediate",
+      "id": "file:data/intermediate/wbs_from_operations.csv",
+      "path": "data/intermediate/wbs_from_operations.csv",
+      "stage": "intermediate",
+      "type": "file"
+    },
+    "file:data/intermediate/wbs_from_ops_activities.csv": {
+      "folder": "intermediate",
+      "id": "file:data/intermediate/wbs_from_ops_activities.csv",
+      "path": "data/intermediate/wbs_from_ops_activities.csv",
+      "stage": "intermediate",
+      "type": "file"
+    },
+    "file:data/intermediate/wbs_from_projects.csv": {
+      "folder": "intermediate",
+      "id": "file:data/intermediate/wbs_from_projects.csv",
+      "path": "data/intermediate/wbs_from_projects.csv",
+      "stage": "intermediate",
+      "type": "file"
+    },
+    "file:data/intermediate/wbs_processed.csv": {
+      "folder": "intermediate",
+      "id": "file:data/intermediate/wbs_processed.csv",
+      "path": "data/intermediate/wbs_processed.csv",
+      "stage": "intermediate",
+      "type": "file"
+    },
+    "file:data/raw/fdp": {
+      "id": "file:data/raw/fdp",
+      "path": "data/raw/fdp",
       "type": "file"
     },
     "file:data/raw/gr table.csv": {
@@ -3289,6 +4006,28 @@
       "stage": "stage3_prepare",
       "type": "script"
     },
+    "script:07_process_wbs": {
+      "functions": [
+        "combine_sources",
+        "load_all_sources",
+        "main",
+        "map_location_from_ops_district",
+        "parse_operations",
+        "parse_ops_activities",
+        "parse_sbl_codes",
+        "parse_wbs_entry",
+        "save_data",
+        "select_output_columns",
+        "split_and_parse_projects",
+        "to_sbl_array",
+        "validate_wbs_format"
+      ],
+      "id": "script:07_process_wbs",
+      "name": "07_process_wbs",
+      "path": "scripts/stage2_transform/07_process_wbs.py",
+      "stage": "stage2_transform",
+      "type": "script"
+    },
     "script:08_prepare_grir_exposures": {
       "functions": [
         "load_data",
@@ -3301,6 +4040,75 @@
       "name": "08_prepare_grir_exposures",
       "path": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
       "stage": "stage3_prepare",
+      "type": "script"
+    },
+    "script:09_prepare_wbs_details": {
+      "functions": [
+        "handle_duplicates",
+        "json_to_pg_array",
+        "load_data",
+        "main",
+        "map_columns",
+        "save_data",
+        "validate_output"
+      ],
+      "id": "script:09_prepare_wbs_details",
+      "name": "09_prepare_wbs_details",
+      "path": "scripts/stage3_prepare/09_prepare_wbs_details.py",
+      "stage": "stage3_prepare",
+      "type": "script"
+    },
+    "script:10_wbs_from_projects": {
+      "functions": [
+        "add_source_metadata",
+        "determine_rig",
+        "filter_rows_with_wbs",
+        "find_input_file",
+        "load_data",
+        "main",
+        "map_location",
+        "save_data",
+        "select_output_columns",
+        "standardize_columns"
+      ],
+      "id": "script:10_wbs_from_projects",
+      "name": "10_wbs_from_projects",
+      "path": "scripts/stage1_clean/10_wbs_from_projects.py",
+      "stage": "stage1_clean",
+      "type": "script"
+    },
+    "script:11_wbs_from_operations": {
+      "functions": [
+        "add_source_metadata",
+        "filter_rows_with_wbs",
+        "find_input_file",
+        "load_data",
+        "main",
+        "save_data",
+        "select_output_columns",
+        "standardize_columns"
+      ],
+      "id": "script:11_wbs_from_operations",
+      "name": "11_wbs_from_operations",
+      "path": "scripts/stage1_clean/11_wbs_from_operations.py",
+      "stage": "stage1_clean",
+      "type": "script"
+    },
+    "script:12_wbs_from_ops_activities": {
+      "functions": [
+        "add_source_metadata",
+        "filter_rows_with_wbs",
+        "find_input_file",
+        "load_data",
+        "main",
+        "save_data",
+        "select_output_columns",
+        "standardize_columns"
+      ],
+      "id": "script:12_wbs_from_ops_activities",
+      "name": "12_wbs_from_ops_activities",
+      "path": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
+      "stage": "stage1_clean",
       "type": "script"
     },
     "script:pipeline": {
@@ -3519,8 +4327,18 @@
     "table:wbs_details": {
       "columns": [
         "clientName",
-        "subBusinessLine",
-        "wbsNumber"
+        "createdAt",
+        "location",
+        "operationNumber",
+        "opsActivityNumber",
+        "opsDistrict",
+        "projectNumber",
+        "rig",
+        "subBusinessLines",
+        "updatedAt",
+        "wbsName",
+        "wbsNumber",
+        "wbsSource"
       ],
       "file": "wbs-details.ts",
       "id": "table:wbs_details",
@@ -3529,24 +4347,24 @@
     }
   },
   "stats": {
-    "columns_tracked": 39,
+    "columns_tracked": 54,
     "edges_by_type": {
       "DEPENDS_ON": 12,
-      "INPUT": 23,
+      "INPUT": 30,
       "MAPS_TO": 5,
-      "OUTPUT": 19,
-      "TRANSFORMS": 36
+      "OUTPUT": 23,
+      "TRANSFORMS": 51
     },
     "nodes_by_type": {
-      "column": 59,
-      "db_column": 123,
-      "file": 13,
-      "script": 10,
+      "column": 74,
+      "db_column": 133,
+      "file": 19,
+      "script": 15,
       "table": 11
     },
-    "total_edges": 95,
-    "total_nodes": 216,
-    "variables_traced": 33
+    "total_edges": 121,
+    "total_nodes": 252,
+    "variables_traced": 51
   },
   "variable_sources": {
     "01_po_line_items": {
@@ -3664,9 +4482,76 @@
         "transaction_type"
       ]
     },
+    "07_process_wbs": {
+      "mapped": [
+        "location"
+      ],
+      "mapped_count": [
+        "sub_business_lines"
+      ],
+      "parsed": [
+        "sap_wbs_raw"
+      ],
+      "sbl_code": [
+        "sub_business_line_from_wbs",
+        "sub_business_line_mapped"
+      ],
+      "sbl_filled": [
+        "sub_business_lines"
+      ],
+      "unmapped": [
+        "sub_business_line_mapped",
+        "sub_business_line_raw"
+      ],
+      "valid_format": [
+        "wbs_number"
+      ],
+      "valid_mask": [
+        "wbs_number"
+      ]
+    },
     "08_prepare_grir_exposures": {
       "bucket_df": [
         "time_bucket"
+      ]
+    },
+    "09_prepare_wbs_details": {
+      "converted_filled": [
+        "sub_business_lines"
+      ],
+      "original_filled": [
+        "sub_business_lines"
+      ],
+      "valid_format": [
+        "wbs_number"
+      ]
+    },
+    "10_wbs_from_projects": {
+      "from_rigs": [
+        "rigs"
+      ],
+      "from_type": [
+        "project_type"
+      ],
+      "mapped_count": [
+        "location"
+      ],
+      "mask": [
+        "SAP WBS # / SO #"
+      ],
+      "unmapped": [
+        "location",
+        "ops_district"
+      ]
+    },
+    "11_wbs_from_operations": {
+      "mask": [
+        "SAP WBS # / SO #"
+      ]
+    },
+    "12_wbs_from_ops_activities": {
+      "mask": [
+        "SAP WBS # / SO #"
       ]
     }
   },

@@ -20,6 +20,7 @@ Output:
     data/import-ready/po_line_items.csv   → po_line_items table
     data/import-ready/po_transactions.csv → po_transactions table
     data/import-ready/grir_exposures.csv  → grir_exposures table
+    data/import-ready/wbs_details.csv     → wbs_details table
 """
 
 import subprocess
@@ -37,18 +38,24 @@ STAGE1_SCRIPTS = [
     ("stage1_clean/01_po_line_items.py", "Clean PO Line Items"),
     ("stage1_clean/02_gr_postings.py", "Clean GR Postings"),
     ("stage1_clean/03_ir_postings.py", "Clean IR Postings"),
+    # WBS extraction from FDP reports
+    ("stage1_clean/10_wbs_from_projects.py", "Extract WBS from Projects"),
+    ("stage1_clean/11_wbs_from_operations.py", "Extract WBS from Operations"),
+    ("stage1_clean/12_wbs_from_ops_activities.py", "Extract WBS from Ops Activities"),
 ]
 
 STAGE2_SCRIPTS = [
     ("stage2_transform/04_enrich_po_line_items.py", "Enrich PO Line Items"),
     ("stage2_transform/05_calculate_cost_impact.py", "Calculate Cost Impact"),
     ("stage2_transform/06_calculate_grir.py", "Calculate GRIR Exposures"),
+    ("stage2_transform/07_process_wbs.py", "Process WBS (split/parse/enrich)"),
 ]
 
 STAGE3_SCRIPTS = [
     ("stage3_prepare/06_prepare_po_line_items.py", "Prepare PO Line Items for Import"),
     ("stage3_prepare/07_prepare_po_transactions.py", "Prepare PO Transactions for Import"),
     ("stage3_prepare/08_prepare_grir_exposures.py", "Prepare GRIR Exposures for Import"),
+    ("stage3_prepare/09_prepare_wbs_details.py", "Prepare WBS Details for Import"),
 ]
 
 

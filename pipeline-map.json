@@ -101,6 +101,19 @@
       "P9518": "Singapore Hub",
       "P9519": "Japan Hub",
       "P9562": "QRTC"
+    },
+    "WBS_DETAILS_MAPPING": {
+      "client_name": "client_name",
+      "location": "location",
+      "operation_number": "operation_number",
+      "ops_activity_number": "ops_activity_number",
+      "ops_district": "ops_district",
+      "project_number": "project_number",
+      "rig": "rig",
+      "sub_business_lines": "sub_business_lines",
+      "wbs_name": "wbs_name",
+      "wbs_number": "wbs_number",
+      "wbs_source": "wbs_source"
     }
   },
   "common_errors": {
@@ -166,7 +179,8 @@
     "import-ready": [
       "grir_exposures.csv",
       "po_line_items.csv",
-      "po_transactions.csv"
+      "po_transactions.csv",
+      "wbs_details.csv"
     ],
     "intermediate": [
       "cost_impact.csv",
@@ -174,7 +188,11 @@
       "grir_exposures.csv",
       "ir_postings.csv",
       "po_details_enrichment.csv",
-      "po_line_items.csv"
+      "po_line_items.csv",
+      "wbs_from_operations.csv",
+      "wbs_from_ops_activities.csv",
+      "wbs_from_projects.csv",
+      "wbs_processed.csv"
     ],
     "raw": [
       "gr table.csv",
@@ -610,6 +628,241 @@
         "quantity": 1.0,
         "transaction_type": "IR"
       }
+    },
+    "wbs_details.csv": {
+      "columns": [
+        "client_name",
+        "location",
+        "operation_number",
+        "ops_activity_number",
+        "ops_district",
+        "project_number",
+        "rig",
+        "sub_business_lines",
+        "wbs_name",
+        "wbs_number",
+        "wbs_source"
+      ],
+      "dtypes": {
+        "client_name": "object",
+        "location": "object",
+        "operation_number": "object",
+        "ops_activity_number": "object",
+        "ops_district": "object",
+        "project_number": "object",
+        "rig": "object",
+        "sub_business_lines": "object",
+        "wbs_name": "object",
+        "wbs_number": "object",
+        "wbs_source": "object"
+      },
+      "null_counts": {
+        "operation_number": 526,
+        "ops_activity_number": 670,
+        "rig": 232
+      },
+      "path": "data/import-ready/wbs_details.csv",
+      "row_count": 7852,
+      "sample_row": {
+        "client_name": "SANTOS LIMITED",
+        "location": "Moomba",
+        "operation_number": NaN,
+        "ops_activity_number": NaN,
+        "ops_district": "Moomba WL",
+        "project_number": "P.1033291",
+        "rig": "RIGLESS - AUSTRALIA",
+        "sub_business_lines": "{SLKN}",
+        "wbs_name": "Q3 U420 Rigless",
+        "wbs_number": "J.22.111697",
+        "wbs_source": "Project"
+      }
+    },
+    "wbs_from_operations.csv": {
+      "columns": [
+        "client_name",
+        "location",
+        "operation_number",
+        "ops_activity_number",
+        "ops_district",
+        "project_number",
+        "rig",
+        "sap_wbs_raw",
+        "sub_business_lines_raw",
+        "wbs_name",
+        "wbs_source"
+      ],
+      "dtypes": {
+        "client_name": "object",
+        "location": "float64",
+        "operation_number": "object",
+        "ops_activity_number": "float64",
+        "ops_district": "object",
+        "project_number": "object",
+        "rig": "object",
+        "sap_wbs_raw": "object",
+        "sub_business_lines_raw": "object",
+        "wbs_name": "object",
+        "wbs_source": "object"
+      },
+      "null_counts": {
+        "location": 144,
+        "ops_activity_number": 144,
+        "rig": 10
+      },
+      "path": "data/intermediate/wbs_from_operations.csv",
+      "row_count": 144,
+      "sample_row": {
+        "client_name": "FUGRO AUSTRALIA PTY LTD",
+        "location": NaN,
+        "operation_number": "O.1075365.01",
+        "ops_activity_number": NaN,
+        "ops_district": "APG TS",
+        "project_number": "P.1075365",
+        "rig": NaN,
+        "sap_wbs_raw": "J.25.166462",
+        "sub_business_lines_raw": "DHT",
+        "wbs_name": "Fugro Subsea Sampling Job",
+        "wbs_source": "Operation"
+      }
+    },
+    "wbs_from_ops_activities.csv": {
+      "columns": [
+        "client_name",
+        "location",
+        "operation_number",
+        "ops_activity_number",
+        "ops_district",
+        "project_number",
+        "rig",
+        "sap_wbs_raw",
+        "sub_business_line_raw",
+        "wbs_name",
+        "wbs_source"
+      ],
+      "dtypes": {
+        "client_name": "object",
+        "location": "float64",
+        "operation_number": "object",
+        "ops_activity_number": "object",
+        "ops_district": "object",
+        "project_number": "object",
+        "rig": "object",
+        "sap_wbs_raw": "object",
+        "sub_business_line_raw": "object",
+        "wbs_name": "object",
+        "wbs_source": "object"
+      },
+      "null_counts": {
+        "location": 7182,
+        "rig": 222
+      },
+      "path": "data/intermediate/wbs_from_ops_activities.csv",
+      "row_count": 7182,
+      "sample_row": {
+        "client_name": "ORIGIN ENERGY UPSTREAM OPERATOR PTY LTD",
+        "location": NaN,
+        "operation_number": "O.1077724.01",
+        "ops_activity_number": "A.1077724.01.05",
+        "ops_district": "AUS East Coast WS",
+        "project_number": "P.1077724",
+        "rig": NaN,
+        "sap_wbs_raw": "J.26.019759",
+        "sub_business_line_raw": "WS Production Services",
+        "wbs_name": "ShaleAID test5",
+        "wbs_source": "Operation Activity"
+      }
+    },
+    "wbs_from_projects.csv": {
+      "columns": [
+        "client_name",
+        "location",
+        "operation_number",
+        "ops_activity_number",
+        "ops_district",
+        "project_number",
+        "rig",
+        "sap_wbs_raw",
+        "wbs_name",
+        "wbs_source"
+      ],
+      "dtypes": {
+        "client_name": "object",
+        "location": "object",
+        "operation_number": "float64",
+        "ops_activity_number": "float64",
+        "ops_district": "object",
+        "project_number": "object",
+        "rig": "object",
+        "sap_wbs_raw": "object",
+        "wbs_name": "object",
+        "wbs_source": "object"
+      },
+      "null_counts": {
+        "operation_number": 369,
+        "ops_activity_number": 369
+      },
+      "path": "data/intermediate/wbs_from_projects.csv",
+      "row_count": 369,
+      "sample_row": {
+        "client_name": "SANTOS LIMITED",
+        "location": "Moomba",
+        "operation_number": NaN,
+        "ops_activity_number": NaN,
+        "ops_district": "Moomba WL",
+        "project_number": "P.1033291",
+        "rig": "RIGLESS - AUSTRALIA",
+        "sap_wbs_raw": "J.22.111697(SLKN), J.22.153401(WLPS)",
+        "wbs_name": "Q3 U420 Rigless",
+        "wbs_source": "Project"
+      }
+    },
+    "wbs_processed.csv": {
+      "columns": [
+        "client_name",
+        "location",
+        "operation_number",
+        "ops_activity_number",
+        "ops_district",
+        "project_number",
+        "rig",
+        "sub_business_lines",
+        "wbs_name",
+        "wbs_number",
+        "wbs_source"
+      ],
+      "dtypes": {
+        "client_name": "object",
+        "location": "object",
+        "operation_number": "object",
+        "ops_activity_number": "object",
+        "ops_district": "object",
+        "project_number": "object",
+        "rig": "object",
+        "sub_business_lines": "object",
+        "wbs_name": "object",
+        "wbs_number": "object",
+        "wbs_source": "object"
+      },
+      "null_counts": {
+        "operation_number": 526,
+        "ops_activity_number": 670,
+        "rig": 232
+      },
+      "path": "data/intermediate/wbs_processed.csv",
+      "row_count": 7852,
+      "sample_row": {
+        "client_name": "SANTOS LIMITED",
+        "location": "Moomba",
+        "operation_number": NaN,
+        "ops_activity_number": NaN,
+        "ops_district": "Moomba WL",
+        "project_number": "P.1033291",
+        "rig": "RIGLESS - AUSTRALIA",
+        "sub_business_lines": "[\"SLKN\"]",
+        "wbs_name": "Q3 U420 Rigless",
+        "wbs_number": "J.22.111697",
+        "wbs_source": "Project"
+      }
     }
   },
   "description": "Data pipeline for transforming raw PO/GR/IR data into import-ready CSVs",
@@ -622,7 +875,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-01T02:50:57.243670+00:00",
+  "generated_at": "2025-12-01T08:29:43.429984+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -970,7 +1223,6 @@
         },
         {
           "name": "wbsNumber",
-          "references": "wbsDetails.wbsNumber",
           "type": "varchar"
         }
       ],
@@ -1269,7 +1521,6 @@
         },
         {
           "name": "wbsNumber",
-          "references": "wbsDetails.wbsNumber",
           "type": "varchar"
         }
       ],
@@ -1284,12 +1535,53 @@
           "type": "text"
         },
         {
-          "name": "subBusinessLine",
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "location",
+          "type": "varchar"
+        },
+        {
+          "name": "operationNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "opsActivityNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "opsDistrict",
+          "type": "varchar"
+        },
+        {
+          "name": "projectNumber",
+          "type": "varchar"
+        },
+        {
+          "name": "rig",
+          "type": "varchar"
+        },
+        {
+          "name": "subBusinessLines",
+          "type": "text"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "wbsName",
           "type": "text"
         },
         {
           "name": "wbsNumber",
           "primary_key": true,
+          "type": "varchar"
+        },
+        {
+          "name": "wbsSource",
+          "not_null": true,
           "type": "varchar"
         }
       ],
@@ -2859,6 +3151,402 @@
     },
     {
       "dependencies": [],
+      "docstring": "Stage 2: Process WBS Data - Split, Parse, and Map Location\n\nCombines WBS data from all three sources (Projects, Operations, Ops Activities),\nparses WBS numbers and Sub Business Line codes, and maps location from Ops District.\n\nKey transformations:\n1. Split comma-separated WBS entries (Projects) into separate rows\n2. Parse WBS number format: J.XX.XXXXXX from strings like \"J.24.079733(WIS)\"\n3. Extract Sub Business Line codes as arrays:\n   - Projects: single code from brackets -> [\"WIS\"]\n   - Operations: comma-separated codes -> [\"SLKN\", \"WLPS\", \"WLES\"]\n   - Ops Activities: map full name to code -> [\"WLPS\"]\n4. Map location from Ops District (available in all three reports)\n5. Validate WBS format and flag non-standard entries\n\nDependencies: \n- scripts/stage1_clean/10_wbs_from_projects.py\n- scripts/stage1_clean/11_wbs_from_operations.py\n- scripts/stage1_clean/12_wbs_from_ops_activities.py\n\nInput: \n- data/intermediate/wbs_from_projects.csv\n- data/intermediate/wbs_from_operations.csv\n- data/intermediate/wbs_from_ops_activities.csv\n\nOutput: data/intermediate/wbs_processed.csv",
+      "functions": [
+        {
+          "args": [
+            "dfs"
+          ],
+          "docstring": "Combine all sources into a single DataFrame.",
+          "line": 257,
+          "name": "combine_sources",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": "Load all WBS source files.",
+          "line": 61,
+          "name": "load_all_sources",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": null,
+          "line": 326,
+          "name": "main",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df",
+            "source_name"
+          ],
+          "docstring": "Map location from Ops District using OPS_DISTRICT_TO_LOCATION mapping.",
+          "line": 239,
+          "name": "map_location_from_ops_district",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [
+              "location"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Parse Operations WBS entries.\nOperations can have multiple SBL codes (comma-separated in source).",
+          "line": 144,
+          "name": "parse_operations",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "sub_business_lines",
+              "wbs_number"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Parse Ops Activities WBS entries.\nMaps full SBL names to codes, stores as single-element array.",
+          "line": 185,
+          "name": "parse_ops_activities",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "sub_business_line_from_wbs",
+              "sub_business_line_mapped",
+              "sub_business_lines",
+              "wbs_number"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "raw_value"
+          ],
+          "docstring": null,
+          "line": 159,
+          "name": "parse_sbl_codes",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "wbs_string"
+          ],
+          "docstring": "Parse a single WBS entry to extract WBS number and SBL code.\n\nExamples:\n- \"J.24.079733(WIS)\" -> (\"J.24.079733\", \"WIS\")\n- \"J.25.166462\" -> (\"J.25.166462\", None)\n- \"Invalid\" -> (None, None)",
+          "line": 75,
+          "name": "parse_wbs_entry",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "docstring": "Save the processed DataFrame to CSV.",
+          "line": 318,
+          "name": "save_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Select and order final output columns.",
+          "line": 289,
+          "name": "select_output_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Split comma-separated WBS entries in Projects and parse each.\nEach WBS gets a single SBL code wrapped in array format.",
+          "line": 111,
+          "name": "split_and_parse_projects",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "sub_business_lines",
+              "wbs_number"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "codes"
+          ],
+          "docstring": "Convert list of SBL codes to JSON array string for CSV storage.",
+          "line": 100,
+          "name": "to_sbl_array",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Validate WBS number format and flag non-standard entries.",
+          "line": 272,
+          "name": "validate_wbs_format",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        }
+      ],
+      "imports": [
+        "config.column_mappings",
+        "json",
+        "pandas",
+        "pathlib",
+        "re",
+        "sys",
+        "typing"
+      ],
+      "inputs": [],
+      "line_count": 389,
+      "name": "07_process_wbs",
+      "outputs": [],
+      "pandas_operations": [
+        {
+          "code_snippet": "parsed = df[\"sap_wbs_raw\"].apply(lambda x: pd.Series(parse_wbs_entry(x)))",
+          "description": "Applies function to data",
+          "line": 155,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[\"sub_business_lines\"] = df[\"sub_business_lines_raw\"].apply(parse_sbl_codes)",
+          "description": "Applies function to data",
+          "line": 166,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "parsed = df[\"sap_wbs_raw\"].apply(lambda x: pd.Series(parse_wbs_entry(x)))",
+          "description": "Applies function to data",
+          "line": 196,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[\"sub_business_lines\"] = sbl_code.apply(lambda x: to_sbl_array([x]) if pd.notna(x) else None)",
+          "description": "Applies function to data",
+          "line": 217,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[\"sub_business_lines\"] = df[\"sub_business_line_from_wbs\"].apply(",
+          "description": "Applies function to data",
+          "line": 223,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df = df[available]",
+          "description": "Filters rows based on boolean condition",
+          "line": 313,
+          "operation": "boolean_filter"
+        },
+        {
+          "code_snippet": "df[\"location\"] = df[\"ops_district\"].map(OPS_DISTRICT_TO_LOCATION)",
+          "column": "location",
+          "description": "Creates/modifies column 'location'",
+          "line": 244,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"sub_business_line_from_wbs\"] = parsed[1]",
+          "column": "sub_business_line_from_wbs",
+          "description": "Creates/modifies column 'sub_business_line_from_wbs'",
+          "line": 198,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"sub_business_line_mapped\"] = df[\"sub_business_line_raw\"].map(SBL_NAME_TO_CODE)",
+          "column": "sub_business_line_mapped",
+          "description": "Creates/modifies column 'sub_business_line_mapped'",
+          "line": 202,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "new_row[\"sub_business_lines\"] = to_sbl_array([sbl_code]) if sbl_code else None",
+          "column": "sub_business_lines",
+          "description": "Creates/modifies column 'sub_business_lines'",
+          "line": 136,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"sub_business_lines\"] = df[\"sub_business_lines_raw\"].apply(parse_sbl_codes)",
+          "column": "sub_business_lines",
+          "description": "Creates/modifies column 'sub_business_lines'",
+          "line": 166,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"sub_business_lines\"] = None",
+          "column": "sub_business_lines",
+          "description": "Creates/modifies column 'sub_business_lines'",
+          "line": 172,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"sub_business_lines\"] = sbl_code.apply(lambda x: to_sbl_array([x]) if pd.notna(x) else None)",
+          "column": "sub_business_lines",
+          "description": "Creates/modifies column 'sub_business_lines'",
+          "line": 217,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"sub_business_lines\"] = df[\"sub_business_line_from_wbs\"].apply(",
+          "column": "sub_business_lines",
+          "description": "Creates/modifies column 'sub_business_lines'",
+          "line": 223,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "new_row[\"wbs_number\"] = wbs_number",
+          "column": "wbs_number",
+          "description": "Creates/modifies column 'wbs_number'",
+          "line": 134,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"wbs_number\"] = parsed[0]",
+          "column": "wbs_number",
+          "description": "Creates/modifies column 'wbs_number'",
+          "line": 156,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"wbs_number\"] = parsed[0]",
+          "column": "wbs_number",
+          "description": "Creates/modifies column 'wbs_number'",
+          "line": 197,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df = df.drop(columns=[\"sub_business_lines_raw\"])",
+          "description": "Removes columns or rows",
+          "dropped_columns": [
+            "sub_business_lines_raw"
+          ],
+          "line": 167,
+          "operation": "drop"
+        },
+        {
+          "code_snippet": "df = df.drop(columns=[\"sub_business_line_raw\", \"sub_business_line_from_wbs\", \"sub_business_line_mapped\"])",
+          "description": "Removes columns or rows",
+          "dropped_columns": [
+            "sub_business_line_from_wbs",
+            "sub_business_line_mapped",
+            "sub_business_line_raw"
+          ],
+          "line": 218,
+          "operation": "drop"
+        },
+        {
+          "code_snippet": "df = df.drop(columns=[\"sub_business_line_from_wbs\"])",
+          "description": "Removes columns or rows",
+          "dropped_columns": [
+            "sub_business_line_from_wbs"
+          ],
+          "line": 226,
+          "operation": "drop"
+        },
+        {
+          "code_snippet": "df[\"sub_business_line_mapped\"] = df[\"sub_business_line_raw\"].map(SBL_NAME_TO_CODE)",
+          "description": "Maps values using dictionary or function",
+          "line": 202,
+          "operation": "map"
+        },
+        {
+          "code_snippet": "df[\"location\"] = df[\"ops_district\"].map(OPS_DISTRICT_TO_LOCATION)",
+          "description": "Maps values using dictionary or function",
+          "line": 244,
+          "operation": "map"
+        }
+      ],
+      "path": "scripts/stage2_transform/07_process_wbs.py",
+      "stage": "stage2_transform"
+    },
+    {
+      "dependencies": [],
       "docstring": "Stage 3: Prepare GRIR Exposures for Import\n\nMaps intermediate GRIR columns to database schema columns.\n\nDependencies: stage2_transform/06_calculate_grir.py must run first\nInput: data/intermediate/grir_exposures.csv\nOutput: data/import-ready/grir_exposures.csv",
       "functions": [
         {
@@ -2991,12 +3679,807 @@
     },
     {
       "dependencies": [],
-      "docstring": "Data Pipeline Orchestrator\n\nRuns all data transformation scripts in the correct order to produce\nimport-ready CSV files from raw data.\n\nUsage:\n    python3 scripts/pipeline.py           # Run full pipeline\n    python3 scripts/pipeline.py --stage1  # Run only stage 1\n    python3 scripts/pipeline.py --stage2  # Run stages 1-2\n    python3 scripts/pipeline.py --stage3  # Run all stages (same as full)\n\nPipeline Stages:\n    Stage 1 (Clean):     Raw data \u2192 Intermediate (cleaned)\n    Stage 2 (Transform): Intermediate \u2192 Intermediate (enriched + cost impact)\n    Stage 3 (Prepare):   Intermediate \u2192 Import-ready (DB schema mapped)\n\nOutput:\n    data/import-ready/po_line_items.csv   \u2192 po_line_items table\n    data/import-ready/po_transactions.csv \u2192 po_transactions table\n    data/import-ready/grir_exposures.csv  \u2192 grir_exposures table",
+      "docstring": "Stage 3: Prepare WBS Details for Import\n\nMaps intermediate columns to database schema columns and handles\nduplicate WBS entries (same WBS from different sources).\n\nDuplicate handling strategy:\n- wbs_number is the primary key (globally unique across all FDP reports)\n- If duplicates found (shouldn't happen), keep first occurrence\n\nArray column handling:\n- sub_business_lines: JSON array in CSV -> PostgreSQL text[] literal format\n- Example: '[\"WLPS\", \"SLKN\"]' -> '{WLPS,SLKN}'\n\nDependencies: scripts/stage2_transform/07_process_wbs.py\nInput: data/intermediate/wbs_processed.csv\nOutput: data/import-ready/wbs_details.csv",
+      "functions": [
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Handle duplicate WBS entries.\n\nSince wbs_number is the primary key (globally unique across all FDP reports),\nwe check for any duplicates and fail if found.",
+          "line": 68,
+          "name": "handle_duplicates",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "json_str"
+          ],
+          "docstring": "Convert JSON array string to PostgreSQL text[] literal format.\n\nExamples:\n- '[\"WLPS\"]' -> '{WLPS}'\n- '[\"WLPS\", \"SLKN\", \"WLES\"]' -> '{WLPS,SLKN,WLES}'\n- None/NaN -> None",
+          "line": 46,
+          "name": "json_to_pg_array",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": true,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": "Load intermediate WBS data.",
+          "line": 38,
+          "name": "load_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": null,
+          "line": 164,
+          "name": "main",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Map intermediate columns to database column names.",
+          "line": 93,
+          "name": "map_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "sub_business_lines"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "docstring": "Save import-ready DataFrame to CSV.",
+          "line": 155,
+          "name": "save_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Validate required columns are present and data is valid.",
+          "line": 118,
+          "name": "validate_output",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        }
+      ],
+      "imports": [
+        "config.column_mappings",
+        "json",
+        "pandas",
+        "pathlib",
+        "sys"
+      ],
+      "inputs": [
+        "data/intermediate/wbs_processed.csv"
+      ],
+      "line_count": 201,
+      "name": "09_prepare_wbs_details",
+      "outputs": [
+        "data/intermediate/wbs_processed.csv"
+      ],
+      "pandas_operations": [
+        {
+          "code_snippet": "output_df[\"sub_business_lines\"] = output_df[\"sub_business_lines\"].apply(json_to_pg_array)",
+          "description": "Applies function to data",
+          "line": 110,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "output_df[db_col] = df[csv_col]",
+          "description": "Filters rows based on boolean condition",
+          "line": 102,
+          "operation": "boolean_filter"
+        },
+        {
+          "code_snippet": "output_df[\"sub_business_lines\"] = output_df[\"sub_business_lines\"].apply(json_to_pg_array)",
+          "column": "sub_business_lines",
+          "description": "Creates/modifies column 'sub_business_lines'",
+          "line": 110,
+          "operation": "column_assign"
+        }
+      ],
+      "path": "scripts/stage3_prepare/09_prepare_wbs_details.py",
+      "stage": "stage3_prepare"
+    },
+    {
+      "dependencies": [],
+      "docstring": "Stage 1: Extract WBS Data from Projects Report\n\nReads the FDP Projects dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\nWBS splitting (for comma-separated entries) happens in Stage 2.\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/ProjectDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_projects.csv",
+      "functions": [
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Add source tracking columns.",
+          "line": 136,
+          "name": "add_source_metadata",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [
+              "operation_number",
+              "ops_activity_number",
+              "wbs_source"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Determine rig value - use Rigs column, fallback to Project Type.",
+          "line": 121,
+          "name": "determine_rig",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [
+              "rig"
+            ],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Filter to only rows that have WBS data.",
+          "line": 72,
+          "name": "filter_rows_with_wbs",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
+          "args": [],
+          "docstring": "Find the Projects dashboard export file.",
+          "line": 42,
+          "name": "find_input_file",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "filepath"
+          ],
+          "docstring": "Load the Excel file and select relevant columns.",
+          "line": 55,
+          "name": "load_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": null,
+          "line": 175,
+          "name": "main",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Map Ops District to Location.",
+          "line": 105,
+          "name": "map_location",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [
+              "location"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "docstring": "Save the cleaned DataFrame to CSV.",
+          "line": 167,
+          "name": "save_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Select and order final output columns.",
+          "line": 145,
+          "name": "select_output_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Rename columns to standardized intermediate format.",
+          "line": 87,
+          "name": "standardize_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": true,
+            "type_conversions": false
+          }
+        }
+      ],
+      "imports": [
+        "config.column_mappings",
+        "pandas",
+        "pathlib",
+        "sys",
+        "typing"
+      ],
+      "inputs": [
+        "data/intermediate/wbs_from_projects.csv",
+        "data/raw/fdp"
+      ],
+      "line_count": 223,
+      "name": "10_wbs_from_projects",
+      "outputs": [
+        "data/intermediate/wbs_from_projects.csv"
+      ],
+      "pandas_operations": [
+        {
+          "code_snippet": "df[\"rigs\"].notna() & (df[\"rigs\"].astype(str).str.strip() != \"\"),",
+          "description": "Converts column types",
+          "line": 124,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "from_rigs = df[\"rigs\"].notna() & (df[\"rigs\"].astype(str).str.strip() != \"\")",
+          "description": "Converts column types",
+          "line": 128,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "mask = df[wbs_col].notna() & (df[wbs_col].astype(str).str.strip() != \"\")",
+          "description": "Converts column types",
+          "line": 78,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df = df[available]",
+          "description": "Filters rows based on boolean condition",
+          "line": 162,
+          "operation": "boolean_filter"
+        },
+        {
+          "code_snippet": "df[\"location\"] = df[\"ops_district\"].map(OPS_DISTRICT_TO_LOCATION)",
+          "column": "location",
+          "description": "Creates/modifies column 'location'",
+          "line": 107,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"operation_number\"] = None",
+          "column": "operation_number",
+          "description": "Creates/modifies column 'operation_number'",
+          "line": 139,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"ops_activity_number\"] = None",
+          "column": "ops_activity_number",
+          "description": "Creates/modifies column 'ops_activity_number'",
+          "line": 140,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"rig\"] = df[\"rigs\"].where(",
+          "column": "rig",
+          "description": "Creates/modifies column 'rig'",
+          "line": 123,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"wbs_source\"] = \"Project\"",
+          "column": "wbs_source",
+          "description": "Creates/modifies column 'wbs_source'",
+          "line": 138,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"location\"] = df[\"ops_district\"].map(OPS_DISTRICT_TO_LOCATION)",
+          "description": "Maps values using dictionary or function",
+          "line": 107,
+          "operation": "map"
+        },
+        {
+          "code_snippet": "df = df.rename(columns=rename_map)",
+          "description": "Renames columns",
+          "line": 100,
+          "operation": "rename"
+        }
+      ],
+      "path": "scripts/stage1_clean/10_wbs_from_projects.py",
+      "stage": "stage1_clean"
+    },
+    {
+      "dependencies": [],
+      "docstring": "Stage 1: Extract WBS Data from Operations Report\n\nReads the FDP Operations dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\n\nNote: Operations file has single WBS per row (no comma-separated entries).\nNote: Most operations rows (89%) have NULL WBS - these are filtered out.\nNote: No Plant Code column - will be enriched from Projects in Stage 2.\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/OperationDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_operations.csv",
+      "functions": [
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Add source tracking and placeholder columns.",
+          "line": 108,
+          "name": "add_source_metadata",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [
+              "location",
+              "ops_activity_number",
+              "wbs_source"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Filter to only rows that have WBS data.",
+          "line": 75,
+          "name": "filter_rows_with_wbs",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
+          "args": [],
+          "docstring": "Find the Operations dashboard export file.",
+          "line": 45,
+          "name": "find_input_file",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "filepath"
+          ],
+          "docstring": "Load the Excel file and select relevant columns.",
+          "line": 58,
+          "name": "load_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": null,
+          "line": 151,
+          "name": "main",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "docstring": "Save the cleaned DataFrame to CSV.",
+          "line": 143,
+          "name": "save_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Select and order final output columns.",
+          "line": 120,
+          "name": "select_output_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Rename columns to standardized intermediate format.",
+          "line": 90,
+          "name": "standardize_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": true,
+            "type_conversions": false
+          }
+        }
+      ],
+      "imports": [
+        "pandas",
+        "pathlib",
+        "sys",
+        "typing"
+      ],
+      "inputs": [
+        "data/intermediate/wbs_from_operations.csv",
+        "data/raw/fdp"
+      ],
+      "line_count": 200,
+      "name": "11_wbs_from_operations",
+      "outputs": [
+        "data/intermediate/wbs_from_operations.csv"
+      ],
+      "pandas_operations": [
+        {
+          "code_snippet": "mask = df[wbs_col].notna() & (df[wbs_col].astype(str).str.strip() != \"\")",
+          "description": "Converts column types",
+          "line": 81,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df = df[available]",
+          "description": "Filters rows based on boolean condition",
+          "line": 138,
+          "operation": "boolean_filter"
+        },
+        {
+          "code_snippet": "df[\"location\"] = None",
+          "column": "location",
+          "description": "Creates/modifies column 'location'",
+          "line": 114,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"ops_activity_number\"] = None",
+          "column": "ops_activity_number",
+          "description": "Creates/modifies column 'ops_activity_number'",
+          "line": 111,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"wbs_source\"] = \"Operation\"",
+          "column": "wbs_source",
+          "description": "Creates/modifies column 'wbs_source'",
+          "line": 110,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df = df.rename(columns=rename_map)",
+          "description": "Renames columns",
+          "line": 103,
+          "operation": "rename"
+        }
+      ],
+      "path": "scripts/stage1_clean/11_wbs_from_operations.py",
+      "stage": "stage1_clean"
+    },
+    {
+      "dependencies": [],
+      "docstring": "Stage 1: Extract WBS Data from Operation Activities Report\n\nReads the FDP Operation Activities dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\n\nNote: Ops Activities has single WBS per row (no comma-separated entries).\nNote: Has explicit \"Sub Business Line\" column with full names (not bracket codes).\nNote: No Plant Code column - will be enriched from Projects in Stage 2.\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/OperationActivityDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_ops_activities.csv",
+      "functions": [
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Add source tracking and placeholder columns.",
+          "line": 110,
+          "name": "add_source_metadata",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [
+              "location",
+              "wbs_source"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Filter to only rows that have WBS data.",
+          "line": 76,
+          "name": "filter_rows_with_wbs",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
+          "args": [],
+          "docstring": "Find the Operation Activities dashboard export file.",
+          "line": 46,
+          "name": "find_input_file",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "filepath"
+          ],
+          "docstring": "Load the Excel file and select relevant columns.",
+          "line": 59,
+          "name": "load_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": null,
+          "line": 152,
+          "name": "main",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "docstring": "Save the cleaned DataFrame to CSV.",
+          "line": 144,
+          "name": "save_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Select and order final output columns.",
+          "line": 121,
+          "name": "select_output_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Rename columns to standardized intermediate format.",
+          "line": 91,
+          "name": "standardize_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": true,
+            "type_conversions": false
+          }
+        }
+      ],
+      "imports": [
+        "pandas",
+        "pathlib",
+        "sys",
+        "typing"
+      ],
+      "inputs": [
+        "data/intermediate/wbs_from_ops_activities.csv",
+        "data/raw/fdp"
+      ],
+      "line_count": 201,
+      "name": "12_wbs_from_ops_activities",
+      "outputs": [
+        "data/intermediate/wbs_from_ops_activities.csv"
+      ],
+      "pandas_operations": [
+        {
+          "code_snippet": "mask = df[wbs_col].notna() & (df[wbs_col].astype(str).str.strip() != \"\")",
+          "description": "Converts column types",
+          "line": 82,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df = df[available]",
+          "description": "Filters rows based on boolean condition",
+          "line": 139,
+          "operation": "boolean_filter"
+        },
+        {
+          "code_snippet": "df[\"location\"] = None",
+          "column": "location",
+          "description": "Creates/modifies column 'location'",
+          "line": 115,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"wbs_source\"] = \"Operation Activity\"",
+          "column": "wbs_source",
+          "description": "Creates/modifies column 'wbs_source'",
+          "line": 112,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df = df.rename(columns=rename_map)",
+          "description": "Renames columns",
+          "line": 105,
+          "operation": "rename"
+        }
+      ],
+      "path": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
+      "stage": "stage1_clean"
+    },
+    {
+      "dependencies": [],
+      "docstring": "Data Pipeline Orchestrator\n\nRuns all data transformation scripts in the correct order to produce\nimport-ready CSV files from raw data.\n\nUsage:\n    python3 scripts/pipeline.py           # Run full pipeline\n    python3 scripts/pipeline.py --stage1  # Run only stage 1\n    python3 scripts/pipeline.py --stage2  # Run stages 1-2\n    python3 scripts/pipeline.py --stage3  # Run all stages (same as full)\n\nPipeline Stages:\n    Stage 1 (Clean):     Raw data \u2192 Intermediate (cleaned)\n    Stage 2 (Transform): Intermediate \u2192 Intermediate (enriched + cost impact)\n    Stage 3 (Prepare):   Intermediate \u2192 Import-ready (DB schema mapped)\n\nOutput:\n    data/import-ready/po_line_items.csv   \u2192 po_line_items table\n    data/import-ready/po_transactions.csv \u2192 po_transactions table\n    data/import-ready/grir_exposures.csv  \u2192 grir_exposures table\n    data/import-ready/wbs_details.csv     \u2192 wbs_details table",
       "functions": [
         {
           "args": [],
           "docstring": null,
-          "line": 137,
+          "line": 144,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -3012,7 +4495,7 @@
             "max_stage"
           ],
           "docstring": "Run the pipeline up to the specified stage.",
-          "line": 92,
+          "line": 99,
           "name": "run_pipeline",
           "semantics": {
             "aggregates": false,
@@ -3029,7 +4512,7 @@
             "script_path"
           ],
           "docstring": "Run a Python script and return success status.",
-          "line": 55,
+          "line": 62,
           "name": "run_script",
           "semantics": {
             "aggregates": false,
@@ -3046,7 +4529,7 @@
             "stage_name"
           ],
           "docstring": "Run all scripts in a stage.",
-          "line": 74,
+          "line": 81,
           "name": "run_stage",
           "semantics": {
             "aggregates": false,
@@ -3066,7 +4549,7 @@
         "sys"
       ],
       "inputs": [],
-      "line_count": 170,
+      "line_count": 177,
       "name": "pipeline",
       "outputs": [],
       "pandas_operations": [],

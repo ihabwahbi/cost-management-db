@@ -141,7 +141,7 @@ VENDOR_NAME_MAPPING = {
     "P9032": "FCS",
 }
 
-# Plant Code → Location mappings
+# Plant Code → Location mappings (legacy - for PO data)
 PLANT_CODE_TO_LOCATION = {
     "3601": "Perth",
     "3606": "Jandakot",
@@ -164,6 +164,38 @@ PLANT_CODE_TO_LOCATION = {
     "4039": "Roma",
     "4062": "Toowoomba",
     "4063": "Dampier",
+}
+
+# Ops District → Location mappings (for WBS data from FDP reports)
+OPS_DISTRICT_TO_LOCATION = {
+    "APG TS": "Jandakot",
+    "AUS East Coast WS": "Roma",
+    "AUS West Coast WS": "Jandakot",
+    "Moomba WL": "Moomba",
+    "New Burn WL": "Jandakot",
+    "New Plymouth TS": "New Plymouth",
+    "New Plymouth WL": "New Plymouth",
+    "New Plymouth WS": "New Plymouth",
+    "Port Moresby TS": "Port Moresby",
+    "Port Moresby WL": "Port Moresby",
+    "Roma WL": "Roma",
+}
+
+# Sub Business Line full name → SBL code mappings (for Ops Activities)
+# These map the explicit "Sub Business Line" column values to SBL codes
+SBL_NAME_TO_CODE = {
+    "TCP - Tubing-Conveyed Perforation": "TCPF",
+    "TCP-Tubing-Conveyed Perforation": "TCPF",
+    "TS Downhole Reservoir Testing": "DHT",
+    "TS Laboratories": "LABR",
+    "TS Production Testing": "PSV",
+    "TS Surface Testing": "TSW",
+    "Wireline Slickline": "SLKN",
+    "WL Evaluation Services": "WLES",
+    "WL Production Services": "WLPS",
+    "WS Production Services": "WPS",
+    "WS Well Integrity": "WIT",
+    "WS Well Intervention": "WIS",
 }
 
 # Valuation classes to exclude during cleaning
@@ -201,3 +233,32 @@ GRIR_TIME_BUCKETS = {
     365: "6-12 months",
 }
 GRIR_TIME_BUCKET_MAX = ">1 year"
+
+
+# =============================================================================
+# WBS DETAILS: Intermediate CSV → Database columns
+# =============================================================================
+WBS_DETAILS_MAPPING = {
+    # Primary business key (globally unique across all FDP reports)
+    "wbs_number": "wbs_number",
+    
+    # Source tracking
+    "wbs_source": "wbs_source",  # Project, Operation, Operation Activity
+    
+    # Source identifiers
+    "project_number": "project_number",
+    "operation_number": "operation_number",
+    "ops_activity_number": "ops_activity_number",
+    
+    # Descriptive fields
+    "wbs_name": "wbs_name",
+    "client_name": "client_name",
+    
+    # Equipment and location
+    "rig": "rig",
+    "ops_district": "ops_district",  # e.g., "Roma WL", "Moomba WL"
+    "location": "location",  # Mapped from ops_district
+    
+    # Business classification (JSON array in CSV -> PostgreSQL text[] in DB)
+    "sub_business_lines": "sub_business_lines",
+}

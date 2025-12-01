@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-01T02:50:57.243670+00:00
+Generated: 2025-12-01T08:29:43.429984+00:00
 
 ## Data Flow Diagram
 
@@ -17,33 +17,43 @@ flowchart TD
         01_po_line_items["01_po_line_items"]
         02_gr_postings["02_gr_postings"]
         03_ir_postings["03_ir_postings"]
+        10_wbs_from_projects["10_wbs_from_projects"]
+        11_wbs_from_operations["11_wbs_from_operations"]
+        12_wbs_from_ops_activities["12_wbs_from_ops_activities"]
     end
 
     subgraph INTERMEDIATE["Intermediate Data"]
         int_0["gr_postings.csv"]
         int_1["grir_exposures.csv"]
-        int_2["ir_postings.csv"]
-        int_3["po_details_enrichment.csv"]
-        int_4["cost_impact.csv"]
-        int_5["po_line_items.csv"]
+        int_2["wbs_from_operations.csv"]
+        int_3["ir_postings.csv"]
+        int_4["wbs_from_projects.csv"]
+        int_5["po_details_enrichment.csv"]
+        int_6["wbs_from_ops_activities.csv"]
+        int_7["cost_impact.csv"]
+        int_8["wbs_processed.csv"]
+        int_9["po_line_items.csv"]
     end
 
     subgraph STAGE2["Stage 2: Transform"]
         04_enrich_po_line_items["04_enrich_po_line_items"]
         05_calculate_cost_impact["05_calculate_cost_impact"]
         06_calculate_grir["06_calculate_grir"]
+        07_process_wbs["07_process_wbs"]
     end
 
     subgraph STAGE3["Stage 3: Prepare"]
         06_prepare_po_line_items["06_prepare_po_line_items"]
         07_prepare_po_transactions["07_prepare_po_transactions"]
         08_prepare_grir_exposures["08_prepare_grir_exposures"]
+        09_prepare_wbs_details["09_prepare_wbs_details"]
     end
 
     subgraph IMPORTREADY["Import-Ready Data"]
         ready_0["po_transactions.csv"]
         ready_1["grir_exposures.csv"]
-        ready_2["po_line_items.csv"]
+        ready_2["wbs_details.csv"]
+        ready_3["po_line_items.csv"]
     end
 
     subgraph DB["Database Tables"]
@@ -77,13 +87,18 @@ flowchart TD
 | 1 | `01_po_line_items` | stage1_clean | Stage 1: Clean PO Line Items | po line items.csv, po_line_items.csv | po_line_items.csv |
 | 2 | `02_gr_postings` | stage1_clean | Stage 1: Clean GR (Goods Receipt) Postings | gr table.csv, po_line_items.csv, gr_postings.csv | po_line_items.csv, gr_postings.csv |
 | 3 | `03_ir_postings` | stage1_clean | Stage 1: Clean IR (Invoice Receipt) Postings | invoice table.csv, po_line_items.csv, ir_postings.csv | po_line_items.csv, ir_postings.csv |
-| 4 | `04_enrich_po_line_items` | stage2_transform | Stage 2: Enrich PO Line Items | po details report.xlsx, po_line_items.csv, po_details_enrichment.csv | po_line_items.csv, po_details_enrichment.csv |
-| 5 | `05_calculate_cost_impact` | stage2_transform | Stage 2: Calculate Cost Impact | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv |
-| 6 | `06_calculate_grir` | stage2_transform | Stage 2: Calculate GRIR Exposures | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv |
-| 7 | `06_prepare_po_line_items` | stage3_prepare | Stage 3: Prepare PO Line Items for Import | po_line_items.csv, cost_impact.csv | po_line_items.csv, cost_impact.csv |
-| 8 | `07_prepare_po_transactions` | stage3_prepare | Stage 3: Prepare PO Transactions for Import | cost_impact.csv | cost_impact.csv |
-| 9 | `08_prepare_grir_exposures` | stage3_prepare | Stage 3: Prepare GRIR Exposures for Import | grir_exposures.csv | grir_exposures.csv |
-| 10 | `pipeline` | scripts | Data Pipeline Orchestrator | - | - |
+| 4 | `10_wbs_from_projects` | stage1_clean | Stage 1: Extract WBS Data from Projects Report | fdp, wbs_from_projects.csv | wbs_from_projects.csv |
+| 5 | `11_wbs_from_operations` | stage1_clean | Stage 1: Extract WBS Data from Operations Report | fdp, wbs_from_operations.csv | wbs_from_operations.csv |
+| 6 | `12_wbs_from_ops_activities` | stage1_clean | Stage 1: Extract WBS Data from Operation Activitie | fdp, wbs_from_ops_activities.csv | wbs_from_ops_activities.csv |
+| 7 | `04_enrich_po_line_items` | stage2_transform | Stage 2: Enrich PO Line Items | po details report.xlsx, po_line_items.csv, po_details_enrichment.csv | po_line_items.csv, po_details_enrichment.csv |
+| 8 | `05_calculate_cost_impact` | stage2_transform | Stage 2: Calculate Cost Impact | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv |
+| 9 | `06_calculate_grir` | stage2_transform | Stage 2: Calculate GRIR Exposures | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv |
+| 10 | `07_process_wbs` | stage2_transform | Stage 2: Process WBS Data - Split, Parse, and Map  | - | - |
+| 11 | `06_prepare_po_line_items` | stage3_prepare | Stage 3: Prepare PO Line Items for Import | po_line_items.csv, cost_impact.csv | po_line_items.csv, cost_impact.csv |
+| 12 | `07_prepare_po_transactions` | stage3_prepare | Stage 3: Prepare PO Transactions for Import | cost_impact.csv | cost_impact.csv |
+| 13 | `08_prepare_grir_exposures` | stage3_prepare | Stage 3: Prepare GRIR Exposures for Import | grir_exposures.csv | grir_exposures.csv |
+| 14 | `09_prepare_wbs_details` | stage3_prepare | Stage 3: Prepare WBS Details for Import | wbs_processed.csv | wbs_processed.csv |
+| 15 | `pipeline` | scripts | Data Pipeline Orchestrator | - | - |
 
 ## Script Dependencies
 
@@ -269,7 +284,7 @@ flowchart LR
 | `reservationStatus` | varchar | - |
 | `poNumber` | varchar | - |
 | `poLineNumber` | integer | - |
-| `wbsNumber` | varchar | FK → wbsDetails.wbsNumber |
+| `wbsNumber` | varchar | - |
 | `assetCode` | varchar | - |
 | `assetSerialNumber` | varchar | - |
 | `requester` | varchar | - |
@@ -280,8 +295,18 @@ flowchart LR
 | Column | Type | Constraints |
 |--------|------|-------------|
 | `wbsNumber` | varchar | PK |
+| `wbsSource` | varchar | NOT NULL |
+| `projectNumber` | varchar | - |
+| `operationNumber` | varchar | - |
+| `opsActivityNumber` | varchar | - |
+| `wbsName` | text | - |
 | `clientName` | text | - |
-| `subBusinessLine` | text | - |
+| `rig` | varchar | - |
+| `opsDistrict` | varchar | - |
+| `location` | varchar | - |
+| `subBusinessLines` | text | - |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
 
 ## Data Profiles
 
@@ -367,6 +392,30 @@ Sample data and types for each CSV file:
 | `time_bucket` | object |
 | `snapshot_date` | object |
 
+### `wbs_from_operations.csv`
+
+- **Path**: `data/intermediate/wbs_from_operations.csv`
+- **Rows**: 144
+
+| Column | Type |
+|--------|------|
+| `sap_wbs_raw` | object |
+| `wbs_source` | object |
+| `project_number` | object |
+| `operation_number` | object |
+| `ops_activity_number` | float64 |
+| `wbs_name` | object |
+| `client_name` | object |
+| `rig` | object |
+| `ops_district` | object |
+| `location` | float64 |
+| *...* | *1 more* |
+
+**Columns with nulls:**
+- `ops_activity_number`: 144 nulls
+- `rig`: 10 nulls
+- `location`: 144 nulls
+
 ### `ir_postings.csv`
 
 - **Path**: `data/intermediate/ir_postings.csv`
@@ -378,6 +427,28 @@ Sample data and types for each CSV file:
 | `Invoice Posting Date` | object |
 | `IR Effective Quantity` | float64 |
 | `Invoice Amount` | float64 |
+
+### `wbs_from_projects.csv`
+
+- **Path**: `data/intermediate/wbs_from_projects.csv`
+- **Rows**: 369
+
+| Column | Type |
+|--------|------|
+| `sap_wbs_raw` | object |
+| `wbs_source` | object |
+| `project_number` | object |
+| `operation_number` | float64 |
+| `ops_activity_number` | float64 |
+| `wbs_name` | object |
+| `client_name` | object |
+| `rig` | object |
+| `ops_district` | object |
+| `location` | object |
+
+**Columns with nulls:**
+- `operation_number`: 369 nulls
+- `ops_activity_number`: 369 nulls
 
 ### `po_details_enrichment.csv`
 
@@ -396,6 +467,29 @@ Sample data and types for each CSV file:
 - `PR Number`: 444 nulls
 - `PR Line`: 2 nulls
 
+### `wbs_from_ops_activities.csv`
+
+- **Path**: `data/intermediate/wbs_from_ops_activities.csv`
+- **Rows**: 7182
+
+| Column | Type |
+|--------|------|
+| `sap_wbs_raw` | object |
+| `wbs_source` | object |
+| `project_number` | object |
+| `operation_number` | object |
+| `ops_activity_number` | object |
+| `wbs_name` | object |
+| `client_name` | object |
+| `rig` | object |
+| `ops_district` | object |
+| `location` | float64 |
+| *...* | *1 more* |
+
+**Columns with nulls:**
+- `rig`: 222 nulls
+- `location`: 7182 nulls
+
 ### `cost_impact.csv`
 
 - **Path**: `data/intermediate/cost_impact.csv`
@@ -409,6 +503,30 @@ Sample data and types for each CSV file:
 | `Posting Qty` | float64 |
 | `Cost Impact Qty` | float64 |
 | `Cost Impact Amount` | float64 |
+
+### `wbs_processed.csv`
+
+- **Path**: `data/intermediate/wbs_processed.csv`
+- **Rows**: 7852
+
+| Column | Type |
+|--------|------|
+| `wbs_number` | object |
+| `wbs_source` | object |
+| `project_number` | object |
+| `operation_number` | object |
+| `ops_activity_number` | object |
+| `wbs_name` | object |
+| `client_name` | object |
+| `rig` | object |
+| `ops_district` | object |
+| `location` | object |
+| *...* | *1 more* |
+
+**Columns with nulls:**
+- `operation_number`: 526 nulls
+- `ops_activity_number`: 670 nulls
+- `rig`: 232 nulls
 
 ### `po_line_items.csv`
 
@@ -452,6 +570,30 @@ Sample data and types for each CSV file:
 | `cost_impact_qty` | float64 |
 | `cost_impact_amount` | float64 |
 | `amount` | float64 |
+
+### `wbs_details.csv`
+
+- **Path**: `data/import-ready/wbs_details.csv`
+- **Rows**: 7852
+
+| Column | Type |
+|--------|------|
+| `wbs_number` | object |
+| `wbs_source` | object |
+| `project_number` | object |
+| `operation_number` | object |
+| `ops_activity_number` | object |
+| `wbs_name` | object |
+| `client_name` | object |
+| `rig` | object |
+| `ops_district` | object |
+| `location` | object |
+| *...* | *1 more* |
+
+**Columns with nulls:**
+- `operation_number`: 526 nulls
+- `ops_activity_number`: 670 nulls
+- `rig`: 232 nulls
 
 ## Common Errors & Solutions
 
@@ -540,6 +682,42 @@ Key pandas operations used in each script:
 | 55 | column_assign | column: `Invoice Amount` |
 | 50 | merge | on: `PO Line ID` |
 
+### `10_wbs_from_projects`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 107 | column_assign | column: `location` |
+| 123 | column_assign | column: `rig` |
+| 138 | column_assign | column: `wbs_source` |
+| 139 | column_assign | column: `operation_number` |
+| 140 | column_assign | column: `ops_activity_number` |
+| 162 | boolean_filter | Filters rows based on boolean condition |
+| 100 | rename | Renames columns |
+| 107 | map | Maps values using dictionary or function |
+| 78 | astype | Converts column types |
+| 128 | astype | Converts column types |
+
+### `11_wbs_from_operations`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 110 | column_assign | column: `wbs_source` |
+| 111 | column_assign | column: `ops_activity_number` |
+| 114 | column_assign | column: `location` |
+| 138 | boolean_filter | Filters rows based on boolean condition |
+| 103 | rename | Renames columns |
+| 81 | astype | Converts column types |
+
+### `12_wbs_from_ops_activities`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 112 | column_assign | column: `wbs_source` |
+| 115 | column_assign | column: `location` |
+| 139 | boolean_filter | Filters rows based on boolean condition |
+| 105 | rename | Renames columns |
+| 82 | astype | Converts column types |
+
 ### `04_enrich_po_line_items`
 
 | Line | Operation | Details |
@@ -584,6 +762,21 @@ Key pandas operations used in each script:
 | 138 | sort_values | Sorts by column values |
 | 143 | groupby | by: `PO Line ID` |
 
+### `07_process_wbs`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 156 | column_assign | column: `wbs_number` |
+| 197 | column_assign | column: `wbs_number` |
+| 198 | column_assign | column: `sub_business_line_from_wbs` |
+| 244 | column_assign | column: `location` |
+| 313 | boolean_filter | Filters rows based on boolean condition |
+| 155 | apply | Applies function to data |
+| 166 | column_assign | column: `sub_business_lines` |
+| 172 | column_assign | column: `sub_business_lines` |
+| 196 | apply | Applies function to data |
+| 202 | column_assign | column: `sub_business_line_mapped` |
+
 ### `06_prepare_po_line_items`
 
 | Line | Operation | Details |
@@ -617,3 +810,11 @@ Key pandas operations used in each script:
 | 55 | column_assign | column: `grir_value` |
 | 45 | boolean_filter | Filters rows based on boolean condition |
 | 95 | boolean_filter | Filters rows based on boolean condition |
+
+### `09_prepare_wbs_details`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 110 | column_assign | column: `sub_business_lines` |
+| 102 | boolean_filter | Filters rows based on boolean condition |
+| 110 | apply | Applies function to data |

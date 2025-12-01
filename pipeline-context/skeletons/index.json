@@ -31,6 +31,36 @@
       "source_path": "scripts/stage1_clean/03_ir_postings.py"
     },
     {
+      "compression_ratio": 3.19,
+      "name": "10_wbs_from_projects",
+      "original_lines": 223,
+      "original_tokens": 1746,
+      "skeleton_lines": 67,
+      "skeleton_path": "pipeline-context/skeletons/stage1_clean/10_wbs_from_projects.skeleton.py",
+      "skeleton_tokens": 547,
+      "source_path": "scripts/stage1_clean/10_wbs_from_projects.py"
+    },
+    {
+      "compression_ratio": 3.12,
+      "name": "11_wbs_from_operations",
+      "original_lines": 200,
+      "original_tokens": 1589,
+      "skeleton_lines": 60,
+      "skeleton_path": "pipeline-context/skeletons/stage1_clean/11_wbs_from_operations.skeleton.py",
+      "skeleton_tokens": 509,
+      "source_path": "scripts/stage1_clean/11_wbs_from_operations.py"
+    },
+    {
+      "compression_ratio": 3.11,
+      "name": "12_wbs_from_ops_activities",
+      "original_lines": 201,
+      "original_tokens": 1628,
+      "skeleton_lines": 60,
+      "skeleton_path": "pipeline-context/skeletons/stage1_clean/12_wbs_from_ops_activities.skeleton.py",
+      "skeleton_tokens": 524,
+      "source_path": "scripts/stage1_clean/12_wbs_from_ops_activities.py"
+    },
+    {
       "compression_ratio": 3.38,
       "name": "04_enrich_po_line_items",
       "original_lines": 201,
@@ -61,6 +91,16 @@
       "source_path": "scripts/stage2_transform/06_calculate_grir.py"
     },
     {
+      "compression_ratio": 3.36,
+      "name": "07_process_wbs",
+      "original_lines": 389,
+      "original_tokens": 3309,
+      "skeleton_lines": 112,
+      "skeleton_path": "pipeline-context/skeletons/stage2_transform/07_process_wbs.skeleton.py",
+      "skeleton_tokens": 985,
+      "source_path": "scripts/stage2_transform/07_process_wbs.py"
+    },
+    {
       "compression_ratio": 3.33,
       "name": "06_prepare_po_line_items",
       "original_lines": 186,
@@ -89,13 +129,23 @@
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/08_prepare_grir_exposures.skeleton.py",
       "skeleton_tokens": 317,
       "source_path": "scripts/stage3_prepare/08_prepare_grir_exposures.py"
+    },
+    {
+      "compression_ratio": 3.06,
+      "name": "09_prepare_wbs_details",
+      "original_lines": 201,
+      "original_tokens": 1636,
+      "skeleton_lines": 73,
+      "skeleton_path": "pipeline-context/skeletons/stage3_prepare/09_prepare_wbs_details.skeleton.py",
+      "skeleton_tokens": 535,
+      "source_path": "scripts/stage3_prepare/09_prepare_wbs_details.py"
     }
   ],
   "totals": {
-    "compression_ratio": 3.14,
-    "original_lines": 1487,
-    "original_tokens": 12727,
-    "skeleton_lines": 488,
-    "skeleton_tokens": 4057
+    "compression_ratio": 3.16,
+    "original_lines": 2701,
+    "original_tokens": 22635,
+    "skeleton_lines": 860,
+    "skeleton_tokens": 7157
   }
 }
