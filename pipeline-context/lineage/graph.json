@@ -342,6 +342,20 @@
         "type": "WRITES"
       }
     ],
+    "Reservation -Line": [
+      {
+        "file": "scripts/stage1_clean/13_reservations.py",
+        "line": 80,
+        "script": "13_reservations",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage1_clean/13_reservations.py",
+        "line": 83,
+        "script": "13_reservations",
+        "type": "READS"
+      }
+    ],
     "Total Cost Impact Amount": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
@@ -641,6 +655,30 @@
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
         "line": 64,
         "script": "07_prepare_po_transactions",
+        "type": "WRITES"
+      }
+    ],
+    "reservation_line_id": [
+      {
+        "file": "scripts/stage1_clean/13_reservations.py",
+        "line": 67,
+        "script": "13_reservations",
+        "type": "WRITES"
+      }
+    ],
+    "reservation_line_number": [
+      {
+        "file": "scripts/stage1_clean/13_reservations.py",
+        "line": 83,
+        "script": "13_reservations",
+        "type": "WRITES"
+      }
+    ],
+    "reservation_number": [
+      {
+        "file": "scripts/stage1_clean/13_reservations.py",
+        "line": 80,
+        "script": "13_reservations",
         "type": "WRITES"
       }
     ],
@@ -1067,6 +1105,24 @@
       "type": "MAPS_TO"
     },
     {
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 83,
+      "operation": "pd.to_numeric(parts.apply(lambda x: x[1]), errors='coerce').astype('Int64')",
+      "script": "13_reservations",
+      "source": "column:Reservation -Line",
+      "target": "column:reservation_line_number",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 80,
+      "operation": "parts.apply(lambda x: x[0]).astype('string')",
+      "script": "13_reservations",
+      "source": "column:Reservation -Line",
+      "target": "column:reservation_number",
+      "type": "TRANSFORMS"
+    },
+    {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
       "line": 80,
       "operation": "po_df['Total Cost Impact Amount'].fillna(0)",
@@ -1414,6 +1470,11 @@
       "type": "INPUT"
     },
     {
+      "source": "file:data/intermediate/reservations.csv",
+      "target": "script:13_reservations",
+      "type": "INPUT"
+    },
+    {
       "source": "file:data/intermediate/wbs_from_operations.csv",
       "target": "script:11_wbs_from_operations",
       "type": "INPUT"
@@ -1466,6 +1527,11 @@
     {
       "source": "file:data/raw/po line items.csv",
       "target": "script:01_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/raw/reservations",
+      "target": "script:13_reservations",
       "type": "INPUT"
     },
     {
@@ -1641,6 +1707,11 @@
     {
       "source": "script:12_wbs_from_ops_activities",
       "target": "file:data/intermediate/wbs_from_ops_activities.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:13_reservations",
+      "target": "file:data/intermediate/reservations.csv",
       "type": "OUTPUT"
     }
   ],
@@ -1918,6 +1989,11 @@
       "name": "Requester",
       "type": "column"
     },
+    "column:Reservation -Line": {
+      "id": "column:Reservation -Line",
+      "name": "Reservation -Line",
+      "type": "column"
+    },
     "column:SL Sub-Business Line Code (BV Lvl 3)": {
       "id": "column:SL Sub-Business Line Code (BV Lvl 3)",
       "name": "SL Sub-Business Line Code (BV Lvl 3)",
@@ -2076,6 +2152,30 @@
       ],
       "id": "column:quantity",
       "name": "quantity",
+      "type": "column"
+    },
+    "column:reservation_line_id": {
+      "created_by": [
+        "scripts/stage1_clean/13_reservations.py:67"
+      ],
+      "id": "column:reservation_line_id",
+      "name": "reservation_line_id",
+      "type": "column"
+    },
+    "column:reservation_line_number": {
+      "created_by": [
+        "scripts/stage1_clean/13_reservations.py:83"
+      ],
+      "id": "column:reservation_line_number",
+      "name": "reservation_line_number",
+      "type": "column"
+    },
+    "column:reservation_number": {
+      "created_by": [
+        "scripts/stage1_clean/13_reservations.py:80"
+      ],
+      "id": "column:reservation_number",
+      "name": "reservation_number",
       "type": "column"
     },
     "column:rig": {
@@ -3499,6 +3599,18 @@
       "table": "sap_reservations",
       "type": "db_column"
     },
+    "db_column:sap_reservations.reservationLineId": {
+      "column": "reservationLineId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:sap_reservations.reservationLineId",
+      "table": "sap_reservations",
+      "type": "db_column"
+    },
     "db_column:sap_reservations.reservationLineNumber": {
       "column": "reservationLineNumber",
       "constraints": {
@@ -3506,7 +3618,7 @@
         "primary_key": false,
         "references": null
       },
-      "data_type": "varchar",
+      "data_type": "integer",
       "id": "db_column:sap_reservations.reservationLineNumber",
       "table": "sap_reservations",
       "type": "db_column"
@@ -3821,6 +3933,13 @@
       "stage": "intermediate",
       "type": "file"
     },
+    "file:data/intermediate/reservations.csv": {
+      "folder": "intermediate",
+      "id": "file:data/intermediate/reservations.csv",
+      "path": "data/intermediate/reservations.csv",
+      "stage": "intermediate",
+      "type": "file"
+    },
     "file:data/intermediate/wbs_from_operations.csv": {
       "folder": "intermediate",
       "id": "file:data/intermediate/wbs_from_operations.csv",
@@ -3880,6 +3999,11 @@
       "id": "file:data/raw/po line items.csv",
       "path": "data/raw/po line items.csv",
       "stage": "source",
+      "type": "file"
+    },
+    "file:data/raw/reservations": {
+      "id": "file:data/raw/reservations",
+      "path": "data/raw/reservations",
       "type": "file"
     },
     "script:01_po_line_items": {
@@ -4111,6 +4235,24 @@
       "stage": "stage1_clean",
       "type": "script"
     },
+    "script:13_reservations": {
+      "functions": [
+        "clean_po_number",
+        "extract_parts",
+        "filter_matching_business_lines",
+        "load_data",
+        "main",
+        "normalize_po_line_id",
+        "normalize_po_line_ids",
+        "save_data",
+        "split_reservation_line_id"
+      ],
+      "id": "script:13_reservations",
+      "name": "13_reservations",
+      "path": "scripts/stage1_clean/13_reservations.py",
+      "stage": "stage1_clean",
+      "type": "script"
+    },
     "script:pipeline": {
       "functions": [
         "main",
@@ -4310,6 +4452,7 @@
         "poLineNumber",
         "poNumber",
         "requester",
+        "reservationLineId",
         "reservationLineNumber",
         "reservationNumber",
         "reservationQty",
@@ -4347,24 +4490,24 @@
     }
   },
   "stats": {
-    "columns_tracked": 54,
+    "columns_tracked": 58,
     "edges_by_type": {
       "DEPENDS_ON": 12,
-      "INPUT": 30,
+      "INPUT": 32,
       "MAPS_TO": 5,
-      "OUTPUT": 23,
-      "TRANSFORMS": 51
+      "OUTPUT": 24,
+      "TRANSFORMS": 53
     },
     "nodes_by_type": {
-      "column": 74,
-      "db_column": 133,
-      "file": 19,
-      "script": 15,
+      "column": 78,
+      "db_column": 134,
+      "file": 21,
+      "script": 16,
       "table": 11
     },
-    "total_edges": 121,
-    "total_nodes": 252,
-    "variables_traced": 52
+    "total_edges": 126,
+    "total_nodes": 260,
+    "variables_traced": 58
   },
   "variable_sources": {
     "01_po_line_items": {
@@ -4555,6 +4698,26 @@
     "12_wbs_from_ops_activities": {
       "mask": [
         "SAP WBS # / SO #"
+      ]
+    },
+    "13_reservations": {
+      "cc": [
+        "Business Line - By Cost Center"
+      ],
+      "null_count": [
+        "reservation_line_number"
+      ],
+      "original_non_null": [
+        "Main - PO to Peg to Reservation"
+      ],
+      "parts": [
+        "Reservation -Line"
+      ],
+      "pc": [
+        "Business Line by Profit Center"
+      ],
+      "valid_splits": [
+        "reservation_line_number"
       ]
     }
   },

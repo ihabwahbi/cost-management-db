@@ -189,6 +189,7 @@
       "ir_postings.csv",
       "po_details_enrichment.csv",
       "po_line_items.csv",
+      "reservations.csv",
       "wbs_from_operations.csv",
       "wbs_from_ops_activities.csv",
       "wbs_from_projects.csv",
@@ -629,6 +630,258 @@
         "transaction_type": "IR"
       }
     },
+    "reservations.csv": {
+      "columns": [
+        "Additional PO - Line to Peg",
+        "Business Line - By Cost Center",
+        "Business Line by Profit Center",
+        "Combined SOH & PO Pegging",
+        "Cost Center",
+        "Creation Date",
+        "GEO UNIT (Profit Center)",
+        "Geo-Unit",
+        "Goods recipient",
+        "Index",
+        "Last 12 Month Consumption",
+        "Last 3 Month Consumption",
+        "Last 6 Month Consumption",
+        "MRP Parameters - MRP Controller",
+        "MRP Parameters - Planned Delivery Time",
+        "MRP Parameters - Prime Status",
+        "MRP Parameters - Profit Center",
+        "MRP Parameters - Safety Stock",
+        "MRP Parameters - Standard Price",
+        "Main - PO Line to Peg to Reservation",
+        "Main - PO to Peg to Reservation",
+        "Material",
+        "Material Description",
+        "Material Stratification (Last 12 Month Consumption)",
+        "Material Stratification (Last 6 Month Consumption)",
+        "Material-Plant",
+        "Material/Plant-Open PO Qty - Total",
+        "Material/Plant-SOH - Total",
+        "Maximo - WO STATUS and Part Status",
+        "Maximo Asset ID",
+        "Maximo Asset Num",
+        "Maximo Serial No",
+        "Open Qty - Reservation",
+        "Open Reservation Value",
+        "Pegged Main PO GR Status",
+        "Pegged Main PO Invoice Status",
+        "Planned Order - Status",
+        "Planned Orders",
+        "Plant",
+        "Post Pegging PO Qty",
+        "Post Pegging SOH Qty",
+        "Primary Pegged PO-LN - Approval Status",
+        "Primary Pegged PO-LN - Invoice Qty",
+        "Primary Pegged PO-LN - Open Qty",
+        "Primary Pegged PO-LN - Order Qty",
+        "Primary Pegged PO-LN - RDD Date",
+        "Purchase Requisition - Status",
+        "Purchase Requisitions",
+        "Requirements Date",
+        "Reservation -Line",
+        "Reservation Creation type",
+        "Stock On Hand - DDSC",
+        "Stock On Hand - HDSC",
+        "Sub - Business Line - By Cost Center",
+        "User Name",
+        "WBS Element",
+        "WO Number",
+        "reservation_line_id",
+        "reservation_line_number",
+        "reservation_number"
+      ],
+      "dtypes": {
+        "Additional PO - Line to Peg": "object",
+        "Business Line - By Cost Center": "object",
+        "Business Line by Profit Center": "object",
+        "Combined SOH & PO Pegging": "object",
+        "Cost Center": "object",
+        "Creation Date": "object",
+        "GEO UNIT (Profit Center)": "object",
+        "Geo-Unit": "object",
+        "Goods recipient": "object",
+        "Index": "object",
+        "Last 12 Month Consumption": "float64",
+        "Last 3 Month Consumption": "float64",
+        "Last 6 Month Consumption": "float64",
+        "MRP Parameters - MRP Controller": "object",
+        "MRP Parameters - Planned Delivery Time": "float64",
+        "MRP Parameters - Prime Status": "object",
+        "MRP Parameters - Profit Center": "float64",
+        "MRP Parameters - Safety Stock": "float64",
+        "MRP Parameters - Standard Price": "float64",
+        "Main - PO Line to Peg to Reservation": "object",
+        "Main - PO to Peg to Reservation": "float64",
+        "Material": "object",
+        "Material Description": "object",
+        "Material Stratification (Last 12 Month Consumption)": "object",
+        "Material Stratification (Last 6 Month Consumption)": "object",
+        "Material-Plant": "object",
+        "Material/Plant-Open PO Qty - Total": "float64",
+        "Material/Plant-SOH - Total": "float64",
+        "Maximo - WO STATUS and Part Status": "object",
+        "Maximo Asset ID": "float64",
+        "Maximo Asset Num": "object",
+        "Maximo Serial No": "object",
+        "Open Qty - Reservation": "float64",
+        "Open Reservation Value": "float64",
+        "Pegged Main PO GR Status": "object",
+        "Pegged Main PO Invoice Status": "object",
+        "Planned Order - Status": "object",
+        "Planned Orders": "object",
+        "Plant": "float64",
+        "Post Pegging PO Qty": "float64",
+        "Post Pegging SOH Qty": "float64",
+        "Primary Pegged PO-LN - Approval Status": "object",
+        "Primary Pegged PO-LN - Invoice Qty": "float64",
+        "Primary Pegged PO-LN - Open Qty": "float64",
+        "Primary Pegged PO-LN - Order Qty": "float64",
+        "Primary Pegged PO-LN - RDD Date": "object",
+        "Purchase Requisition - Status": "object",
+        "Purchase Requisitions": "float64",
+        "Requirements Date": "object",
+        "Reservation -Line": "object",
+        "Reservation Creation type": "object",
+        "Stock On Hand - DDSC": "float64",
+        "Stock On Hand - HDSC": "float64",
+        "Sub - Business Line - By Cost Center": "object",
+        "User Name": "object",
+        "WBS Element": "object",
+        "WO Number": "object",
+        "reservation_line_id": "object",
+        "reservation_line_number": "float64",
+        "reservation_number": "float64"
+      },
+      "null_counts": {
+        "Additional PO - Line to Peg": 1466,
+        "Business Line - By Cost Center": 299,
+        "Business Line by Profit Center": 2,
+        "Combined SOH & PO Pegging": 2,
+        "Cost Center": 299,
+        "Creation Date": 2,
+        "GEO UNIT (Profit Center)": 2,
+        "Geo-Unit": 2,
+        "Goods recipient": 16,
+        "Index": 1,
+        "Last 12 Month Consumption": 2,
+        "Last 3 Month Consumption": 2,
+        "Last 6 Month Consumption": 2,
+        "MRP Parameters - MRP Controller": 2,
+        "MRP Parameters - Planned Delivery Time": 2,
+        "MRP Parameters - Prime Status": 2,
+        "MRP Parameters - Profit Center": 2,
+        "MRP Parameters - Safety Stock": 2,
+        "MRP Parameters - Standard Price": 2,
+        "Main - PO Line to Peg to Reservation": 968,
+        "Main - PO to Peg to Reservation": 968,
+        "Material": 2,
+        "Material Description": 2,
+        "Material Stratification (Last 12 Month Consumption)": 2,
+        "Material Stratification (Last 6 Month Consumption)": 2,
+        "Material-Plant": 2,
+        "Material/Plant-Open PO Qty - Total": 2,
+        "Material/Plant-SOH - Total": 1028,
+        "Maximo - WO STATUS and Part Status": 2,
+        "Maximo Asset ID": 812,
+        "Maximo Asset Num": 812,
+        "Maximo Serial No": 812,
+        "Open Qty - Reservation": 2,
+        "Open Reservation Value": 2,
+        "Pegged Main PO GR Status": 968,
+        "Pegged Main PO Invoice Status": 968,
+        "Planned Order - Status": 2,
+        "Planned Orders": 1013,
+        "Plant": 2,
+        "Post Pegging PO Qty": 35,
+        "Post Pegging SOH Qty": 2,
+        "Primary Pegged PO-LN - Approval Status": 1044,
+        "Primary Pegged PO-LN - Invoice Qty": 1440,
+        "Primary Pegged PO-LN - Open Qty": 1044,
+        "Primary Pegged PO-LN - Order Qty": 1044,
+        "Primary Pegged PO-LN - RDD Date": 1044,
+        "Purchase Requisition - Status": 2,
+        "Purchase Requisitions": 1480,
+        "Requirements Date": 2,
+        "Reservation -Line": 2,
+        "Reservation Creation type": 2,
+        "Stock On Hand - DDSC": 712,
+        "Stock On Hand - HDSC": 901,
+        "Sub - Business Line - By Cost Center": 299,
+        "User Name": 2,
+        "WBS Element": 1188,
+        "WO Number": 503,
+        "reservation_line_id": 2,
+        "reservation_line_number": 2,
+        "reservation_number": 2
+      },
+      "path": "data/intermediate/reservations.csv",
+      "row_count": 1485,
+      "sample_row": {
+        "Additional PO - Line to Peg": NaN,
+        "Business Line - By Cost Center": "RPE",
+        "Business Line by Profit Center": "RPE",
+        "Combined SOH & PO Pegging": "04. PO Available to Peg",
+        "Cost Center": "AU100070",
+        "Creation Date": "2025-11-24",
+        "GEO UNIT (Profit Center)": "APG",
+        "Geo-Unit": "APG",
+        "Goods recipient": "02307312",
+        "Index": "1",
+        "Last 12 Month Consumption": 1.0,
+        "Last 3 Month Consumption": 1.0,
+        "Last 6 Month Consumption": 1.0,
+        "MRP Parameters - MRP Controller": "005",
+        "MRP Parameters - Planned Delivery Time": 18.0,
+        "MRP Parameters - Prime Status": "AR Part",
+        "MRP Parameters - Profit Center": 110516.0,
+        "MRP Parameters - Safety Stock": 0.0,
+        "MRP Parameters - Standard Price": 5959.5763,
+        "Main - PO Line to Peg to Reservation": "4584632148-1",
+        "Main - PO to Peg to Reservation": 4584632148.0,
+        "Material": "100109883",
+        "Material Description": "CENTER BODY, ARM MOUNTING",
+        "Material Stratification (Last 12 Month Consumption)": "STRANGER",
+        "Material Stratification (Last 6 Month Consumption)": "STRANGER",
+        "Material-Plant": "100109883-3606",
+        "Material/Plant-Open PO Qty - Total": 1.0,
+        "Material/Plant-SOH - Total": NaN,
+        "Maximo - WO STATUS and Part Status": "-",
+        "Maximo Asset ID": NaN,
+        "Maximo Asset Num": NaN,
+        "Maximo Serial No": NaN,
+        "Open Qty - Reservation": 1.0,
+        "Open Reservation Value": 5757.2104,
+        "Pegged Main PO GR Status": "Pending Full GR",
+        "Pegged Main PO Invoice Status": "PO is not Invoiced",
+        "Planned Order - Status": "NO PLD ORDER",
+        "Planned Orders": NaN,
+        "Plant": 3606.0,
+        "Post Pegging PO Qty": 0.0,
+        "Post Pegging SOH Qty": -1.0,
+        "Primary Pegged PO-LN - Approval Status": "Approved",
+        "Primary Pegged PO-LN - Invoice Qty": NaN,
+        "Primary Pegged PO-LN - Open Qty": 1.0,
+        "Primary Pegged PO-LN - Order Qty": 1.0,
+        "Primary Pegged PO-LN - RDD Date": "2025-11-20",
+        "Purchase Requisition - Status": "No Purchase Requisition",
+        "Purchase Requisitions": NaN,
+        "Requirements Date": "2025-11-25",
+        "Reservation -Line": "6086214878-1",
+        "Reservation Creation type": "MAXIMO",
+        "Stock On Hand - DDSC": 4.0,
+        "Stock On Hand - HDSC": NaN,
+        "Sub - Business Line - By Cost Center": "WLES",
+        "User Name": "SYS-MAXIMO",
+        "WBS Element": NaN,
+        "WO Number": "49365954",
+        "reservation_line_id": "6086214878-1",
+        "reservation_line_number": 1.0,
+        "reservation_number": 6086214878.0
+      }
+    },
     "wbs_details.csv": {
       "columns": [
         "client_name",
@@ -875,7 +1128,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-01T13:22:49.955978+00:00",
+  "generated_at": "2025-12-01T14:30:06.024767+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1491,9 +1744,15 @@
           "type": "varchar"
         },
         {
+          "name": "reservationLineId",
+          "not_null": true,
+          "type": "varchar",
+          "unique": true
+        },
+        {
           "name": "reservationLineNumber",
           "not_null": true,
-          "type": "varchar"
+          "type": "integer"
         },
         {
           "name": "reservationNumber",
@@ -4499,6 +4758,258 @@
         }
       ],
       "path": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
+      "stage": "stage1_clean"
+    },
+    {
+      "dependencies": [],
+      "docstring": "Stage 1: Clean Reservations\n\nReads raw reservations Excel file and performs:\n1. Removes rows where both business line columns (Profit Center and Cost Center)\n   have matching values of WCM, WCF, or WCD (internal transfers/overhead).\n2. Splits \"Reservation -Line\" column into components:\n   - reservation_line_id: Original combined key (e.g., \"6086214878-1\")\n   - reservation_number: The reservation part (e.g., \"6086214878\")\n   - reservation_line_number: The line number as integer (e.g., 1)\n3. Normalizes PO Line IDs to match po_line_items format:\n   - Strips leading zeros from line numbers (e.g., \"4584632148-00001\" -> \"4584632148-1\")\n   - Cleans PO numbers (removes .0 suffix from float conversion)\n\nDependencies: None (independent stage 1 script)\nInput: data/raw/reservations/Data Table - Open Reservation - *.xlsx\nOutput: data/intermediate/reservations.csv",
+      "functions": [
+        {
+          "args": [
+            "val"
+          ],
+          "docstring": "Remove .0 suffix from PO numbers (artifact of float conversion).",
+          "line": 129,
+          "name": "clean_po_number",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "val"
+          ],
+          "docstring": null,
+          "line": 70,
+          "name": "extract_parts",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Remove rows where both Business Line columns have the same value\nAND that value is one of WCM, WCF, or WCD.\n\nThese represent internal transfers/overhead allocations.",
+          "line": 153,
+          "name": "filter_matching_business_lines",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": true,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
+          "args": [
+            "filepath"
+          ],
+          "docstring": "Load the raw Excel file.",
+          "line": 45,
+          "name": "load_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": null,
+          "line": 195,
+          "name": "main",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "val"
+          ],
+          "docstring": "Strip leading zeros from line number part of PO Line ID.",
+          "line": 111,
+          "name": "normalize_po_line_id",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Normalize PO Line IDs to match po_line_items format.\n\nReservations format: \"4584632148-00001\" (5-digit zero-padded line number)\nPO Line Items format: \"4581850069-1\" (no padding)\n\nThis ensures proper joins between sap_reservations and po_line_items tables.",
+          "line": 99,
+          "name": "normalize_po_line_ids",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "docstring": "Save the cleaned DataFrame to CSV.",
+          "line": 187,
+          "name": "save_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Split 'Reservation -Line' column into components.\n\nInput format: \"6086214878-1\" (reservation_number-line_number)\n\nCreates:\n- reservation_line_id: Original combined value (for lookups/traceability)\n- reservation_number: The reservation part (for grouping)\n- reservation_line_number: The line number as integer (for sorting)",
+          "line": 53,
+          "name": "split_reservation_line_id",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "reservation_line_id",
+              "reservation_line_number",
+              "reservation_number"
+            ],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        }
+      ],
+      "imports": [
+        "pandas",
+        "pathlib",
+        "sys"
+      ],
+      "inputs": [
+        "data/intermediate/reservations.csv",
+        "data/raw/reservations"
+      ],
+      "line_count": 223,
+      "name": "13_reservations",
+      "outputs": [
+        "data/intermediate/reservations.csv"
+      ],
+      "pandas_operations": [
+        {
+          "code_snippet": "df[po_line_col] = df[po_line_col].apply(normalize_po_line_id)",
+          "description": "Applies function to data",
+          "line": 141,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[po_num_col] = df[po_num_col].apply(clean_po_number)",
+          "description": "Applies function to data",
+          "line": 147,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "parts = df[source_col].apply(extract_parts)",
+          "description": "Applies function to data",
+          "line": 79,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[\"reservation_number\"] = parts.apply(lambda x: x[0]).astype(",
+          "description": "Applies function to data",
+          "line": 80,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "parts.apply(lambda x: x[1]), errors=\"coerce\"",
+          "description": "Applies function to data",
+          "line": 84,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "pc = df[\"Business Line by Profit Center\"].astype(\"string\").str.strip().str.upper()",
+          "description": "Converts column types",
+          "line": 164,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "cc = df[\"Business Line - By Cost Center\"].astype(\"string\").str.strip().str.upper()",
+          "description": "Converts column types",
+          "line": 165,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df[\"reservation_line_id\"] = df[source_col].astype(str)",
+          "description": "Converts column types",
+          "line": 67,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df[\"reservation_number\"] = parts.apply(lambda x: x[0]).astype(",
+          "description": "Converts column types",
+          "line": 80,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df[\"reservation_line_number\"] = pd.to_numeric(",
+          "description": "Converts column types",
+          "line": 83,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df[\"reservation_line_id\"] = df[source_col].astype(str)",
+          "column": "reservation_line_id",
+          "description": "Creates/modifies column 'reservation_line_id'",
+          "line": 67,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"reservation_line_number\"] = pd.to_numeric(",
+          "column": "reservation_line_number",
+          "description": "Creates/modifies column 'reservation_line_number'",
+          "line": 83,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"reservation_number\"] = parts.apply(lambda x: x[0]).astype(",
+          "column": "reservation_number",
+          "description": "Creates/modifies column 'reservation_number'",
+          "line": 80,
+          "operation": "column_assign"
+        }
+      ],
+      "path": "scripts/stage1_clean/13_reservations.py",
       "stage": "stage1_clean"
     },
     {

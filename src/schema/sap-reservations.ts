@@ -5,8 +5,13 @@ import { devV3Schema } from './_schema';
 
 export const sapReservations = devV3Schema.table('sap_reservations', {
   id: uuid('id').primaryKey().defaultRandom(),
+  
+  // Business key - matches source system format (e.g., "6086214878-1")
+  reservationLineId: varchar('reservation_line_id').notNull().unique(),
+  
+  // Split components for grouping and sorting
   reservationNumber: varchar('reservation_number').notNull(),
-  reservationLineNumber: varchar('reservation_line_number').notNull(),
+  reservationLineNumber: integer('reservation_line_number').notNull(),
   reservationRequirementDate: date('reservation_requirement_date'),
   partNumber: varchar('part_number'),
   description: text('description'),

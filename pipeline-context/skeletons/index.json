@@ -61,6 +61,16 @@
       "source_path": "scripts/stage1_clean/12_wbs_from_ops_activities.py"
     },
     {
+      "compression_ratio": 2.74,
+      "name": "13_reservations",
+      "original_lines": 223,
+      "original_tokens": 1918,
+      "skeleton_lines": 77,
+      "skeleton_path": "pipeline-context/skeletons/stage1_clean/13_reservations.skeleton.py",
+      "skeleton_tokens": 701,
+      "source_path": "scripts/stage1_clean/13_reservations.py"
+    },
+    {
       "compression_ratio": 3.45,
       "name": "04_enrich_po_line_items",
       "original_lines": 203,
@@ -142,10 +152,10 @@
     }
   ],
   "totals": {
-    "compression_ratio": 3.17,
-    "original_lines": 2943,
-    "original_tokens": 24659,
-    "skeleton_lines": 909,
-    "skeleton_tokens": 7790
+    "compression_ratio": 3.13,
+    "original_lines": 3166,
+    "original_tokens": 26577,
+    "skeleton_lines": 986,
+    "skeleton_tokens": 8491
   }
 }

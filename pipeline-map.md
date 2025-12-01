@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-01T13:22:49.955978+00:00
+Generated: 2025-12-01T14:30:06.024767+00:00
 
 ## Data Flow Diagram
 
@@ -20,19 +20,21 @@ flowchart TD
         10_wbs_from_projects["10_wbs_from_projects"]
         11_wbs_from_operations["11_wbs_from_operations"]
         12_wbs_from_ops_activities["12_wbs_from_ops_activities"]
+        13_reservations["13_reservations"]
     end
 
     subgraph INTERMEDIATE["Intermediate Data"]
         int_0["gr_postings.csv"]
-        int_1["grir_exposures.csv"]
-        int_2["wbs_from_operations.csv"]
-        int_3["ir_postings.csv"]
-        int_4["wbs_from_projects.csv"]
-        int_5["po_details_enrichment.csv"]
-        int_6["wbs_from_ops_activities.csv"]
-        int_7["cost_impact.csv"]
-        int_8["wbs_processed.csv"]
-        int_9["po_line_items.csv"]
+        int_1["reservations.csv"]
+        int_2["grir_exposures.csv"]
+        int_3["wbs_from_operations.csv"]
+        int_4["ir_postings.csv"]
+        int_5["wbs_from_projects.csv"]
+        int_6["po_details_enrichment.csv"]
+        int_7["wbs_from_ops_activities.csv"]
+        int_8["cost_impact.csv"]
+        int_9["wbs_processed.csv"]
+        int_10["po_line_items.csv"]
     end
 
     subgraph STAGE2["Stage 2: Transform"]
@@ -90,15 +92,16 @@ flowchart TD
 | 4 | `10_wbs_from_projects` | stage1_clean | Stage 1: Extract WBS Data from Projects Report | fdp, wbs_from_projects.csv | wbs_from_projects.csv |
 | 5 | `11_wbs_from_operations` | stage1_clean | Stage 1: Extract WBS Data from Operations Report | fdp, wbs_from_operations.csv | wbs_from_operations.csv |
 | 6 | `12_wbs_from_ops_activities` | stage1_clean | Stage 1: Extract WBS Data from Operation Activitie | fdp, wbs_from_ops_activities.csv | wbs_from_ops_activities.csv |
-| 7 | `04_enrich_po_line_items` | stage2_transform | Stage 2: Enrich PO Line Items | po details report.xlsx, po_line_items.csv, po_details_enrichment.csv | po_line_items.csv, po_details_enrichment.csv |
-| 8 | `05_calculate_cost_impact` | stage2_transform | Stage 2: Calculate Cost Impact | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv |
-| 9 | `06_calculate_grir` | stage2_transform | Stage 2: Calculate GRIR Exposures | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv |
-| 10 | `07_process_wbs` | stage2_transform | Stage 2: Process WBS Data - Split, Parse, and Map  | - | - |
-| 11 | `06_prepare_po_line_items` | stage3_prepare | Stage 3: Prepare PO Line Items for Import | po_line_items.csv, cost_impact.csv | po_line_items.csv, cost_impact.csv |
-| 12 | `07_prepare_po_transactions` | stage3_prepare | Stage 3: Prepare PO Transactions for Import | cost_impact.csv | cost_impact.csv |
-| 13 | `08_prepare_grir_exposures` | stage3_prepare | Stage 3: Prepare GRIR Exposures for Import | grir_exposures.csv | grir_exposures.csv |
-| 14 | `09_prepare_wbs_details` | stage3_prepare | Stage 3: Prepare WBS Details for Import | wbs_processed.csv | wbs_processed.csv |
-| 15 | `pipeline` | scripts | Data Pipeline Orchestrator | - | - |
+| 7 | `13_reservations` | stage1_clean | Stage 1: Clean Reservations | reservations, reservations.csv | reservations.csv |
+| 8 | `04_enrich_po_line_items` | stage2_transform | Stage 2: Enrich PO Line Items | po details report.xlsx, po_line_items.csv, po_details_enrichment.csv | po_line_items.csv, po_details_enrichment.csv |
+| 9 | `05_calculate_cost_impact` | stage2_transform | Stage 2: Calculate Cost Impact | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv |
+| 10 | `06_calculate_grir` | stage2_transform | Stage 2: Calculate GRIR Exposures | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv |
+| 11 | `07_process_wbs` | stage2_transform | Stage 2: Process WBS Data - Split, Parse, and Map  | - | - |
+| 12 | `06_prepare_po_line_items` | stage3_prepare | Stage 3: Prepare PO Line Items for Import | po_line_items.csv, cost_impact.csv | po_line_items.csv, cost_impact.csv |
+| 13 | `07_prepare_po_transactions` | stage3_prepare | Stage 3: Prepare PO Transactions for Import | cost_impact.csv | cost_impact.csv |
+| 14 | `08_prepare_grir_exposures` | stage3_prepare | Stage 3: Prepare GRIR Exposures for Import | grir_exposures.csv | grir_exposures.csv |
+| 15 | `09_prepare_wbs_details` | stage3_prepare | Stage 3: Prepare WBS Details for Import | wbs_processed.csv | wbs_processed.csv |
+| 16 | `pipeline` | scripts | Data Pipeline Orchestrator | - | - |
 
 ## Script Dependencies
 
@@ -274,8 +277,9 @@ flowchart LR
 | Column | Type | Constraints |
 |--------|------|-------------|
 | `id` | uuid | PK |
+| `reservationLineId` | varchar | NOT NULL |
 | `reservationNumber` | varchar | NOT NULL |
-| `reservationLineNumber` | varchar | NOT NULL |
+| `reservationLineNumber` | integer | NOT NULL |
 | `reservationRequirementDate` | date | - |
 | `partNumber` | varchar | - |
 | `description` | text | - |
@@ -287,8 +291,7 @@ flowchart LR
 | `wbsNumber` | varchar | FK → wbsDetails.wbsNumber |
 | `assetCode` | varchar | - |
 | `assetSerialNumber` | varchar | - |
-| `requester` | varchar | - |
-| *...* | *3 more* | |
+| *...* | *4 more* | |
 
 ### `wbs_details`
 
@@ -376,6 +379,87 @@ Sample data and types for each CSV file:
 | `GR Posting Date` | object |
 | `GR Effective Quantity` | float64 |
 | `GR Amount` | float64 |
+
+### `reservations.csv`
+
+- **Path**: `data/intermediate/reservations.csv`
+- **Rows**: 1485
+
+| Column | Type |
+|--------|------|
+| `Index` | object |
+| `Material-Plant` | object |
+| `Plant` | float64 |
+| `Geo-Unit` | object |
+| `GEO UNIT (Profit Center)` | object |
+| `Material` | object |
+| `Reservation -Line` | object |
+| `Requirements Date` | object |
+| `Creation Date` | object |
+| `Stock On Hand - DDSC` | float64 |
+| *...* | *50 more* |
+
+**Columns with nulls:**
+- `Index`: 1 nulls
+- `Material-Plant`: 2 nulls
+- `Plant`: 2 nulls
+- `Geo-Unit`: 2 nulls
+- `GEO UNIT (Profit Center)`: 2 nulls
+- `Material`: 2 nulls
+- `Reservation -Line`: 2 nulls
+- `Requirements Date`: 2 nulls
+- `Creation Date`: 2 nulls
+- `Stock On Hand - DDSC`: 712 nulls
+- `Stock On Hand - HDSC`: 901 nulls
+- `Last 3 Month Consumption`: 2 nulls
+- `Last 6 Month Consumption`: 2 nulls
+- `Last 12 Month Consumption`: 2 nulls
+- `Material Stratification (Last 6 Month Consumption)`: 2 nulls
+- `Material Stratification (Last 12 Month Consumption)`: 2 nulls
+- `Open Qty - Reservation`: 2 nulls
+- `Open Reservation Value`: 2 nulls
+- `Material/Plant-SOH - Total`: 1028 nulls
+- `Primary Pegged PO-LN - Open Qty`: 1044 nulls
+- `Combined SOH & PO Pegging`: 2 nulls
+- `Main - PO Line to Peg to Reservation`: 968 nulls
+- `Main - PO to Peg to Reservation`: 968 nulls
+- `Additional PO - Line to Peg`: 1466 nulls
+- `Primary Pegged PO-LN - Order Qty`: 1044 nulls
+- `Primary Pegged PO-LN - Approval Status`: 1044 nulls
+- `Primary Pegged PO-LN - RDD Date`: 1044 nulls
+- `Pegged Main PO GR Status`: 968 nulls
+- `Pegged Main PO Invoice Status`: 968 nulls
+- `Primary Pegged PO-LN - Invoice Qty`: 1440 nulls
+- `Post Pegging SOH Qty`: 2 nulls
+- `Post Pegging PO Qty`: 35 nulls
+- `Material Description`: 2 nulls
+- `MRP Parameters - MRP Controller`: 2 nulls
+- `MRP Parameters - Profit Center`: 2 nulls
+- `MRP Parameters - Planned Delivery Time`: 2 nulls
+- `MRP Parameters - Prime Status`: 2 nulls
+- `MRP Parameters - Safety Stock`: 2 nulls
+- `MRP Parameters - Standard Price`: 2 nulls
+- `Business Line - By Cost Center`: 299 nulls
+- `Sub - Business Line - By Cost Center`: 299 nulls
+- `Business Line by Profit Center`: 2 nulls
+- `Material/Plant-Open PO Qty - Total`: 2 nulls
+- `Purchase Requisition - Status`: 2 nulls
+- `Purchase Requisitions`: 1480 nulls
+- `Planned Order - Status`: 2 nulls
+- `Planned Orders`: 1013 nulls
+- `Maximo Asset ID`: 812 nulls
+- `Maximo Asset Num`: 812 nulls
+- `Maximo Serial No`: 812 nulls
+- `Reservation Creation type`: 2 nulls
+- `WO Number`: 503 nulls
+- `User Name`: 2 nulls
+- `Goods recipient`: 16 nulls
+- `Maximo - WO STATUS and Part Status`: 2 nulls
+- `WBS Element`: 1188 nulls
+- `Cost Center`: 299 nulls
+- `reservation_line_id`: 2 nulls
+- `reservation_number`: 2 nulls
+- `reservation_line_number`: 2 nulls
 
 ### `grir_exposures.csv`
 
@@ -718,6 +802,21 @@ Key pandas operations used in each script:
 | 147 | boolean_filter | Filters rows based on boolean condition |
 | 113 | rename | Renames columns |
 | 90 | astype | Converts column types |
+
+### `13_reservations`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 67 | column_assign | column: `reservation_line_id` |
+| 80 | column_assign | column: `reservation_number` |
+| 83 | column_assign | column: `reservation_line_number` |
+| 67 | astype | Converts column types |
+| 79 | apply | Applies function to data |
+| 80 | astype | Converts column types |
+| 83 | astype | Converts column types |
+| 141 | apply | Applies function to data |
+| 147 | apply | Applies function to data |
+| 80 | apply | Applies function to data |
 
 ### `04_enrich_po_line_items`
 

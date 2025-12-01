@@ -20,6 +20,60 @@
         "04_enrich_po_line_items"
       ]
     },
+    "Additional PO - Line to Peg": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Additional PO - Line to Peg",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Business Line - By Cost Center": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Business Line - By Cost Center",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": [
+        "13_reservations"
+      ]
+    },
+    "Business Line by Profit Center": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Business Line by Profit Center",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": [
+        "13_reservations"
+      ]
+    },
+    "Combined SOH & PO Pegging": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Combined SOH & PO Pegging",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Cost Center": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Cost Center",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
     "Cost Impact Amount": {
       "created_by": null,
       "dtype": "float64",
@@ -39,6 +93,16 @@
       "source_type": "intermediate",
       "sources": [
         "data/intermediate/cost_impact.csv"
+      ],
+      "used_in": []
+    },
+    "Creation Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Creation Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
       ],
       "used_in": []
     },
@@ -71,6 +135,16 @@
       "source_type": "intermediate",
       "sources": [
         "data/intermediate/grir_exposures.csv"
+      ],
+      "used_in": []
+    },
+    "GEO UNIT (Profit Center)": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "GEO UNIT (Profit Center)",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
       ],
       "used_in": []
     },
@@ -136,6 +210,26 @@
         "06_calculate_grir"
       ]
     },
+    "Geo-Unit": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Geo-Unit",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Goods recipient": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Goods recipient",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
     "IR Effective Quantity": {
       "created_by": null,
       "dtype": "float64",
@@ -148,6 +242,16 @@
       "used_in": [
         "03_ir_postings"
       ]
+    },
+    "Index": {
+      "created_by": null,
+      "dtype": "int64",
+      "name": "Index",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
     },
     "Invoice Amount": {
       "created_by": "scripts/stage1_clean/03_ir_postings.py:55",
@@ -172,6 +276,36 @@
       ],
       "used_in": []
     },
+    "Last 12 Month Consumption": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Last 12 Month Consumption",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Last 3 Month Consumption": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Last 3 Month Consumption",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Last 6 Month Consumption": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Last 6 Month Consumption",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
     "Location": {
       "created_by": "scripts/stage1_clean/01_po_line_items.py:103",
       "dtype": "object",
@@ -183,6 +317,86 @@
       "used_in": [
         "01_po_line_items"
       ]
+    },
+    "MRP Parameters - MRP Controller": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "MRP Parameters - MRP Controller",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "MRP Parameters - Planned Delivery Time": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "MRP Parameters - Planned Delivery Time",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "MRP Parameters - Prime Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "MRP Parameters - Prime Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "MRP Parameters - Profit Center": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "MRP Parameters - Profit Center",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "MRP Parameters - Safety Stock": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "MRP Parameters - Safety Stock",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "MRP Parameters - Standard Price": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "MRP Parameters - Standard Price",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Main - PO Line to Peg to Reservation": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Main - PO Line to Peg to Reservation",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Main - PO to Peg to Reservation": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Main - PO to Peg to Reservation",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
     },
     "Main Vendor ID": {
       "created_by": null,
@@ -222,6 +436,116 @@
         "06_calculate_grir"
       ]
     },
+    "Material": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Material",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Material Description": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Material Description",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Material Stratification (Last 12 Month Consumption)": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Material Stratification (Last 12 Month Consumption)",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Material Stratification (Last 6 Month Consumption)": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Material Stratification (Last 6 Month Consumption)",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Material-Plant": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Material-Plant",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Material/Plant-Open PO Qty - Total": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Material/Plant-Open PO Qty - Total",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Material/Plant-SOH - Total": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Material/Plant-SOH - Total",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Maximo - WO STATUS and Part Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Maximo - WO STATUS and Part Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Maximo Asset ID": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Maximo Asset ID",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Maximo Asset Num": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Maximo Asset Num",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Maximo Serial No": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Maximo Serial No",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
     "NIS Level 0 Desc": {
       "created_by": null,
       "dtype": "object",
@@ -252,6 +576,26 @@
       "sources": [
         "data/intermediate/po_line_items.csv",
         "data/raw/po line items.csv"
+      ],
+      "used_in": []
+    },
+    "Open Qty - Reservation": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Open Qty - Reservation",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Open Reservation Value": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Open Reservation Value",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
       ],
       "used_in": []
     },
@@ -546,6 +890,56 @@
         "04_enrich_po_line_items"
       ]
     },
+    "Pegged Main PO GR Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Pegged Main PO GR Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Pegged Main PO Invoice Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Pegged Main PO Invoice Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Planned Order - Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Planned Order - Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Planned Orders": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Planned Orders",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Plant": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Plant",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
     "Plant Code": {
       "created_by": null,
       "dtype": "int64",
@@ -558,6 +952,26 @@
       "used_in": [
         "01_po_line_items"
       ]
+    },
+    "Post Pegging PO Qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Post Pegging PO Qty",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Post Pegging SOH Qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Post Pegging SOH Qty",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
     },
     "Posting Date": {
       "created_by": "scripts/stage2_transform/06_calculate_grir.py:137",
@@ -598,6 +1012,66 @@
         "06_calculate_grir"
       ]
     },
+    "Primary Pegged PO-LN - Approval Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Primary Pegged PO-LN - Approval Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Primary Pegged PO-LN - Invoice Qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Primary Pegged PO-LN - Invoice Qty",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Primary Pegged PO-LN - Open Qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Primary Pegged PO-LN - Open Qty",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Primary Pegged PO-LN - Order Qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Primary Pegged PO-LN - Order Qty",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Primary Pegged PO-LN - RDD Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Primary Pegged PO-LN - RDD Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Purchase Requisition - Status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Purchase Requisition - Status",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
     "Purchase Requisition Item": {
       "created_by": null,
       "dtype": null,
@@ -617,6 +1091,16 @@
       "used_in": [
         "04_enrich_po_line_items"
       ]
+    },
+    "Purchase Requisitions": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Purchase Requisitions",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
     },
     "Purchase Value USD": {
       "created_by": null,
@@ -647,6 +1131,36 @@
         "04_enrich_po_line_items"
       ]
     },
+    "Requirements Date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Requirements Date",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Reservation -Line": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Reservation -Line",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Reservation Creation type": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Reservation Creation type",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
     "SL Sub-Business Line Code (BV Lvl 3)": {
       "created_by": null,
       "dtype": "object",
@@ -665,6 +1179,36 @@
       "source_type": "intermediate",
       "sources": [
         "data/intermediate/grir_exposures.csv"
+      ],
+      "used_in": []
+    },
+    "Stock On Hand - DDSC": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Stock On Hand - DDSC",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Stock On Hand - HDSC": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "Stock On Hand - HDSC",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "Sub - Business Line - By Cost Center": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "Sub - Business Line - By Cost Center",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
       ],
       "used_in": []
     },
@@ -736,6 +1280,36 @@
         "05_calculate_cost_impact",
         "06_calculate_grir"
       ]
+    },
+    "User Name": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "User Name",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "WBS Element": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "WBS Element",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
+    },
+    "WO Number": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "WO Number",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": []
     },
     "account_assignment_category": {
       "created_by": null,
@@ -1174,6 +1748,42 @@
         "data/import-ready/po_line_items.csv"
       ],
       "used_in": []
+    },
+    "reservation_line_id": {
+      "created_by": "scripts/stage1_clean/13_reservations.py:67",
+      "dtype": "object",
+      "name": "reservation_line_id",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": [
+        "13_reservations"
+      ]
+    },
+    "reservation_line_number": {
+      "created_by": "scripts/stage1_clean/13_reservations.py:83",
+      "dtype": "int64",
+      "name": "reservation_line_number",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": [
+        "13_reservations"
+      ]
+    },
+    "reservation_number": {
+      "created_by": "scripts/stage1_clean/13_reservations.py:80",
+      "dtype": "int64",
+      "name": "reservation_number",
+      "source_type": "intermediate",
+      "sources": [
+        "data/intermediate/reservations.csv"
+      ],
+      "used_in": [
+        "13_reservations"
+      ]
     },
     "rig": {
       "created_by": "scripts/stage1_clean/10_wbs_from_projects.py:134",
@@ -1775,6 +2385,23 @@
     },
     {
       "args": [
+        "val"
+      ],
+      "called_by": [],
+      "calls": [
+        "endswith",
+        "isna",
+        "str"
+      ],
+      "docstring": "Remove .0 suffix from PO numbers (artifact of float conversion).",
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 129,
+      "name": "clean_po_number",
+      "return_type": null,
+      "signature": "def clean_po_number(val)"
+    },
+    {
+      "args": [
         "dfs"
       ],
       "called_by": [
@@ -1891,6 +2518,23 @@
     },
     {
       "args": [
+        "val"
+      ],
+      "called_by": [],
+      "calls": [
+        "isna",
+        "rfind",
+        "str"
+      ],
+      "docstring": null,
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 70,
+      "name": "extract_parts",
+      "return_type": null,
+      "signature": "def extract_parts(val)"
+    },
+    {
+      "args": [
         "df"
       ],
       "called_by": [
@@ -1908,6 +2552,32 @@
       "name": "fill_nis_level_for_3021",
       "return_type": "pd.DataFrame",
       "signature": "def fill_nis_level_for_3021(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "astype",
+        "copy",
+        "isin",
+        "join",
+        "len",
+        "print",
+        "sorted",
+        "strip",
+        "sum",
+        "upper"
+      ],
+      "docstring": "Remove rows where both Business Line columns have the same value\nAND that value is one of WCM, WCF, or WCD.\n\nThese represent internal transfers/overhead allocations.",
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 153,
+      "name": "filter_matching_business_lines",
+      "return_type": "pd.DataFrame",
+      "signature": "def filter_matching_business_lines(df: pd.DataFrame) -> pd.DataFrame"
     },
     {
       "args": [
@@ -2310,6 +2980,23 @@
       "signature": "def load_data(filepath: Path) -> pd.DataFrame"
     },
     {
+      "args": [
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
+        "print",
+        "read_excel"
+      ],
+      "docstring": "Load the raw Excel file.",
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 45,
+      "name": "load_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_data(filepath: Path) -> pd.DataFrame"
+    },
+    {
       "args": [],
       "called_by": [],
       "calls": [
@@ -2620,6 +3307,24 @@
       "name": "main",
       "return_type": "bool",
       "signature": "def main(force: bool) -> bool"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "filter_matching_business_lines",
+        "load_data",
+        "normalize_po_line_ids",
+        "print",
+        "save_data",
+        "split_reservation_line_id"
+      ],
+      "docstring": null,
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 195,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
     },
     {
       "args": [],
@@ -2964,6 +3669,49 @@
     },
     {
       "args": [
+        "val"
+      ],
+      "called_by": [],
+      "calls": [
+        "int",
+        "isna",
+        "rfind",
+        "str"
+      ],
+      "docstring": "Strip leading zeros from line number part of PO Line ID.",
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 111,
+      "name": "normalize_po_line_id",
+      "return_type": null,
+      "signature": "def normalize_po_line_id(val)"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "apply",
+        "endswith",
+        "int",
+        "isna",
+        "notna",
+        "print",
+        "rfind",
+        "str",
+        "sum"
+      ],
+      "docstring": "Normalize PO Line IDs to match po_line_items format.\n\nReservations format: \"4584632148-00001\" (5-digit zero-padded line number)\nPO Line Items format: \"4581850069-1\" (no padding)\n\nThis ensures proper joins between sap_reservations and po_line_items tables.",
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 99,
+      "name": "normalize_po_line_ids",
+      "return_type": "pd.DataFrame",
+      "signature": "def normalize_po_line_ids(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
         "df"
       ],
       "called_by": [
@@ -3256,6 +4004,25 @@
       "called_by": [],
       "calls": [
         "len",
+        "mkdir",
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save the cleaned DataFrame to CSV.",
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 187,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
+    },
+    {
+      "args": [
+        "df",
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
         "print",
         "reset_index",
         "sort_values",
@@ -3527,6 +4294,31 @@
       "args": [
         "df"
       ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "apply",
+        "astype",
+        "isna",
+        "notna",
+        "print",
+        "rfind",
+        "str",
+        "sum",
+        "to_numeric"
+      ],
+      "docstring": "Split 'Reservation -Line' column into components.\n\nInput format: \"6086214878-1\" (reservation_number-line_number)\n\nCreates:\n- reservation_line_id: Original combined value (for lookups/traceability)\n- reservation_number: The reservation part (for grouping)\n- reservation_line_number: The line number as integer (for sorting)",
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 53,
+      "name": "split_reservation_line_id",
+      "return_type": "pd.DataFrame",
+      "signature": "def split_reservation_line_id(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
       "called_by": [],
       "calls": [
         "len",
@@ -3719,9 +4511,9 @@
     }
   ],
   "stats": {
-    "total_columns": 119,
+    "total_columns": 179,
     "total_constants": 16,
-    "total_functions": 107,
+    "total_functions": 116,
     "total_tables": 11
   },
   "tables": [
@@ -3959,6 +4751,7 @@
         "poLineNumber",
         "poNumber",
         "requester",
+        "reservationLineId",
         "reservationLineNumber",
         "reservationNumber",
         "reservationQty",

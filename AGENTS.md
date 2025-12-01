@@ -178,38 +178,6 @@ python3 scripts/profile_data.py data/intermediate/po_line_items.csv "PO Receipt 
 
 ---
 
-## Environment Setup
-
-**Database credentials are in `.env` file (NOT auto-loaded by scripts)**
-
-```env
-DATABASE_URL=postgresql://user:password@host:5432/postgres?sslmode=require
-```
-
-- **Database**: Azure PostgreSQL (shared with production)
-- **Our Schema**: `dev_v3` (isolated, safe to modify)
-- **Production Schema**: `public` (NEVER TOUCH)
-- **Previous Dev Schema**: `dev_v2` (preserved, do not modify)
-- **Schema isolation**: No extra costs, complete independence
-
-## Development Commands
-
-**Always use npm scripts** - they handle environment loading automatically:
-
-```bash
-# Schema Management
-npm run db:push              # Push schema changes to database
-npm run db:generate          # Generate migration files
-npm run db:studio            # Open Drizzle Studio GUI
-
-# Quality Checks
-npm run type-check           # TypeScript validation
-npm test                     # Run tests
-```
-
-❌ Don't run scripts directly (missing environment)  
-✅ Use npm scripts (handles `--env-file=.env` automatically)
-
 ## Data Pipeline
 
 The data pipeline transforms raw CSV/Excel files into import-ready CSVs that match the database schema.
@@ -244,199 +212,76 @@ The data pipeline transforms raw CSV/Excel files into import-ready CSVs that mat
 
 **Note:** Static type checker warnings (Pyright/Pylance) for pandas code can be ignored - they're false positives due to pandas' dynamic typing. Runtime behavior is what matters.
 
-## Context Oracle (AI Intelligence Layer)
+---
 
-The Context Oracle is an active guidance system that transforms blind file operations into guided, verified, consistent code changes.
+## Command Reference
 
-### Three Pillars
-
-| Pillar | Purpose | Artifact |
-|--------|---------|----------|
-| **Symbol Registry** | Verify before use (anti-hallucination) | `pipeline-context/registry/symbols.json` |
-| **Pattern Library** | Follow conventions (anti-drift) | `pipeline-context/patterns/index.json` |
-| **Lineage Oracle** | Know impact (guided search) | `pipeline-context/lineage/graph.json` |
-
-### Generated Artifacts
-
-```
-pipeline-context/
-├── registry/
-│   └── symbols.json      # 46 functions, 10 constants, 88 columns, 10 tables
-├── skeletons/            # Compressed code views (3.3x compression)
-│   ├── stage1_clean/     # Skeleton versions of pipeline scripts
-│   ├── stage2_transform/
-│   └── stage3_prepare/
-├── patterns/
-│   └── index.json        # 4 patterns (pipeline_script, drizzle_schema, etc.)
-└── lineage/
-    └── graph.json        # Data flow graph with variable tracing
-```
-
-### Skeleton Column Annotations
-
-Each skeleton file includes a column summary in its docstring:
-
-```python
-"""
-Stage 3: Prepare PO Line Items for Import
-...
-Column Operations:
-  WRITES: fmt_po, open_po_qty, open_po_value
-  READS:  Main Vendor SLB Vendor Category, PO Line ID, PO Receipt Status
-"""
-```
-
-This tells you at a glance which columns a script touches without reading full source.
-
-### Context Oracle CLI Tool
-
-Use `scripts/ask_oracle.py` to query the Context Oracle. All output is JSON for easy parsing.
-
-**Verify a symbol exists** (anti-hallucination):
+### Database (npm scripts)
 ```bash
-python3 scripts/ask_oracle.py verify filter_valuation_classes
-# {"found":true,"type":"function","location":"scripts/stage1_clean/01_po_line_items.py:42",...}
-
-python3 scripts/ask_oracle.py verify nonexistent_function
-# {"found":false,"suggestion":"Did you mean 'filter_valuation_classes'?",...}
+npm run db:push              # Push schema changes to database
+npm run db:generate          # Generate migration files
+npm run db:studio            # Open Drizzle Studio GUI
+npm run type-check           # TypeScript validation
+npm test                     # Run tests
 ```
 
-**Predict impact before modifying a script** (with tiered classification):
+### Context Oracle CLI
 ```bash
-python3 scripts/ask_oracle.py impact 05_calculate_cost_impact
-# {"script":"05_calculate_cost_impact",
-#  "columns_modified":["Unit Price","Cost Impact Qty"],
-#  "tiered_impact":{
-#    "column_readers":["02_gr_postings","03_ir_postings"],  # Scripts that READ your columns
-#    "file_consumers":["06_prepare_po_line_items"]          # Scripts that consume output files
-#  },
-#  "risk_level":"high",
-#  "recommendation":"Test affected scripts: ['02_gr_postings','03_ir_postings']"}
+python3 scripts/ask_oracle.py verify <name>           # Check if symbol exists
+python3 scripts/ask_oracle.py impact <script>         # Predict change impact
+python3 scripts/ask_oracle.py who <column>            # Find column readers/writers
+python3 scripts/ask_oracle.py trace <column>          # Trace data lineage
+python3 scripts/ask_oracle.py pattern <type>          # Get code pattern
+python3 scripts/ask_oracle.py search <query>          # Search symbols
+python3 scripts/ask_oracle.py health                  # Check artifact freshness
+python3 scripts/ask_oracle.py validate schema-lock    # Validate output schemas
+python3 scripts/ask_oracle.py validate pipeline-order # Check for DAG cycles
 ```
 
-**Find which scripts read/write a column**:
+### Data Profiling
 ```bash
-python3 scripts/ask_oracle.py who "Unit Price"
-# {"column":"Unit Price",
-#  "writers":[{"script":"02_gr_postings","location":"...py:53"}],
-#  "readers":[{"script":"02_gr_postings","location":"...py:64"}],
-#  "summary":"3 scripts write, 2 scripts read"}
+python3 scripts/profile_data.py <file> "<column>"     # Profile specific column
+python3 scripts/profile_data.py <file>                # Profile entire file
 ```
 
-**Trace column lineage** (now with variable tracing):
+### Validation
 ```bash
-python3 scripts/ask_oracle.py trace open_po_value --direction upstream
-# {"target":"open_po_value","upstream":[...],"critical_files":[...]}
+python3 scripts/validators/schema_lock.py --check    # Verify schemas match lock
+python3 scripts/validators/schema_lock.py --update   # Update lock (if intentional)
 ```
 
-**Get code pattern for a task**:
-```bash
-python3 scripts/ask_oracle.py pattern pipeline_script
-# {"found":true,"pattern":{"structure":[...],"conventions":[...],"function_templates":{...}}}
-```
+---
 
-**Search for similar symbols**:
-```bash
-python3 scripts/ask_oracle.py search calculate --limit 5
-# {"query":"calculate","count":5,"results":[...]}
-```
+## Schema Management
 
-### When to Use the Oracle
-
-| Task | Command | Purpose |
-|------|---------|---------|
-| Before calling a function | `verify <name>` | Prevent hallucination |
-| Before modifying a script | `impact <script>` | Know what breaks |
-| Find who touches a column | `who <column>` | Direct read/write info |
-| Understanding data flow | `trace <column>` | Find dependencies |
-| Writing new code | `pattern <type>` | Follow conventions |
-| Finding existing code | `search <query>` | Avoid duplication |
-| Check Oracle artifacts | `health` | Verify artifacts are fresh |
-| Validate schema changes | `validate schema-lock` | Check for output schema drift |
-| Validate pipeline order | `validate pipeline-order` | Check for DAG cycles |
-
-### Regenerate Context Oracle
-
-```bash
-python3 scripts/generate_context_oracle.py    # Full regeneration
-```
-
-The pre-commit hook automatically regenerates Context Oracle when pipeline scripts or schema files change.
-
-### Known Limitations (Be Aware)
-
-| Limitation | Impact | Mitigation |
-|------------|--------|------------|
-| **Voluntary compliance** | Agent can skip Oracle and make blind changes | Always run `verify` and `impact` before writing code |
-| **Stale after edits** | After modifying files, artifacts are outdated until regenerated | Run `generate_context_oracle.py` after major changes, or commit to trigger pre-commit |
-| **Static analysis only** | Dynamic column names (`df[f"col_{i}"]`) not captured | Check actual code if lineage seems incomplete |
-| **Python/TS only** | SQL in strings, config files may be missed | Manually verify database-related changes |
-
-**Critical Rule**: The Oracle is a guide, not a safety net. Always verify your understanding by reading the actual source code before making changes.
-
-## Schema Management Rules
-
-### 1. Never Use Direct SQL
-All database changes MUST go through Drizzle ORM schema files in `src/schema/`.
-
-### 2. Always Import Shared Schema
+### Rules
+1. **Never use direct SQL** - All changes through Drizzle ORM in `src/schema/`
+2. **Always import shared schema**:
 ```typescript
-// ✓ CORRECT
+// CORRECT
 import { devV3Schema } from './_schema';
 
-// ✗ WRONG - Creates duplicate schema instances
+// WRONG - Creates duplicate schema instances
 import { pgSchema } from 'drizzle-orm/pg-core';
 const devV3Schema = pgSchema('dev_v3');
 ```
 
-### 3. Standard Workflow
+### Workflow
 1. Edit schema files in `src/schema/`
 2. Run `npm run db:push`
 3. Run `npm run type-check`
 4. Verify with `npm run db:studio` if needed
 
-### 4. Schema Discovery
-- Schema files in `src/schema/` are the source of truth
-- Use Read/Grep tools to understand current schema
-- Check `src/schema/index.ts` for all table exports
-
-## Drizzle Configuration
-
-Located in `drizzle.config.ts`:
-- `schemaFilter: ['dev_v3']` - Only touches `dev_v3`, never `public`
-- This ensures all operations are scoped safely
-
-## Naming Conventions
-
+### Naming Conventions
 - **TypeScript properties**: `camelCase`
 - **SQL columns/tables**: `snake_case`
 - **Files**: `kebab-case.ts`
-- **Type exports**: `export type TableName = typeof tableName.$inferSelect`
 
-## Safety Rules
+---
 
-1. **Never modify `public` schema** - That's production
-2. **Never commit `.env` file** - Contains credentials
-3. **Always use npm scripts** - They handle environment
-4. **Always run type-check after changes** - Catches errors early
+## Validation & Recovery
 
-## Commit Discipline (AI Agents)
-
-### Commit Frequently
-- **Commit after each logical unit of work** - Don't batch unrelated changes
-- **Commit before risky operations** - Create a checkpoint you can revert to
-- **Commit after successful tests** - Lock in working state
-
-### Commit Message Format
-```
-<type>: <short description>
-
-Types: feat, fix, refactor, docs, chore, test
-```
-
-### Pre-commit Hooks (3-Layer Guardrails)
-
-This project uses a 3-layer pre-commit system that runs automatically on every commit:
+### Pre-commit Hooks (Automatic)
 
 | Layer | What Runs | Purpose |
 |-------|-----------|---------|
@@ -444,124 +289,62 @@ This project uses a 3-layer pre-commit system that runs automatically on every c
 | **Layer 2** | Schema lock, Pipeline DAG | Catch breaking changes to output schemas |
 | **Layer 3** | Oracle regeneration | Keep context artifacts in sync |
 
-**All layers run automatically - no agent action needed during normal commits.**
+### Handling Failures
 
-```bash
-# Install pre-commit (one-time setup)
-pip install pre-commit
-pre-commit install
-```
+| Failure | Resolution |
+|---------|------------|
+| Ruff/MyPy/Pylint | Fix the reported code issues |
+| Schema lock check | If INTENTIONAL: `python3 scripts/validators/schema_lock.py --update && git add schema_lock.json`. If UNINTENTIONAL: fix your code |
+| Pipeline DAG | Fix circular script dependencies |
+| Oracle regeneration | Stage updated files: `git add pipeline-context/` |
 
-### Handling Pre-commit Failures
-
-| Failure | Cause | Resolution |
-|---------|-------|------------|
-| **Ruff/MyPy/Pylint** | Code quality issues | Fix the reported issues |
-| **Schema lock check** | Output columns changed | See "Schema Lock" section below |
-| **Pipeline DAG** | Circular dependency detected | Fix script dependencies |
-| **Oracle regeneration** | Source files changed | Stage updated files: `git add pipeline-context/` |
-
-### Schema Lock (Important for Agents)
-
-The schema lock tracks output column schemas. When you change columns written by stage3 scripts:
-
-```bash
-# Pre-commit will fail with: "Schema mismatch detected"
-
-# If the change is INTENTIONAL, update the lock:
-python3 scripts/validators/schema_lock.py --update
-git add schema_lock.json
-git commit -m "your message"
-
-# If the change is UNINTENTIONAL, fix your code
-```
-
-**Rule**: Never blindly run `--update`. Understand WHY schemas changed first.
-
-### What Triggers Context Oracle Regeneration
+### What Triggers Oracle Regeneration
 - Any change to `scripts/stage*/*.py`
 - Any change to `scripts/config/*.py`  
 - Any change to `src/schema/*.ts`
 
-The hook ensures Context Oracle artifacts stay in sync with the codebase.
+---
 
-## Development Workflow
+## Safety Rules (NEVER Violate)
 
-### Using PLAN Agent (OpenCode)
-1. Analyze schema files in `src/schema/`
-2. Suggest changes
-3. Identify potential issues
+1. **NEVER modify `public` schema** - That's production
+2. **NEVER commit `.env` file** - Contains credentials
+3. **NEVER use direct SQL** - Always use Drizzle ORM
+4. **NEVER skip `type-check`** after schema changes
+5. **NEVER blindly run `schema_lock.py --update`** - Understand WHY schemas changed first
 
-### Using BUILD Agent (OpenCode)
-1. Edit schema files
-2. Run `npm run db:push`
-3. Run `npm run type-check`
-4. Report results
+---
 
-## Common Tasks
+## Commit Discipline
 
-### Add/Modify Schema
-1. Edit relevant file in `src/schema/`
-2. Ensure `devV3Schema` is imported from `_schema.ts`
-3. Run `npm run db:push`
-4. Run `npm run type-check`
+- **Commit after each logical unit of work** - Don't batch unrelated changes
+- **Commit before risky operations** - Create a checkpoint
+- **Commit after successful tests** - Lock in working state
 
-### View Schema
-```bash
-npm run db:studio  # Opens GUI at https://local.drizzle.studio
+### Message Format
+```
+<type>: <short description>
+
+Types: feat, fix, refactor, docs, chore, test
 ```
 
-## Project Structure
+---
 
-```
-src/schema/              # Drizzle ORM schemas (SINGLE SOURCE OF TRUTH)
-├── _schema.ts          # Shared devV3Schema instance (import this!)
-├── *.ts                # Individual table definitions
-└── index.ts            # Exports all tables
+## Project Structure (Key Directories Only)
 
-scripts/                 # Data pipeline scripts
-├── pipeline.py         # Orchestrator - runs all stages
-├── ask_oracle.py       # Context Oracle CLI tool
-├── config/
-│   └── column_mappings.py  # CSV→DB column mappings
-├── contracts/          # Pandera data contracts (runtime validation)
-│   ├── po_line_items_schema.py
-│   ├── po_transactions_schema.py
-│   └── grir_exposures_schema.py
-├── validators/         # Pre-commit validation scripts
-│   ├── schema_lock.py  # Output schema tracking
-│   ├── pipeline_order.py  # DAG cycle detection
-│   └── oracle_client.py   # Unified Oracle access layer
-├── stage1_clean/       # Raw → Intermediate
-├── stage2_transform/   # Enrichment, calculations
-└── stage3_prepare/     # Intermediate → Import-ready
+| Directory | Purpose |
+|-----------|---------|
+| `src/schema/` | Drizzle ORM schemas (source of truth for DB) |
+| `scripts/stage{1,2,3}_*/` | Pipeline scripts by stage |
+| `scripts/contracts/` | Pandera data contracts |
+| `scripts/validators/` | Pre-commit validation scripts |
+| `pipeline-context/` | Context Oracle artifacts (auto-generated) |
+| `data/raw/` | Source files (never modified) |
+| `data/intermediate/` | Cleaned/transformed data |
+| `data/import-ready/` | Final CSVs matching DB schema |
+| `tests/contracts/` | Business rule assertions |
 
-data/
-├── raw/                # Source files (never modified)
-├── intermediate/       # Cleaned and transformed data
-└── import-ready/       # Final CSVs matching DB schema
-
-pipeline-context/        # Context Oracle artifacts (AI guidance)
-├── registry/           # Symbol registry (functions, columns, tables)
-├── skeletons/          # Compressed code views
-├── patterns/           # Code patterns and conventions
-└── lineage/            # Data flow graph
-
-tests/                   # Python tests (golden set, contracts)
-__tests__/              # Vitest tests (TypeScript)
-```
-
-## Migration Strategy
-
-### Development (Current)
-Use `npm run db:push` for instant schema changes.
-
-### Production (Future)
-```bash
-npm run db:generate  # Creates migration files
-# Review SQL
-# Apply to production with proper controls
-```
+---
 
 ## Common Issues
 
@@ -569,9 +352,6 @@ npm run db:generate  # Creates migration files
 |-------|----------|
 | Environment not loading | Use npm scripts (not direct scripts) |
 | Type errors after changes | Run `npm run type-check` |
-| Want to inspect changes | Run `npm run db:studio` |
-
-## Additional Resources
-
-- Drizzle ORM: https://orm.drizzle.team/
-- PostgreSQL Schema Docs: https://www.postgresql.org/docs/current/ddl-schemas.html
+| Pre-commit hook fails | Read the error message, fix the issue |
+| Schema lock mismatch | Intentional? Update lock. Unintentional? Fix code |
+| Oracle artifacts stale | Commit triggers auto-regen, or run `python3 scripts/generate_context_oracle.py` |

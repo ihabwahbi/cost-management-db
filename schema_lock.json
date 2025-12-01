@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2025-12-01T12:52:03.214282+00:00",
+  "generated_at": "2025-12-01T14:30:15.525638+00:00",
   "schemas": {
     "01_po_line_items": {
       "columns": [
@@ -132,8 +132,17 @@
       ],
       "hash": "062ae9197663636e",
       "count": 2
+    },
+    "13_reservations": {
+      "columns": [
+        "reservation_line_id",
+        "reservation_line_number",
+        "reservation_number"
+      ],
+      "hash": "46cee70a3f523cd6",
+      "count": 3
     }
   },
-  "total_scripts": 14,
-  "total_columns": 47
+  "total_scripts": 15,
+  "total_columns": 50
 }

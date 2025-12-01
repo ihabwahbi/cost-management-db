@@ -13,6 +13,7 @@
     "scripts/stage1_clean/10_wbs_from_projects.py": "657fac99a9a3d340366a8d845153e24e",
     "scripts/stage1_clean/11_wbs_from_operations.py": "f55fe98e5c294563935653a48ec063ee",
     "scripts/stage1_clean/12_wbs_from_ops_activities.py": "beefd8d480a8d417e67379108d40a3eb",
+    "scripts/stage1_clean/13_reservations.py": "61597252acb669095906a15d30401e34",
     "scripts/stage2_transform/04_enrich_po_line_items.py": "9b4e6f15c33172f02b8a3e3e80aee055",
     "scripts/stage2_transform/05_calculate_cost_impact.py": "5f10db4c88f82db0c0a87a0c32ba4c1a",
     "scripts/stage2_transform/06_calculate_grir.py": "7cb790bf412b0443c73d2db6b0c263c1",
@@ -32,8 +33,8 @@
     "src/schema/po-operations.ts": "e62b72cc066a6d71a4ea40d30b41d7e1",
     "src/schema/po-transactions.ts": "a7eb389f960fca4618806e52bb8ea712",
     "src/schema/projects.ts": "74036a3a90d8b6e4e2c3df571561f92f",
-    "src/schema/sap-reservations.ts": "8e6834f9b5c0e217d73e162184279440",
+    "src/schema/sap-reservations.ts": "0dc248c1036a80456c1205a24bebcd1d",
     "src/schema/wbs-details.ts": "2c5e11cb2add603fbb26e98302d37ab5"
   },
-  "last_generated": "2025-12-01T13:22:49.955978+00:00"
+  "last_generated": "2025-12-01T14:30:06.024767+00:00"
 }
