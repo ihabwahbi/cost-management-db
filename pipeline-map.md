@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-01T09:38:05.194159+00:00
+Generated: 2025-12-01T13:22:49.955978+00:00
 
 ## Data Flow Diagram
 
@@ -782,35 +782,35 @@ Key pandas operations used in each script:
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 64 | column_assign | column: `Total Cost Impact Qty` |
-| 65 | column_assign | column: `Total Cost Impact Amount` |
-| 61 | merge | on: `PO Line ID` |
-| 64 | fillna | Fills null values |
-| 65 | fillna | Fills null values |
-| 87 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
-| 107 | column_assign | column: `open_po_qty` |
-| 109 | column_assign | column: `open_po_value` |
-| 115 | column_assign | column: `fmt_po` |
-| 117 | column_assign | column: `fmt_po` |
+| 79 | column_assign | column: `Total Cost Impact Qty` |
+| 80 | column_assign | column: `Total Cost Impact Amount` |
+| 76 | merge | on: `PO Line ID` |
+| 79 | fillna | Fills null values |
+| 80 | fillna | Fills null values |
+| 104 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
+| 124 | column_assign | column: `open_po_qty` |
+| 126 | column_assign | column: `open_po_value` |
+| 132 | column_assign | column: `fmt_po` |
+| 134 | column_assign | column: `fmt_po` |
 
 ### `07_prepare_po_transactions`
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 58 | column_assign | column: `amount` |
-| 50 | column_assign | column: `cost_impact_qty` |
-| 52 | column_assign | column: `cost_impact_amount` |
-| 54 | column_assign | column: `quantity` |
-| 44 | boolean_filter | Filters rows based on boolean condition |
+| 68 | column_assign | column: `amount` |
+| 60 | column_assign | column: `cost_impact_qty` |
+| 62 | column_assign | column: `cost_impact_amount` |
+| 64 | column_assign | column: `quantity` |
+| 54 | boolean_filter | Filters rows based on boolean condition |
 
 ### `08_prepare_grir_exposures`
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 52 | column_assign | column: `grir_qty` |
-| 55 | column_assign | column: `grir_value` |
-| 45 | boolean_filter | Filters rows based on boolean condition |
-| 95 | boolean_filter | Filters rows based on boolean condition |
+| 65 | column_assign | column: `grir_qty` |
+| 68 | column_assign | column: `grir_value` |
+| 58 | boolean_filter | Filters rows based on boolean condition |
+| 126 | boolean_filter | Filters rows based on boolean condition |
 
 ### `09_prepare_wbs_details`
 

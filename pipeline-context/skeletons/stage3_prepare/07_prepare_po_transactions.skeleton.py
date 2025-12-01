@@ -16,6 +16,11 @@ SCRIPTS_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 import pandas as pd
 from config.column_mappings import PO_TRANSACTIONS_MAPPING
+try:
+    from contracts.po_transactions_schema import PANDERA_AVAILABLE, POTransactionsSchema
+except ImportError:
+    PANDERA_AVAILABLE = False
+    POTransactionsSchema = None
 PROJECT_ROOT = SCRIPTS_DIR.parent
 COST_IMPACT_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'cost_impact.csv'
 OUTPUT_FILE = PROJECT_ROOT / 'data' / 'import-ready' / 'po_transactions.csv'
@@ -29,7 +34,7 @@ def map_columns(df: pd.DataFrame) -> pd.DataFrame:
     ...
 
 def validate_output(df: pd.DataFrame) -> bool:
-    """Validate required columns are present."""
+    """Validate output using Pandera contract (with fallback to basic checks)."""
     ...
 
 def save_data(df: pd.DataFrame, filepath: Path) -> None:

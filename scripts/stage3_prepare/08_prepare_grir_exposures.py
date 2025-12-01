@@ -16,8 +16,21 @@ from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-import pandas as pd
-from config.column_mappings import GRIR_EXPOSURES_MAPPING, REQUIRED_COLUMNS
+import pandas as pd  # noqa: E402
+from config.column_mappings import (  # noqa: E402
+    GRIR_EXPOSURES_MAPPING,
+    REQUIRED_COLUMNS,
+)
+
+# Import Pandera contract for runtime validation (optional dependency)
+try:
+    from contracts.grir_exposures_schema import (  # type: ignore[import-not-found]  # noqa: E402
+        PANDERA_AVAILABLE,
+        GRIRExposuresSchema,
+    )
+except ImportError:
+    PANDERA_AVAILABLE = False
+    GRIRExposuresSchema = None  # type: ignore[misc, assignment]
 
 # Paths
 PROJECT_ROOT = SCRIPTS_DIR.parent
@@ -36,9 +49,9 @@ def load_data(filepath: Path) -> pd.DataFrame:
 def map_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Map CSV columns to database column names."""
     print("Mapping columns to database schema...")
-    
+
     output_df = pd.DataFrame()
-    
+
     # Map columns using the mapping dictionary
     for csv_col, db_col in GRIR_EXPOSURES_MAPPING.items():
         if csv_col in df.columns:
@@ -46,34 +59,46 @@ def map_columns(df: pd.DataFrame) -> pd.DataFrame:
             print(f"  {csv_col} -> {db_col}")
         else:
             print(f"  WARNING: Column '{csv_col}' not found in source data")
-    
+
     # Round numeric columns
     if "grir_qty" in output_df.columns:
         output_df["grir_qty"] = output_df["grir_qty"].round(4)
-    
+
     if "grir_value" in output_df.columns:
         output_df["grir_value"] = output_df["grir_value"].round(2)
-    
+
     return output_df
 
 
 def validate_output(df: pd.DataFrame) -> bool:
-    """Validate required columns are present."""
+    """Validate output using Pandera contract (with fallback to basic checks)."""
     print("Validating output...")
-    
+
+    # Basic column checks first (fast fail)
     required = REQUIRED_COLUMNS.get("grir_exposures", [])
     missing = [col for col in required if col not in df.columns]
-    
+
     if missing:
         print(f"  ERROR: Missing required columns: {missing}")
         return False
-    
-    # Check for nulls in required columns
-    for col in required:
-        null_count = df[col].isna().sum()
-        if null_count > 0:
-            print(f"  WARNING: Column '{col}' has {null_count:,} null values")
-    
+
+    # Pandera contract validation (if available)
+    if PANDERA_AVAILABLE and GRIRExposuresSchema is not None:
+        try:
+            GRIRExposuresSchema.validate(df, lazy=True)
+            print("  Pandera contract validation passed")
+        except Exception as e:
+            print("  ERROR: Pandera contract validation failed:")
+            print(f"    {e}")
+            return False
+    else:
+        print("  Warning: Pandera not available, using basic validation only")
+        # Fallback: check for nulls in required columns
+        for col in required:
+            null_count = df[col].isna().sum()
+            if null_count > 0:
+                print(f"  WARNING: Column '{col}' has {null_count:,} null values")
+
     print(f"  All {len(required)} required columns present")
     return True
 
@@ -84,50 +109,59 @@ def save_data(df: pd.DataFrame, filepath: Path) -> None:
     df.to_csv(filepath, index=False)
     print(f"  Saved to: {filepath}")
     print(f"  Final row count: {len(df):,}")
-    
+
     # Summary stats
     if len(df) > 0 and "grir_value" in df.columns:
         print(f"  Total GRIR Value: ${df['grir_value'].sum():,.2f}")
-        
+
         if "time_bucket" in df.columns:
-            print(f"\n  Time bucket summary:")
-            for bucket in ["<1 month", "1-3 months", "3-6 months", "6-12 months", ">1 year"]:
+            print("\n  Time bucket summary:")
+            for bucket in [
+                "<1 month",
+                "1-3 months",
+                "3-6 months",
+                "6-12 months",
+                ">1 year",
+            ]:
                 bucket_df = df[df["time_bucket"] == bucket]
                 if len(bucket_df) > 0:
-                    print(f"    {bucket}: {len(bucket_df):,} POs (${bucket_df['grir_value'].sum():,.2f})")
+                    value = bucket_df["grir_value"].sum()
+                    print(f"    {bucket}: {len(bucket_df):,} POs (${value:,.2f})")
 
 
 def main():
     print("=" * 60)
     print("Stage 3: Prepare GRIR Exposures for Import")
     print("=" * 60)
-    
+
     # Check dependency
     if not INPUT_FILE.exists():
         print(f"ERROR: Dependency not found: {INPUT_FILE}")
         print("Run 06_calculate_grir.py first")
         return False
-    
+
     print("\n[1/4] Loading data...")
     df = load_data(INPUT_FILE)
-    
+
     if len(df) == 0:
         print("\n  No GRIR exposures found - creating empty output file")
         OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-        pd.DataFrame(columns=list(GRIR_EXPOSURES_MAPPING.values())).to_csv(OUTPUT_FILE, index=False)
+        pd.DataFrame(columns=list(GRIR_EXPOSURES_MAPPING.values())).to_csv(
+            OUTPUT_FILE, index=False
+        )
         print(f"  Saved empty file to: {OUTPUT_FILE}")
         return True
-    
+
     print("\n[2/4] Mapping columns...")
     output_df = map_columns(df)
-    
+
     print("\n[3/4] Validating output...")
     if not validate_output(output_df):
         return False
-    
+
     print("\n[4/4] Saving import-ready file...")
     save_data(output_df, OUTPUT_FILE)
-    
+
     print("\n" + "=" * 60)
     print("Stage 3 Complete: GRIR Exposures ready for import")
     print("=" * 60)

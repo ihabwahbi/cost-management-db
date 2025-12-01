@@ -83,7 +83,7 @@
     "Main Vendor SLB Vendor Category": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 115,
+        "line": 132,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       }
@@ -171,7 +171,7 @@
       {
         "context": "merge_join",
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 61,
+        "line": 76,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       }
@@ -345,13 +345,13 @@
     "Total Cost Impact Amount": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 65,
+        "line": 80,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 65,
+        "line": 80,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -359,13 +359,13 @@
     "Total Cost Impact Qty": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 64,
+        "line": 79,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 64,
+        "line": 79,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -427,7 +427,7 @@
     "amount": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 58,
+        "line": 68,
         "script": "07_prepare_po_transactions",
         "type": "WRITES"
       }
@@ -435,19 +435,19 @@
     "cost_impact_amount": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 52,
+        "line": 62,
         "script": "07_prepare_po_transactions",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 58,
+        "line": 68,
         "script": "07_prepare_po_transactions",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 52,
+        "line": 62,
         "script": "07_prepare_po_transactions",
         "type": "WRITES"
       }
@@ -455,13 +455,13 @@
     "cost_impact_qty": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 50,
+        "line": 60,
         "script": "07_prepare_po_transactions",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 50,
+        "line": 60,
         "script": "07_prepare_po_transactions",
         "type": "WRITES"
       }
@@ -469,13 +469,13 @@
     "fmt_po": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 115,
+        "line": 132,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 117,
+        "line": 134,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -483,13 +483,13 @@
     "grir_qty": [
       {
         "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-        "line": 52,
+        "line": 65,
         "script": "08_prepare_grir_exposures",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-        "line": 52,
+        "line": 65,
         "script": "08_prepare_grir_exposures",
         "type": "WRITES"
       }
@@ -497,13 +497,13 @@
     "grir_value": [
       {
         "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-        "line": 55,
+        "line": 68,
         "script": "08_prepare_grir_exposures",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-        "line": 55,
+        "line": 68,
         "script": "08_prepare_grir_exposures",
         "type": "WRITES"
       }
@@ -537,25 +537,25 @@
     "open_po_qty": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 107,
+        "line": 124,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 107,
+        "line": 124,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 72,
+        "line": 87,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 76,
+        "line": 91,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -563,25 +563,25 @@
     "open_po_value": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 109,
+        "line": 126,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 109,
+        "line": 126,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 73,
+        "line": 88,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 79,
+        "line": 95,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -633,13 +633,13 @@
     "quantity": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 54,
+        "line": 64,
         "script": "07_prepare_po_transactions",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 54,
+        "line": 64,
         "script": "07_prepare_po_transactions",
         "type": "WRITES"
       }
@@ -882,7 +882,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 115,
+      "line": 132,
       "operation": "is_ops_vendor",
       "script": "06_prepare_po_line_items",
       "source": "column:Main Vendor SLB Vendor Category",
@@ -1068,7 +1068,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 65,
+      "line": 80,
       "operation": "po_df['Total Cost Impact Amount'].fillna(0)",
       "script": "06_prepare_po_line_items",
       "source": "column:Total Cost Impact Amount",
@@ -1077,7 +1077,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 64,
+      "line": 79,
       "operation": "po_df['Total Cost Impact Qty'].fillna(0)",
       "script": "06_prepare_po_line_items",
       "source": "column:Total Cost Impact Qty",
@@ -1113,7 +1113,7 @@
     },
     {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 58,
+      "line": 68,
       "operation": "output_df['cost_impact_amount']",
       "script": "07_prepare_po_transactions",
       "source": "column:cost_impact_amount",
@@ -1122,7 +1122,7 @@
     },
     {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 52,
+      "line": 62,
       "operation": "output_df['cost_impact_amount'].round(2)",
       "script": "07_prepare_po_transactions",
       "source": "column:cost_impact_amount",
@@ -1131,7 +1131,7 @@
     },
     {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 50,
+      "line": 60,
       "operation": "output_df['cost_impact_qty'].round(4)",
       "script": "07_prepare_po_transactions",
       "source": "column:cost_impact_qty",
@@ -1140,7 +1140,7 @@
     },
     {
       "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 52,
+      "line": 65,
       "operation": "output_df['grir_qty'].round(4)",
       "script": "08_prepare_grir_exposures",
       "source": "column:grir_qty",
@@ -1149,7 +1149,7 @@
     },
     {
       "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 55,
+      "line": 68,
       "operation": "output_df['grir_value'].round(2)",
       "script": "08_prepare_grir_exposures",
       "source": "column:grir_value",
@@ -1158,7 +1158,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 107,
+      "line": 124,
       "operation": "po_df['open_po_qty'].round(4)",
       "script": "06_prepare_po_line_items",
       "source": "column:open_po_qty",
@@ -1167,7 +1167,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 109,
+      "line": 126,
       "operation": "po_df['open_po_value'].round(2)",
       "script": "06_prepare_po_line_items",
       "source": "column:open_po_value",
@@ -1203,7 +1203,7 @@
     },
     {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 54,
+      "line": 64,
       "operation": "output_df['quantity'].round(4)",
       "script": "07_prepare_po_transactions",
       "source": "column:quantity",
@@ -1801,7 +1801,7 @@
         "scripts/stage1_clean/02_gr_postings.py:59",
         "scripts/stage1_clean/03_ir_postings.py:50",
         "scripts/stage2_transform/04_enrich_po_line_items.py:125",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:61"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:76"
       ]
     },
     "column:PO Line Item": {
@@ -1925,7 +1925,7 @@
     },
     "column:Total Cost Impact Amount": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:65"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:80"
       ],
       "id": "column:Total Cost Impact Amount",
       "name": "Total Cost Impact Amount",
@@ -1933,7 +1933,7 @@
     },
     "column:Total Cost Impact Qty": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:64"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:79"
       ],
       "id": "column:Total Cost Impact Qty",
       "name": "Total Cost Impact Qty",
@@ -1965,7 +1965,7 @@
     },
     "column:amount": {
       "created_by": [
-        "scripts/stage3_prepare/07_prepare_po_transactions.py:58"
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:68"
       ],
       "id": "column:amount",
       "name": "amount",
@@ -1973,7 +1973,7 @@
     },
     "column:cost_impact_amount": {
       "created_by": [
-        "scripts/stage3_prepare/07_prepare_po_transactions.py:52"
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:62"
       ],
       "id": "column:cost_impact_amount",
       "name": "cost_impact_amount",
@@ -1981,7 +1981,7 @@
     },
     "column:cost_impact_qty": {
       "created_by": [
-        "scripts/stage3_prepare/07_prepare_po_transactions.py:50"
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:60"
       ],
       "id": "column:cost_impact_qty",
       "name": "cost_impact_qty",
@@ -1989,8 +1989,8 @@
     },
     "column:fmt_po": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:115",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:117"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:132",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:134"
       ],
       "id": "column:fmt_po",
       "name": "fmt_po",
@@ -1998,7 +1998,7 @@
     },
     "column:grir_qty": {
       "created_by": [
-        "scripts/stage3_prepare/08_prepare_grir_exposures.py:52"
+        "scripts/stage3_prepare/08_prepare_grir_exposures.py:65"
       ],
       "id": "column:grir_qty",
       "name": "grir_qty",
@@ -2006,7 +2006,7 @@
     },
     "column:grir_value": {
       "created_by": [
-        "scripts/stage3_prepare/08_prepare_grir_exposures.py:55"
+        "scripts/stage3_prepare/08_prepare_grir_exposures.py:68"
       ],
       "id": "column:grir_value",
       "name": "grir_value",
@@ -2025,9 +2025,9 @@
     },
     "column:open_po_qty": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:107",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:72",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:76"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:124",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:87",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:91"
       ],
       "id": "column:open_po_qty",
       "name": "open_po_qty",
@@ -2035,9 +2035,9 @@
     },
     "column:open_po_value": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:109",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:73",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:79"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:126",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:88",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:95"
       ],
       "id": "column:open_po_value",
       "name": "open_po_value",
@@ -2072,7 +2072,7 @@
     },
     "column:quantity": {
       "created_by": [
-        "scripts/stage3_prepare/07_prepare_po_transactions.py:54"
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:64"
       ],
       "id": "column:quantity",
       "name": "quantity",
@@ -4364,7 +4364,7 @@
     },
     "total_edges": 121,
     "total_nodes": 252,
-    "variables_traced": 51
+    "variables_traced": 52
   },
   "variable_sources": {
     "01_po_line_items": {
@@ -4513,6 +4513,9 @@
     "08_prepare_grir_exposures": {
       "bucket_df": [
         "time_bucket"
+      ],
+      "value": [
+        "grir_value"
       ]
     },
     "09_prepare_wbs_details": {

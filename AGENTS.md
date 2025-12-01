@@ -58,6 +58,8 @@ If regeneration fails, the Oracle will exit with an error (never uses broken con
 | Add new pipeline script | `python3 scripts/ask_oracle.py pattern pipeline_script` |
 | Add new DB table | `python3 scripts/ask_oracle.py pattern drizzle_schema` |
 | Find similar code | `python3 scripts/ask_oracle.py search <query>` |
+| Check system health | `python3 scripts/ask_oracle.py health` |
+| Validate before commit | `python3 scripts/ask_oracle.py validate schema-lock` |
 
 ### Key Files to Know
 
@@ -68,6 +70,8 @@ If regeneration fails, the Oracle will exit with an error (never uses broken con
 | `pipeline-context/lineage/graph.json` | Data flow between scripts |
 | `src/schema/index.ts` | All database table exports |
 | `scripts/config/column_mappings.py` | CSV to DB column mappings |
+| `schema_lock.json` | Tracks output schema hashes (auto-validated on commit) |
+| `scripts/contracts/*.py` | Pandera data contracts for runtime validation |
 
 ### Searching the Codebase
 
@@ -210,9 +214,13 @@ The data pipeline transforms raw CSV/Excel files into import-ready CSVs that mat
 
 ### Run Full Pipeline
 ```bash
-python3 scripts/pipeline.py           # Run all stages
-python3 scripts/pipeline.py --stage1  # Run only stage 1 (clean)
-python3 scripts/pipeline.py --stage2  # Run stages 1-2 (clean + transform)
+# Use the virtual environment for Pandera validation support
+.venv/bin/python scripts/pipeline.py           # Run all stages
+.venv/bin/python scripts/pipeline.py --stage1  # Run only stage 1 (clean)
+.venv/bin/python scripts/pipeline.py --stage2  # Run stages 1-2 (clean + transform)
+
+# Run golden set tests
+.venv/bin/pytest tests/test_pipeline_golden_set.py -v
 ```
 
 ### Pipeline Stages
@@ -338,6 +346,9 @@ python3 scripts/ask_oracle.py search calculate --limit 5
 | Understanding data flow | `trace <column>` | Find dependencies |
 | Writing new code | `pattern <type>` | Follow conventions |
 | Finding existing code | `search <query>` | Avoid duplication |
+| Check Oracle artifacts | `health` | Verify artifacts are fresh |
+| Validate schema changes | `validate schema-lock` | Check for output schema drift |
+| Validate pipeline order | `validate pipeline-order` | Check for DAG cycles |
 
 ### Regenerate Context Oracle
 
@@ -418,22 +429,52 @@ Located in `drizzle.config.ts`:
 Types: feat, fix, refactor, docs, chore, test
 ```
 
-### Pre-commit Hooks
-This project uses pre-commit hooks. When committing changes to pipeline scripts or schema files, the Context Oracle is automatically regenerated.
+### Pre-commit Hooks (3-Layer Guardrails)
+
+This project uses a 3-layer pre-commit system that runs automatically on every commit:
+
+| Layer | What Runs | Purpose |
+|-------|-----------|---------|
+| **Layer 1** | ruff, mypy, pylint | Standard linting, types, duplicate detection |
+| **Layer 2** | Schema lock, Pipeline DAG | Catch breaking changes to output schemas |
+| **Layer 3** | Oracle regeneration | Keep context artifacts in sync |
+
+**All layers run automatically - no agent action needed during normal commits.**
 
 ```bash
 # Install pre-commit (one-time setup)
 pip install pre-commit
 pre-commit install
-
-# If pre-commit blocks your commit, Context Oracle artifacts were updated
-# Stage the updated files and commit again:
-git add pipeline-context/
-git commit -m "your message"
 ```
 
+### Handling Pre-commit Failures
+
+| Failure | Cause | Resolution |
+|---------|-------|------------|
+| **Ruff/MyPy/Pylint** | Code quality issues | Fix the reported issues |
+| **Schema lock check** | Output columns changed | See "Schema Lock" section below |
+| **Pipeline DAG** | Circular dependency detected | Fix script dependencies |
+| **Oracle regeneration** | Source files changed | Stage updated files: `git add pipeline-context/` |
+
+### Schema Lock (Important for Agents)
+
+The schema lock tracks output column schemas. When you change columns written by stage3 scripts:
+
+```bash
+# Pre-commit will fail with: "Schema mismatch detected"
+
+# If the change is INTENTIONAL, update the lock:
+python3 scripts/validators/schema_lock.py --update
+git add schema_lock.json
+git commit -m "your message"
+
+# If the change is UNINTENTIONAL, fix your code
+```
+
+**Rule**: Never blindly run `--update`. Understand WHY schemas changed first.
+
 ### What Triggers Context Oracle Regeneration
-- Any change to `scripts/*.py`
+- Any change to `scripts/stage*/*.py`
 - Any change to `scripts/config/*.py`  
 - Any change to `src/schema/*.ts`
 
@@ -475,8 +516,17 @@ src/schema/              # Drizzle ORM schemas (SINGLE SOURCE OF TRUTH)
 
 scripts/                 # Data pipeline scripts
 ├── pipeline.py         # Orchestrator - runs all stages
+├── ask_oracle.py       # Context Oracle CLI tool
 ├── config/
 │   └── column_mappings.py  # CSV→DB column mappings
+├── contracts/          # Pandera data contracts (runtime validation)
+│   ├── po_line_items_schema.py
+│   ├── po_transactions_schema.py
+│   └── grir_exposures_schema.py
+├── validators/         # Pre-commit validation scripts
+│   ├── schema_lock.py  # Output schema tracking
+│   ├── pipeline_order.py  # DAG cycle detection
+│   └── oracle_client.py   # Unified Oracle access layer
 ├── stage1_clean/       # Raw → Intermediate
 ├── stage2_transform/   # Enrichment, calculations
 └── stage3_prepare/     # Intermediate → Import-ready
@@ -492,7 +542,8 @@ pipeline-context/        # Context Oracle artifacts (AI guidance)
 ├── patterns/           # Code patterns and conventions
 └── lineage/            # Data flow graph
 
-__tests__/              # Vitest tests
+tests/                   # Python tests (golden set, contracts)
+__tests__/              # Vitest tests (TypeScript)
 ```
 
 ## Migration Strategy

@@ -101,33 +101,33 @@
       "source_path": "scripts/stage2_transform/07_process_wbs.py"
     },
     {
-      "compression_ratio": 3.33,
+      "compression_ratio": 3.48,
       "name": "06_prepare_po_line_items",
-      "original_lines": 186,
-      "original_tokens": 1573,
-      "skeleton_lines": 55,
+      "original_lines": 221,
+      "original_tokens": 1819,
+      "skeleton_lines": 60,
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/06_prepare_po_line_items.skeleton.py",
-      "skeleton_tokens": 473,
+      "skeleton_tokens": 523,
       "source_path": "scripts/stage3_prepare/06_prepare_po_line_items.py"
     },
     {
-      "compression_ratio": 2.92,
+      "compression_ratio": 3.15,
       "name": "07_prepare_po_transactions",
-      "original_lines": 123,
-      "original_tokens": 974,
-      "skeleton_lines": 43,
+      "original_lines": 152,
+      "original_tokens": 1214,
+      "skeleton_lines": 48,
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/07_prepare_po_transactions.skeleton.py",
-      "skeleton_tokens": 333,
+      "skeleton_tokens": 385,
       "source_path": "scripts/stage3_prepare/07_prepare_po_transactions.py"
     },
     {
-      "compression_ratio": 3.53,
+      "compression_ratio": 3.75,
       "name": "08_prepare_grir_exposures",
-      "original_lines": 139,
-      "original_tokens": 1118,
-      "skeleton_lines": 43,
+      "original_lines": 173,
+      "original_tokens": 1381,
+      "skeleton_lines": 48,
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/08_prepare_grir_exposures.skeleton.py",
-      "skeleton_tokens": 317,
+      "skeleton_tokens": 368,
       "source_path": "scripts/stage3_prepare/08_prepare_grir_exposures.py"
     },
     {
@@ -142,10 +142,10 @@
     }
   ],
   "totals": {
-    "compression_ratio": 3.13,
-    "original_lines": 2845,
-    "original_tokens": 23910,
-    "skeleton_lines": 894,
-    "skeleton_tokens": 7637
+    "compression_ratio": 3.17,
+    "original_lines": 2943,
+    "original_tokens": 24659,
+    "skeleton_lines": 909,
+    "skeleton_tokens": 7790
   }
 }

@@ -17,6 +17,11 @@ SCRIPTS_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 import pandas as pd
 from config.column_mappings import PO_LINE_ITEMS_MAPPING
+try:
+    from contracts.po_line_items_schema import PANDERA_AVAILABLE, POLineItemsSchema
+except ImportError:
+    PANDERA_AVAILABLE = False
+    POLineItemsSchema = None
 PROJECT_ROOT = SCRIPTS_DIR.parent
 PO_LINE_ITEMS_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'po_line_items.csv'
 COST_IMPACT_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'cost_impact.csv'
@@ -29,7 +34,7 @@ def load_data():
 def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.DataFrame:
     """
     Calculate open_po_qty and open_po_value based on cost impact.
-    
+
     Logic:
     - If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0
     - Otherwise: calculate open values from ordered - cost impact
@@ -41,7 +46,7 @@ def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
     ...
 
 def validate_output(df: pd.DataFrame) -> bool:
-    """Validate required columns are present."""
+    """Validate output using Pandera contract (with fallback to basic checks)."""
     ...
 
 def save_data(df: pd.DataFrame, filepath: Path) -> None:

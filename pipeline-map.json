@@ -875,7 +875,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-01T09:38:05.194159+00:00",
+  "generated_at": "2025-12-01T13:22:49.955978+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -2819,7 +2819,7 @@
             "po_df"
           ],
           "docstring": "Calculate open_po_qty and open_po_value based on cost impact.\n\nLogic:\n- If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0\n- Otherwise: calculate open values from ordered - cost impact",
-          "line": 43,
+          "line": 53,
           "name": "calculate_open_values",
           "semantics": {
             "aggregates": true,
@@ -2836,7 +2836,7 @@
         {
           "args": [],
           "docstring": "Load intermediate data files.",
-          "line": 30,
+          "line": 40,
           "name": "load_data",
           "semantics": {
             "aggregates": false,
@@ -2850,7 +2850,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 151,
+          "line": 186,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -2866,7 +2866,7 @@
             "po_df"
           ],
           "docstring": "Map CSV columns to database column names.",
-          "line": 92,
+          "line": 109,
           "name": "map_columns",
           "semantics": {
             "aggregates": false,
@@ -2887,7 +2887,7 @@
             "filepath"
           ],
           "docstring": "Save import-ready DataFrame to CSV.",
-          "line": 142,
+          "line": 177,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -2902,8 +2902,8 @@
           "args": [
             "df"
           ],
-          "docstring": "Validate required columns are present.",
-          "line": 123,
+          "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
+          "line": 140,
           "name": "validate_output",
           "semantics": {
             "aggregates": false,
@@ -2917,6 +2917,7 @@
       ],
       "imports": [
         "config.column_mappings",
+        "contracts.po_line_items_schema",
         "pandas",
         "pathlib",
         "sys"
@@ -2925,7 +2926,7 @@
         "data/intermediate/cost_impact.csv",
         "data/intermediate/po_line_items.csv"
       ],
-      "line_count": 186,
+      "line_count": 221,
       "name": "06_prepare_po_line_items",
       "outputs": [
         "data/intermediate/cost_impact.csv",
@@ -2935,49 +2936,49 @@
         {
           "code_snippet": "output_df[db_col] = po_df[csv_col]",
           "description": "Filters rows based on boolean condition",
-          "line": 101,
+          "line": 118,
           "operation": "boolean_filter"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Amount\"] = po_df[\"Total Cost Impact Amount\"].fillna(0)",
           "column": "Total Cost Impact Amount",
           "description": "Creates/modifies column 'Total Cost Impact Amount'",
-          "line": 65,
+          "line": 80,
           "operation": "column_assign"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Qty\"] = po_df[\"Total Cost Impact Qty\"].fillna(0)",
           "column": "Total Cost Impact Qty",
           "description": "Creates/modifies column 'Total Cost Impact Qty'",
-          "line": 64,
+          "line": 79,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"fmt_po\"] = is_ops_vendor",
           "column": "fmt_po",
           "description": "Creates/modifies column 'fmt_po'",
-          "line": 115,
+          "line": 132,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"fmt_po\"] = False",
           "column": "fmt_po",
           "description": "Creates/modifies column 'fmt_po'",
-          "line": 117,
+          "line": 134,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"open_po_qty\"] = po_df[\"open_po_qty\"].round(4)",
           "column": "open_po_qty",
           "description": "Creates/modifies column 'open_po_qty'",
-          "line": 107,
+          "line": 124,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"open_po_value\"] = po_df[\"open_po_value\"].round(2)",
           "column": "open_po_value",
           "description": "Creates/modifies column 'open_po_value'",
-          "line": 109,
+          "line": 126,
           "operation": "column_assign"
         },
         {
@@ -2987,33 +2988,33 @@
             "Total Cost Impact Amount",
             "Total Cost Impact Qty"
           ],
-          "line": 87,
+          "line": 104,
           "operation": "drop"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Qty\"] = po_df[\"Total Cost Impact Qty\"].fillna(0)",
           "description": "Fills null values",
-          "line": 64,
+          "line": 79,
           "operation": "fillna"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Amount\"] = po_df[\"Total Cost Impact Amount\"].fillna(0)",
           "description": "Fills null values",
-          "line": 65,
+          "line": 80,
           "operation": "fillna"
         },
         {
-          "code_snippet": "cost_agg = cost_df.groupby(\"PO Line ID\").agg({",
+          "code_snippet": "cost_df.groupby(\"PO Line ID\")",
           "description": "Groups data for aggregation",
           "group_column": "PO Line ID",
-          "line": 54,
+          "line": 65,
           "operation": "groupby"
         },
         {
           "code_snippet": "po_df = po_df.merge(cost_agg, on=\"PO Line ID\", how=\"left\")",
           "description": "Joins two DataFrames",
           "join_type": "left",
-          "line": 61,
+          "line": 76,
           "on_column": "PO Line ID",
           "operation": "merge"
         }
@@ -3030,7 +3031,7 @@
             "filepath"
           ],
           "docstring": "Load cost impact data.",
-          "line": 28,
+          "line": 38,
           "name": "load_data",
           "semantics": {
             "aggregates": false,
@@ -3044,7 +3045,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 94,
+          "line": 123,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -3060,7 +3061,7 @@
             "df"
           ],
           "docstring": "Map CSV columns to database column names.",
-          "line": 36,
+          "line": 46,
           "name": "map_columns",
           "semantics": {
             "aggregates": false,
@@ -3082,7 +3083,7 @@
             "filepath"
           ],
           "docstring": "Save import-ready DataFrame to CSV.",
-          "line": 85,
+          "line": 114,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -3097,8 +3098,8 @@
           "args": [
             "df"
           ],
-          "docstring": "Validate required columns are present.",
-          "line": 64,
+          "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
+          "line": 74,
           "name": "validate_output",
           "semantics": {
             "aggregates": false,
@@ -3112,6 +3113,7 @@
       ],
       "imports": [
         "config.column_mappings",
+        "contracts.po_transactions_schema",
         "pandas",
         "pathlib",
         "sys"
@@ -3119,7 +3121,7 @@
       "inputs": [
         "data/intermediate/cost_impact.csv"
       ],
-      "line_count": 123,
+      "line_count": 152,
       "name": "07_prepare_po_transactions",
       "outputs": [
         "data/intermediate/cost_impact.csv"
@@ -3128,35 +3130,35 @@
         {
           "code_snippet": "output_df[db_col] = df[csv_col]",
           "description": "Filters rows based on boolean condition",
-          "line": 44,
+          "line": 54,
           "operation": "boolean_filter"
         },
         {
           "code_snippet": "output_df[\"amount\"] = output_df[\"cost_impact_amount\"]",
           "column": "amount",
           "description": "Creates/modifies column 'amount'",
-          "line": 58,
+          "line": 68,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"cost_impact_amount\"] = output_df[\"cost_impact_amount\"].round(2)",
           "column": "cost_impact_amount",
           "description": "Creates/modifies column 'cost_impact_amount'",
-          "line": 52,
+          "line": 62,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"cost_impact_qty\"] = output_df[\"cost_impact_qty\"].round(4)",
           "column": "cost_impact_qty",
           "description": "Creates/modifies column 'cost_impact_qty'",
-          "line": 50,
+          "line": 60,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"quantity\"] = output_df[\"quantity\"].round(4)",
           "column": "quantity",
           "description": "Creates/modifies column 'quantity'",
-          "line": 54,
+          "line": 64,
           "operation": "column_assign"
         }
       ],
@@ -3568,7 +3570,7 @@
             "filepath"
           ],
           "docstring": "Load GRIR exposures data.",
-          "line": 28,
+          "line": 41,
           "name": "load_data",
           "semantics": {
             "aggregates": false,
@@ -3582,7 +3584,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 100,
+          "line": 132,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -3598,7 +3600,7 @@
             "df"
           ],
           "docstring": "Map CSV columns to database column names.",
-          "line": 36,
+          "line": 49,
           "name": "map_columns",
           "semantics": {
             "aggregates": false,
@@ -3618,7 +3620,7 @@
             "filepath"
           ],
           "docstring": "Save import-ready DataFrame to CSV.",
-          "line": 81,
+          "line": 106,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -3633,8 +3635,8 @@
           "args": [
             "df"
           ],
-          "docstring": "Validate required columns are present.",
-          "line": 60,
+          "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
+          "line": 73,
           "name": "validate_output",
           "semantics": {
             "aggregates": false,
@@ -3648,6 +3650,7 @@
       ],
       "imports": [
         "config.column_mappings",
+        "contracts.grir_exposures_schema",
         "pandas",
         "pathlib",
         "sys"
@@ -3655,36 +3658,36 @@
       "inputs": [
         "data/intermediate/grir_exposures.csv"
       ],
-      "line_count": 139,
+      "line_count": 173,
       "name": "08_prepare_grir_exposures",
       "outputs": [
         "data/intermediate/grir_exposures.csv"
       ],
       "pandas_operations": [
         {
-          "code_snippet": "output_df[db_col] = df[csv_col]",
+          "code_snippet": "bucket_df = df[df[\"time_bucket\"] == bucket]",
           "description": "Filters rows based on boolean condition",
-          "line": 45,
+          "line": 126,
           "operation": "boolean_filter"
         },
         {
-          "code_snippet": "bucket_df = df[df[\"time_bucket\"] == bucket]",
+          "code_snippet": "output_df[db_col] = df[csv_col]",
           "description": "Filters rows based on boolean condition",
-          "line": 95,
+          "line": 58,
           "operation": "boolean_filter"
         },
         {
           "code_snippet": "output_df[\"grir_qty\"] = output_df[\"grir_qty\"].round(4)",
           "column": "grir_qty",
           "description": "Creates/modifies column 'grir_qty'",
-          "line": 52,
+          "line": 65,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"grir_value\"] = output_df[\"grir_value\"].round(2)",
           "column": "grir_value",
           "description": "Creates/modifies column 'grir_value'",
-          "line": 55,
+          "line": 68,
           "operation": "column_assign"
         }
       ],

@@ -681,7 +681,7 @@
       ]
     },
     "Total Cost Impact Amount": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:65",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:80",
       "dtype": null,
       "name": "Total Cost Impact Amount",
       "source_type": "script",
@@ -691,7 +691,7 @@
       ]
     },
     "Total Cost Impact Qty": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:64",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:79",
       "dtype": null,
       "name": "Total Cost Impact Qty",
       "source_type": "script",
@@ -748,7 +748,7 @@
       "used_in": []
     },
     "amount": {
-      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:58",
+      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:68",
       "dtype": "float64",
       "name": "amount",
       "source_type": "import-ready",
@@ -774,7 +774,7 @@
       "used_in": []
     },
     "cost_impact_amount": {
-      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:52",
+      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:62",
       "dtype": "float64",
       "name": "cost_impact_amount",
       "source_type": "import-ready",
@@ -786,7 +786,7 @@
       ]
     },
     "cost_impact_qty": {
-      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:50",
+      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:60",
       "dtype": "float64",
       "name": "cost_impact_qty",
       "source_type": "import-ready",
@@ -838,7 +838,7 @@
       "used_in": []
     },
     "fmt_po": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:115",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:132",
       "dtype": "bool",
       "name": "fmt_po",
       "source_type": "import-ready",
@@ -850,7 +850,7 @@
       ]
     },
     "grir_qty": {
-      "created_by": "scripts/stage3_prepare/08_prepare_grir_exposures.py:52",
+      "created_by": "scripts/stage3_prepare/08_prepare_grir_exposures.py:65",
       "dtype": "float64",
       "name": "grir_qty",
       "source_type": "import-ready",
@@ -862,7 +862,7 @@
       ]
     },
     "grir_value": {
-      "created_by": "scripts/stage3_prepare/08_prepare_grir_exposures.py:55",
+      "created_by": "scripts/stage3_prepare/08_prepare_grir_exposures.py:68",
       "dtype": "float64",
       "name": "grir_value",
       "source_type": "import-ready",
@@ -914,7 +914,7 @@
       "used_in": []
     },
     "open_po_qty": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:107",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:124",
       "dtype": "float64",
       "name": "open_po_qty",
       "source_type": "import-ready",
@@ -926,7 +926,7 @@
       ]
     },
     "open_po_value": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:109",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:126",
       "dtype": "float64",
       "name": "open_po_value",
       "source_type": "import-ready",
@@ -1154,7 +1154,7 @@
       ]
     },
     "quantity": {
-      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:54",
+      "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:64",
       "dtype": "float64",
       "name": "quantity",
       "source_type": "import-ready",
@@ -1708,7 +1708,7 @@
       ],
       "docstring": "Calculate open_po_qty and open_po_value based on cost impact.\n\nLogic:\n- If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0\n- Otherwise: calculate open values from ordered - cost impact",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 43,
+      "line": 53,
       "name": "calculate_open_values",
       "return_type": "pd.DataFrame",
       "signature": "def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.DataFrame"
@@ -2349,7 +2349,7 @@
       ],
       "docstring": "Load intermediate data files.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 30,
+      "line": 40,
       "name": "load_data",
       "return_type": null,
       "signature": "def load_data()"
@@ -2366,7 +2366,7 @@
       ],
       "docstring": "Load cost impact data.",
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 28,
+      "line": 38,
       "name": "load_data",
       "return_type": "pd.DataFrame",
       "signature": "def load_data(filepath: Path) -> pd.DataFrame"
@@ -2385,7 +2385,7 @@
       ],
       "docstring": "Load GRIR exposures data.",
       "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 28,
+      "line": 41,
       "name": "load_data",
       "return_type": "pd.DataFrame",
       "signature": "def load_data(filepath: Path) -> pd.DataFrame"
@@ -2727,7 +2727,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 151,
+      "line": 186,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -2745,7 +2745,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 94,
+      "line": 123,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -2769,7 +2769,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 100,
+      "line": 132,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -2809,7 +2809,7 @@
       ],
       "docstring": "Map CSV columns to database column names.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 92,
+      "line": 109,
       "name": "map_columns",
       "return_type": "pd.DataFrame",
       "signature": "def map_columns(po_df: pd.DataFrame) -> pd.DataFrame"
@@ -2828,7 +2828,7 @@
       ],
       "docstring": "Map CSV columns to database column names.",
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 36,
+      "line": 46,
       "name": "map_columns",
       "return_type": "pd.DataFrame",
       "signature": "def map_columns(df: pd.DataFrame) -> pd.DataFrame"
@@ -2848,7 +2848,7 @@
       ],
       "docstring": "Map CSV columns to database column names.",
       "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 36,
+      "line": 49,
       "name": "map_columns",
       "return_type": "pd.DataFrame",
       "signature": "def map_columns(df: pd.DataFrame) -> pd.DataFrame"
@@ -3343,7 +3343,7 @@
       ],
       "docstring": "Save import-ready DataFrame to CSV.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 142,
+      "line": 177,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -3363,7 +3363,7 @@
       ],
       "docstring": "Save import-ready DataFrame to CSV.",
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 85,
+      "line": 114,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -3385,7 +3385,7 @@
       ],
       "docstring": "Save import-ready DataFrame to CSV.",
       "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 81,
+      "line": 106,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -3623,11 +3623,12 @@
       "calls": [
         "isna",
         "print",
-        "sum"
+        "sum",
+        "validate"
       ],
-      "docstring": "Validate required columns are present.",
+      "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 123,
+      "line": 140,
       "name": "validate_output",
       "return_type": "bool",
       "signature": "def validate_output(df: pd.DataFrame) -> bool"
@@ -3640,11 +3641,12 @@
       "calls": [
         "print",
         "set",
-        "unique"
+        "unique",
+        "validate"
       ],
-      "docstring": "Validate required columns are present.",
+      "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 64,
+      "line": 74,
       "name": "validate_output",
       "return_type": "bool",
       "signature": "def validate_output(df: pd.DataFrame) -> bool"
@@ -3661,11 +3663,12 @@
         "isna",
         "len",
         "print",
-        "sum"
+        "sum",
+        "validate"
       ],
-      "docstring": "Validate required columns are present.",
+      "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
       "file": "scripts/stage3_prepare/08_prepare_grir_exposures.py",
-      "line": 60,
+      "line": 73,
       "name": "validate_output",
       "return_type": "bool",
       "signature": "def validate_output(df: pd.DataFrame) -> bool"

@@ -61,9 +61,9 @@ if PANDERA_AVAILABLE:
         location: Series[str] = pa.Field(nullable=True)
         sub_business_line: Series[str] = pa.Field(nullable=True)
 
-        # Purchase Requisition
-        pr_number: Series[float] = pa.Field(nullable=True)  # float due to NaN
-        pr_line: Series[float] = pa.Field(nullable=True)  # float due to NaN
+        # Purchase Requisition (can have alphanumeric values like "13959-V2")
+        pr_number: Series[str] = pa.Field(nullable=True)
+        pr_line: Series[str] = pa.Field(nullable=True)
         requester: Series[str] = pa.Field(nullable=True)
 
         # Vendor information
@@ -77,8 +77,8 @@ if PANDERA_AVAILABLE:
         description: Series[str] = pa.Field(nullable=True)
         order_unit: Series[str] = pa.Field(nullable=True)
 
-        # Classification
-        account_assignment_category: Series[float] = pa.Field(nullable=True)
+        # Classification (account_assignment_category can be letter codes like "K", "P")
+        account_assignment_category: Series[str] = pa.Field(nullable=True)
         nis_line: Series[str] = pa.Field(nullable=True)
         wbs_number: Series[str] = pa.Field(nullable=True)
 
