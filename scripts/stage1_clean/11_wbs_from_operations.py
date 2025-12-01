@@ -9,11 +9,17 @@ Note: Operations file has single WBS per row (no comma-separated entries).
 Note: Most operations rows (89%) have NULL WBS - these are filtered out.
 Note: No Plant Code column - will be enriched from Projects in Stage 2.
 
+Caching: Extracts data from xlsx to CSV cache. Only reprocesses xlsx if:
+- Source file changed (different filename, mtime, or size)
+- Script code changed (including config dependencies)
+- Use --force to bypass cache
+
 Dependencies: None (reads from raw)
 Input: data/raw/fdp/OperationDashboard_Export_*.xlsx
 Output: data/intermediate/wbs_from_operations.csv
 """
 
+import argparse
 import sys
 from pathlib import Path
 from typing import Optional
@@ -23,11 +29,13 @@ SCRIPTS_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 import pandas as pd
+from utils.xlsx_cache import XlsxCacheManager
 
 # Paths
 PROJECT_ROOT = SCRIPTS_DIR.parent
 RAW_DIR = PROJECT_ROOT / "data" / "raw" / "fdp"
 OUTPUT_FILE = PROJECT_ROOT / "data" / "intermediate" / "wbs_from_operations.csv"
+SOURCE_PATTERN = "OperationDashboard_Export_*.xlsx"
 
 # Columns to keep from Operations export
 SOURCE_COLUMNS = [
@@ -148,17 +156,41 @@ def save_data(df: pd.DataFrame, filepath: Path) -> None:
     print(f"  Final row count: {len(df):,}")
 
 
-def main():
+def main(force: bool = False) -> bool:
     print("=" * 60)
     print("Stage 1: Extract WBS Data from Operations Report")
     print("=" * 60)
     
-    # Find input file
+    # Initialize cache manager
+    cache = XlsxCacheManager(
+        source_dir=RAW_DIR,
+        source_pattern=SOURCE_PATTERN,
+        output_file=OUTPUT_FILE,
+        script_path=Path(__file__),
+        extra_deps=[]
+    )
+    
+    # Check cache validity
+    print(f"\n[0/6] Checking cache...")
+    if not force and cache.is_valid():
+        print(f"\n  Using cached output (xlsx unchanged)")
+        print(f"  {cache.get_cache_info()}")
+        print("\n" + "=" * 60)
+        print("Stage 1 Complete: WBS from Operations (cached)")
+        print("=" * 60)
+        return True
+    
+    if force:
+        print("  Cache bypassed (--force flag)")
+    
+    # Find input file (use cache manager's source file)
     print("\n[1/6] Finding input file...")
-    input_file = find_input_file()
+    input_file = cache.source_file
     if input_file is None:
+        print(f"  ERROR: No files matching {SOURCE_PATTERN} in {RAW_DIR}")
         print("ERROR: Cannot proceed without input file")
         return False
+    print(f"  Found: {input_file.name}")
     
     print(f"\n[2/6] Loading data...")
     df = load_data(input_file)
@@ -175,6 +207,7 @@ def main():
             "plant_code", "location"
         ])
         save_data(df, OUTPUT_FILE)
+        cache.save_metadata()
         return True
     
     print(f"\n[4/6] Standardizing column names...")
@@ -189,6 +222,9 @@ def main():
     print(f"\n[Save] Writing output...")
     save_data(df, OUTPUT_FILE)
     
+    # Save cache metadata
+    cache.save_metadata()
+    
     print("\n" + "=" * 60)
     print("Stage 1 Complete: WBS from Operations extracted")
     print("=" * 60)
@@ -196,5 +232,15 @@ def main():
 
 
 if __name__ == "__main__":
-    success = main()
+    parser = argparse.ArgumentParser(
+        description="Extract WBS data from Operations dashboard export"
+    )
+    parser.add_argument(
+        "--force", "-f",
+        action="store_true",
+        help="Force processing even if cache is valid"
+    )
+    args = parser.parse_args()
+    
+    success = main(force=args.force)
     sys.exit(0 if success else 1)

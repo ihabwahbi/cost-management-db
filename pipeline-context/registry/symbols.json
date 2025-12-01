@@ -884,7 +884,7 @@
       "used_in": []
     },
     "location": {
-      "created_by": "scripts/stage1_clean/11_wbs_from_operations.py:114",
+      "created_by": "scripts/stage1_clean/11_wbs_from_operations.py:122",
       "dtype": "object",
       "name": "location",
       "source_type": "import-ready",
@@ -938,7 +938,7 @@
       ]
     },
     "operation_number": {
-      "created_by": "scripts/stage1_clean/10_wbs_from_projects.py:139",
+      "created_by": "scripts/stage1_clean/10_wbs_from_projects.py:150",
       "dtype": "float64",
       "name": "operation_number",
       "source_type": "import-ready",
@@ -954,7 +954,7 @@
       ]
     },
     "ops_activity_number": {
-      "created_by": "scripts/stage1_clean/11_wbs_from_operations.py:111",
+      "created_by": "scripts/stage1_clean/11_wbs_from_operations.py:119",
       "dtype": "float64",
       "name": "ops_activity_number",
       "source_type": "import-ready",
@@ -1176,7 +1176,7 @@
       "used_in": []
     },
     "rig": {
-      "created_by": "scripts/stage1_clean/10_wbs_from_projects.py:123",
+      "created_by": "scripts/stage1_clean/10_wbs_from_projects.py:134",
       "dtype": "object",
       "name": "rig",
       "source_type": "import-ready",
@@ -1387,7 +1387,7 @@
       ]
     },
     "wbs_source": {
-      "created_by": "scripts/stage1_clean/11_wbs_from_operations.py:110",
+      "created_by": "scripts/stage1_clean/11_wbs_from_operations.py:118",
       "dtype": "object",
       "name": "wbs_source",
       "source_type": "import-ready",
@@ -1533,7 +1533,7 @@
       ],
       "docstring": "Add source tracking columns.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 136,
+      "line": 147,
       "name": "add_source_metadata",
       "return_type": "pd.DataFrame",
       "signature": "def add_source_metadata(df: pd.DataFrame) -> pd.DataFrame"
@@ -1548,7 +1548,7 @@
       ],
       "docstring": "Add source tracking and placeholder columns.",
       "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-      "line": 108,
+      "line": 116,
       "name": "add_source_metadata",
       "return_type": "pd.DataFrame",
       "signature": "def add_source_metadata(df: pd.DataFrame) -> pd.DataFrame"
@@ -1565,7 +1565,7 @@
       ],
       "docstring": "Add source tracking and placeholder columns.",
       "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-      "line": 110,
+      "line": 118,
       "name": "add_source_metadata",
       "return_type": "pd.DataFrame",
       "signature": "def add_source_metadata(df: pd.DataFrame) -> pd.DataFrame"
@@ -1832,7 +1832,7 @@
       ],
       "docstring": "Determine rig value - use Rigs column, fallback to Project Type.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 121,
+      "line": 132,
       "name": "determine_rig",
       "return_type": "pd.DataFrame",
       "signature": "def determine_rig(df: pd.DataFrame) -> pd.DataFrame"
@@ -1944,7 +1944,7 @@
       ],
       "docstring": "Filter to only rows that have WBS data.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 72,
+      "line": 83,
       "name": "filter_rows_with_wbs",
       "return_type": "pd.DataFrame",
       "signature": "def filter_rows_with_wbs(df: pd.DataFrame) -> pd.DataFrame"
@@ -1964,7 +1964,7 @@
       ],
       "docstring": "Filter to only rows that have WBS data.",
       "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-      "line": 75,
+      "line": 83,
       "name": "filter_rows_with_wbs",
       "return_type": "pd.DataFrame",
       "signature": "def filter_rows_with_wbs(df: pd.DataFrame) -> pd.DataFrame"
@@ -1986,7 +1986,7 @@
       ],
       "docstring": "Filter to only rows that have WBS data.",
       "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-      "line": 76,
+      "line": 84,
       "name": "filter_rows_with_wbs",
       "return_type": "pd.DataFrame",
       "signature": "def filter_rows_with_wbs(df: pd.DataFrame) -> pd.DataFrame"
@@ -2044,7 +2044,7 @@
       ],
       "docstring": "Find the Projects dashboard export file.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 42,
+      "line": 53,
       "name": "find_input_file",
       "return_type": "Optional[Path]",
       "signature": "def find_input_file() -> Optional[Path]"
@@ -2062,16 +2062,14 @@
       ],
       "docstring": "Find the Operations dashboard export file.",
       "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-      "line": 45,
+      "line": 53,
       "name": "find_input_file",
       "return_type": "Optional[Path]",
       "signature": "def find_input_file() -> Optional[Path]"
     },
     {
       "args": [],
-      "called_by": [
-        "main"
-      ],
+      "called_by": [],
       "calls": [
         "glob",
         "len",
@@ -2082,7 +2080,7 @@
       ],
       "docstring": "Find the Operation Activities dashboard export file.",
       "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-      "line": 46,
+      "line": 54,
       "name": "find_input_file",
       "return_type": "Optional[Path]",
       "signature": "def find_input_file() -> Optional[Path]"
@@ -2268,7 +2266,7 @@
       ],
       "docstring": "Load the Excel file and select relevant columns.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 55,
+      "line": 66,
       "name": "load_data",
       "return_type": "pd.DataFrame",
       "signature": "def load_data(filepath: Path) -> pd.DataFrame"
@@ -2287,7 +2285,7 @@
       ],
       "docstring": "Load the Excel file and select relevant columns.",
       "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-      "line": 58,
+      "line": 66,
       "name": "load_data",
       "return_type": "pd.DataFrame",
       "signature": "def load_data(filepath: Path) -> pd.DataFrame"
@@ -2306,7 +2304,7 @@
       ],
       "docstring": "Load the Excel file and select relevant columns.",
       "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-      "line": 59,
+      "line": 67,
       "name": "load_data",
       "return_type": "pd.DataFrame",
       "signature": "def load_data(filepath: Path) -> pd.DataFrame"
@@ -2539,71 +2537,89 @@
       "signature": "def main()"
     },
     {
-      "args": [],
+      "args": [
+        "force"
+      ],
       "called_by": [],
       "calls": [
+        "Path",
+        "XlsxCacheManager",
         "add_source_metadata",
         "determine_rig",
         "filter_rows_with_wbs",
-        "find_input_file",
+        "get_cache_info",
+        "is_valid",
         "len",
         "load_data",
         "map_location",
         "print",
         "save_data",
+        "save_metadata",
         "select_output_columns",
         "standardize_columns"
       ],
       "docstring": null,
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 175,
+      "line": 186,
       "name": "main",
-      "return_type": null,
-      "signature": "def main()"
+      "return_type": "bool",
+      "signature": "def main(force: bool) -> bool"
     },
     {
-      "args": [],
+      "args": [
+        "force"
+      ],
       "called_by": [],
       "calls": [
         "DataFrame",
+        "Path",
+        "XlsxCacheManager",
         "add_source_metadata",
         "filter_rows_with_wbs",
-        "find_input_file",
+        "get_cache_info",
+        "is_valid",
         "len",
         "load_data",
         "print",
         "save_data",
+        "save_metadata",
         "select_output_columns",
         "standardize_columns"
       ],
       "docstring": null,
       "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-      "line": 151,
+      "line": 159,
       "name": "main",
-      "return_type": null,
-      "signature": "def main()"
+      "return_type": "bool",
+      "signature": "def main(force: bool) -> bool"
     },
     {
-      "args": [],
+      "args": [
+        "force"
+      ],
       "called_by": [],
       "calls": [
         "DataFrame",
+        "Path",
+        "XlsxCacheManager",
         "add_source_metadata",
         "filter_rows_with_wbs",
-        "find_input_file",
+        "get_cache_info",
+        "is_valid",
         "len",
         "load_data",
         "print",
         "save_data",
+        "save_metadata",
         "select_output_columns",
         "standardize_columns"
       ],
       "docstring": null,
       "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-      "line": 152,
+      "line": 160,
       "name": "main",
-      "return_type": null,
-      "signature": "def main()"
+      "return_type": "bool",
+      "signature": "def main(force: bool) -> bool"
     },
     {
       "args": [],
@@ -2895,7 +2911,7 @@
       ],
       "docstring": "Map Ops District to Location.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 105,
+      "line": 116,
       "name": "map_location",
       "return_type": "pd.DataFrame",
       "signature": "def map_location(df: pd.DataFrame) -> pd.DataFrame"
@@ -3187,7 +3203,7 @@
       ],
       "docstring": "Save the cleaned DataFrame to CSV.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 167,
+      "line": 178,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -3206,7 +3222,7 @@
       ],
       "docstring": "Save the cleaned DataFrame to CSV.",
       "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-      "line": 143,
+      "line": 151,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -3225,7 +3241,7 @@
       ],
       "docstring": "Save the cleaned DataFrame to CSV.",
       "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-      "line": 144,
+      "line": 152,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -3418,7 +3434,7 @@
       ],
       "docstring": "Select and order final output columns.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 145,
+      "line": 156,
       "name": "select_output_columns",
       "return_type": "pd.DataFrame",
       "signature": "def select_output_columns(df: pd.DataFrame) -> pd.DataFrame"
@@ -3434,7 +3450,7 @@
       ],
       "docstring": "Select and order final output columns.",
       "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-      "line": 120,
+      "line": 128,
       "name": "select_output_columns",
       "return_type": "pd.DataFrame",
       "signature": "def select_output_columns(df: pd.DataFrame) -> pd.DataFrame"
@@ -3450,7 +3466,7 @@
       ],
       "docstring": "Select and order final output columns.",
       "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-      "line": 121,
+      "line": 129,
       "name": "select_output_columns",
       "return_type": "pd.DataFrame",
       "signature": "def select_output_columns(df: pd.DataFrame) -> pd.DataFrame"
@@ -3515,7 +3531,7 @@
       ],
       "docstring": "Rename columns to standardized intermediate format.",
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 87,
+      "line": 98,
       "name": "standardize_columns",
       "return_type": "pd.DataFrame",
       "signature": "def standardize_columns(df: pd.DataFrame) -> pd.DataFrame"
@@ -3532,7 +3548,7 @@
       ],
       "docstring": "Rename columns to standardized intermediate format.",
       "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-      "line": 90,
+      "line": 98,
       "name": "standardize_columns",
       "return_type": "pd.DataFrame",
       "signature": "def standardize_columns(df: pd.DataFrame) -> pd.DataFrame"
@@ -3551,7 +3567,7 @@
       ],
       "docstring": "Rename columns to standardized intermediate format.",
       "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-      "line": 91,
+      "line": 99,
       "name": "standardize_columns",
       "return_type": "pd.DataFrame",
       "signature": "def standardize_columns(df: pd.DataFrame) -> pd.DataFrame"

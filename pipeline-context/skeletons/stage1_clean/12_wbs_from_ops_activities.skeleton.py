@@ -8,21 +8,29 @@ Note: Ops Activities has single WBS per row (no comma-separated entries).
 Note: Has explicit "Sub Business Line" column with full names (not bracket codes).
 Note: No Plant Code column - will be enriched from Projects in Stage 2.
 
+Caching: Extracts data from xlsx to CSV cache. Only reprocesses xlsx if:
+- Source file changed (different filename, mtime, or size)
+- Script code changed (including config dependencies)
+- Use --force to bypass cache
+
 Dependencies: None (reads from raw)
 Input: data/raw/fdp/OperationActivityDashboard_Export_*.xlsx
 Output: data/intermediate/wbs_from_ops_activities.csv
 
 Column Operations:
   WRITES: location, wbs_source"""
+import argparse
 import sys
 from pathlib import Path
 from typing import Optional
 SCRIPTS_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 import pandas as pd
+from utils.xlsx_cache import XlsxCacheManager
 PROJECT_ROOT = SCRIPTS_DIR.parent
 RAW_DIR = PROJECT_ROOT / 'data' / 'raw' / 'fdp'
 OUTPUT_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'wbs_from_ops_activities.csv'
+SOURCE_PATTERN = 'OperationActivityDashboard_Export_*.xlsx'
 SOURCE_COLUMNS = ['Project Number', 'Operation Number', 'Ops Activity Number', 'Ops Activity Name', 'Customer', 'Rig', 'SAP WBS # / SO #', 'Sub Business Line', 'Ops District']
 
 def find_input_file() -> Optional[Path]:
@@ -53,8 +61,11 @@ def save_data(df: pd.DataFrame, filepath: Path) -> None:
     """Save the cleaned DataFrame to CSV."""
     ...
 
-def main():
+def main(force: bool=False) -> bool:
     ...
 if __name__ == '__main__':
-    success = main()
+    parser = argparse.ArgumentParser(description='Extract WBS data from Operation Activities dashboard export')
+    parser.add_argument('--force', '-f', action='store_true', help='Force processing even if cache is valid')
+    args = parser.parse_args()
+    success = main(force=args.force)
     sys.exit(0 if success else 1)

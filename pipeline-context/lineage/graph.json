@@ -517,19 +517,19 @@
       },
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-        "line": 107,
+        "line": 118,
         "script": "10_wbs_from_projects",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-        "line": 114,
+        "line": 122,
         "script": "11_wbs_from_operations",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-        "line": 115,
+        "line": 123,
         "script": "12_wbs_from_ops_activities",
         "type": "WRITES"
       }
@@ -589,7 +589,7 @@
     "operation_number": [
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-        "line": 139,
+        "line": 150,
         "script": "10_wbs_from_projects",
         "type": "WRITES"
       }
@@ -597,13 +597,13 @@
     "ops_activity_number": [
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-        "line": 140,
+        "line": 151,
         "script": "10_wbs_from_projects",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-        "line": 111,
+        "line": 119,
         "script": "11_wbs_from_operations",
         "type": "WRITES"
       }
@@ -617,7 +617,7 @@
       },
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-        "line": 107,
+        "line": 118,
         "script": "10_wbs_from_projects",
         "type": "READS"
       }
@@ -625,7 +625,7 @@
     "project_type": [
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-        "line": 123,
+        "line": 134,
         "script": "10_wbs_from_projects",
         "type": "READS"
       }
@@ -647,7 +647,7 @@
     "rig": [
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-        "line": 123,
+        "line": 134,
         "script": "10_wbs_from_projects",
         "type": "WRITES"
       }
@@ -655,7 +655,7 @@
     "rigs": [
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-        "line": 123,
+        "line": 134,
         "script": "10_wbs_from_projects",
         "type": "READS"
       }
@@ -809,19 +809,19 @@
     "wbs_source": [
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-        "line": 138,
+        "line": 149,
         "script": "10_wbs_from_projects",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage1_clean/11_wbs_from_operations.py",
-        "line": 110,
+        "line": 118,
         "script": "11_wbs_from_operations",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
-        "line": 112,
+        "line": 120,
         "script": "12_wbs_from_ops_activities",
         "type": "WRITES"
       }
@@ -1185,7 +1185,7 @@
     },
     {
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 107,
+      "line": 118,
       "operation": "df['ops_district'].map(OPS_DISTRICT_TO_LOCATION)",
       "script": "10_wbs_from_projects",
       "source": "column:ops_district",
@@ -1194,7 +1194,7 @@
     },
     {
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 123,
+      "line": 134,
       "operation": "df['rigs'].where(df['rigs'].notna() & (df['rigs'].astype(str).str.strip() != ''), df['project_type']",
       "script": "10_wbs_from_projects",
       "source": "column:project_type",
@@ -1212,7 +1212,7 @@
     },
     {
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
-      "line": 123,
+      "line": 134,
       "operation": "df['rigs'].where(df['rigs'].notna() & (df['rigs'].astype(str).str.strip() != ''), df['project_type']",
       "script": "10_wbs_from_projects",
       "source": "column:rigs",
@@ -2014,9 +2014,9 @@
     },
     "column:location": {
       "created_by": [
-        "scripts/stage1_clean/10_wbs_from_projects.py:107",
-        "scripts/stage1_clean/11_wbs_from_operations.py:114",
-        "scripts/stage1_clean/12_wbs_from_ops_activities.py:115",
+        "scripts/stage1_clean/10_wbs_from_projects.py:118",
+        "scripts/stage1_clean/11_wbs_from_operations.py:122",
+        "scripts/stage1_clean/12_wbs_from_ops_activities.py:123",
         "scripts/stage2_transform/07_process_wbs.py:244"
       ],
       "id": "column:location",
@@ -2045,7 +2045,7 @@
     },
     "column:operation_number": {
       "created_by": [
-        "scripts/stage1_clean/10_wbs_from_projects.py:139"
+        "scripts/stage1_clean/10_wbs_from_projects.py:150"
       ],
       "id": "column:operation_number",
       "name": "operation_number",
@@ -2053,8 +2053,8 @@
     },
     "column:ops_activity_number": {
       "created_by": [
-        "scripts/stage1_clean/10_wbs_from_projects.py:140",
-        "scripts/stage1_clean/11_wbs_from_operations.py:111"
+        "scripts/stage1_clean/10_wbs_from_projects.py:151",
+        "scripts/stage1_clean/11_wbs_from_operations.py:119"
       ],
       "id": "column:ops_activity_number",
       "name": "ops_activity_number",
@@ -2080,7 +2080,7 @@
     },
     "column:rig": {
       "created_by": [
-        "scripts/stage1_clean/10_wbs_from_projects.py:123"
+        "scripts/stage1_clean/10_wbs_from_projects.py:134"
       ],
       "id": "column:rig",
       "name": "rig",
@@ -2147,9 +2147,9 @@
     },
     "column:wbs_source": {
       "created_by": [
-        "scripts/stage1_clean/10_wbs_from_projects.py:138",
-        "scripts/stage1_clean/11_wbs_from_operations.py:110",
-        "scripts/stage1_clean/12_wbs_from_ops_activities.py:112"
+        "scripts/stage1_clean/10_wbs_from_projects.py:149",
+        "scripts/stage1_clean/11_wbs_from_operations.py:118",
+        "scripts/stage1_clean/12_wbs_from_ops_activities.py:120"
       ],
       "id": "column:wbs_source",
       "name": "wbs_source",

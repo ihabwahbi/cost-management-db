@@ -9,3 +9,6 @@ dist/
 .idea/
 __pycache__/
 .venv/
+
+# Pipeline cache metadata files
+data/intermediate/.*.meta.json

@@ -875,7 +875,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-01T08:29:43.429984+00:00",
+  "generated_at": "2025-12-01T09:14:12.832835+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -3834,14 +3834,14 @@
     },
     {
       "dependencies": [],
-      "docstring": "Stage 1: Extract WBS Data from Projects Report\n\nReads the FDP Projects dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\nWBS splitting (for comma-separated entries) happens in Stage 2.\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/ProjectDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_projects.csv",
+      "docstring": "Stage 1: Extract WBS Data from Projects Report\n\nReads the FDP Projects dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\nWBS splitting (for comma-separated entries) happens in Stage 2.\n\nCaching: Extracts data from xlsx to CSV cache. Only reprocesses xlsx if:\n- Source file changed (different filename, mtime, or size)\n- Script code changed (including config dependencies)\n- Use --force to bypass cache\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/ProjectDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_projects.csv",
       "functions": [
         {
           "args": [
             "df"
           ],
           "docstring": "Add source tracking columns.",
-          "line": 136,
+          "line": 147,
           "name": "add_source_metadata",
           "semantics": {
             "aggregates": false,
@@ -3861,7 +3861,7 @@
             "df"
           ],
           "docstring": "Determine rig value - use Rigs column, fallback to Project Type.",
-          "line": 121,
+          "line": 132,
           "name": "determine_rig",
           "semantics": {
             "aggregates": false,
@@ -3879,7 +3879,7 @@
             "df"
           ],
           "docstring": "Filter to only rows that have WBS data.",
-          "line": 72,
+          "line": 83,
           "name": "filter_rows_with_wbs",
           "semantics": {
             "aggregates": false,
@@ -3893,7 +3893,7 @@
         {
           "args": [],
           "docstring": "Find the Projects dashboard export file.",
-          "line": 42,
+          "line": 53,
           "name": "find_input_file",
           "semantics": {
             "aggregates": false,
@@ -3909,7 +3909,7 @@
             "filepath"
           ],
           "docstring": "Load the Excel file and select relevant columns.",
-          "line": 55,
+          "line": 66,
           "name": "load_data",
           "semantics": {
             "aggregates": false,
@@ -3921,9 +3921,11 @@
           }
         },
         {
-          "args": [],
+          "args": [
+            "force"
+          ],
           "docstring": null,
-          "line": 175,
+          "line": 186,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -3939,7 +3941,7 @@
             "df"
           ],
           "docstring": "Map Ops District to Location.",
-          "line": 105,
+          "line": 116,
           "name": "map_location",
           "semantics": {
             "aggregates": false,
@@ -3958,7 +3960,7 @@
             "filepath"
           ],
           "docstring": "Save the cleaned DataFrame to CSV.",
-          "line": 167,
+          "line": 178,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -3974,7 +3976,7 @@
             "df"
           ],
           "docstring": "Select and order final output columns.",
-          "line": 145,
+          "line": 156,
           "name": "select_output_columns",
           "semantics": {
             "aggregates": false,
@@ -3990,7 +3992,7 @@
             "df"
           ],
           "docstring": "Rename columns to standardized intermediate format.",
-          "line": 87,
+          "line": 98,
           "name": "standardize_columns",
           "semantics": {
             "aggregates": false,
@@ -4003,17 +4005,19 @@
         }
       ],
       "imports": [
+        "argparse",
         "config.column_mappings",
         "pandas",
         "pathlib",
         "sys",
-        "typing"
+        "typing",
+        "utils.xlsx_cache"
       ],
       "inputs": [
         "data/intermediate/wbs_from_projects.csv",
         "data/raw/fdp"
       ],
-      "line_count": 223,
+      "line_count": 271,
       "name": "10_wbs_from_projects",
       "outputs": [
         "data/intermediate/wbs_from_projects.csv"
@@ -4022,72 +4026,72 @@
         {
           "code_snippet": "df[\"rigs\"].notna() & (df[\"rigs\"].astype(str).str.strip() != \"\"),",
           "description": "Converts column types",
-          "line": 124,
+          "line": 135,
           "operation": "astype"
         },
         {
           "code_snippet": "from_rigs = df[\"rigs\"].notna() & (df[\"rigs\"].astype(str).str.strip() != \"\")",
           "description": "Converts column types",
-          "line": 128,
+          "line": 139,
           "operation": "astype"
         },
         {
           "code_snippet": "mask = df[wbs_col].notna() & (df[wbs_col].astype(str).str.strip() != \"\")",
           "description": "Converts column types",
-          "line": 78,
+          "line": 89,
           "operation": "astype"
         },
         {
           "code_snippet": "df = df[available]",
           "description": "Filters rows based on boolean condition",
-          "line": 162,
+          "line": 173,
           "operation": "boolean_filter"
         },
         {
           "code_snippet": "df[\"location\"] = df[\"ops_district\"].map(OPS_DISTRICT_TO_LOCATION)",
           "column": "location",
           "description": "Creates/modifies column 'location'",
-          "line": 107,
+          "line": 118,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"operation_number\"] = None",
           "column": "operation_number",
           "description": "Creates/modifies column 'operation_number'",
-          "line": 139,
+          "line": 150,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"ops_activity_number\"] = None",
           "column": "ops_activity_number",
           "description": "Creates/modifies column 'ops_activity_number'",
-          "line": 140,
+          "line": 151,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"rig\"] = df[\"rigs\"].where(",
           "column": "rig",
           "description": "Creates/modifies column 'rig'",
-          "line": 123,
+          "line": 134,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"wbs_source\"] = \"Project\"",
           "column": "wbs_source",
           "description": "Creates/modifies column 'wbs_source'",
-          "line": 138,
+          "line": 149,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"location\"] = df[\"ops_district\"].map(OPS_DISTRICT_TO_LOCATION)",
           "description": "Maps values using dictionary or function",
-          "line": 107,
+          "line": 118,
           "operation": "map"
         },
         {
           "code_snippet": "df = df.rename(columns=rename_map)",
           "description": "Renames columns",
-          "line": 100,
+          "line": 111,
           "operation": "rename"
         }
       ],
@@ -4096,14 +4100,14 @@
     },
     {
       "dependencies": [],
-      "docstring": "Stage 1: Extract WBS Data from Operations Report\n\nReads the FDP Operations dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\n\nNote: Operations file has single WBS per row (no comma-separated entries).\nNote: Most operations rows (89%) have NULL WBS - these are filtered out.\nNote: No Plant Code column - will be enriched from Projects in Stage 2.\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/OperationDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_operations.csv",
+      "docstring": "Stage 1: Extract WBS Data from Operations Report\n\nReads the FDP Operations dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\n\nNote: Operations file has single WBS per row (no comma-separated entries).\nNote: Most operations rows (89%) have NULL WBS - these are filtered out.\nNote: No Plant Code column - will be enriched from Projects in Stage 2.\n\nCaching: Extracts data from xlsx to CSV cache. Only reprocesses xlsx if:\n- Source file changed (different filename, mtime, or size)\n- Script code changed (including config dependencies)\n- Use --force to bypass cache\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/OperationDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_operations.csv",
       "functions": [
         {
           "args": [
             "df"
           ],
           "docstring": "Add source tracking and placeholder columns.",
-          "line": 108,
+          "line": 116,
           "name": "add_source_metadata",
           "semantics": {
             "aggregates": false,
@@ -4123,7 +4127,7 @@
             "df"
           ],
           "docstring": "Filter to only rows that have WBS data.",
-          "line": 75,
+          "line": 83,
           "name": "filter_rows_with_wbs",
           "semantics": {
             "aggregates": false,
@@ -4137,7 +4141,7 @@
         {
           "args": [],
           "docstring": "Find the Operations dashboard export file.",
-          "line": 45,
+          "line": 53,
           "name": "find_input_file",
           "semantics": {
             "aggregates": false,
@@ -4153,7 +4157,7 @@
             "filepath"
           ],
           "docstring": "Load the Excel file and select relevant columns.",
-          "line": 58,
+          "line": 66,
           "name": "load_data",
           "semantics": {
             "aggregates": false,
@@ -4165,9 +4169,11 @@
           }
         },
         {
-          "args": [],
+          "args": [
+            "force"
+          ],
           "docstring": null,
-          "line": 151,
+          "line": 159,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -4184,7 +4190,7 @@
             "filepath"
           ],
           "docstring": "Save the cleaned DataFrame to CSV.",
-          "line": 143,
+          "line": 151,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -4200,7 +4206,7 @@
             "df"
           ],
           "docstring": "Select and order final output columns.",
-          "line": 120,
+          "line": 128,
           "name": "select_output_columns",
           "semantics": {
             "aggregates": false,
@@ -4216,7 +4222,7 @@
             "df"
           ],
           "docstring": "Rename columns to standardized intermediate format.",
-          "line": 90,
+          "line": 98,
           "name": "standardize_columns",
           "semantics": {
             "aggregates": false,
@@ -4229,16 +4235,18 @@
         }
       ],
       "imports": [
+        "argparse",
         "pandas",
         "pathlib",
         "sys",
-        "typing"
+        "typing",
+        "utils.xlsx_cache"
       ],
       "inputs": [
         "data/intermediate/wbs_from_operations.csv",
         "data/raw/fdp"
       ],
-      "line_count": 200,
+      "line_count": 246,
       "name": "11_wbs_from_operations",
       "outputs": [
         "data/intermediate/wbs_from_operations.csv"
@@ -4247,40 +4255,40 @@
         {
           "code_snippet": "mask = df[wbs_col].notna() & (df[wbs_col].astype(str).str.strip() != \"\")",
           "description": "Converts column types",
-          "line": 81,
+          "line": 89,
           "operation": "astype"
         },
         {
           "code_snippet": "df = df[available]",
           "description": "Filters rows based on boolean condition",
-          "line": 138,
+          "line": 146,
           "operation": "boolean_filter"
         },
         {
           "code_snippet": "df[\"location\"] = None",
           "column": "location",
           "description": "Creates/modifies column 'location'",
-          "line": 114,
+          "line": 122,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"ops_activity_number\"] = None",
           "column": "ops_activity_number",
           "description": "Creates/modifies column 'ops_activity_number'",
-          "line": 111,
+          "line": 119,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"wbs_source\"] = \"Operation\"",
           "column": "wbs_source",
           "description": "Creates/modifies column 'wbs_source'",
-          "line": 110,
+          "line": 118,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df = df.rename(columns=rename_map)",
           "description": "Renames columns",
-          "line": 103,
+          "line": 111,
           "operation": "rename"
         }
       ],
@@ -4289,14 +4297,14 @@
     },
     {
       "dependencies": [],
-      "docstring": "Stage 1: Extract WBS Data from Operation Activities Report\n\nReads the FDP Operation Activities dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\n\nNote: Ops Activities has single WBS per row (no comma-separated entries).\nNote: Has explicit \"Sub Business Line\" column with full names (not bracket codes).\nNote: No Plant Code column - will be enriched from Projects in Stage 2.\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/OperationActivityDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_ops_activities.csv",
+      "docstring": "Stage 1: Extract WBS Data from Operation Activities Report\n\nReads the FDP Operation Activities dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\n\nNote: Ops Activities has single WBS per row (no comma-separated entries).\nNote: Has explicit \"Sub Business Line\" column with full names (not bracket codes).\nNote: No Plant Code column - will be enriched from Projects in Stage 2.\n\nCaching: Extracts data from xlsx to CSV cache. Only reprocesses xlsx if:\n- Source file changed (different filename, mtime, or size)\n- Script code changed (including config dependencies)\n- Use --force to bypass cache\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/OperationActivityDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_ops_activities.csv",
       "functions": [
         {
           "args": [
             "df"
           ],
           "docstring": "Add source tracking and placeholder columns.",
-          "line": 110,
+          "line": 118,
           "name": "add_source_metadata",
           "semantics": {
             "aggregates": false,
@@ -4315,7 +4323,7 @@
             "df"
           ],
           "docstring": "Filter to only rows that have WBS data.",
-          "line": 76,
+          "line": 84,
           "name": "filter_rows_with_wbs",
           "semantics": {
             "aggregates": false,
@@ -4329,7 +4337,7 @@
         {
           "args": [],
           "docstring": "Find the Operation Activities dashboard export file.",
-          "line": 46,
+          "line": 54,
           "name": "find_input_file",
           "semantics": {
             "aggregates": false,
@@ -4345,7 +4353,7 @@
             "filepath"
           ],
           "docstring": "Load the Excel file and select relevant columns.",
-          "line": 59,
+          "line": 67,
           "name": "load_data",
           "semantics": {
             "aggregates": false,
@@ -4357,9 +4365,11 @@
           }
         },
         {
-          "args": [],
+          "args": [
+            "force"
+          ],
           "docstring": null,
-          "line": 152,
+          "line": 160,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -4376,7 +4386,7 @@
             "filepath"
           ],
           "docstring": "Save the cleaned DataFrame to CSV.",
-          "line": 144,
+          "line": 152,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -4392,7 +4402,7 @@
             "df"
           ],
           "docstring": "Select and order final output columns.",
-          "line": 121,
+          "line": 129,
           "name": "select_output_columns",
           "semantics": {
             "aggregates": false,
@@ -4408,7 +4418,7 @@
             "df"
           ],
           "docstring": "Rename columns to standardized intermediate format.",
-          "line": 91,
+          "line": 99,
           "name": "standardize_columns",
           "semantics": {
             "aggregates": false,
@@ -4421,16 +4431,18 @@
         }
       ],
       "imports": [
+        "argparse",
         "pandas",
         "pathlib",
         "sys",
-        "typing"
+        "typing",
+        "utils.xlsx_cache"
       ],
       "inputs": [
         "data/intermediate/wbs_from_ops_activities.csv",
         "data/raw/fdp"
       ],
-      "line_count": 201,
+      "line_count": 247,
       "name": "12_wbs_from_ops_activities",
       "outputs": [
         "data/intermediate/wbs_from_ops_activities.csv"
@@ -4439,33 +4451,33 @@
         {
           "code_snippet": "mask = df[wbs_col].notna() & (df[wbs_col].astype(str).str.strip() != \"\")",
           "description": "Converts column types",
-          "line": 82,
+          "line": 90,
           "operation": "astype"
         },
         {
           "code_snippet": "df = df[available]",
           "description": "Filters rows based on boolean condition",
-          "line": 139,
+          "line": 147,
           "operation": "boolean_filter"
         },
         {
           "code_snippet": "df[\"location\"] = None",
           "column": "location",
           "description": "Creates/modifies column 'location'",
-          "line": 115,
+          "line": 123,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"wbs_source\"] = \"Operation Activity\"",
           "column": "wbs_source",
           "description": "Creates/modifies column 'wbs_source'",
-          "line": 112,
+          "line": 120,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df = df.rename(columns=rename_map)",
           "description": "Renames columns",
-          "line": 105,
+          "line": 113,
           "operation": "rename"
         }
       ],

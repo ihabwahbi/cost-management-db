@@ -31,33 +31,33 @@
       "source_path": "scripts/stage1_clean/03_ir_postings.py"
     },
     {
-      "compression_ratio": 3.19,
+      "compression_ratio": 3.03,
       "name": "10_wbs_from_projects",
-      "original_lines": 223,
-      "original_tokens": 1746,
-      "skeleton_lines": 67,
+      "original_lines": 271,
+      "original_tokens": 2163,
+      "skeleton_lines": 79,
       "skeleton_path": "pipeline-context/skeletons/stage1_clean/10_wbs_from_projects.skeleton.py",
-      "skeleton_tokens": 547,
+      "skeleton_tokens": 715,
       "source_path": "scripts/stage1_clean/10_wbs_from_projects.py"
     },
     {
-      "compression_ratio": 3.12,
+      "compression_ratio": 2.98,
       "name": "11_wbs_from_operations",
-      "original_lines": 200,
-      "original_tokens": 1589,
-      "skeleton_lines": 60,
+      "original_lines": 246,
+      "original_tokens": 1978,
+      "skeleton_lines": 71,
       "skeleton_path": "pipeline-context/skeletons/stage1_clean/11_wbs_from_operations.skeleton.py",
-      "skeleton_tokens": 509,
+      "skeleton_tokens": 663,
       "source_path": "scripts/stage1_clean/11_wbs_from_operations.py"
     },
     {
-      "compression_ratio": 3.11,
+      "compression_ratio": 2.97,
       "name": "12_wbs_from_ops_activities",
-      "original_lines": 201,
-      "original_tokens": 1628,
-      "skeleton_lines": 60,
+      "original_lines": 247,
+      "original_tokens": 2024,
+      "skeleton_lines": 71,
       "skeleton_path": "pipeline-context/skeletons/stage1_clean/12_wbs_from_ops_activities.skeleton.py",
-      "skeleton_tokens": 524,
+      "skeleton_tokens": 682,
       "source_path": "scripts/stage1_clean/12_wbs_from_ops_activities.py"
     },
     {
@@ -142,10 +142,10 @@
     }
   ],
   "totals": {
-    "compression_ratio": 3.16,
-    "original_lines": 2701,
-    "original_tokens": 22635,
-    "skeleton_lines": 860,
-    "skeleton_tokens": 7157
+    "compression_ratio": 3.12,
+    "original_lines": 2841,
+    "original_tokens": 23837,
+    "skeleton_lines": 894,
+    "skeleton_tokens": 7637
   }
 }

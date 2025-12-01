@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-01T08:29:43.429984+00:00
+Generated: 2025-12-01T09:14:12.832835+00:00
 
 ## Data Flow Diagram
 
@@ -686,37 +686,37 @@ Key pandas operations used in each script:
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 107 | column_assign | column: `location` |
-| 123 | column_assign | column: `rig` |
-| 138 | column_assign | column: `wbs_source` |
-| 139 | column_assign | column: `operation_number` |
-| 140 | column_assign | column: `ops_activity_number` |
-| 162 | boolean_filter | Filters rows based on boolean condition |
-| 100 | rename | Renames columns |
-| 107 | map | Maps values using dictionary or function |
-| 78 | astype | Converts column types |
-| 128 | astype | Converts column types |
+| 118 | column_assign | column: `location` |
+| 134 | column_assign | column: `rig` |
+| 149 | column_assign | column: `wbs_source` |
+| 150 | column_assign | column: `operation_number` |
+| 151 | column_assign | column: `ops_activity_number` |
+| 173 | boolean_filter | Filters rows based on boolean condition |
+| 111 | rename | Renames columns |
+| 118 | map | Maps values using dictionary or function |
+| 89 | astype | Converts column types |
+| 139 | astype | Converts column types |
 
 ### `11_wbs_from_operations`
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 110 | column_assign | column: `wbs_source` |
-| 111 | column_assign | column: `ops_activity_number` |
-| 114 | column_assign | column: `location` |
-| 138 | boolean_filter | Filters rows based on boolean condition |
-| 103 | rename | Renames columns |
-| 81 | astype | Converts column types |
+| 118 | column_assign | column: `wbs_source` |
+| 119 | column_assign | column: `ops_activity_number` |
+| 122 | column_assign | column: `location` |
+| 146 | boolean_filter | Filters rows based on boolean condition |
+| 111 | rename | Renames columns |
+| 89 | astype | Converts column types |
 
 ### `12_wbs_from_ops_activities`
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 112 | column_assign | column: `wbs_source` |
-| 115 | column_assign | column: `location` |
-| 139 | boolean_filter | Filters rows based on boolean condition |
-| 105 | rename | Renames columns |
-| 82 | astype | Converts column types |
+| 120 | column_assign | column: `wbs_source` |
+| 123 | column_assign | column: `location` |
+| 147 | boolean_filter | Filters rows based on boolean condition |
+| 113 | rename | Renames columns |
+| 90 | astype | Converts column types |
 
 ### `04_enrich_po_line_items`
 
