@@ -65,6 +65,7 @@ If regeneration fails, the Oracle will exit with an error (never uses broken con
 
 | File | Purpose |
 |------|---------|
+| `COST_MANAGEMENT_LOGIC.md` | **Business rules source of truth** (read for domain logic) |
 | `pipeline-context/skeletons/index.json` | Overview of all scripts (read first) |
 | `pipeline-context/registry/symbols.json` | All functions, columns, constants, tables |
 | `pipeline-context/lineage/graph.json` | Data flow between scripts |
@@ -72,6 +73,7 @@ If regeneration fails, the Oracle will exit with an error (never uses broken con
 | `scripts/config/column_mappings.py` | CSV to DB column mappings |
 | `schema_lock.json` | Tracks output schema hashes (auto-validated on commit) |
 | `scripts/contracts/*.py` | Pandera data contracts for runtime validation |
+| `tests/contracts/test_business_rules.py` | Business rule assertions (from COST_MANAGEMENT_LOGIC.md) |
 
 ### Searching the Codebase
 
@@ -221,6 +223,9 @@ The data pipeline transforms raw CSV/Excel files into import-ready CSVs that mat
 
 # Run golden set tests
 .venv/bin/pytest tests/test_pipeline_golden_set.py -v
+
+# Run business rule tests (validates COST_MANAGEMENT_LOGIC.md rules)
+.venv/bin/pytest tests/contracts/test_business_rules.py -v
 ```
 
 ### Pipeline Stages
