@@ -8,6 +8,9 @@ Dependencies: 01_po_line_items.py must run first
 Input: data/intermediate/po_line_items.csv, data/raw/po details report.xlsx
 Output: data/intermediate/po_line_items.csv (updated in place)
 
+Caching: Extracts enrichment data from xlsx to CSV cache. Only reprocesses
+xlsx if the source file is newer than the cache.
+
 Column Operations:
   WRITES: PO Line ID, PO Line Item, PR Number, Requester
   READS:  ARIBA Shopping cart number, ARIBA shopping cart number : created by (Text), PO Line ID, PO Line Item, PO Number, Purchase Requisition Number"""
@@ -18,6 +21,19 @@ SCRIPTS_DIR = Path(__file__).parent.parent
 PROJECT_ROOT = SCRIPTS_DIR.parent
 PO_DETAILS_FILE = PROJECT_ROOT / 'data' / 'raw' / 'po details report.xlsx'
 PO_LINE_ITEMS_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'po_line_items.csv'
+ENRICHMENT_CACHE_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'po_details_enrichment.csv'
+
+def is_cache_fresh() -> bool:
+    """Check if enrichment cache exists and is newer than the xlsx source."""
+    ...
+
+def load_enrichment_from_cache() -> pd.DataFrame:
+    """Load enrichment data from cache CSV."""
+    ...
+
+def save_enrichment_to_cache(enrichment: pd.DataFrame) -> None:
+    """Save enrichment data to cache CSV for future runs."""
+    ...
 
 def load_po_details(filepath: Path) -> pd.DataFrame:
     """Load PO Details Report and prepare for join."""

@@ -8,6 +8,9 @@ from the PO Details Report.
 Dependencies: 01_po_line_items.py must run first
 Input: data/intermediate/po_line_items.csv, data/raw/po details report.xlsx
 Output: data/intermediate/po_line_items.csv (updated in place)
+
+Caching: Extracts enrichment data from xlsx to CSV cache. Only reprocesses
+xlsx if the source file is newer than the cache.
 """
 
 import sys
@@ -20,6 +23,35 @@ SCRIPTS_DIR = Path(__file__).parent.parent
 PROJECT_ROOT = SCRIPTS_DIR.parent
 PO_DETAILS_FILE = PROJECT_ROOT / "data" / "raw" / "po details report.xlsx"
 PO_LINE_ITEMS_FILE = PROJECT_ROOT / "data" / "intermediate" / "po_line_items.csv"
+# Cache for enrichment data extracted from xlsx (speeds up subsequent runs)
+ENRICHMENT_CACHE_FILE = PROJECT_ROOT / "data" / "intermediate" / "po_details_enrichment.csv"
+
+
+def is_cache_fresh() -> bool:
+    """Check if enrichment cache exists and is newer than the xlsx source."""
+    if not ENRICHMENT_CACHE_FILE.exists():
+        return False
+    if not PO_DETAILS_FILE.exists():
+        return False
+    
+    cache_mtime = ENRICHMENT_CACHE_FILE.stat().st_mtime
+    source_mtime = PO_DETAILS_FILE.stat().st_mtime
+    
+    return cache_mtime > source_mtime
+
+
+def load_enrichment_from_cache() -> pd.DataFrame:
+    """Load enrichment data from cache CSV."""
+    print(f"Loading enrichment data from cache: {ENRICHMENT_CACHE_FILE.name}")
+    df = pd.read_csv(ENRICHMENT_CACHE_FILE)
+    print(f"  Loaded {len(df):,} rows from cache")
+    return df
+
+
+def save_enrichment_to_cache(enrichment: pd.DataFrame) -> None:
+    """Save enrichment data to cache CSV for future runs."""
+    enrichment.to_csv(ENRICHMENT_CACHE_FILE, index=False)
+    print(f"  Cached enrichment data to: {ENRICHMENT_CACHE_FILE.name}")
 
 
 def load_po_details(filepath: Path) -> pd.DataFrame:
@@ -76,6 +108,12 @@ def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame:
     
     initial_count = len(po_df)
     
+    # Drop existing enrichment columns if present (from previous runs)
+    cols_to_drop = [col for col in ['Requester', 'PR Number'] if col in po_df.columns]
+    if cols_to_drop:
+        po_df = po_df.drop(columns=cols_to_drop)
+        print(f"  Dropped existing columns: {cols_to_drop}")
+    
     # Left join to preserve all PO line items
     enriched = po_df.merge(
         enrichment[['PO Line ID', 'Requester', 'PR Number']],
@@ -127,17 +165,21 @@ def main():
         print(f"ERROR: Source file not found: {PO_DETAILS_FILE}")
         return False
     
-    print("\n[1/4] Loading PO Details Report...")
-    details = load_po_details(PO_DETAILS_FILE)
+    # Check if we can use cached enrichment data
+    if is_cache_fresh():
+        print("\n[1/3] Using cached enrichment data (xlsx unchanged)...")
+        enrichment = load_enrichment_from_cache()
+    else:
+        print("\n[1/3] Processing xlsx file (cache missing or stale)...")
+        details = load_po_details(PO_DETAILS_FILE)
+        enrichment = extract_enrichment_data(details)
+        save_enrichment_to_cache(enrichment)
     
-    print("\n[2/4] Loading PO Line Items...")
+    print("\n[2/3] Loading PO Line Items...")
     po_df = load_po_line_items(PO_LINE_ITEMS_FILE)
     
-    print("\n[3/4] Extracting and joining data...")
-    enrichment = extract_enrichment_data(details)
+    print("\n[3/3] Enriching and saving data...")
     enriched = enrich_data(po_df, enrichment)
-    
-    print("\n[4/4] Saving enriched data...")
     save_data(enriched, PO_LINE_ITEMS_FILE)
     
     print("\n" + "=" * 60)

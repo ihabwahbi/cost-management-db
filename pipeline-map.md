@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-11-30T14:50:47.685301+00:00
+Generated: 2025-12-01T00:15:51.688258+00:00
 
 ## Data Flow Diagram
 
@@ -23,8 +23,9 @@ flowchart TD
         int_0["gr_postings.csv"]
         int_1["grir_exposures.csv"]
         int_2["ir_postings.csv"]
-        int_3["cost_impact.csv"]
-        int_4["po_line_items.csv"]
+        int_3["po_details_enrichment.csv"]
+        int_4["cost_impact.csv"]
+        int_5["po_line_items.csv"]
     end
 
     subgraph STAGE2["Stage 2: Transform"]
@@ -76,7 +77,7 @@ flowchart TD
 | 1 | `01_po_line_items` | stage1_clean | Stage 1: Clean PO Line Items | po line items.csv, po_line_items.csv | po_line_items.csv |
 | 2 | `02_gr_postings` | stage1_clean | Stage 1: Clean GR (Goods Receipt) Postings | gr table.csv, po_line_items.csv, gr_postings.csv | po_line_items.csv, gr_postings.csv |
 | 3 | `03_ir_postings` | stage1_clean | Stage 1: Clean IR (Invoice Receipt) Postings | invoice table.csv, po_line_items.csv, ir_postings.csv | po_line_items.csv, ir_postings.csv |
-| 4 | `04_enrich_po_line_items` | stage2_transform | Stage 2: Enrich PO Line Items | po details report.xlsx, po_line_items.csv | po_line_items.csv |
+| 4 | `04_enrich_po_line_items` | stage2_transform | Stage 2: Enrich PO Line Items | po details report.xlsx, po_line_items.csv, po_details_enrichment.csv | po_line_items.csv, po_details_enrichment.csv |
 | 5 | `05_calculate_cost_impact` | stage2_transform | Stage 2: Calculate Cost Impact | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, cost_impact.csv |
 | 6 | `06_calculate_grir` | stage2_transform | Stage 2: Calculate GRIR Exposures | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv | po_line_items.csv, gr_postings.csv, ir_postings.csv, grir_exposures.csv |
 | 7 | `06_prepare_po_line_items` | stage3_prepare | Stage 3: Prepare PO Line Items for Import | po_line_items.csv, cost_impact.csv | po_line_items.csv, cost_impact.csv |
@@ -378,6 +379,21 @@ Sample data and types for each CSV file:
 | `IR Effective Quantity` | float64 |
 | `Invoice Amount` | float64 |
 
+### `po_details_enrichment.csv`
+
+- **Path**: `data/intermediate/po_details_enrichment.csv`
+- **Rows**: 22150
+
+| Column | Type |
+|--------|------|
+| `PO Line ID` | object |
+| `Requester` | object |
+| `PR Number` | object |
+
+**Columns with nulls:**
+- `Requester`: 2423 nulls
+- `PR Number`: 444 nulls
+
 ### `cost_impact.csv`
 
 - **Path**: `data/intermediate/cost_impact.csv`
@@ -525,16 +541,16 @@ Key pandas operations used in each script:
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 32 | column_assign | column: `PO Line Item` |
-| 33 | column_assign | column: `PO Line ID` |
-| 51 | column_assign | column: `PO Line ID` |
-| 54 | column_assign | column: `Requester` |
-| 64 | column_assign | column: `PR Number` |
-| 32 | astype | Converts column types |
-| 61 | apply | Applies function to data |
-| 62 | apply | Applies function to data |
-| 80 | merge | on: `PO Line ID` |
-| 89 | astype | Converts column types |
+| 64 | column_assign | column: `PO Line Item` |
+| 65 | column_assign | column: `PO Line ID` |
+| 83 | column_assign | column: `PO Line ID` |
+| 86 | column_assign | column: `Requester` |
+| 96 | column_assign | column: `PR Number` |
+| 64 | astype | Converts column types |
+| 93 | apply | Applies function to data |
+| 94 | apply | Applies function to data |
+| 118 | merge | on: `PO Line ID` |
+| 127 | astype | Converts column types |
 
 ### `05_calculate_cost_impact`
 

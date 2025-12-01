@@ -394,7 +394,7 @@
       "used_in": []
     },
     "PO Line ID": {
-      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:33",
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:65",
       "dtype": "object",
       "name": "PO Line ID",
       "source_type": "intermediate",
@@ -403,6 +403,7 @@
         "data/intermediate/gr_postings.csv",
         "data/intermediate/grir_exposures.csv",
         "data/intermediate/ir_postings.csv",
+        "data/intermediate/po_details_enrichment.csv",
         "data/intermediate/po_line_items.csv",
         "data/raw/gr table.csv",
         "data/raw/invoice table.csv",
@@ -415,7 +416,7 @@
       ]
     },
     "PO Line Item": {
-      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:32",
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:64",
       "dtype": null,
       "name": "PO Line Item",
       "source_type": "script",
@@ -520,11 +521,12 @@
       "used_in": []
     },
     "PR Number": {
-      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:64",
-      "dtype": "float64",
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:96",
+      "dtype": "int64",
       "name": "PR Number",
       "source_type": "intermediate",
       "sources": [
+        "data/intermediate/po_details_enrichment.csv",
         "data/intermediate/po_line_items.csv"
       ],
       "used_in": [
@@ -610,11 +612,12 @@
       ]
     },
     "Requester": {
-      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:54",
-      "dtype": "float64",
+      "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:86",
+      "dtype": "object",
       "name": "Requester",
       "source_type": "intermediate",
       "sources": [
+        "data/intermediate/po_details_enrichment.csv",
         "data/intermediate/po_line_items.csv"
       ],
       "used_in": [
@@ -1464,6 +1467,7 @@
       ],
       "calls": [
         "astype",
+        "drop",
         "len",
         "match",
         "merge",
@@ -1473,7 +1477,7 @@
       ],
       "docstring": "Left join enrichment data to PO line items.",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 73,
+      "line": 105,
       "name": "enrich_data",
       "return_type": "pd.DataFrame",
       "signature": "def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame"
@@ -1498,7 +1502,7 @@
       ],
       "docstring": "Extract Requester and PR Number from PO Details.",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 46,
+      "line": 78,
       "name": "extract_enrichment_data",
       "return_type": "pd.DataFrame",
       "signature": "def extract_enrichment_data(details: pd.DataFrame) -> pd.DataFrame"
@@ -1622,6 +1626,22 @@
       "name": "get_unit_prices",
       "return_type": "dict",
       "signature": "def get_unit_prices(po_df: pd.DataFrame) -> dict"
+    },
+    {
+      "args": [],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "exists",
+        "stat"
+      ],
+      "docstring": "Check if enrichment cache exists and is newer than the xlsx source.",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 30,
+      "name": "is_cache_fresh",
+      "return_type": "bool",
+      "signature": "def is_cache_fresh() -> bool"
     },
     {
       "args": [
@@ -1756,6 +1776,23 @@
       "signature": "def load_data(filepath: Path) -> pd.DataFrame"
     },
     {
+      "args": [],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "len",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load enrichment data from cache CSV.",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 43,
+      "name": "load_enrichment_from_cache",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_enrichment_from_cache() -> pd.DataFrame"
+    },
+    {
       "args": [
         "filepath"
       ],
@@ -1771,7 +1808,7 @@
       ],
       "docstring": "Load PO Details Report and prepare for join.",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 25,
+      "line": 57,
       "name": "load_po_details",
       "return_type": "pd.DataFrame",
       "signature": "def load_po_details(filepath: Path) -> pd.DataFrame"
@@ -1790,7 +1827,7 @@
       ],
       "docstring": "Load intermediate PO line items.",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 38,
+      "line": 70,
       "name": "load_po_line_items",
       "return_type": "pd.DataFrame",
       "signature": "def load_po_line_items(filepath: Path) -> pd.DataFrame"
@@ -1876,14 +1913,17 @@
         "enrich_data",
         "exists",
         "extract_enrichment_data",
+        "is_cache_fresh",
+        "load_enrichment_from_cache",
         "load_po_details",
         "load_po_line_items",
         "print",
-        "save_data"
+        "save_data",
+        "save_enrichment_to_cache"
       ],
       "docstring": null,
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 115,
+      "line": 153,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -2226,7 +2266,7 @@
       ],
       "docstring": "Save enriched DataFrame to CSV.",
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 108,
+      "line": 146,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -2336,6 +2376,24 @@
     },
     {
       "args": [
+        "enrichment"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save enrichment data to cache CSV for future runs.",
+      "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+      "line": 51,
+      "name": "save_enrichment_to_cache",
+      "return_type": "None",
+      "signature": "def save_enrichment_to_cache(enrichment: pd.DataFrame) -> None"
+    },
+    {
+      "args": [
         "df"
       ],
       "called_by": [
@@ -2412,7 +2470,7 @@
   "stats": {
     "total_columns": 100,
     "total_constants": 13,
-    "total_functions": 58,
+    "total_functions": 61,
     "total_tables": 11
   },
   "tables": [

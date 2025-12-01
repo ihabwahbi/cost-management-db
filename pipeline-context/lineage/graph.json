@@ -3,7 +3,7 @@
     "ARIBA Shopping cart number": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 64,
+        "line": 96,
         "script": "04_enrich_po_line_items",
         "type": "READS"
       }
@@ -11,7 +11,7 @@
     "ARIBA shopping cart number : created by (Text)": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 54,
+        "line": 86,
         "script": "04_enrich_po_line_items",
         "type": "READS"
       }
@@ -144,27 +144,27 @@
         "type": "READS"
       },
       {
-        "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 51,
-        "script": "04_enrich_po_line_items",
-        "type": "READS"
-      },
-      {
         "context": "merge_join",
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 80,
+        "line": 118,
         "script": "04_enrich_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 33,
+        "line": 83,
+        "script": "04_enrich_po_line_items",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
+        "line": 65,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 51,
+        "line": 83,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       },
@@ -179,19 +179,19 @@
     "PO Line Item": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 32,
+        "line": 64,
         "script": "04_enrich_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 33,
+        "line": 65,
         "script": "04_enrich_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 32,
+        "line": 64,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       }
@@ -199,7 +199,7 @@
     "PO Number": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 33,
+        "line": 65,
         "script": "04_enrich_po_line_items",
         "type": "READS"
       }
@@ -207,7 +207,7 @@
     "PR Number": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 64,
+        "line": 96,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       }
@@ -275,7 +275,7 @@
     "Purchase Requisition Number": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 64,
+        "line": 96,
         "script": "04_enrich_po_line_items",
         "type": "READS"
       }
@@ -309,19 +309,19 @@
     "Requester": [
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 54,
+        "line": 129,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 91,
+        "line": 136,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-        "line": 98,
+        "line": 86,
         "script": "04_enrich_po_line_items",
         "type": "WRITES"
       }
@@ -563,7 +563,7 @@
   "edges": [
     {
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 64,
+      "line": 96,
       "operation": "pr_number.where(pr_number.notna(), ariba_number)",
       "script": "04_enrich_po_line_items",
       "source": "column:ARIBA Shopping cart number",
@@ -572,7 +572,7 @@
     },
     {
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 54,
+      "line": 86,
       "operation": "details['ARIBA shopping cart number : created by (Text)']",
       "script": "04_enrich_po_line_items",
       "source": "column:ARIBA shopping cart number : created by (Text)",
@@ -659,7 +659,7 @@
     },
     {
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 51,
+      "line": 83,
       "operation": "details['PO Line ID']",
       "script": "04_enrich_po_line_items",
       "source": "column:PO Line ID",
@@ -668,7 +668,7 @@
     },
     {
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 33,
+      "line": 65,
       "operation": "df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)",
       "script": "04_enrich_po_line_items",
       "source": "column:PO Line Item",
@@ -677,7 +677,7 @@
     },
     {
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 32,
+      "line": 64,
       "operation": "df['PO Line Item'].fillna(0).astype(int)",
       "script": "04_enrich_po_line_items",
       "source": "column:PO Line Item",
@@ -692,7 +692,7 @@
     },
     {
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 33,
+      "line": 65,
       "operation": "df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)",
       "script": "04_enrich_po_line_items",
       "source": "column:PO Number",
@@ -740,7 +740,7 @@
     },
     {
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 64,
+      "line": 96,
       "operation": "pr_number.where(pr_number.notna(), ariba_number)",
       "script": "04_enrich_po_line_items",
       "source": "column:Purchase Requisition Number",
@@ -962,6 +962,11 @@
       "type": "INPUT"
     },
     {
+      "source": "file:data/intermediate/po_details_enrichment.csv",
+      "target": "script:04_enrich_po_line_items",
+      "type": "INPUT"
+    },
+    {
       "source": "file:data/intermediate/po_line_items.csv",
       "target": "script:01_po_line_items",
       "type": "INPUT"
@@ -1039,6 +1044,11 @@
     {
       "source": "script:03_ir_postings",
       "target": "file:data/intermediate/po_line_items.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:04_enrich_po_line_items",
+      "target": "file:data/intermediate/po_details_enrichment.csv",
       "type": "OUTPUT"
     },
     {
@@ -1314,8 +1324,8 @@
     },
     "column:PO Line ID": {
       "created_by": [
-        "scripts/stage2_transform/04_enrich_po_line_items.py:33",
-        "scripts/stage2_transform/04_enrich_po_line_items.py:51"
+        "scripts/stage2_transform/04_enrich_po_line_items.py:65",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:83"
       ],
       "id": "column:PO Line ID",
       "name": "PO Line ID",
@@ -1323,13 +1333,13 @@
       "used_in_joins": [
         "scripts/stage1_clean/02_gr_postings.py:59",
         "scripts/stage1_clean/03_ir_postings.py:50",
-        "scripts/stage2_transform/04_enrich_po_line_items.py:80",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:118",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:61"
       ]
     },
     "column:PO Line Item": {
       "created_by": [
-        "scripts/stage2_transform/04_enrich_po_line_items.py:32"
+        "scripts/stage2_transform/04_enrich_po_line_items.py:64"
       ],
       "id": "column:PO Line Item",
       "name": "PO Line Item",
@@ -1372,7 +1382,7 @@
     },
     "column:PR Number": {
       "created_by": [
-        "scripts/stage2_transform/04_enrich_po_line_items.py:64"
+        "scripts/stage2_transform/04_enrich_po_line_items.py:96"
       ],
       "id": "column:PR Number",
       "name": "PR Number",
@@ -1425,9 +1435,9 @@
     },
     "column:Requester": {
       "created_by": [
-        "scripts/stage2_transform/04_enrich_po_line_items.py:54",
-        "scripts/stage2_transform/04_enrich_po_line_items.py:91",
-        "scripts/stage2_transform/04_enrich_po_line_items.py:98"
+        "scripts/stage2_transform/04_enrich_po_line_items.py:129",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:136",
+        "scripts/stage2_transform/04_enrich_po_line_items.py:86"
       ],
       "id": "column:Requester",
       "name": "Requester",
@@ -3080,6 +3090,13 @@
       "stage": "intermediate",
       "type": "file"
     },
+    "file:data/intermediate/po_details_enrichment.csv": {
+      "folder": "intermediate",
+      "id": "file:data/intermediate/po_details_enrichment.csv",
+      "path": "data/intermediate/po_details_enrichment.csv",
+      "stage": "intermediate",
+      "type": "file"
+    },
     "file:data/intermediate/po_line_items.csv": {
       "folder": "intermediate",
       "id": "file:data/intermediate/po_line_items.csv",
@@ -3165,10 +3182,13 @@
       "functions": [
         "enrich_data",
         "extract_enrichment_data",
+        "is_cache_fresh",
+        "load_enrichment_from_cache",
         "load_po_details",
         "load_po_line_items",
         "main",
-        "save_data"
+        "save_data",
+        "save_enrichment_to_cache"
       ],
       "id": "script:04_enrich_po_line_items",
       "name": "04_enrich_po_line_items",
@@ -3479,20 +3499,20 @@
     "columns_tracked": 37,
     "edges_by_type": {
       "DEPENDS_ON": 12,
-      "INPUT": 22,
+      "INPUT": 23,
       "MAPS_TO": 5,
-      "OUTPUT": 18,
+      "OUTPUT": 19,
       "TRANSFORMS": 35
     },
     "nodes_by_type": {
       "column": 58,
       "db_column": 123,
-      "file": 12,
+      "file": 13,
       "script": 10,
       "table": 11
     },
-    "total_edges": 92,
-    "total_nodes": 214,
+    "total_edges": 94,
+    "total_nodes": 215,
     "variables_traced": 33
   },
   "variable_sources": {

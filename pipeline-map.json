@@ -173,6 +173,7 @@
       "gr_postings.csv",
       "grir_exposures.csv",
       "ir_postings.csv",
+      "po_details_enrichment.csv",
       "po_line_items.csv"
     ],
     "raw": [
@@ -445,6 +446,29 @@
         "Ultimate Vendor Number": "P3791"
       }
     },
+    "po_details_enrichment.csv": {
+      "columns": [
+        "PO Line ID",
+        "PR Number",
+        "Requester"
+      ],
+      "dtypes": {
+        "PO Line ID": "object",
+        "PR Number": "object",
+        "Requester": "object"
+      },
+      "null_counts": {
+        "PR Number": 444,
+        "Requester": 2423
+      },
+      "path": "data/intermediate/po_details_enrichment.csv",
+      "row_count": 22150,
+      "sample_row": {
+        "PO Line ID": "4584576859-1",
+        "PR Number": "1002991198",
+        "Requester": "Walid Benmehidi"
+      }
+    },
     "po_line_items.csv": {
       "columns": [
         "account_assignment_category",
@@ -590,7 +614,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-11-30T14:50:47.685301+00:00",
+  "generated_at": "2025-12-01T00:15:51.688258+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1764,7 +1788,7 @@
       "dependencies": [
         "06_prepare_po_line_items"
       ],
-      "docstring": "Stage 2: Enrich PO Line Items\n\nEnriches intermediate PO line items with PR Number and Requester\nfrom the PO Details Report.\n\nDependencies: 01_po_line_items.py must run first\nInput: data/intermediate/po_line_items.csv, data/raw/po details report.xlsx\nOutput: data/intermediate/po_line_items.csv (updated in place)",
+      "docstring": "Stage 2: Enrich PO Line Items\n\nEnriches intermediate PO line items with PR Number and Requester\nfrom the PO Details Report.\n\nDependencies: 01_po_line_items.py must run first\nInput: data/intermediate/po_line_items.csv, data/raw/po details report.xlsx\nOutput: data/intermediate/po_line_items.csv (updated in place)\n\nCaching: Extracts enrichment data from xlsx to CSV cache. Only reprocesses\nxlsx if the source file is newer than the cache.",
       "functions": [
         {
           "args": [
@@ -1772,7 +1796,7 @@
             "po_df"
           ],
           "docstring": "Left join enrichment data to PO line items.",
-          "line": 73,
+          "line": 105,
           "name": "enrich_data",
           "semantics": {
             "aggregates": false,
@@ -1788,7 +1812,7 @@
             "details"
           ],
           "docstring": "Extract Requester and PR Number from PO Details.",
-          "line": 46,
+          "line": 78,
           "name": "extract_enrichment_data",
           "semantics": {
             "aggregates": false,
@@ -1804,11 +1828,39 @@
           }
         },
         {
+          "args": [],
+          "docstring": "Check if enrichment cache exists and is newer than the xlsx source.",
+          "line": 30,
+          "name": "is_cache_fresh",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": "Load enrichment data from cache CSV.",
+          "line": 43,
+          "name": "load_enrichment_from_cache",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
           "args": [
             "filepath"
           ],
           "docstring": "Load PO Details Report and prepare for join.",
-          "line": 25,
+          "line": 57,
           "name": "load_po_details",
           "semantics": {
             "aggregates": false,
@@ -1827,7 +1879,7 @@
             "filepath"
           ],
           "docstring": "Load intermediate PO line items.",
-          "line": 38,
+          "line": 70,
           "name": "load_po_line_items",
           "semantics": {
             "aggregates": false,
@@ -1841,7 +1893,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 115,
+          "line": 153,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -1858,8 +1910,24 @@
             "filepath"
           ],
           "docstring": "Save enriched DataFrame to CSV.",
-          "line": 108,
+          "line": 146,
           "name": "save_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "enrichment"
+          ],
+          "docstring": "Save enrichment data to cache CSV for future runs.",
+          "line": 51,
+          "name": "save_enrichment_to_cache",
           "semantics": {
             "aggregates": false,
             "filters_data": false,
@@ -1876,97 +1944,105 @@
         "sys"
       ],
       "inputs": [
+        "data/intermediate/po_details_enrichment.csv",
         "data/intermediate/po_line_items.csv",
         "data/raw/po details report.xlsx"
       ],
-      "line_count": 151,
+      "line_count": 193,
       "name": "04_enrich_po_line_items",
       "outputs": [
+        "data/intermediate/po_details_enrichment.csv",
         "data/intermediate/po_line_items.csv"
       ],
       "pandas_operations": [
         {
           "code_snippet": "pr_number = pr_number.apply(lambda x: str(int(x)) if pd.notna(x) else None)",
           "description": "Applies function to data",
-          "line": 61,
+          "line": 93,
           "operation": "apply"
         },
         {
           "code_snippet": "ariba_number = ariba_number.apply(lambda x: str(x) if pd.notna(x) else None)",
           "description": "Applies function to data",
-          "line": 62,
+          "line": 94,
           "operation": "apply"
-        },
-        {
-          "code_snippet": "df['PO Line Item'] = df['PO Line Item'].fillna(0).astype(int)",
-          "description": "Converts column types",
-          "line": 32,
-          "operation": "astype"
-        },
-        {
-          "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)",
-          "description": "Converts column types",
-          "line": 33,
-          "operation": "astype"
-        },
-        {
-          "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)",
-          "description": "Converts column types",
-          "line": 33,
-          "operation": "astype"
         },
         {
           "code_snippet": "pr_str = enriched['PR Number'].astype(str)",
           "description": "Converts column types",
-          "line": 89,
+          "line": 127,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df['PO Line Item'] = df['PO Line Item'].fillna(0).astype(int)",
+          "description": "Converts column types",
+          "line": 64,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)",
+          "description": "Converts column types",
+          "line": 65,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)",
+          "description": "Converts column types",
+          "line": 65,
           "operation": "astype"
         },
         {
           "code_snippet": "df['PO Line ID'] = df['PO Number'].astype(str) + '-' + df['PO Line Item'].astype(str)",
           "column": "PO Line ID",
           "description": "Creates/modifies column 'PO Line ID'",
-          "line": 33,
+          "line": 65,
           "operation": "column_assign"
         },
         {
           "code_snippet": "enrichment['PO Line ID'] = details['PO Line ID']",
           "column": "PO Line ID",
           "description": "Creates/modifies column 'PO Line ID'",
-          "line": 51,
+          "line": 83,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df['PO Line Item'] = df['PO Line Item'].fillna(0).astype(int)",
           "column": "PO Line Item",
           "description": "Creates/modifies column 'PO Line Item'",
-          "line": 32,
+          "line": 64,
           "operation": "column_assign"
         },
         {
           "code_snippet": "enrichment['PR Number'] = pr_number.where(pr_number.notna(), ariba_number)",
           "column": "PR Number",
           "description": "Creates/modifies column 'PR Number'",
-          "line": 64,
+          "line": 96,
           "operation": "column_assign"
         },
         {
           "code_snippet": "enrichment['Requester'] = details['ARIBA shopping cart number : created by (Text)']",
           "column": "Requester",
           "description": "Creates/modifies column 'Requester'",
-          "line": 54,
+          "line": 86,
           "operation": "column_assign"
+        },
+        {
+          "code_snippet": "po_df = po_df.drop(columns=cols_to_drop)",
+          "description": "Removes columns or rows",
+          "line": 114,
+          "operation": "drop"
         },
         {
           "code_snippet": "df['PO Line Item'] = df['PO Line Item'].fillna(0).astype(int)",
           "description": "Fills null values",
-          "line": 32,
+          "line": 64,
           "operation": "fillna"
         },
         {
           "code_snippet": "enriched = po_df.merge(",
           "description": "Joins two DataFrames",
           "join_type": "left",
-          "line": 80,
+          "line": 118,
           "on_column": "PO Line ID",
           "operation": "merge"
         }
