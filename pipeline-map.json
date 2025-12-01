@@ -875,7 +875,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-01T09:14:12.832835+00:00",
+  "generated_at": "2025-12-01T09:25:57.352771+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1682,7 +1682,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 133,
+          "line": 135,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -1771,7 +1771,7 @@
         "data/intermediate/po_line_items.csv",
         "data/raw/po line items.csv"
       ],
-      "line_count": 173,
+      "line_count": 175,
       "name": "01_po_line_items",
       "outputs": [
         "data/intermediate/po_line_items.csv"
@@ -1829,6 +1829,12 @@
           "description": "Renames columns",
           "line": 81,
           "operation": "rename"
+        },
+        {
+          "code_snippet": "df = df.sort_values(\"PO Line ID\").reset_index(drop=True)",
+          "description": "Sorts by column values",
+          "line": 129,
+          "operation": "sort_values"
         }
       ],
       "path": "scripts/stage1_clean/01_po_line_items.py",
@@ -2194,7 +2200,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 161,
+          "line": 163,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -2249,7 +2255,7 @@
         "data/intermediate/po_line_items.csv",
         "data/raw/po details report.xlsx"
       ],
-      "line_count": 201,
+      "line_count": 203,
       "name": "04_enrich_po_line_items",
       "outputs": [
         "data/intermediate/po_details_enrichment.csv",
@@ -2359,6 +2365,12 @@
           "line": 125,
           "on_column": "PO Line ID",
           "operation": "merge"
+        },
+        {
+          "code_snippet": "df = df.sort_values(\"PO Line ID\").reset_index(drop=True)",
+          "description": "Sorts by column values",
+          "line": 157,
+          "operation": "sort_values"
         }
       ],
       "path": "scripts/stage2_transform/04_enrich_po_line_items.py",

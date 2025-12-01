@@ -1,10 +1,10 @@
 {
   "scripts": [
     {
-      "compression_ratio": 2.79,
+      "compression_ratio": 2.86,
       "name": "01_po_line_items",
-      "original_lines": 173,
-      "original_tokens": 1488,
+      "original_lines": 175,
+      "original_tokens": 1525,
       "skeleton_lines": 64,
       "skeleton_path": "pipeline-context/skeletons/stage1_clean/01_po_line_items.skeleton.py",
       "skeleton_tokens": 534,
@@ -61,10 +61,10 @@
       "source_path": "scripts/stage1_clean/12_wbs_from_ops_activities.py"
     },
     {
-      "compression_ratio": 3.38,
+      "compression_ratio": 3.45,
       "name": "04_enrich_po_line_items",
-      "original_lines": 201,
-      "original_tokens": 1838,
+      "original_lines": 203,
+      "original_tokens": 1874,
       "skeleton_lines": 62,
       "skeleton_path": "pipeline-context/skeletons/stage2_transform/04_enrich_po_line_items.skeleton.py",
       "skeleton_tokens": 543,
@@ -142,9 +142,9 @@
     }
   ],
   "totals": {
-    "compression_ratio": 3.12,
-    "original_lines": 2841,
-    "original_tokens": 23837,
+    "compression_ratio": 3.13,
+    "original_lines": 2845,
+    "original_tokens": 23910,
     "skeleton_lines": 894,
     "skeleton_tokens": 7637
   }

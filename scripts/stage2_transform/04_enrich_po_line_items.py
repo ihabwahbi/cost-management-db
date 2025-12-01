@@ -153,6 +153,8 @@ def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame:
 
 def save_data(df: pd.DataFrame, filepath: Path) -> None:
     """Save enriched DataFrame to CSV."""
+    # Sort by PO Line ID for deterministic output (avoids hash randomization issues)
+    df = df.sort_values("PO Line ID").reset_index(drop=True)
     df.to_csv(filepath, index=False)
     print(f"  Saved to: {filepath}")
     print(f"  Final row count: {len(df):,}")

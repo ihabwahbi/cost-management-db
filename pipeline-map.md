@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-01T09:14:12.832835+00:00
+Generated: 2025-12-01T09:25:57.352771+00:00
 
 ## Data Flow Diagram
 
@@ -665,6 +665,7 @@ Key pandas operations used in each script:
 | 102 | astype | Converts column types |
 | 103 | map | Maps values using dictionary or function |
 | 120 | drop | Removes columns or rows |
+| 129 | sort_values | Sorts by column values |
 
 ### `02_gr_postings`
 

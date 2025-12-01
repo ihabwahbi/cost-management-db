@@ -2496,7 +2496,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage1_clean/01_po_line_items.py",
-      "line": 133,
+      "line": 135,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -2638,7 +2638,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
-      "line": 161,
+      "line": 163,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -3142,6 +3142,8 @@
         "len",
         "mkdir",
         "print",
+        "reset_index",
+        "sort_values",
         "to_csv"
       ],
       "docstring": "Save the cleaned DataFrame to CSV.",
@@ -3255,6 +3257,8 @@
       "calls": [
         "len",
         "print",
+        "reset_index",
+        "sort_values",
         "to_csv"
       ],
       "docstring": "Save enriched DataFrame to CSV.",

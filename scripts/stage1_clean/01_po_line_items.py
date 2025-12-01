@@ -125,6 +125,8 @@ def consolidate_delivery_dates(df: pd.DataFrame) -> pd.DataFrame:
 def save_data(df: pd.DataFrame, filepath: Path) -> None:
     """Save the cleaned DataFrame to CSV."""
     filepath.parent.mkdir(parents=True, exist_ok=True)
+    # Sort by PO Line ID for deterministic output (avoids hash randomization issues)
+    df = df.sort_values("PO Line ID").reset_index(drop=True)
     df.to_csv(filepath, index=False)
     print(f"  Saved to: {filepath}")
     print(f"  Final row count: {len(df):,}")
