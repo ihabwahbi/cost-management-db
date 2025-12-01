@@ -273,7 +273,7 @@
     },
     "PO Account Assignment Category": {
       "created_by": null,
-      "dtype": "object",
+      "dtype": "float64",
       "name": "PO Account Assignment Category",
       "source_type": "intermediate",
       "sources": [
@@ -287,7 +287,7 @@
     },
     "PO Account Assignment Category Desc": {
       "created_by": null,
-      "dtype": "object",
+      "dtype": "float64",
       "name": "PO Account Assignment Category Desc",
       "source_type": "intermediate",
       "sources": [
@@ -739,7 +739,7 @@
     },
     "account_assignment_category": {
       "created_by": null,
-      "dtype": "object",
+      "dtype": "float64",
       "name": "account_assignment_category",
       "source_type": "import-ready",
       "sources": [
@@ -1167,7 +1167,7 @@
     },
     "requester": {
       "created_by": null,
-      "dtype": "float64",
+      "dtype": "object",
       "name": "requester",
       "source_type": "import-ready",
       "sources": [
@@ -3845,7 +3845,12 @@
         "wbsNumber"
       ],
       "file": "src/schema/po-line-items.ts",
-      "foreign_keys": [],
+      "foreign_keys": [
+        {
+          "column": "wbsNumber",
+          "references": "wbsDetails.wbsNumber"
+        }
+      ],
       "name": "po_line_items",
       "primary_key": "id"
     },
@@ -3965,6 +3970,10 @@
         {
           "column": "poLineItemId",
           "references": "poLineItems.id"
+        },
+        {
+          "column": "wbsNumber",
+          "references": "wbsDetails.wbsNumber"
         }
       ],
       "name": "sap_reservations",

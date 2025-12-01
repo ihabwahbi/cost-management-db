@@ -1,4 +1,5 @@
 import { uuid, varchar, text, numeric, date, integer, timestamp, unique } from 'drizzle-orm/pg-core';
+import { wbsDetails } from './wbs-details';
 import { poLineItems } from './po-line-items';
 import { devV3Schema } from './_schema';
 
@@ -14,8 +15,8 @@ export const sapReservations = devV3Schema.table('sap_reservations', {
   reservationStatus: varchar('reservation_status'),
   poNumber: varchar('po_number'),
   poLineNumber: integer('po_line_number'),
-  // WBS reference (no FK - wbsNumber is not unique PK in wbs_details, use for lookups)
-  wbsNumber: varchar('wbs_number'),
+  // WBS reference - links to wbs_details for project/operation context
+  wbsNumber: varchar('wbs_number').references(() => wbsDetails.wbsNumber),
   assetCode: varchar('asset_code'),
   assetSerialNumber: varchar('asset_serial_number'),
   requester: varchar('requester'),

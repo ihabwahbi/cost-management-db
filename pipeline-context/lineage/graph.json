@@ -2904,7 +2904,7 @@
       "constraints": {
         "not_null": false,
         "primary_key": false,
-        "references": null
+        "references": "wbsDetails.wbsNumber"
       },
       "data_type": "varchar",
       "id": "db_column:po_line_items.wbsNumber",
@@ -3588,7 +3588,7 @@
       "constraints": {
         "not_null": false,
         "primary_key": false,
-        "references": null
+        "references": "wbsDetails.wbsNumber"
       },
       "data_type": "varchar",
       "id": "db_column:sap_reservations.wbsNumber",

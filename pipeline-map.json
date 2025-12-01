@@ -566,34 +566,34 @@
       "path": "data/import-ready/po_line_items.csv",
       "row_count": 57163,
       "sample_row": {
-        "account_assignment_category": "K",
-        "description": "Service Item",
-        "expected_delivery_date": "2022-12-15 00:00:00.000",
+        "account_assignment_category": NaN,
+        "description": "FLOW LINE JOINT",
+        "expected_delivery_date": "2022-12-29 00:00:00.000",
         "fmt_po": false,
-        "line_item_number": 10001,
-        "location": "Jandakot",
+        "line_item_number": 1,
+        "location": "Moomba",
         "nis_line": "Materials and Supplies",
         "open_po_qty": 0.0,
         "open_po_value": 0.0,
-        "order_unit": "AU",
+        "order_unit": "EA",
         "ordered_qty": 1.0,
-        "part_number": NaN,
-        "plant_code": 3606,
+        "part_number": "H433403",
+        "plant_code": 3614,
         "po_approval_status": "Approved",
         "po_creation_date": "2022-12-01 00:00:00.000",
         "po_gts_status": "PO Not blocked by GTS",
-        "po_line_id": "4791459949-10001",
-        "po_number": 4791459949,
+        "po_line_id": "4581850069-1",
+        "po_number": 4581850069,
         "po_receipt_status": "CLOSED PO",
-        "po_value_usd": 1529.17,
+        "po_value_usd": 1489.44,
         "pr_line": NaN,
         "pr_number": NaN,
         "requester": NaN,
-        "sub_business_line": "TSW",
-        "ultimate_vendor_name": "BULLIVANTS PTY LIMITED",
-        "vendor_category": "3rd Party",
-        "vendor_id": "1000038084",
-        "vendor_name": "BULLIVANTS PTY LIMITED",
+        "sub_business_line": "WLPS",
+        "ultimate_vendor_name": "Dubai Hub",
+        "vendor_category": "GLD",
+        "vendor_id": "P9516",
+        "vendor_name": "Dubai Hub",
         "wbs_number": NaN
       }
     },
@@ -875,7 +875,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-01T09:25:57.352771+00:00",
+  "generated_at": "2025-12-01T09:38:05.194159+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1223,6 +1223,7 @@
         },
         {
           "name": "wbsNumber",
+          "references": "wbsDetails.wbsNumber",
           "type": "varchar"
         }
       ],
@@ -1521,6 +1522,7 @@
         },
         {
           "name": "wbsNumber",
+          "references": "wbsDetails.wbsNumber",
           "type": "varchar"
         }
       ],
