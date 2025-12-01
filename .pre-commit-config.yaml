@@ -1,16 +1,86 @@
-# Pre-commit hooks for cost-management-db
+# Pragmatic Agentic Guardrails
+# Target: <5 second pre-commit, comprehensive CI
+#
 # Install: pip install pre-commit && pre-commit install
 # Manual run: pre-commit run --all-files
 
+default_stages: [pre-commit]
+
 repos:
+  # ============================================
+  # LAYER 1: Standard Tools (Battle-Tested)
+  # ============================================
+  
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.9
+    hooks:
+      - id: ruff
+        name: "Ruff: Lint + Complexity"
+        args: [
+          "--fix",
+          "--select=E,F,I,B,UP,C901"  # C901 = complexity check
+        ]
+        files: "^scripts/.*\\.py$"
+      
+      - id: ruff-format
+        files: "^scripts/.*\\.py$"
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        name: "MyPy: Type Safety"
+        args: ["--ignore-missing-imports"]
+        files: "^scripts/.*\\.py$"
+        additional_dependencies: [pandas-stubs]
+
+  # Duplicate detection via pylint
   - repo: local
     hooks:
-      # Regenerate Context Oracle when pipeline-related files change
-      # This runs all generators: pipeline-map (internal), symbols, skeletons, patterns, lineage
+      - id: pylint-duplicates
+        name: "Pylint: Duplicate Detection"
+        entry: pylint
+        args: [
+          "--disable=all",
+          "--enable=similarities",
+          "--min-similarity-lines=10"
+        ]
+        language: system
+        files: "^scripts/stage.*\\.py$"
+        pass_filenames: true
+
+  # ============================================
+  # LAYER 2: Oracle Essentials (Fast Checks)
+  # ============================================
+  
+  - repo: local
+    hooks:
+      # Schema lock - fast hash comparison
+      - id: schema-lock-check
+        name: "Schema: Lock Verification"
+        entry: python3 scripts/validators/schema_lock.py --check
+        language: system
+        files: "^scripts/stage3_.*\\.py$|^src/schema/.*\\.ts$"
+        pass_filenames: false
+
+      # Pipeline DAG validation
+      - id: pipeline-order
+        name: "Pipeline: DAG Validation"
+        entry: python3 scripts/validators/pipeline_order.py
+        language: system
+        files: "^scripts/stage.*\\.py$"
+        pass_filenames: false
+
+  # ============================================
+  # LAYER 3: Oracle Regeneration (Conditional)
+  # ============================================
+  
+  - repo: local
+    hooks:
       - id: update-context-oracle
-        name: Update Context Oracle
+        name: "Oracle: Regenerate Context"
         entry: python3 scripts/generate_context_oracle.py
         language: system
-        files: ^scripts/(stage[123]_|config/).*\.py$|^src/schema/.*\.ts$
+        files: "^scripts/(stage[123]_|config/).*\\.py$|^src/schema/.*\\.ts$"
         pass_filenames: false
         stages: [pre-commit]

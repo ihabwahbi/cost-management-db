@@ -1,0 +1,139 @@
+{
+  "version": "1.0",
+  "generated_at": "2025-12-01T12:52:03.214282+00:00",
+  "schemas": {
+    "01_po_line_items": {
+      "columns": [
+        "Expected Delivery Date",
+        "Location",
+        "Main Vendor Name",
+        "NIS Level 0 Desc",
+        "Ultimate Vendor Name"
+      ],
+      "hash": "54b31dceadd40e04",
+      "count": 5
+    },
+    "02_gr_postings": {
+      "columns": [
+        "GR Amount",
+        "Unit Price"
+      ],
+      "hash": "0e73171f80dc3600",
+      "count": 2
+    },
+    "03_ir_postings": {
+      "columns": [
+        "Invoice Amount",
+        "Unit Price"
+      ],
+      "hash": "93209fd8f083b00b",
+      "count": 2
+    },
+    "04_enrich_po_line_items": {
+      "columns": [
+        "PO Line ID",
+        "PO Line Item",
+        "PR Line",
+        "PR Number",
+        "Requester"
+      ],
+      "hash": "b573aa1cb2edfaf5",
+      "count": 5
+    },
+    "05_calculate_cost_impact": {
+      "columns": [
+        "Posting Date",
+        "Posting Type",
+        "Unit Price"
+      ],
+      "hash": "40e05a1eab160ac4",
+      "count": 3
+    },
+    "06_calculate_grir": {
+      "columns": [
+        "Posting Date",
+        "Posting Type",
+        "Unit Price"
+      ],
+      "hash": "40e05a1eab160ac4",
+      "count": 3
+    },
+    "06_prepare_po_line_items": {
+      "columns": [
+        "Total Cost Impact Amount",
+        "Total Cost Impact Qty",
+        "fmt_po",
+        "open_po_qty",
+        "open_po_value"
+      ],
+      "hash": "350b1e6d2de301a2",
+      "count": 5
+    },
+    "07_prepare_po_transactions": {
+      "columns": [
+        "amount",
+        "cost_impact_amount",
+        "cost_impact_qty",
+        "quantity"
+      ],
+      "hash": "f99cb2d033c0ea20",
+      "count": 4
+    },
+    "07_process_wbs": {
+      "columns": [
+        "location",
+        "sub_business_line_from_wbs",
+        "sub_business_line_mapped",
+        "sub_business_lines",
+        "wbs_number"
+      ],
+      "hash": "d5cbe145568a30c7",
+      "count": 5
+    },
+    "08_prepare_grir_exposures": {
+      "columns": [
+        "grir_qty",
+        "grir_value"
+      ],
+      "hash": "26997db148e0ee29",
+      "count": 2
+    },
+    "09_prepare_wbs_details": {
+      "columns": [
+        "sub_business_lines"
+      ],
+      "hash": "183aaecd1514c4eb",
+      "count": 1
+    },
+    "10_wbs_from_projects": {
+      "columns": [
+        "location",
+        "operation_number",
+        "ops_activity_number",
+        "rig",
+        "wbs_source"
+      ],
+      "hash": "90e839b00f484e45",
+      "count": 5
+    },
+    "11_wbs_from_operations": {
+      "columns": [
+        "location",
+        "ops_activity_number",
+        "wbs_source"
+      ],
+      "hash": "462388aeed8fc83b",
+      "count": 3
+    },
+    "12_wbs_from_ops_activities": {
+      "columns": [
+        "location",
+        "wbs_source"
+      ],
+      "hash": "062ae9197663636e",
+      "count": 2
+    }
+  },
+  "total_scripts": 14,
+  "total_columns": 47
+}

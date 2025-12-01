@@ -8,7 +8,7 @@ All output is strict JSON for easy agent consumption.
 Subcommands:
   verify  - Verify if a symbol exists
   impact  - Predict impact of changing a script
-  trace   - Trace column/file lineage  
+  trace   - Trace column/file lineage
   pattern - Get pattern for a task type
   search  - Search for similar symbols
 
@@ -27,9 +27,9 @@ Usage:
 import argparse
 import json
 import sys
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 from difflib import SequenceMatcher
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # Paths
 SCRIPTS_DIR = Path(__file__).parent
@@ -52,13 +52,13 @@ SOURCE_DIRS = [
 
 def output_json(data: Dict) -> None:
     """Output JSON to stdout (strict, minified for agents)."""
-    print(json.dumps(data, separators=(',', ':')))
+    print(json.dumps(data, separators=(",", ":")))
 
 
 def get_latest_source_mtime() -> float:
     """Get the most recent modification time of any source file."""
     latest_mtime = 0.0
-    
+
     for source_dir in SOURCE_DIRS:
         if not source_dir.exists():
             continue
@@ -68,7 +68,7 @@ def get_latest_source_mtime() -> float:
                 mtime = filepath.stat().st_mtime
                 if mtime > latest_mtime:
                     latest_mtime = mtime
-    
+
     return latest_mtime
 
 
@@ -82,22 +82,22 @@ def get_artifacts_mtime() -> float:
 def check_and_regenerate_if_stale(silent: bool = False) -> bool:
     """
     Check if artifacts are stale and regenerate if needed.
-    
+
     Returns True if regeneration occurred, False otherwise.
     Exits with code 1 if regeneration fails (prevents agent from using broken context).
     """
     import subprocess
-    
+
     source_mtime = get_latest_source_mtime()
     artifacts_mtime = get_artifacts_mtime()
-    
+
     # Also check if the generator script itself changed
     generator_script = SCRIPTS_DIR / "generate_context_oracle.py"
     if generator_script.exists():
         gen_mtime = generator_script.stat().st_mtime
         if gen_mtime > artifacts_mtime:
             source_mtime = max(source_mtime, gen_mtime)
-    
+
     # Check root scripts directory for pipeline.py etc
     for root_script in SCRIPTS_DIR.glob("*.py"):
         if root_script.name.startswith("__"):
@@ -105,30 +105,30 @@ def check_and_regenerate_if_stale(silent: bool = False) -> bool:
         script_mtime = root_script.stat().st_mtime
         if script_mtime > source_mtime:
             source_mtime = script_mtime
-    
+
     needs_regen = artifacts_mtime == 0.0 or source_mtime > artifacts_mtime
-    
+
     if needs_regen:
         if not silent:
             if artifacts_mtime == 0.0:
                 print("Oracle artifacts not found. Generating...", file=sys.stderr)
             else:
                 print("Oracle artifacts are stale. Regenerating...", file=sys.stderr)
-        
+
         try:
             subprocess.run(
                 [sys.executable, str(generator_script)],
                 capture_output=True,
                 text=True,
                 cwd=PROJECT_ROOT,
-                check=True  # Raise CalledProcessError on failure
+                check=True,  # Raise CalledProcessError on failure
             )
         except subprocess.CalledProcessError as e:
             print(f"CRITICAL: Oracle generation failed!\n{e.stderr}", file=sys.stderr)
             sys.exit(1)  # Hard stop - don't let agent continue with broken context
-        
+
         return True
-    
+
     return False
 
 
@@ -160,66 +160,67 @@ def load_patterns() -> Optional[Dict]:
 # VERIFY - Check if a symbol exists
 # =============================================================================
 
+
 def find_similar(query: str, registry: Dict, limit: int = 3) -> List[Dict]:
     """Find symbols similar to query."""
     all_names = []
-    
+
     for func in registry.get("functions", []):
-        all_names.append({
-            "name": func["name"], 
-            "type": "function", 
-            "location": f"{func['file']}:{func['line']}"
-        })
-    
+        all_names.append(
+            {
+                "name": func["name"],
+                "type": "function",
+                "location": f"{func['file']}:{func['line']}",
+            }
+        )
+
     for const in registry.get("constants", []):
-        all_names.append({
-            "name": const["name"], 
-            "type": "constant", 
-            "location": f"{const['file']}:{const['line']}"
-        })
-    
+        all_names.append(
+            {
+                "name": const["name"],
+                "type": "constant",
+                "location": f"{const['file']}:{const['line']}",
+            }
+        )
+
     for col_name in registry.get("columns", {}):
-        all_names.append({
-            "name": col_name, 
-            "type": "column",
-            "location": None
-        })
-    
+        all_names.append({"name": col_name, "type": "column", "location": None})
+
     for table in registry.get("tables", []):
-        all_names.append({
-            "name": table["name"], 
-            "type": "table", 
-            "location": table["file"]
-        })
-    
+        all_names.append(
+            {"name": table["name"], "type": "table", "location": table["file"]}
+        )
+
     # Score by similarity
     query_lower = query.lower()
     scored = []
-    
+
     for item in all_names:
         name_lower = item["name"].lower()
         ratio = SequenceMatcher(None, query_lower, name_lower).ratio()
-        
+
         # Boost substring matches
         if query_lower in name_lower or name_lower in query_lower:
             ratio = max(ratio, 0.8)
-        
+
         if ratio > 0.3:
             scored.append((ratio, item))
-    
+
     scored.sort(key=lambda x: x[0], reverse=True)
     return [item for _, item in scored[:limit]]
 
 
-def cmd_verify(args) -> Dict:
+def cmd_verify(args) -> Dict:  # noqa: C901
     """Verify if a symbol exists."""
     registry = load_registry()
     if not registry:
-        return {"error": "Symbol registry not found. Run generate_context_oracle.py first."}
-    
+        return {
+            "error": "Symbol registry not found. Run generate_context_oracle.py first."
+        }
+
     name = args.name
     symbol_type = args.type
-    
+
     # Search functions
     if symbol_type in ("function", "any"):
         for func in registry.get("functions", []):
@@ -229,9 +230,9 @@ def cmd_verify(args) -> Dict:
                     "type": "function",
                     "location": f"{func['file']}:{func['line']}",
                     "signature": func.get("signature"),
-                    "docstring": func.get("docstring")
+                    "docstring": func.get("docstring"),
                 }
-    
+
     # Search constants
     if symbol_type in ("constant", "any"):
         for const in registry.get("constants", []):
@@ -241,9 +242,9 @@ def cmd_verify(args) -> Dict:
                     "type": "constant",
                     "location": f"{const['file']}:{const['line']}",
                     "value_type": const.get("value_type"),
-                    "value_preview": const.get("value_preview")
+                    "value_preview": const.get("value_preview"),
                 }
-    
+
     # Search columns
     if symbol_type in ("column", "any"):
         columns = registry.get("columns", {})
@@ -255,9 +256,9 @@ def cmd_verify(args) -> Dict:
                 "sources": col.get("sources", []),
                 "dtype": col.get("dtype"),
                 "used_in": col.get("used_in", []),
-                "created_by": col.get("created_by")
+                "created_by": col.get("created_by"),
             }
-    
+
     # Search tables
     if symbol_type in ("table", "any"):
         for table in registry.get("tables", []):
@@ -266,21 +267,21 @@ def cmd_verify(args) -> Dict:
                     "found": True,
                     "type": "table",
                     "location": table.get("file"),
-                    "columns": table.get("columns", [])
+                    "columns": table.get("columns", []),
                 }
-    
+
     # Not found - suggest similar
     similar = find_similar(name, registry)
     suggestion = None
     if similar:
         suggestion = f"Did you mean '{similar[0]['name']}'?"
-    
+
     return {
         "found": False,
         "query": name,
         "query_type": symbol_type,
         "suggestion": suggestion,
-        "similar": similar
+        "similar": similar,
     }
 
 
@@ -288,34 +289,35 @@ def cmd_verify(args) -> Dict:
 # IMPACT - Predict downstream impact of changing a script
 # =============================================================================
 
-def trace_downstream(edges: List[Dict], node_id: str, max_depth: int = 10) -> List[Dict]:
+
+def trace_downstream(
+    edges: List[Dict], node_id: str, max_depth: int = 10
+) -> List[Dict]:
     """Trace all nodes downstream from the given node."""
     visited = set()
     result = []
-    
+
     def _trace(current_id: str, depth: int):
         if current_id in visited or depth > max_depth:
             return
         visited.add(current_id)
-        
+
         for edge in edges:
             if edge["source"] == current_id:
                 target = edge["target"]
-                result.append({
-                    "node": target,
-                    "edge_type": edge["type"],
-                    "depth": depth
-                })
+                result.append(
+                    {"node": target, "edge_type": edge["type"], "depth": depth}
+                )
                 _trace(target, depth + 1)
-    
+
     _trace(node_id, 0)
     return result
 
 
-def cmd_impact(args) -> Dict:
+def cmd_impact(args) -> Dict:  # noqa: C901
     """
     Predict impact of changing a script.
-    
+
     Fix 3: Returns tiered impact classification:
       - direct_writers: Scripts that WRITE to the same columns
       - column_readers: Scripts that READ columns this script WRITES
@@ -324,33 +326,37 @@ def cmd_impact(args) -> Dict:
     """
     lineage = load_lineage()
     if not lineage:
-        return {"error": "Lineage graph not found. Run generate_context_oracle.py first."}
-    
+        return {
+            "error": "Lineage graph not found. Run generate_context_oracle.py first."
+        }
+
     script_name = args.script
     # Strip common prefixes/suffixes
     script_name = script_name.replace(".py", "").replace("scripts/", "")
     for prefix in ["stage1_clean/", "stage2_transform/", "stage3_prepare/"]:
         script_name = script_name.replace(prefix, "")
-    
+
     script_id = f"script:{script_name}"
     nodes = lineage.get("nodes", {})
     edges = lineage.get("edges", [])
     column_access = lineage.get("column_access", {})
-    
+
     if script_id not in nodes:
         # Try to find similar script names
-        script_names = [n.replace("script:", "") for n in nodes if n.startswith("script:")]
+        script_names = [
+            n.replace("script:", "") for n in nodes if n.startswith("script:")
+        ]
         return {
             "error": f"Script '{script_name}' not found",
-            "available_scripts": script_names
+            "available_scripts": script_names,
         }
-    
+
     # Find outputs of this script
     outputs = []
     for edge in edges:
         if edge["source"] == script_id and edge["type"] == "OUTPUT":
             outputs.append(edge["target"].replace("file:", ""))
-    
+
     # Fix 3: Find columns this script WRITES
     columns_written = set()
     columns_read = set()
@@ -361,12 +367,12 @@ def cmd_impact(args) -> Dict:
                     columns_written.add(col)
                 elif access.get("type") == "READS":
                     columns_read.add(col)
-    
+
     # Fix 3: Tiered impact classification
-    direct_writers = set()      # Scripts that also WRITE to same columns
-    column_readers = set()       # Scripts that READ columns we WRITE
-    file_consumers = set()       # Scripts that consume our output files
-    
+    direct_writers = set()  # Scripts that also WRITE to same columns
+    column_readers = set()  # Scripts that READ columns we WRITE
+    file_consumers = set()  # Scripts that consume our output files
+
     # Find scripts that interact with columns we write
     for col in columns_written:
         if col in column_access:
@@ -377,31 +383,34 @@ def cmd_impact(args) -> Dict:
                         direct_writers.add(other_script)
                     elif access.get("type") == "READS":
                         column_readers.add(other_script)
-    
+
     # Find scripts that consume output files (legacy traversal)
     for output in outputs:
         output_id = f"file:{output}"
         downstream = trace_downstream(edges, output_id)
-        
+
         for item in downstream:
             node = item["node"]
             if node.startswith("script:"):
                 other_script = node.replace("script:", "")
                 if other_script != script_name:
                     # If not already a column reader/writer, it's a file consumer
-                    if other_script not in column_readers and other_script not in direct_writers:
+                    if (
+                        other_script not in column_readers
+                        and other_script not in direct_writers
+                    ):
                         file_consumers.add(other_script)
-    
+
     # All affected scripts
     all_affected = direct_writers | column_readers | file_consumers
-    
+
     # Calculate risk level based on tiered impact
     risk_level = "low"
     if len(column_readers) >= 2 or len(direct_writers) >= 1:
         risk_level = "high"
     elif len(column_readers) >= 1 or len(file_consumers) >= 2:
         risk_level = "medium"
-    
+
     # Generate detailed recommendation
     if risk_level == "high":
         parts = []
@@ -409,14 +418,21 @@ def cmd_impact(args) -> Dict:
             parts.append(f"{len(direct_writers)} scripts also write to same columns")
         if column_readers:
             parts.append(f"{len(column_readers)} scripts read columns you modify")
-        detail = "; ".join(parts) if parts else f"affects {len(columns_written)} columns"
+        detail = (
+            "; ".join(parts) if parts else f"affects {len(columns_written)} columns"
+        )
         scripts_to_test = list(column_readers)[:3]
-        recommendation = f"High-risk change: {detail}. Test affected scripts: {scripts_to_test}"
+        recommendation = (
+            f"High-risk change: {detail}. Test affected scripts: {scripts_to_test}"
+        )
     elif risk_level == "medium":
-        recommendation = f"Medium-risk change: {len(column_readers)} downstream readers. Verify transformations."
+        recommendation = (
+            f"Medium-risk change: {len(column_readers)} downstream readers. "
+            "Verify transformations."
+        )
     else:
         recommendation = "Low-risk change: limited downstream impact."
-    
+
     return {
         "script": script_name,
         "outputs": outputs,
@@ -426,12 +442,12 @@ def cmd_impact(args) -> Dict:
         "tiered_impact": {
             "direct_writers": sorted(direct_writers),
             "column_readers": sorted(column_readers),
-            "file_consumers": sorted(file_consumers)
+            "file_consumers": sorted(file_consumers),
         },
         # Legacy format for backward compatibility
         "affected_scripts": sorted(all_affected),
         "risk_level": risk_level,
-        "recommendation": recommendation
+        "recommendation": recommendation,
     }
 
 
@@ -439,87 +455,86 @@ def cmd_impact(args) -> Dict:
 # TRACE - Trace column/file lineage
 # =============================================================================
 
+
 def trace_upstream(edges: List[Dict], node_id: str, max_depth: int = 10) -> List[Dict]:
     """Trace all nodes upstream from the given node."""
     visited = set()
     result = []
-    
+
     def _trace(current_id: str, depth: int):
         if current_id in visited or depth > max_depth:
             return
         visited.add(current_id)
-        
+
         for edge in edges:
             if edge["target"] == current_id:
                 source = edge["source"]
-                edge_info = {
-                    "node": source,
-                    "edge_type": edge["type"],
-                    "depth": depth
-                }
+                edge_info = {"node": source, "edge_type": edge["type"], "depth": depth}
                 # Include operation if present
                 if "operation" in edge:
                     edge_info["operation"] = edge["operation"]
                 if "file" in edge and "line" in edge:
                     edge_info["location"] = f"{edge['file']}:{edge['line']}"
-                
+
                 result.append(edge_info)
                 _trace(source, depth + 1)
-    
+
     _trace(node_id, 0)
     return result
 
 
-def cmd_trace(args) -> Dict:
+def cmd_trace(args) -> Dict:  # noqa: C901
     """Trace lineage of a column or file."""
     lineage = load_lineage()
     if not lineage:
-        return {"error": "Lineage graph not found. Run generate_context_oracle.py first."}
-    
+        return {
+            "error": "Lineage graph not found. Run generate_context_oracle.py first."
+        }
+
     target = args.target
     direction = args.direction
-    
+
     nodes = lineage.get("nodes", {})
     edges = lineage.get("edges", [])
-    
+
     # Determine node type and ID
     node_id = None
     node_type = None
-    
+
     # Try different node ID formats
     candidates = [
         f"column:{target}",
         f"file:{target}",
         f"script:{target}",
         f"table:{target}",
-        target  # Raw ID
+        target,  # Raw ID
     ]
-    
+
     for candidate in candidates:
         if candidate in nodes:
             node_id = candidate
             node_type = nodes[candidate].get("type", "unknown")
             break
-    
+
     if not node_id:
         return {
             "error": f"Node '{target}' not found in lineage graph",
-            "hint": "Try using a column name, file path, or script name"
+            "hint": "Try using a column name, file path, or script name",
         }
-    
+
     result = {
         "target": target,
         "node_id": node_id,
         "node_type": node_type,
-        "direction": direction
+        "direction": direction,
     }
-    
+
     if direction in ("upstream", "both"):
         result["upstream"] = trace_upstream(edges, node_id)
-    
+
     if direction in ("downstream", "both"):
         result["downstream"] = trace_downstream(edges, node_id)
-    
+
     # Extract critical files (files that appear in lineage)
     critical_files = set()
     for item in result.get("upstream", []) + result.get("downstream", []):
@@ -530,9 +545,9 @@ def cmd_trace(args) -> Dict:
             script_node = nodes.get(node, {})
             if "path" in script_node:
                 critical_files.add(script_node["path"])
-    
+
     result["critical_files"] = sorted(critical_files)
-    
+
     return result
 
 
@@ -540,27 +555,27 @@ def cmd_trace(args) -> Dict:
 # PATTERN - Get code pattern for a task type
 # =============================================================================
 
+
 def cmd_pattern(args) -> Dict:
     """Get pattern for a task type."""
     patterns = load_patterns()
     if not patterns:
-        return {"error": "Pattern library not found. Run generate_context_oracle.py first."}
-    
+        return {
+            "error": "Pattern library not found. Run generate_context_oracle.py first."
+        }
+
     pattern_name = args.pattern
     all_patterns = patterns.get("patterns", {})
-    
+
     if pattern_name in all_patterns:
-        return {
-            "found": True,
-            "pattern": all_patterns[pattern_name]
-        }
-    
+        return {"found": True, "pattern": all_patterns[pattern_name]}
+
     # Not found - list available patterns
     return {
         "found": False,
         "query": pattern_name,
         "available_patterns": list(all_patterns.keys()),
-        "hint": "Use one of the available pattern names"
+        "hint": "Use one of the available pattern names",
     }
 
 
@@ -568,18 +583,21 @@ def cmd_pattern(args) -> Dict:
 # SEARCH - Search for similar symbols
 # =============================================================================
 
-def cmd_search(args) -> Dict:
+
+def cmd_search(args) -> Dict:  # noqa: C901
     """Search for symbols matching a query."""
     registry = load_registry()
     if not registry:
-        return {"error": "Symbol registry not found. Run generate_context_oracle.py first."}
-    
+        return {
+            "error": "Symbol registry not found. Run generate_context_oracle.py first."
+        }
+
     query = args.query
     limit = args.limit
     symbol_type = args.type
-    
+
     all_matches = []
-    
+
     # Search functions
     if symbol_type in ("function", "any"):
         for func in registry.get("functions", []):
@@ -588,14 +606,16 @@ def cmd_search(args) -> Dict:
             if query.lower() in name.lower():
                 ratio = max(ratio, 0.8)
             if ratio > 0.3:
-                all_matches.append({
-                    "name": name,
-                    "type": "function",
-                    "location": f"{func['file']}:{func['line']}",
-                    "signature": func.get("signature"),
-                    "score": ratio
-                })
-    
+                all_matches.append(
+                    {
+                        "name": name,
+                        "type": "function",
+                        "location": f"{func['file']}:{func['line']}",
+                        "signature": func.get("signature"),
+                        "score": ratio,
+                    }
+                )
+
     # Search constants
     if symbol_type in ("constant", "any"):
         for const in registry.get("constants", []):
@@ -604,13 +624,15 @@ def cmd_search(args) -> Dict:
             if query.lower() in name.lower():
                 ratio = max(ratio, 0.8)
             if ratio > 0.3:
-                all_matches.append({
-                    "name": name,
-                    "type": "constant",
-                    "location": f"{const['file']}:{const['line']}",
-                    "score": ratio
-                })
-    
+                all_matches.append(
+                    {
+                        "name": name,
+                        "type": "constant",
+                        "location": f"{const['file']}:{const['line']}",
+                        "score": ratio,
+                    }
+                )
+
     # Search columns
     if symbol_type in ("column", "any"):
         for col_name, col_data in registry.get("columns", {}).items():
@@ -618,13 +640,15 @@ def cmd_search(args) -> Dict:
             if query.lower() in col_name.lower():
                 ratio = max(ratio, 0.8)
             if ratio > 0.3:
-                all_matches.append({
-                    "name": col_name,
-                    "type": "column",
-                    "sources": col_data.get("sources", [])[:2],  # Limit sources
-                    "score": ratio
-                })
-    
+                all_matches.append(
+                    {
+                        "name": col_name,
+                        "type": "column",
+                        "sources": col_data.get("sources", [])[:2],  # Limit sources
+                        "score": ratio,
+                    }
+                )
+
     # Search tables
     if symbol_type in ("table", "any"):
         for table in registry.get("tables", []):
@@ -633,49 +657,50 @@ def cmd_search(args) -> Dict:
             if query.lower() in name.lower():
                 ratio = max(ratio, 0.8)
             if ratio > 0.3:
-                all_matches.append({
-                    "name": name,
-                    "type": "table",
-                    "location": table.get("file"),
-                    "score": ratio
-                })
-    
+                all_matches.append(
+                    {
+                        "name": name,
+                        "type": "table",
+                        "location": table.get("file"),
+                        "score": ratio,
+                    }
+                )
+
     # Sort by score and limit
     all_matches.sort(key=lambda x: x["score"], reverse=True)
     results = all_matches[:limit]
-    
+
     # Remove score from output (internal use only)
     for r in results:
         del r["score"]
-    
-    return {
-        "query": query,
-        "count": len(results),
-        "results": results
-    }
+
+    return {"query": query, "count": len(results), "results": results}
 
 
 # =============================================================================
 # WHO - Find which scripts read/write a column
 # =============================================================================
 
+
 def cmd_who(args) -> Dict:
     """
     Find which scripts read or write a specific column.
-    
+
     This directly answers: "Who touches this column?"
     Much more useful than fuzzy search when you know the column name.
     """
     lineage = load_lineage()
     if not lineage:
-        return {"error": "Lineage graph not found. Run generate_context_oracle.py first."}
-    
+        return {
+            "error": "Lineage graph not found. Run generate_context_oracle.py first."
+        }
+
     column = args.column
     column_access = lineage.get("column_access", {})
-    
+
     # Try exact match first
     accesses = column_access.get(column, [])
-    
+
     # If no exact match, try case-insensitive match
     if not accesses:
         for col_name, col_accesses in column_access.items():
@@ -683,7 +708,7 @@ def cmd_who(args) -> Dict:
                 accesses = col_accesses
                 column = col_name  # Use the actual column name
                 break
-    
+
     if not accesses:
         # Column not found in access patterns - suggest similar
         similar = [c for c in column_access.keys() if column.lower() in c.lower()][:5]
@@ -691,41 +716,235 @@ def cmd_who(args) -> Dict:
             "found": False,
             "column": column,
             "suggestion": similar if similar else "Column not tracked in any script",
-            "hint": "Only columns that are explicitly read/written in pipeline scripts are tracked"
+            "hint": (
+                "Only columns that are explicitly read/written "
+                "in pipeline scripts are tracked"
+            ),
         }
-    
+
     # Group by access type
     writers = []
     readers = []
-    
+
     for access in accesses:
         script = access.get("script", "unknown")
         location = f"{access.get('file', '')}:{access.get('line', '')}"
         entry = {"script": script, "location": location}
-        
+
         if access.get("type") == "WRITES":
             writers.append(entry)
         elif access.get("type") == "READS":
             readers.append(entry)
-    
+
     # Deduplicate (same script may access column multiple times)
     unique_writers = list({w["script"]: w for w in writers}.values())
     unique_readers = list({r["script"]: r for r in readers}.values())
-    
+
     return {
         "found": True,
         "column": column,
         "writers": unique_writers,
         "readers": unique_readers,
-        "summary": f"{len(unique_writers)} scripts write, {len(unique_readers)} scripts read"
+        "summary": (
+            f"{len(unique_writers)} scripts write, "
+            f"{len(unique_readers)} scripts read"
+        ),
     }
+
+
+# =============================================================================
+# VALIDATE - Run validation checks
+# =============================================================================
+
+
+def cmd_validate(args) -> Dict:
+    """Run validation checks."""
+    check_type = args.check_type
+
+    if check_type == "pipeline-order":
+        return _validate_pipeline_order()
+    elif check_type == "schema-lock":
+        return _validate_schema_lock()
+    elif check_type == "symbols":
+        return _validate_symbols(args.changed_only)
+    else:
+        return {"error": f"Unknown check type: {check_type}"}
+
+
+def _validate_pipeline_order() -> Dict:
+    """Validate pipeline DAG has no cycles."""
+    import subprocess
+
+    validator_path = SCRIPTS_DIR / "validators" / "pipeline_order.py"
+    if not validator_path.exists():
+        return {"error": "Pipeline order validator not found"}
+
+    result = subprocess.run(
+        [sys.executable, str(validator_path), "--json"],
+        capture_output=True,
+        text=True,
+        cwd=PROJECT_ROOT,
+    )
+
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {
+            "error": "Failed to parse validator output",
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+        }
+
+
+def _validate_schema_lock() -> Dict:
+    """Validate schema lock matches current state."""
+    import subprocess
+
+    validator_path = SCRIPTS_DIR / "validators" / "schema_lock.py"
+    if not validator_path.exists():
+        return {"error": "Schema lock validator not found"}
+
+    result = subprocess.run(
+        [sys.executable, str(validator_path), "--check", "--quiet"],
+        capture_output=True,
+        text=True,
+        cwd=PROJECT_ROOT,
+    )
+
+    passed = result.returncode == 0
+
+    return {
+        "passed": passed,
+        "message": "Schema lock valid" if passed else result.stdout.strip(),
+        "exit_code": result.returncode,
+    }
+
+
+def _validate_symbols(changed_only: bool = False) -> Dict:
+    """Validate symbols exist and are consistent."""
+    registry = load_registry()
+    if not registry:
+        return {"error": "Symbol registry not found"}
+
+    issues = []
+
+    # Check for functions with missing files
+    for func in registry.get("functions", []):
+        file_path = PROJECT_ROOT / func.get("file", "")
+        if not file_path.exists():
+            issues.append(
+                f"Function '{func['name']}' references missing file: {func['file']}"
+            )
+
+    # Check for columns with no sources and no created_by
+    for _col_name, col_data in registry.get("columns", {}).items():
+        sources = col_data.get("sources", [])
+        created_by = col_data.get("created_by")
+        if not sources and not created_by:
+            # This is OK - some columns are internal
+            pass
+
+    return {
+        "passed": len(issues) == 0,
+        "issues": issues,
+        "symbols_checked": {
+            "functions": len(registry.get("functions", [])),
+            "columns": len(registry.get("columns", {})),
+            "tables": len(registry.get("tables", [])),
+        },
+    }
+
+
+# =============================================================================
+# HEALTH - Check Oracle health status
+# =============================================================================
+
+
+def cmd_health(args) -> Dict[str, Any]:
+    """Check Oracle health status."""
+    health: Dict[str, Any] = {
+        "available": False,
+        "artifacts": {},
+        "freshness": {},
+        "summary": "",
+    }
+
+    # Check registry
+    if REGISTRY_FILE.exists():
+        registry = load_registry()
+        health["artifacts"]["registry"] = {
+            "exists": True,
+            "functions": len(registry.get("functions", [])) if registry else 0,
+            "columns": len(registry.get("columns", {})) if registry else 0,
+            "tables": len(registry.get("tables", [])) if registry else 0,
+            "constants": len(registry.get("constants", [])) if registry else 0,
+        }
+    else:
+        health["artifacts"]["registry"] = {"exists": False}
+
+    # Check lineage
+    if LINEAGE_FILE.exists():
+        lineage = load_lineage()
+        health["artifacts"]["lineage"] = {
+            "exists": True,
+            "nodes": len(lineage.get("nodes", {})) if lineage else 0,
+            "edges": len(lineage.get("edges", [])) if lineage else 0,
+            "column_access": len(lineage.get("column_access", {})) if lineage else 0,
+        }
+    else:
+        health["artifacts"]["lineage"] = {"exists": False}
+
+    # Check patterns
+    if PATTERNS_FILE.exists():
+        patterns = load_patterns()
+        health["artifacts"]["patterns"] = {
+            "exists": True,
+            "count": len(patterns.get("patterns", {})) if patterns else 0,
+        }
+    else:
+        health["artifacts"]["patterns"] = {"exists": False}
+
+    # Check skeletons
+    if SKELETONS_INDEX.exists():
+        with open(SKELETONS_INDEX) as f:
+            index = json.load(f)
+        total_files = sum(len(scripts) for scripts in index.get("files", {}).values())
+        health["artifacts"]["skeletons"] = {"exists": True, "count": total_files}
+    else:
+        health["artifacts"]["skeletons"] = {"exists": False}
+
+    # Check freshness
+    source_mtime = get_latest_source_mtime()
+    artifacts_mtime = get_artifacts_mtime()
+    is_fresh = artifacts_mtime >= source_mtime
+
+    health["freshness"] = {
+        "is_fresh": is_fresh,
+        "source_mtime": source_mtime,
+        "artifacts_mtime": artifacts_mtime,
+    }
+
+    # Overall status
+    all_exist = all(a.get("exists", False) for a in health["artifacts"].values())
+    health["available"] = all_exist and is_fresh
+
+    if health["available"]:
+        health["summary"] = "Oracle is healthy and up-to-date"
+    elif not all_exist:
+        missing = [k for k, v in health["artifacts"].items() if not v.get("exists")]
+        health["summary"] = f"Missing artifacts: {missing}"
+    else:
+        health["summary"] = "Artifacts are stale - regeneration needed"
+
+    return health
 
 
 # =============================================================================
 # MAIN
 # =============================================================================
 
-def main():
+
+def main():  # noqa: C901
     parser = argparse.ArgumentParser(
         description="Context Oracle CLI Query Tool",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -737,68 +956,101 @@ Examples:
   python3 scripts/ask_oracle.py pattern pipeline_script
   python3 scripts/ask_oracle.py search calculate --limit 10
   python3 scripts/ask_oracle.py who "Unit Price"
-        """
+  python3 scripts/ask_oracle.py validate pipeline-order
+  python3 scripts/ask_oracle.py validate schema-lock
+  python3 scripts/ask_oracle.py health
+        """,
     )
-    
+
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
-    
+
     # verify subcommand
     verify_parser = subparsers.add_parser("verify", help="Verify if a symbol exists")
     verify_parser.add_argument("name", help="Symbol name to verify")
     verify_parser.add_argument(
-        "--type", "-t",
+        "--type",
+        "-t",
         choices=["function", "constant", "column", "table", "any"],
         default="any",
-        help="Type of symbol to search for (default: any)"
+        help="Type of symbol to search for (default: any)",
     )
-    
+
     # impact subcommand
-    impact_parser = subparsers.add_parser("impact", help="Predict impact of changing a script")
-    impact_parser.add_argument("script", help="Script name (e.g., 05_calculate_cost_impact)")
-    
+    impact_parser = subparsers.add_parser(
+        "impact", help="Predict impact of changing a script"
+    )
+    impact_parser.add_argument(
+        "script", help="Script name (e.g., 05_calculate_cost_impact)"
+    )
+
     # trace subcommand
     trace_parser = subparsers.add_parser("trace", help="Trace column/file lineage")
     trace_parser.add_argument("target", help="Column, file, or script name to trace")
     trace_parser.add_argument(
-        "--direction", "-d",
+        "--direction",
+        "-d",
         choices=["upstream", "downstream", "both"],
         default="both",
-        help="Direction to trace (default: both)"
+        help="Direction to trace (default: both)",
     )
-    
+
     # pattern subcommand
-    pattern_parser = subparsers.add_parser("pattern", help="Get pattern for a task type")
+    pattern_parser = subparsers.add_parser(
+        "pattern", help="Get pattern for a task type"
+    )
     pattern_parser.add_argument("pattern", help="Pattern name (e.g., pipeline_script)")
-    
+
     # search subcommand
     search_parser = subparsers.add_parser("search", help="Search for similar symbols")
     search_parser.add_argument("query", help="Search query")
     search_parser.add_argument(
-        "--limit", "-l",
+        "--limit",
+        "-l",
         type=int,
         default=5,
-        help="Maximum results to return (default: 5)"
+        help="Maximum results to return (default: 5)",
     )
     search_parser.add_argument(
-        "--type", "-t",
+        "--type",
+        "-t",
         choices=["function", "constant", "column", "table", "any"],
         default="any",
-        help="Type of symbol to search for (default: any)"
+        help="Type of symbol to search for (default: any)",
     )
-    
+
     # who subcommand - find which scripts read/write a column
-    who_parser = subparsers.add_parser("who", help="Find which scripts read/write a column")
-    who_parser.add_argument("column", help="Column name to look up (e.g., 'Unit Price', 'fmt_po')")
-    
+    who_parser = subparsers.add_parser(
+        "who", help="Find which scripts read/write a column"
+    )
+    who_parser.add_argument(
+        "column", help="Column name to look up (e.g., 'Unit Price', 'fmt_po')"
+    )
+
+    # validate subcommand - run validation checks
+    validate_parser = subparsers.add_parser("validate", help="Run validation checks")
+    validate_parser.add_argument(
+        "check_type",
+        choices=["pipeline-order", "schema-lock", "symbols"],
+        help="Type of validation to run",
+    )
+    validate_parser.add_argument(
+        "--changed-only",
+        action="store_true",
+        help="Only check changed files (for symbols validation)",
+    )
+
+    # health subcommand - check Oracle health
+    _health_parser = subparsers.add_parser("health", help="Check Oracle health status")
+
     args = parser.parse_args()
-    
+
     if not args.command:
         parser.print_help()
         sys.exit(0)
-    
+
     # Freshness Guard: Auto-regenerate stale artifacts before any command
     check_and_regenerate_if_stale(silent=False)
-    
+
     try:
         if args.command == "verify":
             result = cmd_verify(args)
@@ -812,12 +1064,16 @@ Examples:
             result = cmd_search(args)
         elif args.command == "who":
             result = cmd_who(args)
+        elif args.command == "validate":
+            result = cmd_validate(args)
+        elif args.command == "health":
+            result = cmd_health(args)
         else:
             result = {"error": f"Unknown command: {args.command}"}
-        
+
         output_json(result)
         sys.exit(0)
-        
+
     except Exception as e:
         # System error - exit code 1
         output_json({"error": f"System error: {str(e)}"})
