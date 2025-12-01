@@ -34,12 +34,12 @@ repos:
         files: "^scripts/.*\\.py$"
         additional_dependencies: [pandas-stubs]
 
-  # Duplicate detection via pylint
+  # Duplicate detection via pylint (uses venv)
   - repo: local
     hooks:
       - id: pylint-duplicates
         name: "Pylint: Duplicate Detection"
-        entry: pylint
+        entry: .venv/bin/pylint
         args: [
           "--disable=all",
           "--enable=similarities",
