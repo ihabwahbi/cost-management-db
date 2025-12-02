@@ -1,7 +1,9 @@
 import { uuid, varchar, text, numeric, date, integer, timestamp, unique, index } from 'drizzle-orm/pg-core';
-import { wbsDetails } from './wbs-details';
-import { poLineItems } from './po-line-items';
 import { devV3Schema } from './_schema';
+
+// NOTE: FK constraints removed to allow storing values even when parent records
+// don't exist. This enables investigation of orphan WBS/PO references.
+// The columns still store the same values, just without database-level enforcement.
 
 export const sapReservations = devV3Schema.table('sap_reservations', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -28,8 +30,9 @@ export const sapReservations = devV3Schema.table('sap_reservations', {
   poNumber: varchar('po_number'),
   poLineNumber: integer('po_line_number'),
   
-  // WBS reference - links to wbs_details for project/operation context
-  wbsNumber: varchar('wbs_number').references(() => wbsDetails.wbsNumber),
+  // WBS reference - stores wbs_number value (no FK constraint for investigation)
+  // Can query orphans with: LEFT JOIN wbs_details WHERE wbs_details.wbs_number IS NULL
+  wbsNumber: varchar('wbs_number'),
   
   assetCode: varchar('asset_code'),
   assetSerialNumber: varchar('asset_serial_number'),
@@ -41,8 +44,9 @@ export const sapReservations = devV3Schema.table('sap_reservations', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
   
-  // FK to po_line_items via business key (e.g., "4584632148-1")
-  poLineItemId: varchar('po_line_item_id').references(() => poLineItems.poLineId),
+  // PO Line reference - stores po_line_id value (no FK constraint for investigation)
+  // Can query orphans with: LEFT JOIN po_line_items WHERE po_line_items.po_line_id IS NULL
+  poLineItemId: varchar('po_line_item_id'),
 }, (table) => [
   unique('sap_reservations_unique_line').on(table.reservationNumber, table.reservationLineNumber),
   // Index for efficient lookups on the PO line relationship

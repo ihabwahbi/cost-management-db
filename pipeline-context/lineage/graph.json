@@ -4153,7 +4153,7 @@
       "constraints": {
         "not_null": false,
         "primary_key": false,
-        "references": "poLineItems.poLineId"
+        "references": null
       },
       "data_type": "varchar",
       "id": "db_column:sap_reservations.poLineItemId",
@@ -4297,7 +4297,7 @@
       "constraints": {
         "not_null": false,
         "primary_key": false,
-        "references": "wbsDetails.wbsNumber"
+        "references": null
       },
       "data_type": "varchar",
       "id": "db_column:sap_reservations.wbsNumber",

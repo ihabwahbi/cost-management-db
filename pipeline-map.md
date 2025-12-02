@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-02T08:26:12.072952+00:00
+Generated: 2025-12-02T09:17:41.414901+00:00
 
 ## Data Flow Diagram
 
@@ -296,7 +296,7 @@ flowchart LR
 | `reservationSource` | varchar | - |
 | `poNumber` | varchar | - |
 | `poLineNumber` | integer | - |
-| `wbsNumber` | varchar | FK → wbsDetails.wbsNumber |
+| `wbsNumber` | varchar | - |
 | *...* | *7 more* | |
 
 ### `wbs_details`

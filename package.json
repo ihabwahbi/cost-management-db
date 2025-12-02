@@ -21,7 +21,10 @@
     "import:grir-exposures:force": "tsx src/imports/grir-exposures.ts --force",
     "import:wbs-details": "tsx src/imports/wbs-details.ts",
     "import:wbs-details:dry-run": "tsx src/imports/wbs-details.ts --dry-run",
-    "import:wbs-details:force": "tsx src/imports/wbs-details.ts --force"
+    "import:wbs-details:force": "tsx src/imports/wbs-details.ts --force",
+    "import:sap-reservations": "tsx src/imports/sap-reservations.ts",
+    "import:sap-reservations:dry-run": "tsx src/imports/sap-reservations.ts --dry-run",
+    "import:sap-reservations:force": "tsx src/imports/sap-reservations.ts --force"
   },
   "dependencies": {
     "csv-parse": "^6.1.0",

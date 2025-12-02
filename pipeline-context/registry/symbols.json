@@ -5373,16 +5373,7 @@
         "wbsNumber"
       ],
       "file": "src/schema/sap-reservations.ts",
-      "foreign_keys": [
-        {
-          "column": "poLineItemId",
-          "references": "poLineItems.poLineId"
-        },
-        {
-          "column": "wbsNumber",
-          "references": "wbsDetails.wbsNumber"
-        }
-      ],
+      "foreign_keys": [],
       "name": "sap_reservations",
       "primary_key": "id"
     },
