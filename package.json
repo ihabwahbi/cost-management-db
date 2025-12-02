@@ -18,7 +18,10 @@
     "import:po-transactions:force": "tsx src/imports/po-transactions.ts --force",
     "import:grir-exposures": "tsx src/imports/grir-exposures.ts",
     "import:grir-exposures:dry-run": "tsx src/imports/grir-exposures.ts --dry-run",
-    "import:grir-exposures:force": "tsx src/imports/grir-exposures.ts --force"
+    "import:grir-exposures:force": "tsx src/imports/grir-exposures.ts --force",
+    "import:wbs-details": "tsx src/imports/wbs-details.ts",
+    "import:wbs-details:dry-run": "tsx src/imports/wbs-details.ts --dry-run",
+    "import:wbs-details:force": "tsx src/imports/wbs-details.ts --force"
   },
   "dependencies": {
     "csv-parse": "^6.1.0",
