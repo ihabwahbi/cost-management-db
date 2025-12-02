@@ -1333,6 +1333,32 @@
         "07_prepare_po_transactions"
       ]
     },
+    "asset_code": {
+      "created_by": "scripts/stage3_prepare/10_prepare_reservations.py:140",
+      "dtype": "float64",
+      "name": "asset_code",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": [
+        "10_prepare_reservations"
+      ]
+    },
+    "asset_serial_number": {
+      "created_by": "scripts/stage3_prepare/10_prepare_reservations.py:141",
+      "dtype": "float64",
+      "name": "asset_serial_number",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": [
+        "10_prepare_reservations"
+      ]
+    },
     "client_name": {
       "created_by": null,
       "dtype": "object",
@@ -1387,7 +1413,9 @@
       "name": "description",
       "source_type": "import-ready",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/import-ready/po_line_items.csv",
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
       ],
       "used_in": []
     },
@@ -1511,6 +1539,28 @@
         "06_prepare_po_line_items"
       ]
     },
+    "open_reservation_qty": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "open_reservation_qty",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": []
+    },
+    "open_reservation_value": {
+      "created_by": null,
+      "dtype": "float64",
+      "name": "open_reservation_value",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": []
+    },
     "operation_number": {
       "created_by": "scripts/stage1_clean/10_wbs_from_projects.py:150",
       "dtype": "float64",
@@ -1587,7 +1637,9 @@
       "name": "part_number",
       "source_type": "import-ready",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/import-ready/po_line_items.csv",
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
       ],
       "used_in": []
     },
@@ -1597,7 +1649,9 @@
       "name": "plant_code",
       "source_type": "import-ready",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/import-ready/po_line_items.csv",
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
       ],
       "used_in": []
     },
@@ -1643,15 +1697,45 @@
       ],
       "used_in": []
     },
+    "po_line_item_id": {
+      "created_by": "scripts/stage3_prepare/10_prepare_reservations.py:99",
+      "dtype": "object",
+      "name": "po_line_item_id",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": [
+        "10_prepare_reservations"
+      ]
+    },
+    "po_line_number": {
+      "created_by": "scripts/stage3_prepare/10_prepare_reservations.py:94",
+      "dtype": "float64",
+      "name": "po_line_number",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": [
+        "10_prepare_reservations"
+      ]
+    },
     "po_number": {
-      "created_by": null,
-      "dtype": "int64",
+      "created_by": "scripts/stage3_prepare/10_prepare_reservations.py:93",
+      "dtype": "float64",
       "name": "po_number",
       "source_type": "import-ready",
       "sources": [
-        "data/import-ready/po_line_items.csv"
+        "data/import-ready/po_line_items.csv",
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
       ],
-      "used_in": []
+      "used_in": [
+        "10_prepare_reservations"
+      ]
     },
     "po_receipt_status": {
       "created_by": null,
@@ -1749,15 +1833,40 @@
       ],
       "used_in": []
     },
+    "requester_alias": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "requester_alias",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": []
+    },
+    "reservation_creation_date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "reservation_creation_date",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": []
+    },
     "reservation_line_id": {
       "created_by": "scripts/stage1_clean/13_reservations.py:67",
       "dtype": "object",
       "name": "reservation_line_id",
-      "source_type": "intermediate",
+      "source_type": "import-ready",
       "sources": [
-        "data/intermediate/reservations.csv"
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
       ],
       "used_in": [
+        "10_prepare_reservations",
         "13_reservations"
       ]
     },
@@ -1765,11 +1874,14 @@
       "created_by": "scripts/stage1_clean/13_reservations.py:83",
       "dtype": "int64",
       "name": "reservation_line_number",
-      "source_type": "intermediate",
+      "source_type": "import-ready",
       "sources": [
-        "data/intermediate/reservations.csv"
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
       ],
       "used_in": [
+        "10_prepare_reservations",
         "13_reservations"
       ]
     },
@@ -1777,12 +1889,50 @@
       "created_by": "scripts/stage1_clean/13_reservations.py:80",
       "dtype": "int64",
       "name": "reservation_number",
-      "source_type": "intermediate",
+      "source_type": "import-ready",
       "sources": [
-        "data/intermediate/reservations.csv"
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
       ],
       "used_in": [
+        "10_prepare_reservations",
         "13_reservations"
+      ]
+    },
+    "reservation_requirement_date": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "reservation_requirement_date",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": []
+    },
+    "reservation_source": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "reservation_source",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": []
+    },
+    "reservation_status": {
+      "created_by": null,
+      "dtype": "object",
+      "name": "reservation_status",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/sap_reservations.csv",
+        "data/intermediate/unmatched_reservation_pos.csv"
+      ],
+      "used_in": [
+        "10_prepare_reservations"
       ]
     },
     "rig": {
@@ -1988,12 +2138,15 @@
       "source_type": "import-ready",
       "sources": [
         "data/import-ready/po_line_items.csv",
+        "data/import-ready/sap_reservations.csv",
         "data/import-ready/wbs_details.csv",
+        "data/intermediate/unmatched_reservation_pos.csv",
         "data/intermediate/wbs_processed.csv"
       ],
       "used_in": [
         "07_process_wbs",
-        "09_prepare_wbs_details"
+        "09_prepare_wbs_details",
+        "10_prepare_reservations"
       ]
     },
     "wbs_source": {
@@ -2020,56 +2173,56 @@
   "constants": [
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 205,
+      "line": 203,
       "name": "EXCLUDED_NIS_LEVELS",
       "value_preview": "['Compensation Business Delivery', 'Compensation Business Enablement']",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 202,
+      "line": 200,
       "name": "EXCLUDED_VALUATION_CLASSES",
       "value_preview": "[7800, 7900, 5008]",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 218,
+      "line": 216,
       "name": "GRIR_EXPOSURES_MAPPING",
       "value_preview": "{'PO Line ID': 'po_line_id', 'GRIR Qty': 'grir_qty', 'GRIR Value': 'grir_value', 'First Exposure Dat",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 229,
+      "line": 227,
       "name": "GRIR_TIME_BUCKETS",
       "value_preview": "{30: '<1 month', 90: '1-3 months', 180: '3-6 months', 365: '6-12 months'}",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 235,
+      "line": 233,
       "name": "GRIR_TIME_BUCKET_MAX",
       "value_preview": ">1 year",
       "value_type": "str"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 170,
+      "line": 168,
       "name": "OPS_DISTRICT_TO_LOCATION",
       "value_preview": "{'APG TS': 'Jandakot', 'AUS East Coast WS': 'Roma', 'AUS West Coast WS': 'Jandakot', 'Moomba WL': 'M",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 145,
+      "line": 143,
       "name": "PLANT_CODE_TO_LOCATION",
       "value_preview": "{'3601': 'Perth', '3606': 'Jandakot', '3608': 'Kewdale', '3609': 'Toowoomba', '3610': 'Roma', '3611'",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 68,
+      "line": 59,
       "name": "PO_LINE_ITEMS_CALCULATED",
       "value_preview": "['open_po_qty', 'open_po_value', 'fmt_po']",
       "value_type": "list"
@@ -2083,49 +2236,63 @@
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 78,
+      "line": 69,
       "name": "PO_TRANSACTIONS_MAPPING",
       "value_preview": "{'PO Line ID': 'po_line_id', 'Posting Type': 'transaction_type', 'Posting Date': 'posting_date', 'Po",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 92,
+      "line": 83,
       "name": "REQUIRED_COLUMNS",
       "value_preview": "{'po_line_items': ['po_line_id', 'po_number', 'line_item_number', 'ordered_qty', 'po_value_usd'], 'p",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 186,
+      "line": 290,
+      "name": "SAP_RESERVATIONS_DERIVED",
+      "value_preview": "{'po_number': \"Extract before '-' from Main - PO Line to Peg to Reservation\", 'po_line_number': \"Ext",
+      "value_type": "dict"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 263,
+      "name": "SAP_RESERVATIONS_MAPPING",
+      "value_preview": "{'reservation_line_id': 'reservation_line_id', 'reservation_number': 'reservation_number', 'reservat",
+      "value_type": "dict"
+    },
+    {
+      "file": "scripts/config/column_mappings.py",
+      "line": 184,
       "name": "SBL_NAME_TO_CODE",
       "value_preview": "{'TCP - Tubing-Conveyed Perforation': 'TCPF', 'TCP-Tubing-Conveyed Perforation': 'TCPF', 'TS Downhol",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 212,
+      "line": 210,
       "name": "SIMPLE_ACCOUNT_CATEGORIES",
       "value_preview": "['K', 'P', 'S', 'V']",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 211,
+      "line": 209,
       "name": "SIMPLE_VENDOR_CATEGORY",
       "value_preview": "GLD",
       "value_type": "str"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 122,
+      "line": 120,
       "name": "VENDOR_NAME_MAPPING",
       "value_preview": "{'P9516': 'Dubai Hub', 'P9109': 'Houston Hub', 'P9517': 'Shanghai Hub', 'P9518': 'Singapore Hub', 'P",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 241,
+      "line": 239,
       "name": "WBS_DETAILS_MAPPING",
       "value_preview": "{'wbs_number': 'wbs_number', 'wbs_source': 'wbs_source', 'project_number': 'project_number', 'operat",
       "value_type": "dict"
@@ -2385,6 +2552,26 @@
     },
     {
       "args": [
+        "series"
+      ],
+      "called_by": [
+        "map_columns"
+      ],
+      "calls": [
+        "apply",
+        "endswith",
+        "isna",
+        "str"
+      ],
+      "docstring": "Convert numeric series to clean string (remove .0 suffix).",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 189,
+      "name": "clean_numeric_to_string",
+      "return_type": "pd.Series",
+      "signature": "def clean_numeric_to_string(series: pd.Series) -> pd.Series"
+    },
+    {
+      "args": [
         "val"
       ],
       "called_by": [],
@@ -2399,6 +2586,23 @@
       "name": "clean_po_number",
       "return_type": null,
       "signature": "def clean_po_number(val)"
+    },
+    {
+      "args": [
+        "val"
+      ],
+      "called_by": [],
+      "calls": [
+        "endswith",
+        "isna",
+        "str"
+      ],
+      "docstring": null,
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 192,
+      "name": "clean_val",
+      "return_type": null,
+      "signature": "def clean_val(val)"
     },
     {
       "args": [
@@ -2450,6 +2654,32 @@
         "main"
       ],
       "calls": [
+        "apply",
+        "dropna",
+        "float",
+        "int",
+        "isna",
+        "len",
+        "print",
+        "sorted",
+        "str",
+        "unique"
+      ],
+      "docstring": "Convert Plant from float to string.\n\nInput: 3606.0 -> Output: \"3606\"",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 157,
+      "name": "convert_plant_code",
+      "return_type": "pd.DataFrame",
+      "signature": "def convert_plant_code(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
         "astype",
         "notna",
         "print",
@@ -2488,6 +2718,50 @@
       "name": "enrich_data",
       "return_type": "pd.DataFrame",
       "signature": "def enrich_data(po_df: pd.DataFrame, enrichment: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "apply",
+        "isna",
+        "len",
+        "notna",
+        "print",
+        "split",
+        "str",
+        "strip",
+        "sum"
+      ],
+      "docstring": "Extract asset code and serial number from 'Maximo Asset Num'.\n\nFormat: \"XPS-CA|941\" -> asset_code=\"XPS-CA\", asset_serial_number=\"941\"\n\nNote: Some values may not have \"|\" separator (e.g., \"TCS92314Y1795\").\nIn those cases, the entire value goes to asset_code.",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 109,
+      "name": "extract_asset_info",
+      "return_type": "pd.DataFrame",
+      "signature": "def extract_asset_info(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "val"
+      ],
+      "called_by": [],
+      "calls": [
+        "isna",
+        "len",
+        "split",
+        "str",
+        "strip"
+      ],
+      "docstring": "Extract asset code and serial number from composite value.",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 127,
+      "name": "extract_asset_parts",
+      "return_type": null,
+      "signature": "def extract_asset_parts(val)"
     },
     {
       "args": [
@@ -2532,6 +2806,52 @@
       "name": "extract_parts",
       "return_type": null,
       "signature": "def extract_parts(val)"
+    },
+    {
+      "args": [
+        "val"
+      ],
+      "called_by": [],
+      "calls": [
+        "int",
+        "isna",
+        "rfind",
+        "str"
+      ],
+      "docstring": "Extract PO number and line number from composite key.",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 75,
+      "name": "extract_parts",
+      "return_type": null,
+      "signature": "def extract_parts(val)"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "apply",
+        "astype",
+        "int",
+        "isna",
+        "len",
+        "notna",
+        "print",
+        "rfind",
+        "str",
+        "sum",
+        "to_numeric",
+        "where"
+      ],
+      "docstring": "Extract PO number and line number from 'Main - PO Line to Peg to Reservation'.\n\nFormat: \"4584632148-1\" -> po_number=\"4584632148\", po_line_number=1\nAlso keeps the full value as po_line_item_id for relationship lookup.",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 58,
+      "name": "extract_po_info",
+      "return_type": "pd.DataFrame",
+      "signature": "def extract_po_info(df: pd.DataFrame) -> pd.DataFrame"
     },
     {
       "args": [
@@ -2754,6 +3074,24 @@
       "name": "find_input_file",
       "return_type": "Optional[Path]",
       "signature": "def find_input_file() -> Optional[Path]"
+    },
+    {
+      "args": [
+        "val"
+      ],
+      "called_by": [],
+      "calls": [
+        "float",
+        "int",
+        "isna",
+        "str"
+      ],
+      "docstring": null,
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 171,
+      "name": "float_to_str",
+      "return_type": null,
+      "signature": "def float_to_str(val)"
     },
     {
       "args": [
@@ -3094,6 +3432,23 @@
     },
     {
       "args": [],
+      "called_by": [],
+      "calls": [
+        "copy",
+        "len",
+        "notna",
+        "print",
+        "read_csv"
+      ],
+      "docstring": "Load intermediate reservations data.",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 39,
+      "name": "load_data",
+      "return_type": "pd.DataFrame",
+      "signature": "def load_data() -> pd.DataFrame"
+    },
+    {
+      "args": [],
       "called_by": [
         "main"
       ],
@@ -3161,7 +3516,7 @@
       ],
       "docstring": null,
       "file": "scripts/pipeline.py",
-      "line": 144,
+      "line": 153,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -3501,6 +3856,32 @@
       "signature": "def main()"
     },
     {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "convert_plant_code",
+        "exists",
+        "extract_asset_info",
+        "extract_po_info",
+        "len",
+        "load_data",
+        "map_columns",
+        "notna",
+        "print",
+        "save_data",
+        "sum",
+        "to_string",
+        "validate_output",
+        "value_counts"
+      ],
+      "docstring": null,
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 297,
+      "name": "main",
+      "return_type": null,
+      "signature": "def main()"
+    },
+    {
       "args": [
         "po_df"
       ],
@@ -3575,6 +3956,27 @@
       "docstring": "Map intermediate columns to database column names.",
       "file": "scripts/stage3_prepare/09_prepare_wbs_details.py",
       "line": 93,
+      "name": "map_columns",
+      "return_type": "pd.DataFrame",
+      "signature": "def map_columns(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [],
+      "calls": [
+        "DataFrame",
+        "astype",
+        "clean_numeric_to_string",
+        "items",
+        "len",
+        "print",
+        "to_numeric"
+      ],
+      "docstring": "Map CSV columns to database column names.",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 204,
       "name": "map_columns",
       "return_type": "pd.DataFrame",
       "signature": "def map_columns(df: pd.DataFrame) -> pd.DataFrame"
@@ -3835,7 +4237,7 @@
       ],
       "docstring": "Run the pipeline up to the specified stage.",
       "file": "scripts/pipeline.py",
-      "line": 99,
+      "line": 108,
       "name": "run_pipeline",
       "return_type": "bool",
       "signature": "def run_pipeline(max_stage: int) -> bool"
@@ -3855,7 +4257,7 @@
       ],
       "docstring": "Run a Python script and return success status.",
       "file": "scripts/pipeline.py",
-      "line": 62,
+      "line": 75,
       "name": "run_script",
       "return_type": "bool",
       "signature": "def run_script(script_path: Path, description: str) -> bool"
@@ -3875,7 +4277,7 @@
       ],
       "docstring": "Run all scripts in a stage.",
       "file": "scripts/pipeline.py",
-      "line": 81,
+      "line": 90,
       "name": "run_stage",
       "return_type": "bool",
       "signature": "def run_stage(stage_name: str, scripts: list) -> bool"
@@ -4172,6 +4574,26 @@
       "docstring": "Save import-ready DataFrame to CSV.",
       "file": "scripts/stage3_prepare/09_prepare_wbs_details.py",
       "line": 155,
+      "name": "save_data",
+      "return_type": "None",
+      "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
+    },
+    {
+      "args": [
+        "df",
+        "filepath"
+      ],
+      "called_by": [],
+      "calls": [
+        "len",
+        "list",
+        "mkdir",
+        "print",
+        "to_csv"
+      ],
+      "docstring": "Save import-ready DataFrame to CSV.",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 288,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -4491,6 +4913,26 @@
       "args": [
         "df"
       ],
+      "called_by": [],
+      "calls": [
+        "any",
+        "duplicated",
+        "get",
+        "isna",
+        "print",
+        "sum"
+      ],
+      "docstring": "Validate output using required column checks.",
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 258,
+      "name": "validate_output",
+      "return_type": "bool",
+      "signature": "def validate_output(df: pd.DataFrame) -> bool"
+    },
+    {
+      "args": [
+        "df"
+      ],
       "called_by": [
         "main"
       ],
@@ -4511,9 +4953,9 @@
     }
   ],
   "stats": {
-    "total_columns": 179,
-    "total_constants": 16,
-    "total_functions": 116,
+    "total_columns": 190,
+    "total_constants": 18,
+    "total_functions": 129,
     "total_tables": 11
   },
   "tables": [
@@ -4746,18 +5188,21 @@
         "createdAt",
         "description",
         "id",
+        "openReservationQty",
+        "openReservationValue",
         "partNumber",
+        "plantCode",
         "poLineItemId",
         "poLineNumber",
         "poNumber",
-        "requester",
+        "requesterAlias",
+        "reservationCreationDate",
         "reservationLineId",
         "reservationLineNumber",
         "reservationNumber",
-        "reservationQty",
         "reservationRequirementDate",
+        "reservationSource",
         "reservationStatus",
-        "reservationValue",
         "updatedAt",
         "wbsNumber"
       ],
@@ -4765,7 +5210,7 @@
       "foreign_keys": [
         {
           "column": "poLineItemId",
-          "references": "poLineItems.id"
+          "references": "poLineItems.poLineId"
         },
         {
           "column": "wbsNumber",

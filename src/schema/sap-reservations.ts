@@ -1,4 +1,4 @@
-import { uuid, varchar, text, numeric, date, integer, timestamp, unique } from 'drizzle-orm/pg-core';
+import { uuid, varchar, text, numeric, date, integer, timestamp, unique, index } from 'drizzle-orm/pg-core';
 import { wbsDetails } from './wbs-details';
 import { poLineItems } from './po-line-items';
 import { devV3Schema } from './_schema';
@@ -13,23 +13,40 @@ export const sapReservations = devV3Schema.table('sap_reservations', {
   reservationNumber: varchar('reservation_number').notNull(),
   reservationLineNumber: integer('reservation_line_number').notNull(),
   reservationRequirementDate: date('reservation_requirement_date'),
+  reservationCreationDate: date('reservation_creation_date'),
+  
   partNumber: varchar('part_number'),
   description: text('description'),
-  reservationQty: numeric('reservation_qty'),
-  reservationValue: numeric('reservation_value'),
+  
+  // Renamed: reservation_qty → open_reservation_qty, reservation_value → open_reservation_value
+  openReservationQty: numeric('open_reservation_qty'),
+  openReservationValue: numeric('open_reservation_value'),
+  
   reservationStatus: varchar('reservation_status'),
+  reservationSource: varchar('reservation_source'),
+  
   poNumber: varchar('po_number'),
   poLineNumber: integer('po_line_number'),
+  
   // WBS reference - links to wbs_details for project/operation context
   wbsNumber: varchar('wbs_number').references(() => wbsDetails.wbsNumber),
+  
   assetCode: varchar('asset_code'),
   assetSerialNumber: varchar('asset_serial_number'),
-  requester: varchar('requester'),
+  plantCode: varchar('plant_code'),
+  
+  // Renamed: requester → requester_alias
+  requesterAlias: varchar('requester_alias'),
+  
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
-  poLineItemId: uuid('po_line_item_id').references(() => poLineItems.id),
+  
+  // FK to po_line_items via business key (e.g., "4584632148-1")
+  poLineItemId: varchar('po_line_item_id').references(() => poLineItems.poLineId),
 }, (table) => [
   unique('sap_reservations_unique_line').on(table.reservationNumber, table.reservationLineNumber),
+  // Index for efficient lookups on the PO line relationship
+  index('sap_reservations_po_line_item_id_idx').on(table.poLineItemId),
 ]);
 
 export type SapReservation = typeof sapReservations.$inferSelect;

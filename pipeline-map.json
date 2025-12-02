@@ -75,6 +75,22 @@
       "Posting Qty": "quantity",
       "Posting Type": "transaction_type"
     },
+    "SAP_RESERVATIONS_MAPPING": {
+      "Combined SOH & PO Pegging": "reservation_status",
+      "Creation Date": "reservation_creation_date",
+      "Goods recipient": "requester_alias",
+      "Material": "part_number",
+      "Material Description": "description",
+      "Open Qty - Reservation": "open_reservation_qty",
+      "Open Reservation Value": "open_reservation_value",
+      "Plant": "plant_code",
+      "Requirements Date": "reservation_requirement_date",
+      "Reservation Creation type": "reservation_source",
+      "WBS Element": "wbs_number",
+      "reservation_line_id": "reservation_line_id",
+      "reservation_line_number": "reservation_line_number",
+      "reservation_number": "reservation_number"
+    },
     "SIMPLE_ACCOUNT_CATEGORIES": [
       "K",
       "P",
@@ -180,6 +196,7 @@
       "grir_exposures.csv",
       "po_line_items.csv",
       "po_transactions.csv",
+      "sap_reservations.csv",
       "wbs_details.csv"
     ],
     "intermediate": [
@@ -190,6 +207,7 @@
       "po_details_enrichment.csv",
       "po_line_items.csv",
       "reservations.csv",
+      "unmatched_reservation_pos.csv",
       "wbs_from_operations.csv",
       "wbs_from_ops_activities.csv",
       "wbs_from_projects.csv",
@@ -298,12 +316,12 @@
       "path": "data/import-ready/grir_exposures.csv",
       "row_count": 67,
       "sample_row": {
-        "days_open": 12,
+        "days_open": 13,
         "first_exposure_date": "2025-11-19",
         "grir_qty": 4.0,
         "grir_value": 9576.8,
         "po_line_id": "4584221231-13",
-        "snapshot_date": "2025-12-01",
+        "snapshot_date": "2025-12-02",
         "time_bucket": "<1 month"
       }
     },
@@ -882,6 +900,154 @@
         "reservation_number": 6086214878.0
       }
     },
+    "sap_reservations.csv": {
+      "columns": [
+        "asset_code",
+        "asset_serial_number",
+        "description",
+        "open_reservation_qty",
+        "open_reservation_value",
+        "part_number",
+        "plant_code",
+        "po_line_item_id",
+        "po_line_number",
+        "po_number",
+        "requester_alias",
+        "reservation_creation_date",
+        "reservation_line_id",
+        "reservation_line_number",
+        "reservation_number",
+        "reservation_requirement_date",
+        "reservation_source",
+        "reservation_status",
+        "wbs_number"
+      ],
+      "dtypes": {
+        "asset_code": "object",
+        "asset_serial_number": "object",
+        "description": "object",
+        "open_reservation_qty": "float64",
+        "open_reservation_value": "float64",
+        "part_number": "object",
+        "plant_code": "int64",
+        "po_line_item_id": "object",
+        "po_line_number": "float64",
+        "po_number": "float64",
+        "requester_alias": "object",
+        "reservation_creation_date": "object",
+        "reservation_line_id": "object",
+        "reservation_line_number": "int64",
+        "reservation_number": "int64",
+        "reservation_requirement_date": "object",
+        "reservation_source": "object",
+        "reservation_status": "object",
+        "wbs_number": "object"
+      },
+      "null_counts": {
+        "asset_code": 810,
+        "asset_serial_number": 839,
+        "po_line_item_id": 966,
+        "po_line_number": 966,
+        "po_number": 966,
+        "requester_alias": 14,
+        "wbs_number": 1186
+      },
+      "path": "data/import-ready/sap_reservations.csv",
+      "row_count": 1483,
+      "sample_row": {
+        "asset_code": NaN,
+        "asset_serial_number": NaN,
+        "description": "CENTER BODY, ARM MOUNTING",
+        "open_reservation_qty": 1.0,
+        "open_reservation_value": 5757.2104,
+        "part_number": "100109883",
+        "plant_code": 3606,
+        "po_line_item_id": "4584632148-1",
+        "po_line_number": 1.0,
+        "po_number": 4584632148.0,
+        "requester_alias": "02307312",
+        "reservation_creation_date": "2025-11-24",
+        "reservation_line_id": "6086214878-1",
+        "reservation_line_number": 1,
+        "reservation_number": 6086214878,
+        "reservation_requirement_date": "2025-11-25",
+        "reservation_source": "MAXIMO",
+        "reservation_status": "04. PO Available to Peg",
+        "wbs_number": NaN
+      }
+    },
+    "unmatched_reservation_pos.csv": {
+      "columns": [
+        "asset_code",
+        "asset_serial_number",
+        "description",
+        "open_reservation_qty",
+        "open_reservation_value",
+        "part_number",
+        "plant_code",
+        "po_line_item_id",
+        "po_line_number",
+        "po_number",
+        "requester_alias",
+        "reservation_creation_date",
+        "reservation_line_id",
+        "reservation_line_number",
+        "reservation_number",
+        "reservation_requirement_date",
+        "reservation_source",
+        "reservation_status",
+        "wbs_number"
+      ],
+      "dtypes": {
+        "asset_code": "object",
+        "asset_serial_number": "float64",
+        "description": "object",
+        "open_reservation_qty": "float64",
+        "open_reservation_value": "float64",
+        "part_number": "object",
+        "plant_code": "int64",
+        "po_line_item_id": "object",
+        "po_line_number": "float64",
+        "po_number": "float64",
+        "requester_alias": "object",
+        "reservation_creation_date": "object",
+        "reservation_line_id": "object",
+        "reservation_line_number": "int64",
+        "reservation_number": "int64",
+        "reservation_requirement_date": "object",
+        "reservation_source": "object",
+        "reservation_status": "object",
+        "wbs_number": "object"
+      },
+      "null_counts": {
+        "asset_code": 28,
+        "asset_serial_number": 28,
+        "wbs_number": 19
+      },
+      "path": "data/intermediate/unmatched_reservation_pos.csv",
+      "row_count": 30,
+      "sample_row": {
+        "asset_code": NaN,
+        "asset_serial_number": NaN,
+        "description": "HOUSING, POWER UNIT",
+        "open_reservation_qty": 1.0,
+        "open_reservation_value": 3542.4207,
+        "part_number": "J971840",
+        "plant_code": 3606,
+        "po_line_item_id": "4584632535-1",
+        "po_line_number": 1.0,
+        "po_number": 4584632535.0,
+        "requester_alias": "02307312",
+        "reservation_creation_date": "2025-11-24",
+        "reservation_line_id": "6086214878-2",
+        "reservation_line_number": 2,
+        "reservation_number": 6086214878,
+        "reservation_requirement_date": "2025-11-25",
+        "reservation_source": "MAXIMO",
+        "reservation_status": "04. PO Available to Peg",
+        "wbs_number": NaN
+      }
+    },
     "wbs_details.csv": {
       "columns": [
         "client_name",
@@ -1128,7 +1294,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-01T14:30:06.024767+00:00",
+  "generated_at": "2025-12-02T04:16:01.901434+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1723,13 +1889,25 @@
           "type": "uuid"
         },
         {
+          "name": "openReservationQty",
+          "type": "numeric"
+        },
+        {
+          "name": "openReservationValue",
+          "type": "numeric"
+        },
+        {
           "name": "partNumber",
           "type": "varchar"
         },
         {
+          "name": "plantCode",
+          "type": "varchar"
+        },
+        {
           "name": "poLineItemId",
-          "references": "poLineItems.id",
-          "type": "uuid"
+          "references": "poLineItems.poLineId",
+          "type": "varchar"
         },
         {
           "name": "poLineNumber",
@@ -1740,8 +1918,12 @@
           "type": "varchar"
         },
         {
-          "name": "requester",
+          "name": "requesterAlias",
           "type": "varchar"
+        },
+        {
+          "name": "reservationCreationDate",
+          "type": "date"
         },
         {
           "name": "reservationLineId",
@@ -1760,20 +1942,16 @@
           "type": "varchar"
         },
         {
-          "name": "reservationQty",
-          "type": "numeric"
-        },
-        {
           "name": "reservationRequirementDate",
           "type": "date"
         },
         {
-          "name": "reservationStatus",
+          "name": "reservationSource",
           "type": "varchar"
         },
         {
-          "name": "reservationValue",
-          "type": "numeric"
+          "name": "reservationStatus",
+          "type": "varchar"
         },
         {
           "name": "updatedAt",
@@ -4110,6 +4288,429 @@
     },
     {
       "dependencies": [],
+      "docstring": "Stage 3: Prepare SAP Reservations for Import\n\nMaps intermediate columns to database schema columns and extracts\nderived fields (PO info, asset info).\n\nTransformations:\n1. Map CSV columns to database column names\n2. Extract po_number and po_line_number from \"Main - PO Line to Peg to Reservation\"\n3. Extract asset_code and asset_serial_number from \"Maximo Asset Num\"\n4. Convert Plant from float to string for plant_code\n5. Keep po_line_item_id as the full PO-Line composite key for relationship\n\nDependencies: scripts/stage1_clean/13_reservations.py\nInput: data/intermediate/reservations.csv\nOutput: data/import-ready/sap_reservations.csv",
+      "functions": [
+        {
+          "args": [
+            "series"
+          ],
+          "docstring": "Convert numeric series to clean string (remove .0 suffix).",
+          "line": 189,
+          "name": "clean_numeric_to_string",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "val"
+          ],
+          "docstring": null,
+          "line": 192,
+          "name": "clean_val",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Convert Plant from float to string.\n\nInput: 3606.0 -> Output: \"3606\"",
+          "line": 157,
+          "name": "convert_plant_code",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Extract asset code and serial number from 'Maximo Asset Num'.\n\nFormat: \"XPS-CA|941\" -> asset_code=\"XPS-CA\", asset_serial_number=\"941\"\n\nNote: Some values may not have \"|\" separator (e.g., \"TCS92314Y1795\").\nIn those cases, the entire value goes to asset_code.",
+          "line": 109,
+          "name": "extract_asset_info",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "asset_code",
+              "asset_serial_number"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "val"
+          ],
+          "docstring": "Extract asset code and serial number from composite value.",
+          "line": 127,
+          "name": "extract_asset_parts",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "val"
+          ],
+          "docstring": "Extract PO number and line number from composite key.",
+          "line": 75,
+          "name": "extract_parts",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Extract PO number and line number from 'Main - PO Line to Peg to Reservation'.\n\nFormat: \"4584632148-1\" -> po_number=\"4584632148\", po_line_number=1\nAlso keeps the full value as po_line_item_id for relationship lookup.",
+          "line": 58,
+          "name": "extract_po_info",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "po_line_item_id",
+              "po_line_number",
+              "po_number"
+            ],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
+          "args": [
+            "val"
+          ],
+          "docstring": null,
+          "line": 171,
+          "name": "float_to_str",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": "Load intermediate reservations data.",
+          "line": 39,
+          "name": "load_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [],
+          "docstring": null,
+          "line": 297,
+          "name": "main",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Map CSV columns to database column names.",
+          "line": 204,
+          "name": "map_columns",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "po_line_number",
+              "po_number",
+              "reservation_line_number",
+              "reservation_number"
+            ],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
+          "args": [
+            "df",
+            "filepath"
+          ],
+          "docstring": "Save import-ready DataFrame to CSV.",
+          "line": 288,
+          "name": "save_data",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
+            "df"
+          ],
+          "docstring": "Validate output using required column checks.",
+          "line": 258,
+          "name": "validate_output",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        }
+      ],
+      "imports": [
+        "config.column_mappings",
+        "pandas",
+        "pathlib",
+        "sys"
+      ],
+      "inputs": [
+        "data/intermediate/reservations.csv"
+      ],
+      "line_count": 347,
+      "name": "10_prepare_reservations",
+      "outputs": [
+        "data/intermediate/reservations.csv"
+      ],
+      "pandas_operations": [
+        {
+          "code_snippet": "parts = df[source_col].apply(extract_asset_parts)",
+          "description": "Applies function to data",
+          "line": 139,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[\"asset_code\"] = parts.apply(lambda x: x[0])",
+          "description": "Applies function to data",
+          "line": 140,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[\"asset_serial_number\"] = parts.apply(lambda x: x[1])",
+          "description": "Applies function to data",
+          "line": 141,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[source_col] = df[source_col].apply(float_to_str)",
+          "description": "Applies function to data",
+          "line": 179,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "return series.apply(clean_val)",
+          "description": "Applies function to data",
+          "line": 201,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "parts = df[source_col].apply(extract_parts)",
+          "description": "Applies function to data",
+          "line": 92,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "df[\"po_number\"] = parts.apply(lambda x: x[0])",
+          "description": "Applies function to data",
+          "line": 93,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "parts.apply(lambda x: x[1]), errors=\"coerce\"",
+          "description": "Applies function to data",
+          "line": 95,
+          "operation": "apply"
+        },
+        {
+          "code_snippet": "output_df[\"reservation_line_number\"] = pd.to_numeric(",
+          "description": "Converts column types",
+          "line": 240,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "output_df[\"po_line_number\"] = pd.to_numeric(",
+          "description": "Converts column types",
+          "line": 250,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "df[\"po_line_number\"] = pd.to_numeric(",
+          "description": "Converts column types",
+          "line": 94,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "output_df[db_col] = df[csv_col]",
+          "description": "Filters rows based on boolean condition",
+          "line": 214,
+          "operation": "boolean_filter"
+        },
+        {
+          "code_snippet": "output_df[col] = df[col]",
+          "description": "Filters rows based on boolean condition",
+          "line": 229,
+          "operation": "boolean_filter"
+        },
+        {
+          "code_snippet": "df[\"asset_code\"] = pd.NA",
+          "column": "asset_code",
+          "description": "Creates/modifies column 'asset_code'",
+          "line": 123,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"asset_code\"] = parts.apply(lambda x: x[0])",
+          "column": "asset_code",
+          "description": "Creates/modifies column 'asset_code'",
+          "line": 140,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"asset_serial_number\"] = pd.NA",
+          "column": "asset_serial_number",
+          "description": "Creates/modifies column 'asset_serial_number'",
+          "line": 124,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"asset_serial_number\"] = parts.apply(lambda x: x[1])",
+          "column": "asset_serial_number",
+          "description": "Creates/modifies column 'asset_serial_number'",
+          "line": 141,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"po_line_item_id\"] = pd.NA",
+          "column": "po_line_item_id",
+          "description": "Creates/modifies column 'po_line_item_id'",
+          "line": 72,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"po_line_item_id\"] = df[source_col].where(",
+          "column": "po_line_item_id",
+          "description": "Creates/modifies column 'po_line_item_id'",
+          "line": 99,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "output_df[\"po_line_number\"] = pd.to_numeric(",
+          "column": "po_line_number",
+          "description": "Creates/modifies column 'po_line_number'",
+          "line": 250,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"po_line_number\"] = pd.NA",
+          "column": "po_line_number",
+          "description": "Creates/modifies column 'po_line_number'",
+          "line": 71,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"po_line_number\"] = pd.to_numeric(",
+          "column": "po_line_number",
+          "description": "Creates/modifies column 'po_line_number'",
+          "line": 94,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "output_df[\"po_number\"] = clean_numeric_to_string(output_df[\"po_number\"])",
+          "column": "po_number",
+          "description": "Creates/modifies column 'po_number'",
+          "line": 246,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"po_number\"] = pd.NA",
+          "column": "po_number",
+          "description": "Creates/modifies column 'po_number'",
+          "line": 70,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"po_number\"] = parts.apply(lambda x: x[0])",
+          "column": "po_number",
+          "description": "Creates/modifies column 'po_number'",
+          "line": 93,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "output_df[\"reservation_line_number\"] = pd.to_numeric(",
+          "column": "reservation_line_number",
+          "description": "Creates/modifies column 'reservation_line_number'",
+          "line": 240,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "output_df[\"reservation_number\"] = clean_numeric_to_string(",
+          "column": "reservation_number",
+          "description": "Creates/modifies column 'reservation_number'",
+          "line": 234,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "unique_plants = df[source_col].dropna().unique()",
+          "description": "Removes null values",
+          "line": 181,
+          "operation": "dropna"
+        }
+      ],
+      "path": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "stage": "stage3_prepare"
+    },
+    {
+      "dependencies": [],
       "docstring": "Stage 1: Extract WBS Data from Projects Report\n\nReads the FDP Projects dashboard export and extracts/cleans WBS-related fields.\nThis script maintains 1:1 row traceability with the source file.\nWBS splitting (for comma-separated entries) happens in Stage 2.\n\nCaching: Extracts data from xlsx to CSV cache. Only reprocesses xlsx if:\n- Source file changed (different filename, mtime, or size)\n- Script code changed (including config dependencies)\n- Use --force to bypass cache\n\nDependencies: None (reads from raw)\nInput: data/raw/fdp/ProjectDashboard_Export_*.xlsx\nOutput: data/intermediate/wbs_from_projects.csv",
       "functions": [
         {
@@ -4761,7 +5362,9 @@
       "stage": "stage1_clean"
     },
     {
-      "dependencies": [],
+      "dependencies": [
+        "10_prepare_reservations"
+      ],
       "docstring": "Stage 1: Clean Reservations\n\nReads raw reservations Excel file and performs:\n1. Removes rows where both business line columns (Profit Center and Cost Center)\n   have matching values of WCM, WCF, or WCD (internal transfers/overhead).\n2. Splits \"Reservation -Line\" column into components:\n   - reservation_line_id: Original combined key (e.g., \"6086214878-1\")\n   - reservation_number: The reservation part (e.g., \"6086214878\")\n   - reservation_line_number: The line number as integer (e.g., 1)\n3. Normalizes PO Line IDs to match po_line_items format:\n   - Strips leading zeros from line numbers (e.g., \"4584632148-00001\" -> \"4584632148-1\")\n   - Cleans PO numbers (removes .0 suffix from float conversion)\n\nDependencies: None (independent stage 1 script)\nInput: data/raw/reservations/Data Table - Open Reservation - *.xlsx\nOutput: data/intermediate/reservations.csv",
       "functions": [
         {
@@ -5014,12 +5617,12 @@
     },
     {
       "dependencies": [],
-      "docstring": "Data Pipeline Orchestrator\n\nRuns all data transformation scripts in the correct order to produce\nimport-ready CSV files from raw data.\n\nUsage:\n    python3 scripts/pipeline.py           # Run full pipeline\n    python3 scripts/pipeline.py --stage1  # Run only stage 1\n    python3 scripts/pipeline.py --stage2  # Run stages 1-2\n    python3 scripts/pipeline.py --stage3  # Run all stages (same as full)\n\nPipeline Stages:\n    Stage 1 (Clean):     Raw data \u2192 Intermediate (cleaned)\n    Stage 2 (Transform): Intermediate \u2192 Intermediate (enriched + cost impact)\n    Stage 3 (Prepare):   Intermediate \u2192 Import-ready (DB schema mapped)\n\nOutput:\n    data/import-ready/po_line_items.csv   \u2192 po_line_items table\n    data/import-ready/po_transactions.csv \u2192 po_transactions table\n    data/import-ready/grir_exposures.csv  \u2192 grir_exposures table\n    data/import-ready/wbs_details.csv     \u2192 wbs_details table",
+      "docstring": "Data Pipeline Orchestrator\n\nRuns all data transformation scripts in the correct order to produce\nimport-ready CSV files from raw data.\n\nUsage:\n    python3 scripts/pipeline.py           # Run full pipeline\n    python3 scripts/pipeline.py --stage1  # Run only stage 1\n    python3 scripts/pipeline.py --stage2  # Run stages 1-2\n    python3 scripts/pipeline.py --stage3  # Run all stages (same as full)\n\nPipeline Stages:\n    Stage 1 (Clean):     Raw data \u2192 Intermediate (cleaned)\n    Stage 2 (Transform): Intermediate \u2192 Intermediate (enriched + cost impact)\n    Stage 3 (Prepare):   Intermediate \u2192 Import-ready (DB schema mapped)\n\nOutput:\n    data/import-ready/po_line_items.csv    \u2192 po_line_items table\n    data/import-ready/po_transactions.csv  \u2192 po_transactions table\n    data/import-ready/grir_exposures.csv   \u2192 grir_exposures table\n    data/import-ready/wbs_details.csv      \u2192 wbs_details table\n    data/import-ready/sap_reservations.csv \u2192 sap_reservations table",
       "functions": [
         {
           "args": [],
           "docstring": null,
-          "line": 144,
+          "line": 153,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -5035,7 +5638,7 @@
             "max_stage"
           ],
           "docstring": "Run the pipeline up to the specified stage.",
-          "line": 99,
+          "line": 108,
           "name": "run_pipeline",
           "semantics": {
             "aggregates": false,
@@ -5052,7 +5655,7 @@
             "script_path"
           ],
           "docstring": "Run a Python script and return success status.",
-          "line": 62,
+          "line": 75,
           "name": "run_script",
           "semantics": {
             "aggregates": false,
@@ -5069,7 +5672,7 @@
             "stage_name"
           ],
           "docstring": "Run all scripts in a stage.",
-          "line": 81,
+          "line": 90,
           "name": "run_stage",
           "semantics": {
             "aggregates": false,
@@ -5089,7 +5692,7 @@
         "sys"
       ],
       "inputs": [],
-      "line_count": 177,
+      "line_count": 189,
       "name": "pipeline",
       "outputs": [],
       "pandas_operations": [],

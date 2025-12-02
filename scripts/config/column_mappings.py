@@ -15,25 +15,21 @@ Naming conventions:
 PO_LINE_ITEMS_MAPPING = {
     # Business key
     "PO Line ID": "po_line_id",
-    
     # PO Header fields
     "PO Number": "po_number",
     "PO Document Date": "po_creation_date",
     "Plant Code": "plant_code",
     "Location": "location",
     "SL Sub-Business Line Code (BV Lvl 3)": "sub_business_line",
-    
     # Purchase Requisition
     "PR Number": "pr_number",
     "PR Line": "pr_line",
     "Requester": "requester",
-    
     # Vendor information
     "Main Vendor ID": "vendor_id",
     "Main Vendor Name": "vendor_name",
     "Main Vendor SLB Vendor Category": "vendor_category",
     "Ultimate Vendor Name": "ultimate_vendor_name",
-    
     # Line item fields
     "PO Line": "line_item_number",
     "PO Material Number": "part_number",
@@ -41,24 +37,19 @@ PO_LINE_ITEMS_MAPPING = {
     "Ordered Quantity": "ordered_qty",
     "PO Order Unit": "order_unit",
     "Purchase Value USD": "po_value_usd",
-    
     # Cost classification
     "PO Account Assignment Category": "account_assignment_category",
     "NIS Line": "nis_line",
     "PO WBS Element": "wbs_number",
-    
     # Asset reference (placeholder - not in current CSV)
     # "Asset Code": "asset_code",
-    
     # Dates
     "Expected Delivery Date": "expected_delivery_date",
-    
     # Status flags
     "PO Approval Status": "po_approval_status",
     "PO Receipt Status": "po_receipt_status",
     "PO GTS Status": "po_gts_status",
     # "FMT PO": "fmt_po",  # Calculated field
-    
     # Open PO values (calculated in stage3 from cost_impact)
     # "Open PO Qty": "open_po_qty",
     # "Open PO Value": "open_po_value",
@@ -66,9 +57,9 @@ PO_LINE_ITEMS_MAPPING = {
 
 # Columns that are calculated/derived in stage3 (not from source CSV)
 PO_LINE_ITEMS_CALCULATED = [
-    "open_po_qty",      # ordered_qty - SUM(cost_impact_qty)
-    "open_po_value",    # po_value_usd - SUM(cost_impact_amount)
-    "fmt_po",           # Boolean flag (default False for now)
+    "open_po_qty",  # ordered_qty - SUM(cost_impact_qty)
+    "open_po_value",  # po_value_usd - SUM(cost_impact_amount)
+    "fmt_po",  # Boolean flag (default False for now)
 ]
 
 
@@ -110,6 +101,13 @@ REQUIRED_COLUMNS = {
         "grir_qty",
         "grir_value",
         "snapshot_date",
+    ],
+    "sap_reservations": [
+        "reservation_line_id",
+        "reservation_number",
+        "reservation_line_number",
+        "open_reservation_qty",
+        "open_reservation_value",
     ],
 }
 
@@ -241,24 +239,60 @@ GRIR_TIME_BUCKET_MAX = ">1 year"
 WBS_DETAILS_MAPPING = {
     # Primary business key (globally unique across all FDP reports)
     "wbs_number": "wbs_number",
-    
     # Source tracking
     "wbs_source": "wbs_source",  # Project, Operation, Operation Activity
-    
     # Source identifiers
     "project_number": "project_number",
     "operation_number": "operation_number",
     "ops_activity_number": "ops_activity_number",
-    
     # Descriptive fields
     "wbs_name": "wbs_name",
     "client_name": "client_name",
-    
     # Equipment and location
     "rig": "rig",
     "ops_district": "ops_district",  # e.g., "Roma WL", "Moomba WL"
     "location": "location",  # Mapped from ops_district
-    
     # Business classification (JSON array in CSV -> PostgreSQL text[] in DB)
     "sub_business_lines": "sub_business_lines",
+}
+
+
+# =============================================================================
+# SAP RESERVATIONS: Intermediate CSV → Database columns
+# =============================================================================
+SAP_RESERVATIONS_MAPPING = {
+    # Business key (created in stage 1)
+    "reservation_line_id": "reservation_line_id",
+    # Split components (created in stage 1)
+    "reservation_number": "reservation_number",
+    "reservation_line_number": "reservation_line_number",
+    # Dates
+    "Creation Date": "reservation_creation_date",
+    "Requirements Date": "reservation_requirement_date",
+    # Material info
+    "Material": "part_number",
+    "Material Description": "description",
+    # Open values (renamed in DB schema)
+    "Open Qty - Reservation": "open_reservation_qty",
+    "Open Reservation Value": "open_reservation_value",
+    # Status and source
+    "Combined SOH & PO Pegging": "reservation_status",
+    "Reservation Creation type": "reservation_source",
+    # WBS reference
+    "WBS Element": "wbs_number",
+    # Requester (renamed in DB schema)
+    "Goods recipient": "requester_alias",
+    # Plant (needs float -> string conversion in stage3)
+    "Plant": "plant_code",
+}
+
+# Columns derived/extracted in stage3 (not direct mappings)
+SAP_RESERVATIONS_DERIVED = {
+    # Extracted from "Main - PO Line to Peg to Reservation" (e.g., "4584632148-1")
+    "po_number": "Extract before '-' from Main - PO Line to Peg to Reservation",
+    "po_line_number": "Extract after '-' from Main - PO Line to Peg to Reservation",
+    "po_line_item_id": "Full value from Main - PO Line to Peg to Reservation",
+    # Extracted from "Maximo Asset Num" (e.g., "XPS-CA|941")
+    "asset_code": "Extract before '|' from Maximo Asset Num",
+    "asset_serial_number": "Extract after '|' from Maximo Asset Num",
 }

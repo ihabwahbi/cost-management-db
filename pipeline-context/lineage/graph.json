@@ -220,6 +220,32 @@
         "type": "WRITES"
       }
     ],
+    "Plant": [
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 140,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 141,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 93,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 94,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      }
+    ],
     "Plant Code": [
       {
         "file": "scripts/stage1_clean/01_po_line_items.py",
@@ -446,6 +472,34 @@
         "type": "WRITES"
       }
     ],
+    "asset_code": [
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 123,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 140,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      }
+    ],
+    "asset_serial_number": [
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 124,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 141,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      }
+    ],
     "cost_impact_amount": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
@@ -636,6 +690,72 @@
         "type": "READS"
       }
     ],
+    "po_line_item_id": [
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 72,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 99,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      }
+    ],
+    "po_line_number": [
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 250,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 250,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 71,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 94,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      }
+    ],
+    "po_number": [
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 246,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 246,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 70,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 93,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      }
+    ],
     "project_type": [
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
@@ -660,6 +780,12 @@
     ],
     "reservation_line_id": [
       {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 99,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      },
+      {
         "file": "scripts/stage1_clean/13_reservations.py",
         "line": 67,
         "script": "13_reservations",
@@ -668,6 +794,18 @@
     ],
     "reservation_line_number": [
       {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 240,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 240,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
+      {
         "file": "scripts/stage1_clean/13_reservations.py",
         "line": 83,
         "script": "13_reservations",
@@ -675,6 +813,18 @@
       }
     ],
     "reservation_number": [
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 234,
+        "script": "10_prepare_reservations",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+        "line": 234,
+        "script": "10_prepare_reservations",
+        "type": "WRITES"
+      },
       {
         "file": "scripts/stage1_clean/13_reservations.py",
         "line": 80,
@@ -1015,6 +1165,42 @@
       "type": "TRANSFORMS"
     },
     {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 140,
+      "operation": "parts.apply(lambda x: x[0])",
+      "script": "10_prepare_reservations",
+      "source": "column:Plant",
+      "target": "column:asset_code",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 141,
+      "operation": "parts.apply(lambda x: x[1])",
+      "script": "10_prepare_reservations",
+      "source": "column:Plant",
+      "target": "column:asset_serial_number",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 94,
+      "operation": "pd.to_numeric(parts.apply(lambda x: x[1]), errors='coerce').astype('Int64')",
+      "script": "10_prepare_reservations",
+      "source": "column:Plant",
+      "target": "column:po_line_number",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 93,
+      "operation": "parts.apply(lambda x: x[0])",
+      "script": "10_prepare_reservations",
+      "source": "column:Plant",
+      "target": "column:po_number",
+      "type": "TRANSFORMS"
+    },
+    {
       "source": "column:Posting Amount",
       "table": "po_transactions",
       "target": "db_column:po_transactions.amount",
@@ -1249,6 +1435,24 @@
       "type": "TRANSFORMS"
     },
     {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 250,
+      "operation": "pd.to_numeric(output_df['po_line_number'], errors='coerce').astype('Int64')",
+      "script": "10_prepare_reservations",
+      "source": "column:po_line_number",
+      "target": "column:po_line_number",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 246,
+      "operation": "clean_numeric_to_string(output_df['po_number'])",
+      "script": "10_prepare_reservations",
+      "source": "column:po_number",
+      "target": "column:po_number",
+      "type": "TRANSFORMS"
+    },
+    {
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
       "line": 134,
       "operation": "df['rigs'].where(df['rigs'].notna() & (df['rigs'].astype(str).str.strip() != ''), df['project_type']",
@@ -1264,6 +1468,33 @@
       "script": "07_prepare_po_transactions",
       "source": "column:quantity",
       "target": "column:quantity",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 99,
+      "operation": "df[source_col].where(df[source_col].notna() & (df[source_col] != 'nan'), pd.NA)",
+      "script": "10_prepare_reservations",
+      "source": "column:reservation_line_id",
+      "target": "column:po_line_item_id",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 240,
+      "operation": "pd.to_numeric(output_df['reservation_line_number'], errors='coerce').astype('Int64')",
+      "script": "10_prepare_reservations",
+      "source": "column:reservation_line_number",
+      "target": "column:reservation_line_number",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/10_prepare_reservations.py",
+      "line": 234,
+      "operation": "clean_numeric_to_string(output_df['reservation_number'])",
+      "script": "10_prepare_reservations",
+      "source": "column:reservation_number",
+      "target": "column:reservation_number",
       "type": "TRANSFORMS"
     },
     {
@@ -1467,6 +1698,11 @@
     {
       "source": "file:data/intermediate/po_line_items.csv",
       "target": "script:06_prepare_po_line_items",
+      "type": "INPUT"
+    },
+    {
+      "source": "file:data/intermediate/reservations.csv",
+      "target": "script:10_prepare_reservations",
       "type": "INPUT"
     },
     {
@@ -1693,6 +1929,16 @@
       "source": "script:09_prepare_wbs_details",
       "target": "file:data/intermediate/wbs_processed.csv",
       "type": "OUTPUT"
+    },
+    {
+      "source": "script:10_prepare_reservations",
+      "target": "file:data/intermediate/reservations.csv",
+      "type": "OUTPUT"
+    },
+    {
+      "source": "script:10_prepare_reservations",
+      "target": "script:13_reservations",
+      "type": "DEPENDS_ON"
     },
     {
       "source": "script:10_wbs_from_projects",
@@ -1929,6 +2175,11 @@
       "name": "PR Number",
       "type": "column"
     },
+    "column:Plant": {
+      "id": "column:Plant",
+      "name": "Plant",
+      "type": "column"
+    },
     "column:Plant Code": {
       "id": "column:Plant Code",
       "name": "Plant Code",
@@ -2047,6 +2298,24 @@
       "name": "amount",
       "type": "column"
     },
+    "column:asset_code": {
+      "created_by": [
+        "scripts/stage3_prepare/10_prepare_reservations.py:123",
+        "scripts/stage3_prepare/10_prepare_reservations.py:140"
+      ],
+      "id": "column:asset_code",
+      "name": "asset_code",
+      "type": "column"
+    },
+    "column:asset_serial_number": {
+      "created_by": [
+        "scripts/stage3_prepare/10_prepare_reservations.py:124",
+        "scripts/stage3_prepare/10_prepare_reservations.py:141"
+      ],
+      "id": "column:asset_serial_number",
+      "name": "asset_serial_number",
+      "type": "column"
+    },
     "column:cost_impact_amount": {
       "created_by": [
         "scripts/stage3_prepare/07_prepare_po_transactions.py:62"
@@ -2141,6 +2410,35 @@
       "name": "ops_district",
       "type": "column"
     },
+    "column:po_line_item_id": {
+      "created_by": [
+        "scripts/stage3_prepare/10_prepare_reservations.py:72",
+        "scripts/stage3_prepare/10_prepare_reservations.py:99"
+      ],
+      "id": "column:po_line_item_id",
+      "name": "po_line_item_id",
+      "type": "column"
+    },
+    "column:po_line_number": {
+      "created_by": [
+        "scripts/stage3_prepare/10_prepare_reservations.py:250",
+        "scripts/stage3_prepare/10_prepare_reservations.py:71",
+        "scripts/stage3_prepare/10_prepare_reservations.py:94"
+      ],
+      "id": "column:po_line_number",
+      "name": "po_line_number",
+      "type": "column"
+    },
+    "column:po_number": {
+      "created_by": [
+        "scripts/stage3_prepare/10_prepare_reservations.py:246",
+        "scripts/stage3_prepare/10_prepare_reservations.py:70",
+        "scripts/stage3_prepare/10_prepare_reservations.py:93"
+      ],
+      "id": "column:po_number",
+      "name": "po_number",
+      "type": "column"
+    },
     "column:project_type": {
       "id": "column:project_type",
       "name": "project_type",
@@ -2164,7 +2462,8 @@
     },
     "column:reservation_line_number": {
       "created_by": [
-        "scripts/stage1_clean/13_reservations.py:83"
+        "scripts/stage1_clean/13_reservations.py:83",
+        "scripts/stage3_prepare/10_prepare_reservations.py:240"
       ],
       "id": "column:reservation_line_number",
       "name": "reservation_line_number",
@@ -2172,7 +2471,8 @@
     },
     "column:reservation_number": {
       "created_by": [
-        "scripts/stage1_clean/13_reservations.py:80"
+        "scripts/stage1_clean/13_reservations.py:80",
+        "scripts/stage3_prepare/10_prepare_reservations.py:234"
       ],
       "id": "column:reservation_number",
       "name": "reservation_number",
@@ -3539,6 +3839,30 @@
       "table": "sap_reservations",
       "type": "db_column"
     },
+    "db_column:sap_reservations.openReservationQty": {
+      "column": "openReservationQty",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "numeric",
+      "id": "db_column:sap_reservations.openReservationQty",
+      "table": "sap_reservations",
+      "type": "db_column"
+    },
+    "db_column:sap_reservations.openReservationValue": {
+      "column": "openReservationValue",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "numeric",
+      "id": "db_column:sap_reservations.openReservationValue",
+      "table": "sap_reservations",
+      "type": "db_column"
+    },
     "db_column:sap_reservations.partNumber": {
       "column": "partNumber",
       "constraints": {
@@ -3551,14 +3875,26 @@
       "table": "sap_reservations",
       "type": "db_column"
     },
+    "db_column:sap_reservations.plantCode": {
+      "column": "plantCode",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:sap_reservations.plantCode",
+      "table": "sap_reservations",
+      "type": "db_column"
+    },
     "db_column:sap_reservations.poLineItemId": {
       "column": "poLineItemId",
       "constraints": {
         "not_null": false,
         "primary_key": false,
-        "references": "poLineItems.id"
+        "references": "poLineItems.poLineId"
       },
-      "data_type": "uuid",
+      "data_type": "varchar",
       "id": "db_column:sap_reservations.poLineItemId",
       "table": "sap_reservations",
       "type": "db_column"
@@ -3587,15 +3923,27 @@
       "table": "sap_reservations",
       "type": "db_column"
     },
-    "db_column:sap_reservations.requester": {
-      "column": "requester",
+    "db_column:sap_reservations.requesterAlias": {
+      "column": "requesterAlias",
       "constraints": {
         "not_null": false,
         "primary_key": false,
         "references": null
       },
       "data_type": "varchar",
-      "id": "db_column:sap_reservations.requester",
+      "id": "db_column:sap_reservations.requesterAlias",
+      "table": "sap_reservations",
+      "type": "db_column"
+    },
+    "db_column:sap_reservations.reservationCreationDate": {
+      "column": "reservationCreationDate",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "date",
+      "id": "db_column:sap_reservations.reservationCreationDate",
       "table": "sap_reservations",
       "type": "db_column"
     },
@@ -3635,18 +3983,6 @@
       "table": "sap_reservations",
       "type": "db_column"
     },
-    "db_column:sap_reservations.reservationQty": {
-      "column": "reservationQty",
-      "constraints": {
-        "not_null": false,
-        "primary_key": false,
-        "references": null
-      },
-      "data_type": "numeric",
-      "id": "db_column:sap_reservations.reservationQty",
-      "table": "sap_reservations",
-      "type": "db_column"
-    },
     "db_column:sap_reservations.reservationRequirementDate": {
       "column": "reservationRequirementDate",
       "constraints": {
@@ -3659,6 +3995,18 @@
       "table": "sap_reservations",
       "type": "db_column"
     },
+    "db_column:sap_reservations.reservationSource": {
+      "column": "reservationSource",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:sap_reservations.reservationSource",
+      "table": "sap_reservations",
+      "type": "db_column"
+    },
     "db_column:sap_reservations.reservationStatus": {
       "column": "reservationStatus",
       "constraints": {
@@ -3668,18 +4016,6 @@
       },
       "data_type": "varchar",
       "id": "db_column:sap_reservations.reservationStatus",
-      "table": "sap_reservations",
-      "type": "db_column"
-    },
-    "db_column:sap_reservations.reservationValue": {
-      "column": "reservationValue",
-      "constraints": {
-        "not_null": false,
-        "primary_key": false,
-        "references": null
-      },
-      "data_type": "numeric",
-      "id": "db_column:sap_reservations.reservationValue",
       "table": "sap_reservations",
       "type": "db_column"
     },
@@ -3884,6 +4220,13 @@
       "stage": "output",
       "type": "file"
     },
+    "file:data/import-ready/sap_reservations.csv": {
+      "folder": "import-ready",
+      "id": "file:data/import-ready/sap_reservations.csv",
+      "path": "data/import-ready/sap_reservations.csv",
+      "stage": "output",
+      "type": "file"
+    },
     "file:data/import-ready/wbs_details.csv": {
       "folder": "import-ready",
       "id": "file:data/import-ready/wbs_details.csv",
@@ -3937,6 +4280,13 @@
       "folder": "intermediate",
       "id": "file:data/intermediate/reservations.csv",
       "path": "data/intermediate/reservations.csv",
+      "stage": "intermediate",
+      "type": "file"
+    },
+    "file:data/intermediate/unmatched_reservation_pos.csv": {
+      "folder": "intermediate",
+      "id": "file:data/intermediate/unmatched_reservation_pos.csv",
+      "path": "data/intermediate/unmatched_reservation_pos.csv",
       "stage": "intermediate",
       "type": "file"
     },
@@ -4179,6 +4529,28 @@
       "id": "script:09_prepare_wbs_details",
       "name": "09_prepare_wbs_details",
       "path": "scripts/stage3_prepare/09_prepare_wbs_details.py",
+      "stage": "stage3_prepare",
+      "type": "script"
+    },
+    "script:10_prepare_reservations": {
+      "functions": [
+        "clean_numeric_to_string",
+        "clean_val",
+        "convert_plant_code",
+        "extract_asset_info",
+        "extract_asset_parts",
+        "extract_parts",
+        "extract_po_info",
+        "float_to_str",
+        "load_data",
+        "main",
+        "map_columns",
+        "save_data",
+        "validate_output"
+      ],
+      "id": "script:10_prepare_reservations",
+      "name": "10_prepare_reservations",
+      "path": "scripts/stage3_prepare/10_prepare_reservations.py",
       "stage": "stage3_prepare",
       "type": "script"
     },
@@ -4447,18 +4819,21 @@
         "createdAt",
         "description",
         "id",
+        "openReservationQty",
+        "openReservationValue",
         "partNumber",
+        "plantCode",
         "poLineItemId",
         "poLineNumber",
         "poNumber",
-        "requester",
+        "requesterAlias",
+        "reservationCreationDate",
         "reservationLineId",
         "reservationLineNumber",
         "reservationNumber",
-        "reservationQty",
         "reservationRequirementDate",
+        "reservationSource",
         "reservationStatus",
-        "reservationValue",
         "updatedAt",
         "wbsNumber"
       ],
@@ -4490,24 +4865,24 @@
     }
   },
   "stats": {
-    "columns_tracked": 58,
+    "columns_tracked": 64,
     "edges_by_type": {
-      "DEPENDS_ON": 12,
-      "INPUT": 32,
+      "DEPENDS_ON": 13,
+      "INPUT": 33,
       "MAPS_TO": 5,
-      "OUTPUT": 24,
-      "TRANSFORMS": 53
+      "OUTPUT": 25,
+      "TRANSFORMS": 62
     },
     "nodes_by_type": {
-      "column": 78,
-      "db_column": 134,
-      "file": 21,
-      "script": 16,
+      "column": 84,
+      "db_column": 137,
+      "file": 23,
+      "script": 17,
       "table": 11
     },
-    "total_edges": 126,
-    "total_nodes": 260,
-    "variables_traced": 58
+    "total_edges": 138,
+    "total_nodes": 272,
+    "variables_traced": 65
   },
   "variable_sources": {
     "01_po_line_items": {
@@ -4670,6 +5045,30 @@
       ],
       "valid_format": [
         "wbs_number"
+      ]
+    },
+    "10_prepare_reservations": {
+      "df": [
+        "reservation_line_id"
+      ],
+      "non_null": [
+        "po_number"
+      ],
+      "parts": [
+        "Plant"
+      ],
+      "total_null": [
+        "asset_code"
+      ],
+      "unique_plants": [
+        "Plant"
+      ],
+      "with_separator": [
+        "asset_serial_number"
+      ],
+      "without_separator": [
+        "asset_code",
+        "asset_serial_number"
       ]
     },
     "10_wbs_from_projects": {

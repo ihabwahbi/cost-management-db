@@ -2,7 +2,7 @@
   "files": {
     "scripts/build_lineage_graph.py": "2b817b65ddac2d47f0d1b8cfd2c938a0",
     "scripts/build_symbol_registry.py": "cf6552ee18cca3bd4cfe159c14f10fcf",
-    "scripts/config/column_mappings.py": "f75c892244fa06f24b106f87dcf2d696",
+    "scripts/config/column_mappings.py": "f1e021fd96e274d10ea1f4af28676644",
     "scripts/extract_patterns.py": "426f499acc9eaf4abec70c3a59ae1db9",
     "scripts/generate_context_oracle.py": "129e022780303625d603c15f478d1164",
     "scripts/generate_pipeline_map.py": "b3771208b8f49eba1b000597cfe0cd8e",
@@ -22,6 +22,7 @@
     "scripts/stage3_prepare/07_prepare_po_transactions.py": "f1192770746a6cbdc7063f8ec568fe5c",
     "scripts/stage3_prepare/08_prepare_grir_exposures.py": "ed0258fa2b805d663a646187bd4307a8",
     "scripts/stage3_prepare/09_prepare_wbs_details.py": "0629397a76498123a7e21c7ef12723d4",
+    "scripts/stage3_prepare/10_prepare_reservations.py": "b3cd83dc0f3b0295012eeaad37ca4c0b",
     "src/schema/_schema.ts": "70f9db9fd8a851b708305fb5c72ced0f",
     "src/schema/budget-forecasts.ts": "8187472731e439498848c9f623843acb",
     "src/schema/cost-breakdown.ts": "1d6a5c87e77ef14d17dddc2a976a1990",
@@ -33,8 +34,8 @@
     "src/schema/po-operations.ts": "e62b72cc066a6d71a4ea40d30b41d7e1",
     "src/schema/po-transactions.ts": "a7eb389f960fca4618806e52bb8ea712",
     "src/schema/projects.ts": "74036a3a90d8b6e4e2c3df571561f92f",
-    "src/schema/sap-reservations.ts": "0dc248c1036a80456c1205a24bebcd1d",
+    "src/schema/sap-reservations.ts": "f1a7f0a1f218e8b912846fe323061069",
     "src/schema/wbs-details.ts": "2c5e11cb2add603fbb26e98302d37ab5"
   },
-  "last_generated": "2025-12-01T14:30:06.024767+00:00"
+  "last_generated": "2025-12-02T04:14:51.759925+00:00"
 }

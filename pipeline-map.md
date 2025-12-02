@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-01T14:30:06.024767+00:00
+Generated: 2025-12-02T04:16:01.901434+00:00
 
 ## Data Flow Diagram
 
@@ -26,15 +26,16 @@ flowchart TD
     subgraph INTERMEDIATE["Intermediate Data"]
         int_0["gr_postings.csv"]
         int_1["reservations.csv"]
-        int_2["grir_exposures.csv"]
-        int_3["wbs_from_operations.csv"]
-        int_4["ir_postings.csv"]
-        int_5["wbs_from_projects.csv"]
-        int_6["po_details_enrichment.csv"]
-        int_7["wbs_from_ops_activities.csv"]
-        int_8["cost_impact.csv"]
-        int_9["wbs_processed.csv"]
-        int_10["po_line_items.csv"]
+        int_2["unmatched_reservation_pos.csv"]
+        int_3["grir_exposures.csv"]
+        int_4["wbs_from_operations.csv"]
+        int_5["ir_postings.csv"]
+        int_6["wbs_from_projects.csv"]
+        int_7["po_details_enrichment.csv"]
+        int_8["wbs_from_ops_activities.csv"]
+        int_9["cost_impact.csv"]
+        int_10["wbs_processed.csv"]
+        int_11["po_line_items.csv"]
     end
 
     subgraph STAGE2["Stage 2: Transform"]
@@ -49,13 +50,15 @@ flowchart TD
         07_prepare_po_transactions["07_prepare_po_transactions"]
         08_prepare_grir_exposures["08_prepare_grir_exposures"]
         09_prepare_wbs_details["09_prepare_wbs_details"]
+        10_prepare_reservations["10_prepare_reservations"]
     end
 
     subgraph IMPORTREADY["Import-Ready Data"]
         ready_0["po_transactions.csv"]
         ready_1["grir_exposures.csv"]
         ready_2["wbs_details.csv"]
-        ready_3["po_line_items.csv"]
+        ready_3["sap_reservations.csv"]
+        ready_4["po_line_items.csv"]
     end
 
     subgraph DB["Database Tables"]
@@ -101,7 +104,8 @@ flowchart TD
 | 13 | `07_prepare_po_transactions` | stage3_prepare | Stage 3: Prepare PO Transactions for Import | cost_impact.csv | cost_impact.csv |
 | 14 | `08_prepare_grir_exposures` | stage3_prepare | Stage 3: Prepare GRIR Exposures for Import | grir_exposures.csv | grir_exposures.csv |
 | 15 | `09_prepare_wbs_details` | stage3_prepare | Stage 3: Prepare WBS Details for Import | wbs_processed.csv | wbs_processed.csv |
-| 16 | `pipeline` | scripts | Data Pipeline Orchestrator | - | - |
+| 16 | `10_prepare_reservations` | stage3_prepare | Stage 3: Prepare SAP Reservations for Import | reservations.csv | reservations.csv |
+| 17 | `pipeline` | scripts | Data Pipeline Orchestrator | - | - |
 
 ## Script Dependencies
 
@@ -112,6 +116,7 @@ flowchart LR
     06_calculate_grir --> 02_gr_postings
     06_prepare_po_line_items --> 03_ir_postings
     06_calculate_grir --> 03_ir_postings
+    10_prepare_reservations --> 13_reservations
     06_prepare_po_line_items --> 04_enrich_po_line_items
     06_prepare_po_line_items --> 05_calculate_cost_impact
     06_calculate_grir --> 05_calculate_cost_impact
@@ -281,17 +286,17 @@ flowchart LR
 | `reservationNumber` | varchar | NOT NULL |
 | `reservationLineNumber` | integer | NOT NULL |
 | `reservationRequirementDate` | date | - |
+| `reservationCreationDate` | date | - |
 | `partNumber` | varchar | - |
 | `description` | text | - |
-| `reservationQty` | numeric | - |
-| `reservationValue` | numeric | - |
+| `openReservationQty` | numeric | - |
+| `openReservationValue` | numeric | - |
 | `reservationStatus` | varchar | - |
+| `reservationSource` | varchar | - |
 | `poNumber` | varchar | - |
 | `poLineNumber` | integer | - |
 | `wbsNumber` | varchar | FK → wbsDetails.wbsNumber |
-| `assetCode` | varchar | - |
-| `assetSerialNumber` | varchar | - |
-| *...* | *4 more* | |
+| *...* | *7 more* | |
 
 ### `wbs_details`
 
@@ -460,6 +465,30 @@ Sample data and types for each CSV file:
 - `reservation_line_id`: 2 nulls
 - `reservation_number`: 2 nulls
 - `reservation_line_number`: 2 nulls
+
+### `unmatched_reservation_pos.csv`
+
+- **Path**: `data/intermediate/unmatched_reservation_pos.csv`
+- **Rows**: 30
+
+| Column | Type |
+|--------|------|
+| `reservation_line_id` | object |
+| `reservation_number` | int64 |
+| `reservation_line_number` | int64 |
+| `reservation_creation_date` | object |
+| `reservation_requirement_date` | object |
+| `part_number` | object |
+| `description` | object |
+| `open_reservation_qty` | float64 |
+| `open_reservation_value` | float64 |
+| `reservation_status` | object |
+| *...* | *9 more* |
+
+**Columns with nulls:**
+- `wbs_number`: 19 nulls
+- `asset_code`: 28 nulls
+- `asset_serial_number`: 28 nulls
 
 ### `grir_exposures.csv`
 
@@ -678,6 +707,34 @@ Sample data and types for each CSV file:
 - `operation_number`: 526 nulls
 - `ops_activity_number`: 670 nulls
 - `rig`: 232 nulls
+
+### `sap_reservations.csv`
+
+- **Path**: `data/import-ready/sap_reservations.csv`
+- **Rows**: 1483
+
+| Column | Type |
+|--------|------|
+| `reservation_line_id` | object |
+| `reservation_number` | int64 |
+| `reservation_line_number` | int64 |
+| `reservation_creation_date` | object |
+| `reservation_requirement_date` | object |
+| `part_number` | object |
+| `description` | object |
+| `open_reservation_qty` | float64 |
+| `open_reservation_value` | float64 |
+| `reservation_status` | object |
+| *...* | *9 more* |
+
+**Columns with nulls:**
+- `wbs_number`: 1186 nulls
+- `requester_alias`: 14 nulls
+- `po_number`: 966 nulls
+- `po_line_number`: 966 nulls
+- `po_line_item_id`: 966 nulls
+- `asset_code`: 810 nulls
+- `asset_serial_number`: 839 nulls
 
 ## Common Errors & Solutions
 
@@ -918,3 +975,18 @@ Key pandas operations used in each script:
 | 110 | column_assign | column: `sub_business_lines` |
 | 102 | boolean_filter | Filters rows based on boolean condition |
 | 110 | apply | Applies function to data |
+
+### `10_prepare_reservations`
+
+| Line | Operation | Details |
+|------|-----------|---------|
+| 93 | column_assign | column: `po_number` |
+| 94 | column_assign | column: `po_line_number` |
+| 99 | column_assign | column: `po_line_item_id` |
+| 140 | column_assign | column: `asset_code` |
+| 141 | column_assign | column: `asset_serial_number` |
+| 70 | column_assign | column: `po_number` |
+| 71 | column_assign | column: `po_line_number` |
+| 72 | column_assign | column: `po_line_item_id` |
+| 92 | apply | Applies function to data |
+| 93 | apply | Applies function to data |

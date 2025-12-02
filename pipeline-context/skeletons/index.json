@@ -149,13 +149,23 @@
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/09_prepare_wbs_details.skeleton.py",
       "skeleton_tokens": 535,
       "source_path": "scripts/stage3_prepare/09_prepare_wbs_details.py"
+    },
+    {
+      "compression_ratio": 3.98,
+      "name": "10_prepare_reservations",
+      "original_lines": 347,
+      "original_tokens": 2785,
+      "skeleton_lines": 83,
+      "skeleton_path": "pipeline-context/skeletons/stage3_prepare/10_prepare_reservations.skeleton.py",
+      "skeleton_tokens": 699,
+      "source_path": "scripts/stage3_prepare/10_prepare_reservations.py"
     }
   ],
   "totals": {
-    "compression_ratio": 3.13,
-    "original_lines": 3166,
-    "original_tokens": 26577,
-    "skeleton_lines": 986,
-    "skeleton_tokens": 8491
+    "compression_ratio": 3.19,
+    "original_lines": 3513,
+    "original_tokens": 29362,
+    "skeleton_lines": 1069,
+    "skeleton_tokens": 9190
   }
 }
