@@ -1,4 +1,4 @@
-import { uuid, varchar, numeric, date, integer, timestamp, index } from 'drizzle-orm/pg-core';
+import { uuid, varchar, numeric, date, integer, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-core';
 import { poLineItems } from './po-line-items';
 import { devV3Schema } from './_schema';
 
@@ -44,6 +44,10 @@ export const grirExposures = devV3Schema.table('grir_exposures', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 }, (table) => [
+  // Unique constraint: A PO can only have one exposure record per snapshot date
+  uniqueIndex('grir_exposures_po_snapshot_idx')
+    .on(table.poLineItemId, table.snapshotDate),
+  // Additional indexes for query performance
   index('grir_exposures_po_line_item_id_idx').on(table.poLineItemId),
   index('grir_exposures_time_bucket_idx').on(table.timeBucket),
   index('grir_exposures_snapshot_date_idx').on(table.snapshotDate),

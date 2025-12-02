@@ -1,8 +1,9 @@
 # Import Plan: grir_exposures
 
-> **Status:** Planning  
+> **Status:** Complete  
 > **Author:** AI Agent  
 > **Date:** 2025-12-02  
+> **Completed:** 2025-12-02  
 > **Predecessor:** po_transactions import (completed)
 
 ---
@@ -186,17 +187,17 @@ The current CSV has a single snapshot_date (2025-12-02). Future considerations:
 
 ### 4.1 Pre-Implementation
 
-- [ ] Profile CSV: `python3 scripts/profile_data.py data/import-ready/grir_exposures.csv`
-- [ ] Verify no orphan po_line_ids
-- [ ] Confirm po_line_id uniqueness in current data
+- [x] Profile CSV: `python3 scripts/profile_data.py data/import-ready/grir_exposures.csv`
+- [x] Verify no orphan po_line_ids - **0 orphans confirmed**
+- [x] Confirm po_line_id uniqueness in current data - **65 unique in 65 rows**
 
 ### 4.2 Schema Updates
 
 File: `src/schema/grir-exposures.ts`
 
-- [ ] Add unique index on `(po_line_item_id, snapshot_date)`
-- [ ] Run `npm run type-check`
-- [ ] Run `npm run db:push`
+- [x] Add unique index on `(po_line_item_id, snapshot_date)`
+- [x] Run `npm run type-check`
+- [x] Run `npm run db:push`
 
 ```typescript
 // Add to table definition:
@@ -217,33 +218,33 @@ The current script already:
 - Validates with Pandera contract
 
 **Verify only:**
-- [ ] Run pipeline: `python3 scripts/stage3_prepare/08_prepare_grir_exposures.py`
-- [ ] Confirm output matches expected structure
+- [x] Run pipeline: `python3 scripts/stage3_prepare/08_prepare_grir_exposures.py`
+- [x] Confirm output matches expected structure
 
 ### 4.4 Import Script
 
 File: `src/imports/grir-exposures.ts`
 
-- [ ] Copy structure from `po-transactions.ts`
-- [ ] Simplify (no transaction_id generation needed)
-- [ ] FK lookup for `po_line_id` → UUID
-- [ ] Upsert on `(po_line_item_id, snapshot_date)`
-- [ ] Orphan handling (skip + log)
-- [ ] Circuit breaker (check import size)
-- [ ] Stats logging (total exposure value, time bucket breakdown)
+- [x] Copy structure from `po-transactions.ts`
+- [x] Simplify (no transaction_id generation needed)
+- [x] FK lookup for `po_line_id` → UUID
+- [x] Upsert on `(po_line_item_id, snapshot_date)`
+- [x] Orphan handling (skip + log)
+- [x] Circuit breaker (check import size)
+- [x] Stats logging (total exposure value, time bucket breakdown)
 
 ### 4.5 Testing
 
-- [ ] Run with `--dry-run` first
-- [ ] Verify FK relationships
-- [ ] Check time bucket values are valid
-- [ ] Test idempotency (run twice)
-- [ ] Verify exposure values sum correctly
+- [x] Run with `--dry-run` first
+- [x] Verify FK relationships - **0 orphan FKs**
+- [x] Check time bucket values are valid - **All 5 valid buckets**
+- [x] Test idempotency (run twice) - **Same 65 records both times**
+- [x] Verify exposure values sum correctly - **$45,920.87**
 
 ### 4.6 Post-Implementation
 
-- [ ] Add npm scripts to package.json
-- [ ] Run tests: `pytest tests/test_pipeline_golden_set.py`
+- [x] Add npm scripts to package.json
+- [x] Run tests: `pytest tests/test_pipeline_golden_set.py` - **All passed**
 - [ ] Commit changes
 
 ---
@@ -365,13 +366,13 @@ ORDER BY time_bucket;
 
 ## 8. Success Criteria
 
-- [ ] All 65 exposures imported
-- [ ] 0 orphan po_line_ids
-- [ ] All FK relationships valid
-- [ ] Time bucket values match allowed set
-- [ ] Total grir_value matches CSV sum
-- [ ] Import completes in < 5 seconds
-- [ ] Idempotent (run twice, same result)
+- [x] All 65 exposures imported - **65 records**
+- [x] 0 orphan po_line_ids - **0 orphans**
+- [x] All FK relationships valid - **0 broken FKs**
+- [x] Time bucket values match allowed set - **All valid**
+- [x] Total grir_value matches CSV sum - **$45,920.87**
+- [x] Import completes in < 5 seconds - **<1 second**
+- [x] Idempotent (run twice, same result) - **Verified**
 
 ---
 

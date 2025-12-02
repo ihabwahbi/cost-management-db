@@ -15,7 +15,10 @@
     "import:po-line-items:force": "tsx src/imports/po-line-items.ts --force",
     "import:po-transactions": "tsx src/imports/po-transactions.ts",
     "import:po-transactions:dry-run": "tsx src/imports/po-transactions.ts --dry-run",
-    "import:po-transactions:force": "tsx src/imports/po-transactions.ts --force"
+    "import:po-transactions:force": "tsx src/imports/po-transactions.ts --force",
+    "import:grir-exposures": "tsx src/imports/grir-exposures.ts",
+    "import:grir-exposures:dry-run": "tsx src/imports/grir-exposures.ts --dry-run",
+    "import:grir-exposures:force": "tsx src/imports/grir-exposures.ts --force"
   },
   "dependencies": {
     "csv-parse": "^6.1.0",

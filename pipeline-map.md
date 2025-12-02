@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-02T08:20:29.139053+00:00
+Generated: 2025-12-02T08:26:12.072952+00:00
 
 ## Data Flow Diagram
 
@@ -377,7 +377,7 @@ Sample data and types for each CSV file:
 ### `gr_postings.csv`
 
 - **Path**: `data/intermediate/gr_postings.csv`
-- **Rows**: 55810
+- **Rows**: 54243
 
 | Column | Type |
 |--------|------|
@@ -494,7 +494,7 @@ Sample data and types for each CSV file:
 ### `grir_exposures.csv`
 
 - **Path**: `data/import-ready/grir_exposures.csv`
-- **Rows**: 67
+- **Rows**: 65
 
 | Column | Type |
 |--------|------|
@@ -533,7 +533,7 @@ Sample data and types for each CSV file:
 ### `ir_postings.csv`
 
 - **Path**: `data/intermediate/ir_postings.csv`
-- **Rows**: 55519
+- **Rows**: 54036
 
 | Column | Type |
 |--------|------|
@@ -567,7 +567,7 @@ Sample data and types for each CSV file:
 ### `po_details_enrichment.csv`
 
 - **Path**: `data/intermediate/po_details_enrichment.csv`
-- **Rows**: 22150
+- **Rows**: 21961
 
 | Column | Type |
 |--------|------|
@@ -577,8 +577,8 @@ Sample data and types for each CSV file:
 | `PR Line` | float64 |
 
 **Columns with nulls:**
-- `Requester`: 2423 nulls
-- `PR Number`: 444 nulls
+- `Requester`: 2428 nulls
+- `PR Number`: 440 nulls
 - `PR Line`: 2 nulls
 
 ### `wbs_from_ops_activities.csv`
@@ -607,7 +607,7 @@ Sample data and types for each CSV file:
 ### `cost_impact.csv`
 
 - **Path**: `data/intermediate/cost_impact.csv`
-- **Rows**: 109586
+- **Rows**: 106563
 
 | Column | Type |
 |--------|------|
@@ -645,7 +645,7 @@ Sample data and types for each CSV file:
 ### `po_line_items.csv`
 
 - **Path**: `data/import-ready/po_line_items.csv`
-- **Rows**: 57163
+- **Rows**: 55803
 
 | Column | Type |
 |--------|------|
@@ -662,13 +662,13 @@ Sample data and types for each CSV file:
 | *...* | *21 more* |
 
 **Columns with nulls:**
-- `pr_number`: 37584 nulls
-- `pr_line`: 37165 nulls
-- `requester`: 37072 nulls
-- `part_number`: 47632 nulls
-- `account_assignment_category`: 9047 nulls
-- `wbs_number`: 33327 nulls
-- `po_gts_status`: 64 nulls
+- `pr_number`: 36483 nulls
+- `pr_line`: 36070 nulls
+- `requester`: 35988 nulls
+- `part_number`: 46544 nulls
+- `account_assignment_category`: 8774 nulls
+- `wbs_number`: 31989 nulls
+- `po_gts_status`: 60 nulls
 
 ### `po_transactions.csv`
 

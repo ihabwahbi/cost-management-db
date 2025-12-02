@@ -240,13 +240,13 @@
       },
       "null_counts": {},
       "path": "data/intermediate/cost_impact.csv",
-      "row_count": 109586,
+      "row_count": 106563,
       "sample_row": {
-        "Cost Impact Amount": 1489.44,
-        "Cost Impact Qty": 1.0,
-        "PO Line ID": "4581850069-1",
-        "Posting Date": "2022-12-26 00:00:00",
-        "Posting Qty": 1.0,
+        "Cost Impact Amount": 52.0,
+        "Cost Impact Qty": 20.0,
+        "PO Line ID": "4581911397-1",
+        "Posting Date": "2023-01-16 00:00:00",
+        "Posting Qty": 20.0,
         "Posting Type": "IR"
       }
     },
@@ -285,12 +285,12 @@
       },
       "null_counts": {},
       "path": "data/intermediate/gr_postings.csv",
-      "row_count": 55810,
+      "row_count": 54243,
       "sample_row": {
-        "GR Amount": 1489.44,
-        "GR Effective Quantity": 1.0,
-        "GR Posting Date": "2023-01-06 00:00:00.000",
-        "PO Line ID": "4581850069-1"
+        "GR Amount": 52.0,
+        "GR Effective Quantity": 20.0,
+        "GR Posting Date": "2023-02-14 00:00:00.000",
+        "PO Line ID": "4581911397-1"
       }
     },
     "grir_exposures.csv": {
@@ -314,13 +314,13 @@
       },
       "null_counts": {},
       "path": "data/import-ready/grir_exposures.csv",
-      "row_count": 67,
+      "row_count": 65,
       "sample_row": {
-        "days_open": 13,
-        "first_exposure_date": "2025-11-19",
-        "grir_qty": 4.0,
-        "grir_value": 9576.8,
-        "po_line_id": "4584221231-13",
+        "days_open": 4,
+        "first_exposure_date": "2025-11-28",
+        "grir_qty": 2.0,
+        "grir_value": 688.98,
+        "po_line_id": "4584538403-4",
         "snapshot_date": "2025-12-02",
         "time_bucket": "<1 month"
       }
@@ -360,12 +360,12 @@
       },
       "null_counts": {},
       "path": "data/intermediate/ir_postings.csv",
-      "row_count": 55519,
+      "row_count": 54036,
       "sample_row": {
-        "IR Effective Quantity": 1.0,
-        "Invoice Amount": 1489.44,
-        "Invoice Posting Date": "2022-12-26 00:00:00.000",
-        "PO Line ID": "4581850069-1"
+        "IR Effective Quantity": 20.0,
+        "Invoice Amount": 52.0,
+        "Invoice Posting Date": "2023-01-16 00:00:00.000",
+        "PO Line ID": "4581911397-1"
       }
     },
     "po line items.csv": {
@@ -498,11 +498,11 @@
       },
       "null_counts": {
         "PR Line": 2,
-        "PR Number": 444,
-        "Requester": 2423
+        "PR Number": 440,
+        "Requester": 2428
       },
       "path": "data/intermediate/po_details_enrichment.csv",
-      "row_count": 22150,
+      "row_count": 21961,
       "sample_row": {
         "PO Line ID": "4584576859-1",
         "PR Line": 10.0,
@@ -578,20 +578,20 @@
         "wbs_validated": "bool"
       },
       "null_counts": {
-        "account_assignment_category": 9047,
-        "part_number": 47632,
-        "po_gts_status": 64,
-        "pr_line": 37165,
-        "pr_number": 37584,
-        "requester": 37072,
-        "wbs_number": 33327
+        "account_assignment_category": 8774,
+        "part_number": 46544,
+        "po_gts_status": 60,
+        "pr_line": 36070,
+        "pr_number": 36483,
+        "requester": 35988,
+        "wbs_number": 31989
       },
       "path": "data/import-ready/po_line_items.csv",
-      "row_count": 57163,
+      "row_count": 55803,
       "sample_row": {
         "account_assignment_category": NaN,
-        "description": "FLOW LINE JOINT",
-        "expected_delivery_date": "2022-12-29 00:00:00.000",
+        "description": "O-RING;332,2.35 IN,0.21 IN,FKM,95 DURO",
+        "expected_delivery_date": "2023-01-19 00:00:00.000",
         "fmt_po": false,
         "is_capex": false,
         "line_item_number": 1,
@@ -600,16 +600,16 @@
         "open_po_qty": 0.0,
         "open_po_value": 0.0,
         "order_unit": "EA",
-        "ordered_qty": 1.0,
-        "part_number": "H433403",
+        "ordered_qty": 20.0,
+        "part_number": "B036231",
         "plant_code": 3614,
         "po_approval_status": "Approved",
-        "po_creation_date": "2022-12-01 00:00:00.000",
+        "po_creation_date": "2023-01-02 00:00:00.000",
         "po_gts_status": "PO Not blocked by GTS",
-        "po_line_id": "4581850069-1",
-        "po_number": 4581850069,
+        "po_line_id": "4581911397-1",
+        "po_number": 4581911397,
         "po_receipt_status": "CLOSED PO",
-        "po_value_usd": 1489.44,
+        "po_value_usd": 52.0,
         "pr_line": NaN,
         "pr_number": NaN,
         "requester": NaN,
@@ -1303,7 +1303,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-02T08:20:29.139053+00:00",
+  "generated_at": "2025-12-02T08:26:12.072952+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
