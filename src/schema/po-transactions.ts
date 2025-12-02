@@ -1,4 +1,4 @@
-import { uuid, varchar, numeric, date, timestamp, index } from 'drizzle-orm/pg-core';
+import { uuid, varchar, numeric, date, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-core';
 import { poLineItems } from './po-line-items';
 import { devV3Schema } from './_schema';
 
@@ -11,6 +11,9 @@ import { devV3Schema } from './_schema';
 export const poTransactions = devV3Schema.table('po_transactions', {
   // Primary key
   id: uuid('id').primaryKey().defaultRandom(),
+  
+  // Business key for upserts (format: {po_line_id}-{type}-{date}-{seq})
+  transactionId: varchar('transaction_id').notNull(),
   
   // Reference to PO Line Item
   poLineItemId: uuid('po_line_item_id')
@@ -33,6 +36,7 @@ export const poTransactions = devV3Schema.table('po_transactions', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 }, (table) => [
+  uniqueIndex('po_transactions_transaction_id_idx').on(table.transactionId),
   index('po_transactions_po_line_item_id_idx').on(table.poLineItemId),
   index('po_transactions_posting_date_idx').on(table.postingDate),
   index('po_transactions_type_idx').on(table.transactionType),

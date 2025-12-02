@@ -263,7 +263,7 @@
       },
       "null_counts": {},
       "path": "data/raw/gr table.csv",
-      "row_count": 79425,
+      "row_count": 77276,
       "sample_row": {
         "GR Effective Quantity": 0.0,
         "GR Posting Date": "2023-06-06 00:00:00.000",
@@ -338,7 +338,7 @@
       },
       "null_counts": {},
       "path": "data/raw/invoice table.csv",
-      "row_count": 66956,
+      "row_count": 65245,
       "sample_row": {
         "IR Effective Quantity": 2.0,
         "Invoice Posting Date": "2023-06-06 00:00:00.000",
@@ -436,51 +436,51 @@
         "Ultimate Vendor Number": "object"
       },
       "null_counts": {
-        "NIS Level 0 Desc": 13096,
-        "PO Account Assignment Category": 11334,
-        "PO Account Assignment Category Desc": 11334,
-        "PO Current Supplier Promised Date": 35248,
-        "PO GTS Status": 106,
-        "PO Initial Output Date": 192,
-        "PO Material Number": 49731,
-        "PO Valuation Class": 49731,
-        "PO Valuation Class Desc": 49731,
-        "PO WBS Element": 40646
+        "NIS Level 0 Desc": 12261,
+        "PO Account Assignment Category": 10826,
+        "PO Account Assignment Category Desc": 10826,
+        "PO Current Supplier Promised Date": 33916,
+        "PO GTS Status": 102,
+        "PO Initial Output Date": 128,
+        "PO Material Number": 48541,
+        "PO Valuation Class": 48541,
+        "PO Valuation Class Desc": 48541,
+        "PO WBS Element": 38616
       },
       "path": "data/raw/po line items.csv",
-      "row_count": 64538,
+      "row_count": 62486,
       "sample_row": {
-        "Main Vendor ID": "P3791",
-        "Main Vendor Name": "CIKARANG, 3791",
-        "Main Vendor SLB Vendor Category": "OPS",
+        "Main Vendor ID": "P9516",
+        "Main Vendor Name": "Petroleum Equipment & Supplies FZE,",
+        "Main Vendor SLB Vendor Category": "GLD",
         "NIS Level 0 Desc": NaN,
         "Open Qty": 0.0,
-        "Ordered Quantity": 1.0,
-        "PO Account Assignment Category": "A",
-        "PO Account Assignment Category Desc": "SLB Asset Transfer",
+        "Ordered Quantity": 14.0,
+        "PO Account Assignment Category": NaN,
+        "PO Account Assignment Category Desc": NaN,
         "PO Approval Status": "Approved",
-        "PO Current Supplier Promised Date": "2022-12-12 00:00:00.000",
-        "PO Current Supplier Requested Delivery Date": "2022-12-09 00:00:00.000",
+        "PO Current Supplier Promised Date": "2023-01-19 00:00:00.000",
+        "PO Current Supplier Requested Delivery Date": "2023-01-27 00:00:00.000",
         "PO Delivery Completed Indicator": "Yes",
-        "PO Document Date": "2022-12-01 00:00:00.000",
+        "PO Document Date": "2023-01-02 00:00:00.000",
         "PO GTS Status": "PO Not blocked by GTS",
-        "PO Initial Output Date": "2022-12-01 00:00:00.000",
+        "PO Initial Output Date": "2023-01-02 00:00:00.000",
         "PO Invoice Status": "Partially Paid",
-        "PO Line": 1,
-        "PO Line ID": "4581848878-1",
-        "PO Material Number": "H710794",
-        "PO Material description": "SJB-FB; JOINT, SAFETY, BOWEN, 15K, H2S,~",
-        "PO Number": 4581848878,
+        "PO Line": 2,
+        "PO Line ID": "4581911397-2",
+        "PO Material Number": "H400311",
+        "PO Material description": "BOOT, MALE, .078 DIA",
+        "PO Number": 4581911397,
         "PO Order Unit": "EA",
         "PO Receipt Status": "CLOSED PO",
-        "PO Valuation Class": 7800.0,
-        "PO Valuation Class Desc": "Asset",
+        "PO Valuation Class": 3021.0,
+        "PO Valuation Class Desc": "M&S OPS Materials",
         "PO WBS Element": NaN,
-        "Plant Code": 3606,
-        "Purchase Value USD": 9819.96,
-        "SL Sub-Business Line Code (BV Lvl 3)": "DHT",
-        "Ultimate Vendor Name": "CIKARANG, 3791",
-        "Ultimate Vendor Number": "P3791"
+        "Plant Code": 3614,
+        "Purchase Value USD": 81.62,
+        "SL Sub-Business Line Code (BV Lvl 3)": "WLES",
+        "Ultimate Vendor Name": "Petroleum Equipment & Supplies FZE,",
+        "Ultimate Vendor Number": "P9516"
       }
     },
     "po_details_enrichment.csv": {
@@ -630,6 +630,7 @@
         "po_line_id",
         "posting_date",
         "quantity",
+        "transaction_id",
         "transaction_type"
       ],
       "dtypes": {
@@ -639,19 +640,21 @@
         "po_line_id": "object",
         "posting_date": "object",
         "quantity": "float64",
+        "transaction_id": "object",
         "transaction_type": "object"
       },
       "null_counts": {},
       "path": "data/import-ready/po_transactions.csv",
-      "row_count": 109586,
+      "row_count": 106563,
       "sample_row": {
-        "amount": 1489.44,
-        "cost_impact_amount": 1489.44,
-        "cost_impact_qty": 1.0,
-        "po_line_id": "4581850069-1",
-        "posting_date": "2022-12-26 00:00:00",
-        "quantity": 1.0,
-        "transaction_type": "IR"
+        "amount": 0.0,
+        "cost_impact_amount": 0.0,
+        "cost_impact_qty": 0.0,
+        "po_line_id": "4581911397-1",
+        "posting_date": "2023-02-14 00:00:00",
+        "quantity": 20.0,
+        "transaction_id": "4581911397-1-GR-20230214-001",
+        "transaction_type": "GR"
       }
     },
     "reservations.csv": {
@@ -1300,7 +1303,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-02T07:25:52.132617+00:00",
+  "generated_at": "2025-12-02T08:20:29.139053+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1841,6 +1844,11 @@
           "name": "quantity",
           "not_null": true,
           "type": "numeric"
+        },
+        {
+          "name": "transactionId",
+          "not_null": true,
+          "type": "varchar"
         },
         {
           "name": "transactionType",
@@ -3571,6 +3579,26 @@
       "functions": [
         {
           "args": [
+            "df"
+          ],
+          "docstring": "Generate unique transaction_id for each row.\nFormat: {po_line_id}-{type}-{date}-{seq}\n\nExample: 4581850069-1-GR-20221215-001",
+          "line": 46,
+          "name": "generate_transaction_id",
+          "semantics": {
+            "aggregates": true,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "_date_str",
+              "_seq",
+              "transaction_id"
+            ],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
+          "args": [
             "filepath"
           ],
           "docstring": "Load cost impact data.",
@@ -3588,7 +3616,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 123,
+          "line": 178,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -3604,7 +3632,7 @@
             "df"
           ],
           "docstring": "Map CSV columns to database column names.",
-          "line": 46,
+          "line": 97,
           "name": "map_columns",
           "semantics": {
             "aggregates": false,
@@ -3626,7 +3654,7 @@
             "filepath"
           ],
           "docstring": "Save import-ready DataFrame to CSV.",
-          "line": 114,
+          "line": 169,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -3642,7 +3670,7 @@
             "df"
           ],
           "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
-          "line": 74,
+          "line": 128,
           "name": "validate_output",
           "semantics": {
             "aggregates": false,
@@ -3664,45 +3692,111 @@
       "inputs": [
         "data/intermediate/cost_impact.csv"
       ],
-      "line_count": 152,
+      "line_count": 207,
       "name": "07_prepare_po_transactions",
       "outputs": [
         "data/intermediate/cost_impact.csv"
       ],
       "pandas_operations": [
         {
+          "code_snippet": "df[\"po_line_id\"].astype(str)",
+          "description": "Converts column types",
+          "line": 71,
+          "operation": "astype"
+        },
+        {
+          "code_snippet": "+ df[\"_seq\"].astype(str).str.zfill(3)",
+          "description": "Converts column types",
+          "line": 77,
+          "operation": "astype"
+        },
+        {
           "code_snippet": "output_df[db_col] = df[csv_col]",
           "description": "Filters rows based on boolean condition",
-          "line": 54,
+          "line": 105,
           "operation": "boolean_filter"
+        },
+        {
+          "code_snippet": "df[\"_date_str\"] = pd.to_datetime(df[\"posting_date\"], format=\"mixed\").dt.strftime(",
+          "column": "_date_str",
+          "description": "Creates/modifies column '_date_str'",
+          "line": 60,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"_seq\"] = (",
+          "column": "_seq",
+          "description": "Creates/modifies column '_seq'",
+          "line": 65,
+          "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"amount\"] = output_df[\"cost_impact_amount\"]",
           "column": "amount",
           "description": "Creates/modifies column 'amount'",
-          "line": 68,
+          "line": 119,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"cost_impact_amount\"] = output_df[\"cost_impact_amount\"].round(2)",
           "column": "cost_impact_amount",
           "description": "Creates/modifies column 'cost_impact_amount'",
-          "line": 62,
+          "line": 113,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"cost_impact_qty\"] = output_df[\"cost_impact_qty\"].round(4)",
           "column": "cost_impact_qty",
           "description": "Creates/modifies column 'cost_impact_qty'",
-          "line": 60,
+          "line": 111,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"quantity\"] = output_df[\"quantity\"].round(4)",
           "column": "quantity",
           "description": "Creates/modifies column 'quantity'",
-          "line": 64,
+          "line": 115,
           "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"transaction_id\"] = (",
+          "column": "transaction_id",
+          "description": "Creates/modifies column 'transaction_id'",
+          "line": 70,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df = df.drop(columns=[\"_date_str\", \"_seq\"])",
+          "description": "Removes columns or rows",
+          "dropped_columns": [
+            "_date_str",
+            "_seq"
+          ],
+          "line": 81,
+          "operation": "drop"
+        },
+        {
+          "code_snippet": "df.groupby([\"po_line_id\", \"transaction_type\", \"_date_str\"]).cumcount() + 1",
+          "description": "Groups data for aggregation",
+          "group_columns": [
+            "_date_str",
+            "po_line_id",
+            "transaction_type"
+          ],
+          "line": 66,
+          "operation": "groupby"
+        },
+        {
+          "code_snippet": "df = df.sort_values([\"po_line_id\", \"transaction_type\", \"posting_date\"]).copy()",
+          "description": "Sorts by column values",
+          "line": 56,
+          "operation": "sort_values"
+        },
+        {
+          "code_snippet": "df[\"_date_str\"] = pd.to_datetime(df[\"posting_date\"], format=\"mixed\").dt.strftime(",
+          "description": "Converts to datetime",
+          "line": 60,
+          "operation": "to_datetime"
         }
       ],
       "path": "scripts/stage3_prepare/07_prepare_po_transactions.py",

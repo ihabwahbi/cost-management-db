@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-02T07:25:52.132617+00:00
+Generated: 2025-12-02T08:20:29.139053+00:00
 
 ## Data Flow Diagram
 
@@ -257,6 +257,7 @@ flowchart LR
 | Column | Type | Constraints |
 |--------|------|-------------|
 | `id` | uuid | PK |
+| `transactionId` | varchar | NOT NULL |
 | `poLineItemId` | uuid | NOT NULL, FK → poLineItems.id |
 | `transactionType` | varchar | NOT NULL |
 | `postingDate` | date | NOT NULL |
@@ -323,7 +324,7 @@ Sample data and types for each CSV file:
 ### `invoice table.csv`
 
 - **Path**: `data/raw/invoice table.csv`
-- **Rows**: 66956
+- **Rows**: 65245
 
 | Column | Type |
 |--------|------|
@@ -334,7 +335,7 @@ Sample data and types for each CSV file:
 ### `po line items.csv`
 
 - **Path**: `data/raw/po line items.csv`
-- **Rows**: 64538
+- **Rows**: 62486
 
 | Column | Type |
 |--------|------|
@@ -351,21 +352,21 @@ Sample data and types for each CSV file:
 | *...* | *21 more* |
 
 **Columns with nulls:**
-- `PO Initial Output Date`: 192 nulls
-- `PO Account Assignment Category`: 11334 nulls
-- `PO Account Assignment Category Desc`: 11334 nulls
-- `PO WBS Element`: 40646 nulls
-- `PO Material Number`: 49731 nulls
-- `PO Valuation Class`: 49731 nulls
-- `PO Valuation Class Desc`: 49731 nulls
-- `NIS Level 0 Desc`: 13096 nulls
-- `PO GTS Status`: 106 nulls
-- `PO Current Supplier Promised Date`: 35248 nulls
+- `PO Initial Output Date`: 128 nulls
+- `PO Account Assignment Category`: 10826 nulls
+- `PO Account Assignment Category Desc`: 10826 nulls
+- `PO WBS Element`: 38616 nulls
+- `PO Material Number`: 48541 nulls
+- `PO Valuation Class`: 48541 nulls
+- `PO Valuation Class Desc`: 48541 nulls
+- `NIS Level 0 Desc`: 12261 nulls
+- `PO GTS Status`: 102 nulls
+- `PO Current Supplier Promised Date`: 33916 nulls
 
 ### `gr table.csv`
 
 - **Path**: `data/raw/gr table.csv`
-- **Rows**: 79425
+- **Rows**: 77276
 
 | Column | Type |
 |--------|------|
@@ -672,7 +673,7 @@ Sample data and types for each CSV file:
 ### `po_transactions.csv`
 
 - **Path**: `data/import-ready/po_transactions.csv`
-- **Rows**: 109586
+- **Rows**: 106563
 
 | Column | Type |
 |--------|------|
@@ -683,6 +684,7 @@ Sample data and types for each CSV file:
 | `cost_impact_qty` | float64 |
 | `cost_impact_amount` | float64 |
 | `amount` | float64 |
+| `transaction_id` | object |
 
 ### `wbs_details.csv`
 
@@ -953,11 +955,16 @@ Key pandas operations used in each script:
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 68 | column_assign | column: `amount` |
-| 60 | column_assign | column: `cost_impact_qty` |
-| 62 | column_assign | column: `cost_impact_amount` |
-| 64 | column_assign | column: `quantity` |
-| 54 | boolean_filter | Filters rows based on boolean condition |
+| 60 | column_assign | column: `_date_str` |
+| 65 | column_assign | column: `_seq` |
+| 70 | column_assign | column: `transaction_id` |
+| 119 | column_assign | column: `amount` |
+| 81 | drop | cols: `_date_str, _seq` |
+| 111 | column_assign | column: `cost_impact_qty` |
+| 113 | column_assign | column: `cost_impact_amount` |
+| 115 | column_assign | column: `quantity` |
+| 105 | boolean_filter | Filters rows based on boolean condition |
+| 56 | sort_values | Sorts by column values |
 
 ### `08_prepare_grir_exposures`
 

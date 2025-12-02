@@ -8,8 +8,8 @@ Input: data/intermediate/cost_impact.csv
 Output: data/import-ready/po_transactions.csv
 
 Column Operations:
-  WRITES: amount, cost_impact_amount, cost_impact_qty, quantity
-  READS:  cost_impact_amount, cost_impact_qty, quantity"""
+  WRITES: _date_str, _seq, amount, cost_impact_amount, cost_impact_qty, quantity, transaction_id
+  READS:  _date_str, _seq, cost_impact_amount, cost_impact_qty, po_line_id, posting_date, quantity, transaction_type"""
 import sys
 from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent
@@ -27,6 +27,15 @@ OUTPUT_FILE = PROJECT_ROOT / 'data' / 'import-ready' / 'po_transactions.csv'
 
 def load_data(filepath: Path) -> pd.DataFrame:
     """Load cost impact data."""
+    ...
+
+def generate_transaction_id(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Generate unique transaction_id for each row.
+    Format: {po_line_id}-{type}-{date}-{seq}
+
+    Example: 4581850069-1-GR-20221215-001
+    """
     ...
 
 def map_columns(df: pd.DataFrame) -> pd.DataFrame:

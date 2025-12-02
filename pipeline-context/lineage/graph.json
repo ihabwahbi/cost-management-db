@@ -464,10 +464,38 @@
         "type": "WRITES"
       }
     ],
+    "_date_str": [
+      {
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+        "line": 70,
+        "script": "07_prepare_po_transactions",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+        "line": 60,
+        "script": "07_prepare_po_transactions",
+        "type": "WRITES"
+      }
+    ],
+    "_seq": [
+      {
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+        "line": 70,
+        "script": "07_prepare_po_transactions",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+        "line": 65,
+        "script": "07_prepare_po_transactions",
+        "type": "WRITES"
+      }
+    ],
     "amount": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 68,
+        "line": 119,
         "script": "07_prepare_po_transactions",
         "type": "WRITES"
       }
@@ -503,19 +531,19 @@
     "cost_impact_amount": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 62,
+        "line": 113,
         "script": "07_prepare_po_transactions",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 68,
+        "line": 119,
         "script": "07_prepare_po_transactions",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 62,
+        "line": 113,
         "script": "07_prepare_po_transactions",
         "type": "WRITES"
       }
@@ -523,13 +551,13 @@
     "cost_impact_qty": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 60,
+        "line": 111,
         "script": "07_prepare_po_transactions",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 60,
+        "line": 111,
         "script": "07_prepare_po_transactions",
         "type": "WRITES"
       }
@@ -698,6 +726,14 @@
         "type": "READS"
       }
     ],
+    "po_line_id": [
+      {
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+        "line": 70,
+        "script": "07_prepare_po_transactions",
+        "type": "READS"
+      }
+    ],
     "po_line_item_id": [
       {
         "file": "scripts/stage3_prepare/10_prepare_reservations.py",
@@ -764,6 +800,14 @@
         "type": "WRITES"
       }
     ],
+    "posting_date": [
+      {
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+        "line": 60,
+        "script": "07_prepare_po_transactions",
+        "type": "READS"
+      }
+    ],
     "project_type": [
       {
         "file": "scripts/stage1_clean/10_wbs_from_projects.py",
@@ -775,13 +819,13 @@
     "quantity": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 64,
+        "line": 115,
         "script": "07_prepare_po_transactions",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-        "line": 64,
+        "line": 115,
         "script": "07_prepare_po_transactions",
         "type": "WRITES"
       }
@@ -979,6 +1023,22 @@
         "file": "scripts/stage2_transform/07_process_wbs.py",
         "line": 166,
         "script": "07_process_wbs",
+        "type": "READS"
+      }
+    ],
+    "transaction_id": [
+      {
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+        "line": 70,
+        "script": "07_prepare_po_transactions",
+        "type": "WRITES"
+      }
+    ],
+    "transaction_type": [
+      {
+        "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+        "line": 70,
+        "script": "07_prepare_po_transactions",
         "type": "READS"
       }
     ],
@@ -1389,7 +1449,25 @@
     },
     {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 68,
+      "line": 70,
+      "operation": "df['po_line_id'].astype(str) + '-' + df['transaction_type'] + '-' + df['_date_str'] + '-' + df['_seq",
+      "script": "07_prepare_po_transactions",
+      "source": "column:_date_str",
+      "target": "column:transaction_id",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 70,
+      "operation": "df['po_line_id'].astype(str) + '-' + df['transaction_type'] + '-' + df['_date_str'] + '-' + df['_seq",
+      "script": "07_prepare_po_transactions",
+      "source": "column:_seq",
+      "target": "column:transaction_id",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 119,
       "operation": "output_df['cost_impact_amount']",
       "script": "07_prepare_po_transactions",
       "source": "column:cost_impact_amount",
@@ -1398,7 +1476,7 @@
     },
     {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 62,
+      "line": 113,
       "operation": "output_df['cost_impact_amount'].round(2)",
       "script": "07_prepare_po_transactions",
       "source": "column:cost_impact_amount",
@@ -1407,7 +1485,7 @@
     },
     {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 60,
+      "line": 111,
       "operation": "output_df['cost_impact_qty'].round(4)",
       "script": "07_prepare_po_transactions",
       "source": "column:cost_impact_qty",
@@ -1469,6 +1547,15 @@
       "type": "TRANSFORMS"
     },
     {
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 70,
+      "operation": "df['po_line_id'].astype(str) + '-' + df['transaction_type'] + '-' + df['_date_str'] + '-' + df['_seq",
+      "script": "07_prepare_po_transactions",
+      "source": "column:po_line_id",
+      "target": "column:transaction_id",
+      "type": "TRANSFORMS"
+    },
+    {
       "file": "scripts/stage3_prepare/10_prepare_reservations.py",
       "line": 250,
       "operation": "pd.to_numeric(output_df['po_line_number'], errors='coerce').astype('Int64')",
@@ -1487,6 +1574,15 @@
       "type": "TRANSFORMS"
     },
     {
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 60,
+      "operation": "pd.to_datetime(df['posting_date'], format='mixed').dt.strftime('%Y%m%d')",
+      "script": "07_prepare_po_transactions",
+      "source": "column:posting_date",
+      "target": "column:_date_str",
+      "type": "TRANSFORMS"
+    },
+    {
       "file": "scripts/stage1_clean/10_wbs_from_projects.py",
       "line": 134,
       "operation": "df['rigs'].where(df['rigs'].notna() & (df['rigs'].astype(str).str.strip() != ''), df['project_type']",
@@ -1497,7 +1593,7 @@
     },
     {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
-      "line": 64,
+      "line": 115,
       "operation": "output_df['quantity'].round(4)",
       "script": "07_prepare_po_transactions",
       "source": "column:quantity",
@@ -1637,6 +1733,15 @@
       "script": "07_process_wbs",
       "source": "column:sub_business_lines_raw",
       "target": "column:sub_business_lines",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
+      "line": 70,
+      "operation": "df['po_line_id'].astype(str) + '-' + df['transaction_type'] + '-' + df['_date_str'] + '-' + df['_seq",
+      "script": "07_prepare_po_transactions",
+      "source": "column:transaction_type",
+      "target": "column:transaction_id",
       "type": "TRANSFORMS"
     },
     {
@@ -2342,9 +2447,25 @@
       "name": "Unit Price",
       "type": "column"
     },
+    "column:_date_str": {
+      "created_by": [
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:60"
+      ],
+      "id": "column:_date_str",
+      "name": "_date_str",
+      "type": "column"
+    },
+    "column:_seq": {
+      "created_by": [
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:65"
+      ],
+      "id": "column:_seq",
+      "name": "_seq",
+      "type": "column"
+    },
     "column:amount": {
       "created_by": [
-        "scripts/stage3_prepare/07_prepare_po_transactions.py:68"
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:119"
       ],
       "id": "column:amount",
       "name": "amount",
@@ -2370,7 +2491,7 @@
     },
     "column:cost_impact_amount": {
       "created_by": [
-        "scripts/stage3_prepare/07_prepare_po_transactions.py:62"
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:113"
       ],
       "id": "column:cost_impact_amount",
       "name": "cost_impact_amount",
@@ -2378,7 +2499,7 @@
     },
     "column:cost_impact_qty": {
       "created_by": [
-        "scripts/stage3_prepare/07_prepare_po_transactions.py:60"
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:111"
       ],
       "id": "column:cost_impact_qty",
       "name": "cost_impact_qty",
@@ -2470,6 +2591,11 @@
       "name": "ops_district",
       "type": "column"
     },
+    "column:po_line_id": {
+      "id": "column:po_line_id",
+      "name": "po_line_id",
+      "type": "column"
+    },
     "column:po_line_item_id": {
       "created_by": [
         "scripts/stage3_prepare/10_prepare_reservations.py:72",
@@ -2499,6 +2625,11 @@
       "name": "po_number",
       "type": "column"
     },
+    "column:posting_date": {
+      "id": "column:posting_date",
+      "name": "posting_date",
+      "type": "column"
+    },
     "column:project_type": {
       "id": "column:project_type",
       "name": "project_type",
@@ -2506,7 +2637,7 @@
     },
     "column:quantity": {
       "created_by": [
-        "scripts/stage3_prepare/07_prepare_po_transactions.py:64"
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:115"
       ],
       "id": "column:quantity",
       "name": "quantity",
@@ -2593,6 +2724,19 @@
     "column:sub_business_lines_raw": {
       "id": "column:sub_business_lines_raw",
       "name": "sub_business_lines_raw",
+      "type": "column"
+    },
+    "column:transaction_id": {
+      "created_by": [
+        "scripts/stage3_prepare/07_prepare_po_transactions.py:70"
+      ],
+      "id": "column:transaction_id",
+      "name": "transaction_id",
+      "type": "column"
+    },
+    "column:transaction_type": {
+      "id": "column:transaction_type",
+      "name": "transaction_type",
       "type": "column"
     },
     "column:wbs_number": {
@@ -3800,6 +3944,18 @@
       "table": "po_transactions",
       "type": "db_column"
     },
+    "db_column:po_transactions.transactionId": {
+      "column": "transactionId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:po_transactions.transactionId",
+      "table": "po_transactions",
+      "type": "db_column"
+    },
     "db_column:po_transactions.transactionType": {
       "column": "transactionType",
       "constraints": {
@@ -4576,6 +4732,7 @@
     },
     "script:07_prepare_po_transactions": {
       "functions": [
+        "generate_transaction_id",
         "load_data",
         "main",
         "map_columns",
@@ -4902,6 +5059,7 @@
         "poLineItemId",
         "postingDate",
         "quantity",
+        "transactionId",
         "transactionType",
         "updatedAt"
       ],
@@ -4976,24 +5134,24 @@
     }
   },
   "stats": {
-    "columns_tracked": 66,
+    "columns_tracked": 72,
     "edges_by_type": {
       "DEPENDS_ON": 13,
       "INPUT": 33,
       "MAPS_TO": 5,
       "OUTPUT": 25,
-      "TRANSFORMS": 64
+      "TRANSFORMS": 69
     },
     "nodes_by_type": {
-      "column": 86,
-      "db_column": 140,
+      "column": 92,
+      "db_column": 141,
       "file": 23,
       "script": 17,
       "table": 11
     },
-    "total_edges": 140,
-    "total_nodes": 277,
-    "variables_traced": 71
+    "total_edges": 145,
+    "total_nodes": 284,
+    "variables_traced": 72
   },
   "variable_sources": {
     "01_po_line_items": {
@@ -5127,6 +5285,9 @@
     "07_prepare_po_transactions": {
       "actual_types": [
         "transaction_type"
+      ],
+      "unique_count": [
+        "transaction_id"
       ]
     },
     "07_process_wbs": {

@@ -30,7 +30,7 @@ repos:
     hooks:
       - id: mypy
         name: "MyPy: Type Safety"
-        args: ["--ignore-missing-imports"]
+        args: ["--ignore-missing-imports", "--explicit-package-bases"]
         files: "^scripts/.*\\.py$"
         additional_dependencies: [pandas-stubs]
 

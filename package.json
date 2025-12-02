@@ -12,7 +12,10 @@
     "test": "vitest run",
     "import:po-line-items": "tsx src/imports/po-line-items.ts",
     "import:po-line-items:dry-run": "tsx src/imports/po-line-items.ts --dry-run",
-    "import:po-line-items:force": "tsx src/imports/po-line-items.ts --force"
+    "import:po-line-items:force": "tsx src/imports/po-line-items.ts --force",
+    "import:po-transactions": "tsx src/imports/po-transactions.ts",
+    "import:po-transactions:dry-run": "tsx src/imports/po-transactions.ts --dry-run",
+    "import:po-transactions:force": "tsx src/imports/po-transactions.ts --force"
   },
   "dependencies": {
     "csv-parse": "^6.1.0",

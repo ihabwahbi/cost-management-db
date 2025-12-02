@@ -78,6 +78,12 @@ PO_TRANSACTIONS_MAPPING = {
     "Cost Impact Amount": "cost_impact_amount",
 }
 
+# Columns generated in stage3 for po_transactions (not from source CSV)
+PO_TRANSACTIONS_GENERATED = [
+    "transaction_id",  # Unique business key: {po_line_id}-{type}-{date}-{seq}
+    "amount",  # Copy of cost_impact_amount (posting amount)
+]
+
 
 # =============================================================================
 # VALIDATION: Required columns for each import-ready file
@@ -91,6 +97,7 @@ REQUIRED_COLUMNS = {
         "po_value_usd",
     ],
     "po_transactions": [
+        "transaction_id",  # Unique business key for upserts
         "po_line_id",  # Will be converted to po_line_item_id during import
         "transaction_type",
         "posting_date",

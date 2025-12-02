@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2025-12-02T07:04:18.801372+00:00",
+  "generated_at": "2025-12-02T08:20:35.480316+00:00",
   "schemas": {
     "01_po_line_items": {
       "columns": [
@@ -73,13 +73,16 @@
     },
     "07_prepare_po_transactions": {
       "columns": [
+        "_date_str",
+        "_seq",
         "amount",
         "cost_impact_amount",
         "cost_impact_qty",
-        "quantity"
+        "quantity",
+        "transaction_id"
       ],
-      "hash": "f99cb2d033c0ea20",
-      "count": 4
+      "hash": "ace954013dd0d29c",
+      "count": 7
     },
     "07_process_wbs": {
       "columns": [
@@ -159,5 +162,5 @@
     }
   },
   "total_scripts": 16,
-  "total_columns": 59
+  "total_columns": 62
 }

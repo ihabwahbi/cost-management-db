@@ -38,6 +38,9 @@ if PANDERA_AVAILABLE:
         # Required columns
         # =====================================================
 
+        # Unique business key for upserts (format: {po_line_id}-{type}-{date}-{seq})
+        transaction_id: Series[str] = pa.Field(nullable=False)
+
         # Business key (links to po_line_items)
         po_line_id: Series[str] = pa.Field(nullable=False)
 

@@ -43,6 +43,57 @@ def load_data(filepath: Path) -> pd.DataFrame:
     return df
 
 
+def generate_transaction_id(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Generate unique transaction_id for each row.
+    Format: {po_line_id}-{type}-{date}-{seq}
+
+    Example: 4581850069-1-GR-20221215-001
+    """
+    print("Generating transaction_id...")
+
+    # Sort to ensure consistent ordering for sequence numbers
+    df = df.sort_values(["po_line_id", "transaction_type", "posting_date"]).copy()
+
+    # Format date for ID (remove dashes from YYYY-MM-DD)
+    # Handle various date formats including "YYYY-MM-DD HH:MM:SS.000"
+    df["_date_str"] = pd.to_datetime(df["posting_date"], format="mixed").dt.strftime(
+        "%Y%m%d"
+    )
+
+    # Group by (po_line_id, type, date) and assign sequence numbers
+    df["_seq"] = (
+        df.groupby(["po_line_id", "transaction_type", "_date_str"]).cumcount() + 1
+    )
+
+    # Generate transaction_id
+    df["transaction_id"] = (
+        df["po_line_id"].astype(str)
+        + "-"
+        + df["transaction_type"]
+        + "-"
+        + df["_date_str"]
+        + "-"
+        + df["_seq"].astype(str).str.zfill(3)
+    )
+
+    # Cleanup temp columns
+    df = df.drop(columns=["_date_str", "_seq"])
+
+    # Verify uniqueness
+    unique_count = df["transaction_id"].nunique()
+    total_count = len(df)
+    if unique_count != total_count:
+        print(
+            f"  WARNING: transaction_id not unique! "
+            f"{unique_count:,} unique vs {total_count:,} total"
+        )
+    else:
+        print(f"  Generated {unique_count:,} unique transaction_ids")
+
+    return df
+
+
 def map_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Map CSV columns to database column names."""
     print("Mapping columns to database schema...")
@@ -67,6 +118,9 @@ def map_columns(df: pd.DataFrame) -> pd.DataFrame:
     # This represents the posting amount before cost impact calculation
     output_df["amount"] = output_df["cost_impact_amount"]
 
+    # Generate transaction_id for upsert support
+    output_df = generate_transaction_id(output_df)
+
     print(f"  Mapped {len(output_df.columns)} columns")
     return output_df
 
@@ -75,6 +129,7 @@ def validate_output(df: pd.DataFrame) -> bool:
     """Validate output using Pandera contract (with fallback to basic checks)."""
     # Basic column checks first (fast fail)
     required = [
+        "transaction_id",
         "po_line_id",
         "transaction_type",
         "posting_date",
