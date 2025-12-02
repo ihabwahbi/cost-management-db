@@ -1,5 +1,4 @@
 import { uuid, integer, varchar, text, numeric, timestamp, date, index, boolean } from 'drizzle-orm/pg-core';
-import { wbsDetails } from './wbs-details';
 import { devV3Schema } from './_schema';
 
 /**
@@ -44,8 +43,12 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   // Cost classification
   accountAssignmentCategory: varchar('account_assignment_category'),
   nisLine: varchar('nis_line'),
-  // WBS reference - links to wbs_details for project/operation context
-  wbsNumber: varchar('wbs_number').references(() => wbsDetails.wbsNumber),
+  // WBS reference - stores raw value from PO (may not exist in wbs_details due to typos or capex tracking)
+  wbsNumber: varchar('wbs_number'),
+  // TRUE if wbs_number exists in wbs_details at import time (enables data quality reporting)
+  wbsValidated: boolean('wbs_validated').default(false),
+  // TRUE if WBS indicates capitalized PO (C.* prefix) - these don't hit P&L
+  isCapex: boolean('is_capex').default(false),
   
   // Asset reference (for maintenance POs)
   assetCode: varchar('asset_code'),
@@ -58,6 +61,8 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   poReceiptStatus: varchar('po_receipt_status'),  // Open = future cost impact possible, Closed = no further impact
   poGtsStatus: varchar('po_gts_status'),
   fmtPo: boolean('fmt_po').notNull().default(false),
+  // Soft delete flag - false when PO no longer appears in import file
+  isActive: boolean('is_active').notNull().default(true),
   
   // Open PO values (calculated: total - cost impact recognized, forced to 0 for closed POs)
   openPoQty: numeric('open_po_qty'),      // orderedQty - SUM(cost_impact_qty)
@@ -70,6 +75,7 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   index('po_line_items_po_number_idx').on(table.poNumber),
   index('po_line_items_po_line_id_idx').on(table.poLineId),
   index('po_line_items_vendor_category_idx').on(table.vendorCategory),
+  index('po_line_items_is_active_idx').on(table.isActive),
 ]);
 
 export type POLineItem = typeof poLineItems.$inferSelect;

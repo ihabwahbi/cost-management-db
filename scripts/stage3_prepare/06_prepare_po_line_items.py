@@ -34,6 +34,7 @@ except ImportError:
 PROJECT_ROOT = SCRIPTS_DIR.parent
 PO_LINE_ITEMS_FILE = PROJECT_ROOT / "data" / "intermediate" / "po_line_items.csv"
 COST_IMPACT_FILE = PROJECT_ROOT / "data" / "intermediate" / "cost_impact.csv"
+WBS_DETAILS_FILE = PROJECT_ROOT / "data" / "import-ready" / "wbs_details.csv"
 OUTPUT_FILE = PROJECT_ROOT / "data" / "import-ready" / "po_line_items.csv"
 
 
@@ -137,6 +138,66 @@ def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
     return output_df
 
 
+def calculate_wbs_validated(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Set wbs_validated = True if wbs_number exists in wbs_details.
+
+    This enables data quality reporting for POs with invalid/unknown WBS references
+    (e.g., typos, capex WBS tracked in separate systems).
+    """
+    print("Calculating WBS validation status...")
+
+    if not WBS_DETAILS_FILE.exists():
+        print(f"  Warning: WBS details file not found: {WBS_DETAILS_FILE}")
+        print("  Setting all wbs_validated = False")
+        df["wbs_validated"] = False
+        return df
+
+    # Load valid WBS numbers from wbs_details
+    wbs_df = pd.read_csv(WBS_DETAILS_FILE, usecols=["wbs_number"])
+    valid_wbs = set(wbs_df["wbs_number"].dropna().unique())
+    print(f"  Loaded {len(valid_wbs):,} valid WBS numbers from wbs_details")
+
+    # Calculate validation status
+    # wbs_validated = True if wbs_number is not null AND exists in wbs_details
+    has_wbs = df["wbs_number"].notna()
+    wbs_exists = df["wbs_number"].isin(valid_wbs)
+    df["wbs_validated"] = has_wbs & wbs_exists
+
+    # Report stats
+    total_with_wbs = has_wbs.sum()
+    validated_count = df["wbs_validated"].sum()
+    unvalidated_count = total_with_wbs - validated_count
+
+    print(f"  POs with WBS: {total_with_wbs:,}")
+    print(f"  WBS validated: {validated_count:,}")
+    print(f"  WBS unvalidated (orphan): {unvalidated_count:,}")
+
+    return df
+
+
+def calculate_is_capex(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Set is_capex = True if WBS indicates a capitalized PO.
+
+    CapEx POs (C.* WBS prefix) don't hit P&L - they're capitalized assets.
+    Examples: C.FT*, C.NF*, C.LF*, etc.
+    This flag enables reports to filter out CapEx when analyzing OpEx cost impact.
+    """
+    print("Calculating CapEx flag...")
+
+    # CapEx WBS pattern: starts with 'C.' (e.g., C.FT000928, C.NF001234)
+    df["is_capex"] = df["wbs_number"].str.startswith("C.", na=False)
+
+    capex_count = df["is_capex"].sum()
+    capex_value = df.loc[df["is_capex"], "po_value_usd"].sum()
+
+    print(f"  CapEx POs (C.* WBS): {capex_count:,} rows, ${capex_value:,.0f} value")
+    print(f"  OpEx POs: {len(df) - capex_count:,} rows")
+
+    return df
+
+
 def validate_output(df: pd.DataFrame) -> bool:
     """Validate output using Pandera contract (with fallback to basic checks)."""
     # Basic column checks first (fast fail)
@@ -196,16 +257,22 @@ def main():
         print(f"ERROR: Dependency not found: {COST_IMPACT_FILE}")
         return False
 
-    print("\n[1/4] Loading data...")
+    print("\n[1/6] Loading data...")
     po_df, cost_df = load_data()
 
-    print("\n[2/4] Calculating open values...")
+    print("\n[2/6] Calculating open values...")
     po_df = calculate_open_values(po_df, cost_df)
 
-    print("\n[3/4] Mapping columns...")
+    print("\n[3/6] Mapping columns...")
     output_df = map_columns(po_df)
 
-    print("\n[4/4] Validating and saving...")
+    print("\n[4/6] Calculating WBS validation...")
+    output_df = calculate_wbs_validated(output_df)
+
+    print("\n[5/6] Calculating CapEx flag...")
+    output_df = calculate_is_capex(output_df)
+
+    print("\n[6/6] Validating and saving...")
     if not validate_output(output_df):
         return False
     save_data(output_df, OUTPUT_FILE)

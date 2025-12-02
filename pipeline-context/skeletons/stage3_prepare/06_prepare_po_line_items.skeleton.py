@@ -9,8 +9,8 @@ Input: data/intermediate/po_line_items.csv, data/intermediate/cost_impact.csv
 Output: data/import-ready/po_line_items.csv
 
 Column Operations:
-  WRITES: Total Cost Impact Amount, Total Cost Impact Qty, fmt_po, open_po_qty, open_po_value
-  READS:  Main Vendor SLB Vendor Category, PO Line ID, Total Cost Impact Amount, Total Cost Impact Qty, open_po_qty, open_po_value"""
+  WRITES: Total Cost Impact Amount, Total Cost Impact Qty, fmt_po, is_capex, open_po_qty, open_po_value, wbs_validated
+  READS:  Main Vendor SLB Vendor Category, PO Line ID, Total Cost Impact Amount, Total Cost Impact Qty, open_po_qty, open_po_value, wbs_number"""
 import sys
 from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent
@@ -25,6 +25,7 @@ except ImportError:
 PROJECT_ROOT = SCRIPTS_DIR.parent
 PO_LINE_ITEMS_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'po_line_items.csv'
 COST_IMPACT_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'cost_impact.csv'
+WBS_DETAILS_FILE = PROJECT_ROOT / 'data' / 'import-ready' / 'wbs_details.csv'
 OUTPUT_FILE = PROJECT_ROOT / 'data' / 'import-ready' / 'po_line_items.csv'
 
 def load_data():
@@ -43,6 +44,25 @@ def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.Data
 
 def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
     """Map CSV columns to database column names."""
+    ...
+
+def calculate_wbs_validated(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Set wbs_validated = True if wbs_number exists in wbs_details.
+
+    This enables data quality reporting for POs with invalid/unknown WBS references
+    (e.g., typos, capex WBS tracked in separate systems).
+    """
+    ...
+
+def calculate_is_capex(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Set is_capex = True if WBS indicates a capitalized PO.
+
+    CapEx POs (C.* WBS prefix) don't hit P&L - they're capitalized assets.
+    Examples: C.FT*, C.NF*, C.LF*, etc.
+    This flag enables reports to filter out CapEx when analyzing OpEx cost impact.
+    """
     ...
 
 def validate_output(df: pd.DataFrame) -> bool:

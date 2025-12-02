@@ -1225,7 +1225,7 @@
       ]
     },
     "Total Cost Impact Amount": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:80",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:81",
       "dtype": null,
       "name": "Total Cost Impact Amount",
       "source_type": "script",
@@ -1235,7 +1235,7 @@
       ]
     },
     "Total Cost Impact Qty": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:79",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:80",
       "dtype": null,
       "name": "Total Cost Impact Qty",
       "source_type": "script",
@@ -1440,7 +1440,7 @@
       "used_in": []
     },
     "fmt_po": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:132",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:133",
       "dtype": "bool",
       "name": "fmt_po",
       "source_type": "import-ready",
@@ -1473,6 +1473,18 @@
       ],
       "used_in": [
         "08_prepare_grir_exposures"
+      ]
+    },
+    "is_capex": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:190",
+      "dtype": "bool",
+      "name": "is_capex",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": [
+        "06_prepare_po_line_items"
       ]
     },
     "line_item_number": {
@@ -1516,7 +1528,7 @@
       "used_in": []
     },
     "open_po_qty": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:124",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:125",
       "dtype": "float64",
       "name": "open_po_qty",
       "source_type": "import-ready",
@@ -1528,7 +1540,7 @@
       ]
     },
     "open_po_value": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:126",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:127",
       "dtype": "float64",
       "name": "open_po_value",
       "source_type": "import-ready",
@@ -2144,6 +2156,7 @@
         "data/intermediate/wbs_processed.csv"
       ],
       "used_in": [
+        "06_prepare_po_line_items",
         "07_process_wbs",
         "09_prepare_wbs_details",
         "10_prepare_reservations"
@@ -2168,54 +2181,66 @@
         "11_wbs_from_operations",
         "12_wbs_from_ops_activities"
       ]
+    },
+    "wbs_validated": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:165",
+      "dtype": "bool",
+      "name": "wbs_validated",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": [
+        "06_prepare_po_line_items"
+      ]
     }
   },
   "constants": [
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 203,
+      "line": 205,
       "name": "EXCLUDED_NIS_LEVELS",
       "value_preview": "['Compensation Business Delivery', 'Compensation Business Enablement']",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 200,
+      "line": 202,
       "name": "EXCLUDED_VALUATION_CLASSES",
       "value_preview": "[7800, 7900, 5008]",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 216,
+      "line": 218,
       "name": "GRIR_EXPOSURES_MAPPING",
       "value_preview": "{'PO Line ID': 'po_line_id', 'GRIR Qty': 'grir_qty', 'GRIR Value': 'grir_value', 'First Exposure Dat",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 227,
+      "line": 229,
       "name": "GRIR_TIME_BUCKETS",
       "value_preview": "{30: '<1 month', 90: '1-3 months', 180: '3-6 months', 365: '6-12 months'}",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 233,
+      "line": 235,
       "name": "GRIR_TIME_BUCKET_MAX",
       "value_preview": ">1 year",
       "value_type": "str"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 168,
+      "line": 170,
       "name": "OPS_DISTRICT_TO_LOCATION",
       "value_preview": "{'APG TS': 'Jandakot', 'AUS East Coast WS': 'Roma', 'AUS West Coast WS': 'Jandakot', 'Moomba WL': 'M",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 143,
+      "line": 145,
       "name": "PLANT_CODE_TO_LOCATION",
       "value_preview": "{'3601': 'Perth', '3606': 'Jandakot', '3608': 'Kewdale', '3609': 'Toowoomba', '3610': 'Roma', '3611'",
       "value_type": "dict"
@@ -2224,7 +2249,7 @@
       "file": "scripts/config/column_mappings.py",
       "line": 59,
       "name": "PO_LINE_ITEMS_CALCULATED",
-      "value_preview": "['open_po_qty', 'open_po_value', 'fmt_po']",
+      "value_preview": "['open_po_qty', 'open_po_value', 'fmt_po', 'wbs_validated', 'is_capex']",
       "value_type": "list"
     },
     {
@@ -2236,63 +2261,63 @@
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 69,
+      "line": 71,
       "name": "PO_TRANSACTIONS_MAPPING",
       "value_preview": "{'PO Line ID': 'po_line_id', 'Posting Type': 'transaction_type', 'Posting Date': 'posting_date', 'Po",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 83,
+      "line": 85,
       "name": "REQUIRED_COLUMNS",
       "value_preview": "{'po_line_items': ['po_line_id', 'po_number', 'line_item_number', 'ordered_qty', 'po_value_usd'], 'p",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 290,
+      "line": 292,
       "name": "SAP_RESERVATIONS_DERIVED",
       "value_preview": "{'po_number': \"Extract before '-' from Main - PO Line to Peg to Reservation\", 'po_line_number': \"Ext",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 263,
+      "line": 265,
       "name": "SAP_RESERVATIONS_MAPPING",
       "value_preview": "{'reservation_line_id': 'reservation_line_id', 'reservation_number': 'reservation_number', 'reservat",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 184,
+      "line": 186,
       "name": "SBL_NAME_TO_CODE",
       "value_preview": "{'TCP - Tubing-Conveyed Perforation': 'TCPF', 'TCP-Tubing-Conveyed Perforation': 'TCPF', 'TS Downhol",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 210,
+      "line": 212,
       "name": "SIMPLE_ACCOUNT_CATEGORIES",
       "value_preview": "['K', 'P', 'S', 'V']",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 209,
+      "line": 211,
       "name": "SIMPLE_VENDOR_CATEGORY",
       "value_preview": "GLD",
       "value_type": "str"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 120,
+      "line": 122,
       "name": "VENDOR_NAME_MAPPING",
       "value_preview": "{'P9516': 'Dubai Hub', 'P9109': 'Houston Hub', 'P9517': 'Shanghai Hub', 'P9518': 'Singapore Hub', 'P",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 239,
+      "line": 241,
       "name": "WBS_DETAILS_MAPPING",
       "value_preview": "{'wbs_number': 'wbs_number', 'wbs_source': 'wbs_source', 'project_number': 'project_number', 'operat",
       "value_type": "dict"
@@ -2467,6 +2492,26 @@
     },
     {
       "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "len",
+        "print",
+        "startswith",
+        "sum"
+      ],
+      "docstring": "Set is_capex = True if WBS indicates a capitalized PO.\n\nCapEx POs (C.* WBS prefix) don't hit P&L - they're capitalized assets.\nExamples: C.FT*, C.NF*, C.LF*, etc.\nThis flag enables reports to filter out CapEx when analyzing OpEx cost impact.",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 179,
+      "name": "calculate_is_capex",
+      "return_type": "pd.DataFrame",
+      "signature": "def calculate_is_capex(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "args": [
         "cost_df",
         "po_df"
       ],
@@ -2485,7 +2530,7 @@
       ],
       "docstring": "Calculate open_po_qty and open_po_value based on cost impact.\n\nLogic:\n- If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0\n- Otherwise: calculate open values from ordered - cost impact",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 53,
+      "line": 54,
       "name": "calculate_open_values",
       "return_type": "pd.DataFrame",
       "signature": "def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.DataFrame"
@@ -2511,6 +2556,32 @@
       "name": "calculate_simple_cost_impact",
       "return_type": "pd.DataFrame",
       "signature": "def calculate_simple_cost_impact(gr_df: pd.DataFrame, simple_po_ids: set) -> pd.DataFrame"
+    },
+    {
+      "args": [
+        "df"
+      ],
+      "called_by": [
+        "main"
+      ],
+      "calls": [
+        "dropna",
+        "exists",
+        "isin",
+        "len",
+        "notna",
+        "print",
+        "read_csv",
+        "set",
+        "sum",
+        "unique"
+      ],
+      "docstring": "Set wbs_validated = True if wbs_number exists in wbs_details.\n\nThis enables data quality reporting for POs with invalid/unknown WBS references\n(e.g., typos, capex WBS tracked in separate systems).",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 141,
+      "name": "calculate_wbs_validated",
+      "return_type": "pd.DataFrame",
+      "signature": "def calculate_wbs_validated(df: pd.DataFrame) -> pd.DataFrame"
     },
     {
       "args": [
@@ -3374,7 +3445,7 @@
       ],
       "docstring": "Load intermediate data files.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 40,
+      "line": 41,
       "name": "load_data",
       "return_type": null,
       "signature": "def load_data()"
@@ -3777,7 +3848,9 @@
       "args": [],
       "called_by": [],
       "calls": [
+        "calculate_is_capex",
         "calculate_open_values",
+        "calculate_wbs_validated",
         "exists",
         "load_data",
         "map_columns",
@@ -3787,7 +3860,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 186,
+      "line": 247,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -3895,7 +3968,7 @@
       ],
       "docstring": "Map CSV columns to database column names.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 109,
+      "line": 110,
       "name": "map_columns",
       "return_type": "pd.DataFrame",
       "signature": "def map_columns(po_df: pd.DataFrame) -> pd.DataFrame"
@@ -4512,7 +4585,7 @@
       ],
       "docstring": "Save import-ready DataFrame to CSV.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 177,
+      "line": 238,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -4842,7 +4915,7 @@
       ],
       "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 140,
+      "line": 201,
       "name": "validate_output",
       "return_type": "bool",
       "signature": "def validate_output(df: pd.DataFrame) -> bool"
@@ -4953,9 +5026,9 @@
     }
   ],
   "stats": {
-    "total_columns": 190,
+    "total_columns": 192,
     "total_constants": 18,
-    "total_functions": 129,
+    "total_functions": 131,
     "total_tables": 11
   },
   "tables": [
@@ -5054,6 +5127,8 @@
         "expectedDeliveryDate",
         "fmtPo",
         "id",
+        "isActive",
+        "isCapex",
         "lineItemNumber",
         "location",
         "nisLine",
@@ -5079,15 +5154,11 @@
         "vendorCategory",
         "vendorId",
         "vendorName",
-        "wbsNumber"
+        "wbsNumber",
+        "wbsValidated"
       ],
       "file": "src/schema/po-line-items.ts",
-      "foreign_keys": [
-        {
-          "column": "wbsNumber",
-          "references": "wbsDetails.wbsNumber"
-        }
-      ],
+      "foreign_keys": [],
       "name": "po_line_items",
       "primary_key": "id"
     },

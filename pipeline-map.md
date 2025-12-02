@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-02T04:16:01.901434+00:00
+Generated: 2025-12-02T06:52:14.673404+00:00
 
 ## Data Flow Diagram
 
@@ -216,7 +216,7 @@ flowchart LR
 | `vendorCategory` | varchar | - |
 | `ultimateVendorName` | varchar | - |
 | `lineItemNumber` | integer | NOT NULL |
-| *...* | *18 more* | |
+| *...* | *21 more* | |
 
 ### `po_mappings`
 
@@ -658,7 +658,7 @@ Sample data and types for each CSV file:
 | `pr_line` | float64 |
 | `requester` | object |
 | `vendor_id` | object |
-| *...* | *19 more* |
+| *...* | *21 more* |
 
 **Columns with nulls:**
 - `pr_number`: 37584 nulls
@@ -938,16 +938,16 @@ Key pandas operations used in each script:
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 79 | column_assign | column: `Total Cost Impact Qty` |
-| 80 | column_assign | column: `Total Cost Impact Amount` |
-| 76 | merge | on: `PO Line ID` |
-| 79 | fillna | Fills null values |
+| 80 | column_assign | column: `Total Cost Impact Qty` |
+| 81 | column_assign | column: `Total Cost Impact Amount` |
+| 165 | column_assign | column: `wbs_validated` |
+| 190 | column_assign | column: `is_capex` |
+| 77 | merge | on: `PO Line ID` |
 | 80 | fillna | Fills null values |
-| 104 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
-| 124 | column_assign | column: `open_po_qty` |
-| 126 | column_assign | column: `open_po_value` |
-| 132 | column_assign | column: `fmt_po` |
-| 134 | column_assign | column: `fmt_po` |
+| 81 | fillna | Fills null values |
+| 105 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
+| 125 | column_assign | column: `open_po_qty` |
+| 127 | column_assign | column: `open_po_value` |
 
 ### `07_prepare_po_transactions`
 

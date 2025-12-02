@@ -9,9 +9,14 @@
     "db:push": "drizzle-kit push --force",
     "db:studio": "drizzle-kit studio",
     "type-check": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "import:po-line-items": "tsx src/imports/po-line-items.ts",
+    "import:po-line-items:dry-run": "tsx src/imports/po-line-items.ts --dry-run",
+    "import:po-line-items:force": "tsx src/imports/po-line-items.ts --force"
   },
   "dependencies": {
+    "csv-parse": "^6.1.0",
+    "dotenv": "^17.2.3",
     "drizzle-orm": "0.44.6",
     "postgres": "^3.4.5"
   },
@@ -19,6 +24,7 @@
     "@types/node": "^22",
     "drizzle-kit": "0.31.5",
     "ts-morph": "^27.0.2",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^2.1.8"
   }

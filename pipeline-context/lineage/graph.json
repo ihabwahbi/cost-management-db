@@ -83,7 +83,7 @@
     "Main Vendor SLB Vendor Category": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 132,
+        "line": 133,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       }
@@ -171,7 +171,7 @@
       {
         "context": "merge_join",
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 76,
+        "line": 77,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       }
@@ -385,13 +385,13 @@
     "Total Cost Impact Amount": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 80,
+        "line": 81,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 80,
+        "line": 81,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -399,13 +399,13 @@
     "Total Cost Impact Qty": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 79,
+        "line": 80,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 79,
+        "line": 80,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -537,13 +537,13 @@
     "fmt_po": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 132,
+        "line": 133,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 134,
+        "line": 135,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -576,6 +576,14 @@
         "type": "WRITES"
       }
     ],
+    "is_capex": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 190,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      }
+    ],
     "location": [
       {
         "file": "scripts/stage2_transform/07_process_wbs.py",
@@ -605,39 +613,13 @@
     "open_po_qty": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 124,
+        "line": 125,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 124,
-        "script": "06_prepare_po_line_items",
-        "type": "WRITES"
-      },
-      {
-        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 87,
-        "script": "06_prepare_po_line_items",
-        "type": "WRITES"
-      },
-      {
-        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 91,
-        "script": "06_prepare_po_line_items",
-        "type": "WRITES"
-      }
-    ],
-    "open_po_value": [
-      {
-        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 126,
-        "script": "06_prepare_po_line_items",
-        "type": "READS"
-      },
-      {
-        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 126,
+        "line": 125,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
@@ -649,7 +631,33 @@
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 95,
+        "line": 92,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      }
+    ],
+    "open_po_value": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 127,
+        "script": "06_prepare_po_line_items",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 127,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 89,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 96,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -976,6 +984,18 @@
     ],
     "wbs_number": [
       {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 165,
+        "script": "06_prepare_po_line_items",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 190,
+        "script": "06_prepare_po_line_items",
+        "type": "READS"
+      },
+      {
         "file": "scripts/stage2_transform/07_process_wbs.py",
         "line": 134,
         "script": "07_process_wbs",
@@ -1011,6 +1031,20 @@
         "file": "scripts/stage1_clean/12_wbs_from_ops_activities.py",
         "line": 120,
         "script": "12_wbs_from_ops_activities",
+        "type": "WRITES"
+      }
+    ],
+    "wbs_validated": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 153,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 165,
+        "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
     ]
@@ -1070,7 +1104,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 132,
+      "line": 133,
       "operation": "is_ops_vendor",
       "script": "06_prepare_po_line_items",
       "source": "column:Main Vendor SLB Vendor Category",
@@ -1310,7 +1344,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 80,
+      "line": 81,
       "operation": "po_df['Total Cost Impact Amount'].fillna(0)",
       "script": "06_prepare_po_line_items",
       "source": "column:Total Cost Impact Amount",
@@ -1319,7 +1353,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 79,
+      "line": 80,
       "operation": "po_df['Total Cost Impact Qty'].fillna(0)",
       "script": "06_prepare_po_line_items",
       "source": "column:Total Cost Impact Qty",
@@ -1400,7 +1434,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 124,
+      "line": 125,
       "operation": "po_df['open_po_qty'].round(4)",
       "script": "06_prepare_po_line_items",
       "source": "column:open_po_qty",
@@ -1409,7 +1443,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 126,
+      "line": 127,
       "operation": "po_df['open_po_value'].round(2)",
       "script": "06_prepare_po_line_items",
       "source": "column:open_po_value",
@@ -1603,6 +1637,24 @@
       "script": "07_process_wbs",
       "source": "column:sub_business_lines_raw",
       "target": "column:sub_business_lines",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 190,
+      "operation": "df['wbs_number'].str.startswith('C.', na=False)",
+      "script": "06_prepare_po_line_items",
+      "source": "column:wbs_number",
+      "target": "column:is_capex",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 165,
+      "operation": "has_wbs & wbs_exists",
+      "script": "06_prepare_po_line_items",
+      "source": "column:wbs_number",
+      "target": "column:wbs_validated",
       "type": "TRANSFORMS"
     },
     {
@@ -2118,7 +2170,7 @@
         "scripts/stage1_clean/02_gr_postings.py:59",
         "scripts/stage1_clean/03_ir_postings.py:50",
         "scripts/stage2_transform/04_enrich_po_line_items.py:125",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:76"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:77"
       ]
     },
     "column:PO Line Item": {
@@ -2252,7 +2304,7 @@
     },
     "column:Total Cost Impact Amount": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:80"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:81"
       ],
       "id": "column:Total Cost Impact Amount",
       "name": "Total Cost Impact Amount",
@@ -2260,7 +2312,7 @@
     },
     "column:Total Cost Impact Qty": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:79"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:80"
       ],
       "id": "column:Total Cost Impact Qty",
       "name": "Total Cost Impact Qty",
@@ -2334,8 +2386,8 @@
     },
     "column:fmt_po": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:132",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:134"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:133",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:135"
       ],
       "id": "column:fmt_po",
       "name": "fmt_po",
@@ -2357,6 +2409,14 @@
       "name": "grir_value",
       "type": "column"
     },
+    "column:is_capex": {
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:190"
+      ],
+      "id": "column:is_capex",
+      "name": "is_capex",
+      "type": "column"
+    },
     "column:location": {
       "created_by": [
         "scripts/stage1_clean/10_wbs_from_projects.py:118",
@@ -2370,9 +2430,9 @@
     },
     "column:open_po_qty": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:124",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:87",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:91"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:125",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:88",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:92"
       ],
       "id": "column:open_po_qty",
       "name": "open_po_qty",
@@ -2380,9 +2440,9 @@
     },
     "column:open_po_value": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:126",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:88",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:95"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:127",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:89",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:96"
       ],
       "id": "column:open_po_value",
       "name": "open_po_value",
@@ -2553,6 +2613,15 @@
       ],
       "id": "column:wbs_source",
       "name": "wbs_source",
+      "type": "column"
+    },
+    "column:wbs_validated": {
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:153",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:165"
+      ],
+      "id": "column:wbs_validated",
+      "name": "wbs_validated",
       "type": "column"
     },
     "db_column:budget_forecasts.costBreakdownId": {
@@ -2999,6 +3068,30 @@
       "table": "po_line_items",
       "type": "db_column"
     },
+    "db_column:po_line_items.isActive": {
+      "column": "isActive",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_line_items.isActive",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
+    "db_column:po_line_items.isCapex": {
+      "column": "isCapex",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_line_items.isCapex",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
     "db_column:po_line_items.lineItemNumber": {
       "column": "lineItemNumber",
       "constraints": {
@@ -3304,10 +3397,22 @@
       "constraints": {
         "not_null": false,
         "primary_key": false,
-        "references": "wbsDetails.wbsNumber"
+        "references": null
       },
       "data_type": "varchar",
       "id": "db_column:po_line_items.wbsNumber",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
+    "db_column:po_line_items.wbsValidated": {
+      "column": "wbsValidated",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_line_items.wbsValidated",
       "table": "po_line_items",
       "type": "db_column"
     },
@@ -4453,7 +4558,9 @@
     },
     "script:06_prepare_po_line_items": {
       "functions": [
+        "calculate_is_capex",
         "calculate_open_values",
+        "calculate_wbs_validated",
         "load_data",
         "main",
         "map_columns",
@@ -4709,6 +4816,8 @@
         "expectedDeliveryDate",
         "fmtPo",
         "id",
+        "isActive",
+        "isCapex",
         "lineItemNumber",
         "location",
         "nisLine",
@@ -4734,7 +4843,8 @@
         "vendorCategory",
         "vendorId",
         "vendorName",
-        "wbsNumber"
+        "wbsNumber",
+        "wbsValidated"
       ],
       "file": "po-line-items.ts",
       "id": "table:po_line_items",
@@ -4865,24 +4975,24 @@
     }
   },
   "stats": {
-    "columns_tracked": 64,
+    "columns_tracked": 66,
     "edges_by_type": {
       "DEPENDS_ON": 13,
       "INPUT": 33,
       "MAPS_TO": 5,
       "OUTPUT": 25,
-      "TRANSFORMS": 62
+      "TRANSFORMS": 64
     },
     "nodes_by_type": {
-      "column": 84,
-      "db_column": 137,
+      "column": 86,
+      "db_column": 140,
       "file": 23,
       "script": 17,
       "table": 11
     },
-    "total_edges": 138,
-    "total_nodes": 272,
-    "variables_traced": 65
+    "total_edges": 140,
+    "total_nodes": 277,
+    "variables_traced": 71
   },
   "variable_sources": {
     "01_po_line_items": {
@@ -4991,8 +5101,26 @@
       "already_closed": [
         "PO Receipt Status"
       ],
+      "capex_count": [
+        "is_capex"
+      ],
+      "capex_value": [
+        "is_capex"
+      ],
+      "has_wbs": [
+        "wbs_number"
+      ],
       "is_ops_vendor": [
         "Main Vendor SLB Vendor Category"
+      ],
+      "valid_wbs": [
+        "wbs_number"
+      ],
+      "validated_count": [
+        "wbs_validated"
+      ],
+      "wbs_exists": [
+        "wbs_number"
       ]
     },
     "07_prepare_po_transactions": {

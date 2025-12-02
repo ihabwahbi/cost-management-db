@@ -516,6 +516,7 @@
         "description",
         "expected_delivery_date",
         "fmt_po",
+        "is_capex",
         "line_item_number",
         "location",
         "nis_line",
@@ -540,13 +541,15 @@
         "vendor_category",
         "vendor_id",
         "vendor_name",
-        "wbs_number"
+        "wbs_number",
+        "wbs_validated"
       ],
       "dtypes": {
         "account_assignment_category": "object",
         "description": "object",
         "expected_delivery_date": "object",
         "fmt_po": "bool",
+        "is_capex": "bool",
         "line_item_number": "int64",
         "location": "object",
         "nis_line": "object",
@@ -571,7 +574,8 @@
         "vendor_category": "object",
         "vendor_id": "object",
         "vendor_name": "object",
-        "wbs_number": "object"
+        "wbs_number": "object",
+        "wbs_validated": "bool"
       },
       "null_counts": {
         "account_assignment_category": 9047,
@@ -589,6 +593,7 @@
         "description": "FLOW LINE JOINT",
         "expected_delivery_date": "2022-12-29 00:00:00.000",
         "fmt_po": false,
+        "is_capex": false,
         "line_item_number": 1,
         "location": "Moomba",
         "nis_line": "Materials and Supplies",
@@ -613,7 +618,8 @@
         "vendor_category": "GLD",
         "vendor_id": "P9516",
         "vendor_name": "Dubai Hub",
-        "wbs_number": NaN
+        "wbs_number": NaN,
+        "wbs_validated": false
       }
     },
     "po_transactions.csv": {
@@ -1294,7 +1300,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-02T04:16:01.901434+00:00",
+  "generated_at": "2025-12-02T06:52:14.673404+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1535,6 +1541,17 @@
           "type": "uuid"
         },
         {
+          "has_default": true,
+          "name": "isActive",
+          "not_null": true,
+          "type": "boolean"
+        },
+        {
+          "has_default": true,
+          "name": "isCapex",
+          "type": "boolean"
+        },
+        {
           "name": "lineItemNumber",
           "not_null": true,
           "type": "integer"
@@ -1642,8 +1659,12 @@
         },
         {
           "name": "wbsNumber",
-          "references": "wbsDetails.wbsNumber",
           "type": "varchar"
+        },
+        {
+          "has_default": true,
+          "name": "wbsValidated",
+          "type": "boolean"
         }
       ],
       "extraction_method": "ts-ast",
@@ -3252,11 +3273,29 @@
       "functions": [
         {
           "args": [
+            "df"
+          ],
+          "docstring": "Set is_capex = True if WBS indicates a capitalized PO.\n\nCapEx POs (C.* WBS prefix) don't hit P&L - they're capitalized assets.\nExamples: C.FT*, C.NF*, C.LF*, etc.\nThis flag enables reports to filter out CapEx when analyzing OpEx cost impact.",
+          "line": 179,
+          "name": "calculate_is_capex",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [
+              "is_capex"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
+          "args": [
             "cost_df",
             "po_df"
           ],
           "docstring": "Calculate open_po_qty and open_po_value based on cost impact.\n\nLogic:\n- If raw status is CLOSED PO: trust it, set open_po_qty and open_po_value to 0\n- Otherwise: calculate open values from ordered - cost impact",
-          "line": 53,
+          "line": 54,
           "name": "calculate_open_values",
           "semantics": {
             "aggregates": true,
@@ -3271,9 +3310,27 @@
           }
         },
         {
+          "args": [
+            "df"
+          ],
+          "docstring": "Set wbs_validated = True if wbs_number exists in wbs_details.\n\nThis enables data quality reporting for POs with invalid/unknown WBS references\n(e.g., typos, capex WBS tracked in separate systems).",
+          "line": 141,
+          "name": "calculate_wbs_validated",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": true,
+            "joins_data": false,
+            "modifies_columns": [
+              "wbs_validated"
+            ],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
           "args": [],
           "docstring": "Load intermediate data files.",
-          "line": 40,
+          "line": 41,
           "name": "load_data",
           "semantics": {
             "aggregates": false,
@@ -3287,7 +3344,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 186,
+          "line": 247,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -3303,7 +3360,7 @@
             "po_df"
           ],
           "docstring": "Map CSV columns to database column names.",
-          "line": 109,
+          "line": 110,
           "name": "map_columns",
           "semantics": {
             "aggregates": false,
@@ -3324,7 +3381,7 @@
             "filepath"
           ],
           "docstring": "Save import-ready DataFrame to CSV.",
-          "line": 177,
+          "line": 238,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -3340,7 +3397,7 @@
             "df"
           ],
           "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
-          "line": 140,
+          "line": 201,
           "name": "validate_output",
           "semantics": {
             "aggregates": false,
@@ -3363,7 +3420,7 @@
         "data/intermediate/cost_impact.csv",
         "data/intermediate/po_line_items.csv"
       ],
-      "line_count": 221,
+      "line_count": 288,
       "name": "06_prepare_po_line_items",
       "outputs": [
         "data/intermediate/cost_impact.csv",
@@ -3373,49 +3430,70 @@
         {
           "code_snippet": "output_df[db_col] = po_df[csv_col]",
           "description": "Filters rows based on boolean condition",
-          "line": 118,
+          "line": 119,
           "operation": "boolean_filter"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Amount\"] = po_df[\"Total Cost Impact Amount\"].fillna(0)",
           "column": "Total Cost Impact Amount",
           "description": "Creates/modifies column 'Total Cost Impact Amount'",
-          "line": 80,
+          "line": 81,
           "operation": "column_assign"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Qty\"] = po_df[\"Total Cost Impact Qty\"].fillna(0)",
           "column": "Total Cost Impact Qty",
           "description": "Creates/modifies column 'Total Cost Impact Qty'",
-          "line": 79,
+          "line": 80,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"fmt_po\"] = is_ops_vendor",
           "column": "fmt_po",
           "description": "Creates/modifies column 'fmt_po'",
-          "line": 132,
+          "line": 133,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"fmt_po\"] = False",
           "column": "fmt_po",
           "description": "Creates/modifies column 'fmt_po'",
-          "line": 134,
+          "line": 135,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"is_capex\"] = df[\"wbs_number\"].str.startswith(\"C.\", na=False)",
+          "column": "is_capex",
+          "description": "Creates/modifies column 'is_capex'",
+          "line": 190,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"open_po_qty\"] = po_df[\"open_po_qty\"].round(4)",
           "column": "open_po_qty",
           "description": "Creates/modifies column 'open_po_qty'",
-          "line": 124,
+          "line": 125,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"open_po_value\"] = po_df[\"open_po_value\"].round(2)",
           "column": "open_po_value",
           "description": "Creates/modifies column 'open_po_value'",
-          "line": 126,
+          "line": 127,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"wbs_validated\"] = False",
+          "column": "wbs_validated",
+          "description": "Creates/modifies column 'wbs_validated'",
+          "line": 153,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"wbs_validated\"] = has_wbs & wbs_exists",
+          "column": "wbs_validated",
+          "description": "Creates/modifies column 'wbs_validated'",
+          "line": 165,
           "operation": "column_assign"
         },
         {
@@ -3425,33 +3503,39 @@
             "Total Cost Impact Amount",
             "Total Cost Impact Qty"
           ],
-          "line": 104,
+          "line": 105,
           "operation": "drop"
+        },
+        {
+          "code_snippet": "valid_wbs = set(wbs_df[\"wbs_number\"].dropna().unique())",
+          "description": "Removes null values",
+          "line": 158,
+          "operation": "dropna"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Qty\"] = po_df[\"Total Cost Impact Qty\"].fillna(0)",
           "description": "Fills null values",
-          "line": 79,
+          "line": 80,
           "operation": "fillna"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Amount\"] = po_df[\"Total Cost Impact Amount\"].fillna(0)",
           "description": "Fills null values",
-          "line": 80,
+          "line": 81,
           "operation": "fillna"
         },
         {
           "code_snippet": "cost_df.groupby(\"PO Line ID\")",
           "description": "Groups data for aggregation",
           "group_column": "PO Line ID",
-          "line": 65,
+          "line": 66,
           "operation": "groupby"
         },
         {
           "code_snippet": "po_df = po_df.merge(cost_agg, on=\"PO Line ID\", how=\"left\")",
           "description": "Joins two DataFrames",
           "join_type": "left",
-          "line": 76,
+          "line": 77,
           "on_column": "PO Line ID",
           "operation": "merge"
         }

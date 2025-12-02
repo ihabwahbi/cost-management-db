@@ -59,7 +59,9 @@ PO_LINE_ITEMS_MAPPING = {
 PO_LINE_ITEMS_CALCULATED = [
     "open_po_qty",  # ordered_qty - SUM(cost_impact_qty)
     "open_po_value",  # po_value_usd - SUM(cost_impact_amount)
-    "fmt_po",  # Boolean flag (default False for now)
+    "fmt_po",  # Boolean flag (True when vendor_category = OPS)
+    "wbs_validated",  # True if wbs_number exists in wbs_details
+    "is_capex",  # True if WBS starts with 'C.' (capitalized, doesn't hit P&L)
 ]
 
 
