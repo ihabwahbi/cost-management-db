@@ -1440,7 +1440,7 @@
       "used_in": []
     },
     "fmt_po": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:133",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:149",
       "dtype": "bool",
       "name": "fmt_po",
       "source_type": "import-ready",
@@ -1476,7 +1476,7 @@
       ]
     },
     "is_capex": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:190",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:206",
       "dtype": "bool",
       "name": "is_capex",
       "source_type": "import-ready",
@@ -1528,7 +1528,7 @@
       "used_in": []
     },
     "open_po_qty": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:125",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:141",
       "dtype": "float64",
       "name": "open_po_qty",
       "source_type": "import-ready",
@@ -1540,7 +1540,7 @@
       ]
     },
     "open_po_value": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:127",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:143",
       "dtype": "float64",
       "name": "open_po_value",
       "source_type": "import-ready",
@@ -2183,7 +2183,7 @@
       ]
     },
     "wbs_validated": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:165",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:181",
       "dtype": "bool",
       "name": "wbs_validated",
       "source_type": "import-ready",
@@ -2505,7 +2505,7 @@
       ],
       "docstring": "Set is_capex = True if WBS indicates a capitalized PO.\n\nCapEx POs (C.* WBS prefix) don't hit P&L - they're capitalized assets.\nExamples: C.FT*, C.NF*, C.LF*, etc.\nThis flag enables reports to filter out CapEx when analyzing OpEx cost impact.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 179,
+      "line": 195,
       "name": "calculate_is_capex",
       "return_type": "pd.DataFrame",
       "signature": "def calculate_is_capex(df: pd.DataFrame) -> pd.DataFrame"
@@ -2578,7 +2578,7 @@
       ],
       "docstring": "Set wbs_validated = True if wbs_number exists in wbs_details.\n\nThis enables data quality reporting for POs with invalid/unknown WBS references\n(e.g., typos, capex WBS tracked in separate systems).",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 141,
+      "line": 157,
       "name": "calculate_wbs_validated",
       "return_type": "pd.DataFrame",
       "signature": "def calculate_wbs_validated(df: pd.DataFrame) -> pd.DataFrame"
@@ -2620,6 +2620,27 @@
       "name": "classify_po_line_items",
       "return_type": "tuple",
       "signature": "def classify_po_line_items(po_df: pd.DataFrame) -> tuple"
+    },
+    {
+      "args": [
+        "series"
+      ],
+      "called_by": [
+        "map_columns"
+      ],
+      "calls": [
+        "apply",
+        "int",
+        "isinstance",
+        "notna",
+        "str"
+      ],
+      "docstring": "Clean numeric values that should be strings.\nRemoves .0 suffix from floats (e.g., '4002084960.0' -> '4002084960').",
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 110,
+      "name": "clean_numeric_string",
+      "return_type": "pd.Series",
+      "signature": "def clean_numeric_string(series: pd.Series) -> pd.Series"
     },
     {
       "args": [
@@ -3860,7 +3881,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 247,
+      "line": 263,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -3961,6 +3982,7 @@
       "called_by": [],
       "calls": [
         "DataFrame",
+        "clean_numeric_string",
         "items",
         "len",
         "print",
@@ -3968,7 +3990,7 @@
       ],
       "docstring": "Map CSV columns to database column names.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 110,
+      "line": 120,
       "name": "map_columns",
       "return_type": "pd.DataFrame",
       "signature": "def map_columns(po_df: pd.DataFrame) -> pd.DataFrame"
@@ -4585,7 +4607,7 @@
       ],
       "docstring": "Save import-ready DataFrame to CSV.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 238,
+      "line": 254,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -4915,7 +4937,7 @@
       ],
       "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 201,
+      "line": 217,
       "name": "validate_output",
       "return_type": "bool",
       "signature": "def validate_output(df: pd.DataFrame) -> bool"
@@ -5028,7 +5050,7 @@
   "stats": {
     "total_columns": 192,
     "total_constants": 18,
-    "total_functions": 131,
+    "total_functions": 132,
     "total_tables": 11
   },
   "tables": [

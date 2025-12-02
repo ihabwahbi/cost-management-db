@@ -42,6 +42,13 @@ def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.Data
     """
     ...
 
+def clean_numeric_string(series: pd.Series) -> pd.Series:
+    """
+    Clean numeric values that should be strings.
+    Removes .0 suffix from floats (e.g., '4002084960.0' -> '4002084960').
+    """
+    ...
+
 def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
     """Map CSV columns to database column names."""
     ...

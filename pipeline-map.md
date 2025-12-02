@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-02T06:52:14.673404+00:00
+Generated: 2025-12-02T07:25:52.132617+00:00
 
 ## Data Flow Diagram
 
@@ -940,14 +940,14 @@ Key pandas operations used in each script:
 |------|-----------|---------|
 | 80 | column_assign | column: `Total Cost Impact Qty` |
 | 81 | column_assign | column: `Total Cost Impact Amount` |
-| 165 | column_assign | column: `wbs_validated` |
-| 190 | column_assign | column: `is_capex` |
+| 181 | column_assign | column: `wbs_validated` |
+| 206 | column_assign | column: `is_capex` |
 | 77 | merge | on: `PO Line ID` |
 | 80 | fillna | Fills null values |
 | 81 | fillna | Fills null values |
 | 105 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
-| 125 | column_assign | column: `open_po_qty` |
-| 127 | column_assign | column: `open_po_value` |
+| 115 | apply | Applies function to data |
+| 141 | column_assign | column: `open_po_qty` |
 
 ### `07_prepare_po_transactions`
 

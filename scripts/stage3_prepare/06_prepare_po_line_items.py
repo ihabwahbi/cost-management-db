@@ -107,6 +107,16 @@ def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.Data
     return po_df
 
 
+def clean_numeric_string(series: pd.Series) -> pd.Series:
+    """
+    Clean numeric values that should be strings.
+    Removes .0 suffix from floats (e.g., '4002084960.0' -> '4002084960').
+    """
+    return series.apply(
+        lambda x: str(int(x)) if pd.notna(x) and isinstance(x, float) else x
+    )
+
+
 def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
     """Map CSV columns to database column names."""
     print("Mapping columns to database schema...")
@@ -119,6 +129,12 @@ def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
             output_df[db_col] = po_df[csv_col]
         else:
             print(f"  Warning: Column '{csv_col}' not found in source data")
+
+    # Clean numeric columns that should be strings (remove .0 suffix)
+    string_columns = ["po_number", "plant_code", "pr_number", "pr_line"]
+    for col in string_columns:
+        if col in output_df.columns:
+            output_df[col] = clean_numeric_string(output_df[col])
 
     # Add calculated columns (already have db names)
     if "open_po_qty" in po_df.columns:

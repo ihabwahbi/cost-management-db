@@ -83,7 +83,7 @@
     "Main Vendor SLB Vendor Category": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 133,
+        "line": 149,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       }
@@ -537,13 +537,13 @@
     "fmt_po": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 133,
+        "line": 149,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 135,
+        "line": 151,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -579,7 +579,7 @@
     "is_capex": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 190,
+        "line": 206,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -613,13 +613,13 @@
     "open_po_qty": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 125,
+        "line": 141,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 125,
+        "line": 141,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
@@ -639,13 +639,13 @@
     "open_po_value": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 127,
+        "line": 143,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 127,
+        "line": 143,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
@@ -985,13 +985,13 @@
     "wbs_number": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 165,
+        "line": 181,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 190,
+        "line": 206,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
@@ -1037,13 +1037,13 @@
     "wbs_validated": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 153,
+        "line": 169,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 165,
+        "line": 181,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -1104,7 +1104,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 133,
+      "line": 149,
       "operation": "is_ops_vendor",
       "script": "06_prepare_po_line_items",
       "source": "column:Main Vendor SLB Vendor Category",
@@ -1434,7 +1434,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 125,
+      "line": 141,
       "operation": "po_df['open_po_qty'].round(4)",
       "script": "06_prepare_po_line_items",
       "source": "column:open_po_qty",
@@ -1443,7 +1443,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 127,
+      "line": 143,
       "operation": "po_df['open_po_value'].round(2)",
       "script": "06_prepare_po_line_items",
       "source": "column:open_po_value",
@@ -1641,7 +1641,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 190,
+      "line": 206,
       "operation": "df['wbs_number'].str.startswith('C.', na=False)",
       "script": "06_prepare_po_line_items",
       "source": "column:wbs_number",
@@ -1650,7 +1650,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 165,
+      "line": 181,
       "operation": "has_wbs & wbs_exists",
       "script": "06_prepare_po_line_items",
       "source": "column:wbs_number",
@@ -2386,8 +2386,8 @@
     },
     "column:fmt_po": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:133",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:135"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:149",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:151"
       ],
       "id": "column:fmt_po",
       "name": "fmt_po",
@@ -2411,7 +2411,7 @@
     },
     "column:is_capex": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:190"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:206"
       ],
       "id": "column:is_capex",
       "name": "is_capex",
@@ -2430,7 +2430,7 @@
     },
     "column:open_po_qty": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:125",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:141",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:88",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:92"
       ],
@@ -2440,7 +2440,7 @@
     },
     "column:open_po_value": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:127",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:143",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:89",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:96"
       ],
@@ -2617,8 +2617,8 @@
     },
     "column:wbs_validated": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:153",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:165"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:169",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:181"
       ],
       "id": "column:wbs_validated",
       "name": "wbs_validated",
@@ -4561,6 +4561,7 @@
         "calculate_is_capex",
         "calculate_open_values",
         "calculate_wbs_validated",
+        "clean_numeric_string",
         "load_data",
         "main",
         "map_columns",
