@@ -246,8 +246,10 @@ python3 scripts/profile_data.py <file>                # Profile entire file
 
 ### Validation
 ```bash
-python3 scripts/validators/schema_lock.py --check    # Verify schemas match lock
-python3 scripts/validators/schema_lock.py --update   # Update lock (if intentional)
+python3 scripts/validators/schema_lock.py --check              # Verify schemas match lock
+python3 scripts/validators/schema_lock.py --update             # Update lock (if intentional)
+python3 scripts/validators/cross_project_schema.py --check     # Verify webapp sync
+python3 scripts/validators/cross_project_schema.py --sync      # Sync to webapp
 ```
 
 ---
@@ -266,7 +268,28 @@ import { pgSchema } from 'drizzle-orm/pg-core';
 const devV3Schema = pgSchema('dev_v3');
 ```
 
-### Workflow
+### Cross-Project Schema (This Project Owns Data Schemas)
+
+This project owns schema definitions for data tables. The webapp (`cost-management`) imports them.
+
+```bash
+# Check sync status (runs automatically on commit)
+python3 scripts/validators/cross_project_schema.py --check
+
+# Sync to webapp after schema changes
+python3 scripts/validators/cross_project_schema.py --sync
+
+# Then apply from webapp
+cd ../cost-management && npm run db:push
+```
+
+**Workflow for schema changes:**
+1. Edit schema in `src/schema/`
+2. Sync: `python3 scripts/validators/cross_project_schema.py --sync`
+3. Apply: `cd ../cost-management && npm run db:push`
+4. If pipeline-related: update `column_mappings.py` and stage scripts
+
+### Workflow (Single Project)
 1. Edit schema files in `src/schema/`
 2. Run `npm run db:push`
 3. Run `npm run type-check`
@@ -286,7 +309,7 @@ const devV3Schema = pgSchema('dev_v3');
 | Layer | What Runs | Purpose |
 |-------|-----------|---------|
 | **Layer 1** | ruff, mypy, pylint | Standard linting, types, duplicate detection |
-| **Layer 2** | Schema lock, Pipeline DAG | Catch breaking changes to output schemas |
+| **Layer 2** | Schema lock, Pipeline DAG, Cross-project sync | Catch breaking changes, verify webapp sync |
 | **Layer 3** | Oracle regeneration | Keep context artifacts in sync |
 
 ### Handling Failures
@@ -296,6 +319,7 @@ const devV3Schema = pgSchema('dev_v3');
 | Ruff/MyPy/Pylint | Fix the reported code issues |
 | Schema lock check | If INTENTIONAL: `python3 scripts/validators/schema_lock.py --update && git add schema_lock.json`. If UNINTENTIONAL: fix your code |
 | Pipeline DAG | Fix circular script dependencies |
+| Cross-project sync | Run `python3 scripts/validators/cross_project_schema.py --sync` then `cd ../cost-management && npm run db:push` |
 | Oracle regeneration | Stage updated files: `git add pipeline-context/` |
 
 ### What Triggers Oracle Regeneration
