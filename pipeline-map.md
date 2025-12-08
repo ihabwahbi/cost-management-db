@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-02T09:17:41.414901+00:00
+Generated: 2025-12-07T07:44:53.069053+00:00
 
 ## Data Flow Diagram
 
@@ -70,6 +70,7 @@ flowchart TD
         db_po_mappings[("po_mappings")]
         db_po_operations[("po_operations")]
         db_po_transactions[("po_transactions")]
+        db_pr_pre_mappings[("pr_pre_mappings")]
         db_projects[("projects")]
         db_sap_reservations[("sap_reservations")]
         db_wbs_details[("wbs_details")]
@@ -231,6 +232,11 @@ flowchart LR
 | `mappedAt` | timestamp | - |
 | `createdAt` | timestamp | - |
 | `updatedAt` | timestamp | - |
+| `mappingSource` | varchar | NOT NULL, DEFAULT |
+| `sourcePrPreMappingId` | uuid | FK → prPreMappings.id |
+| `requiresConfirmation` | boolean | NOT NULL, DEFAULT |
+| `confirmedAt` | timestamp | - |
+| `confirmedBy` | varchar | - |
 
 ### `po_operations`
 
@@ -265,6 +271,25 @@ flowchart LR
 | `amount` | numeric | NOT NULL, DEFAULT |
 | `costImpactQty` | numeric | NOT NULL, DEFAULT |
 | `costImpactAmount` | numeric | NOT NULL, DEFAULT |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
+
+### `pr_pre_mappings`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `prNumber` | varchar | NOT NULL |
+| `prLine` | integer | - |
+| `costBreakdownId` | uuid | NOT NULL, FK → costBreakdown.id |
+| `status` | varchar | NOT NULL, DEFAULT |
+| `pendingConfirmationCount` | integer | NOT NULL, DEFAULT |
+| `confirmedCount` | integer | NOT NULL, DEFAULT |
+| `closedAt` | timestamp | - |
+| `closedBy` | varchar | - |
+| `notes` | text | - |
+| `createdBy` | varchar | - |
+| `expiresAt` | timestamp | NOT NULL |
 | `createdAt` | timestamp | - |
 | `updatedAt` | timestamp | - |
 

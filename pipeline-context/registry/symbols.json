@@ -5123,7 +5123,7 @@
     "total_columns": 195,
     "total_constants": 19,
     "total_functions": 133,
-    "total_tables": 11
+    "total_tables": 12
   },
   "tables": [
     {
@@ -5258,6 +5258,8 @@
     },
     {
       "columns": [
+        "confirmedAt",
+        "confirmedBy",
         "costBreakdownId",
         "createdAt",
         "id",
@@ -5265,7 +5267,10 @@
         "mappedAt",
         "mappedBy",
         "mappingNotes",
+        "mappingSource",
         "poLineItemId",
+        "requiresConfirmation",
+        "sourcePrPreMappingId",
         "updatedAt"
       ],
       "file": "src/schema/po-mappings.ts",
@@ -5277,6 +5282,10 @@
         {
           "column": "poLineItemId",
           "references": "poLineItems.id"
+        },
+        {
+          "column": "sourcePrPreMappingId",
+          "references": "prPreMappings.id"
         }
       ],
       "name": "po_mappings",
@@ -5332,6 +5341,33 @@
         }
       ],
       "name": "po_transactions",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "closedAt",
+        "closedBy",
+        "confirmedCount",
+        "costBreakdownId",
+        "createdAt",
+        "createdBy",
+        "expiresAt",
+        "id",
+        "notes",
+        "pendingConfirmationCount",
+        "prLine",
+        "prNumber",
+        "status",
+        "updatedAt"
+      ],
+      "file": "src/schema/pr-pre-mappings.ts",
+      "foreign_keys": [
+        {
+          "column": "costBreakdownId",
+          "references": "costBreakdown.id"
+        }
+      ],
+      "name": "pr_pre_mappings",
       "primary_key": "id"
     },
     {

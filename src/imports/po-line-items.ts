@@ -6,6 +6,10 @@
  * - Upsert on po_line_id (insert new, update existing)
  * - Circuit breaker (abort if >5% would be deactivated)
  * - Soft delete (is_active=false for records not in import)
+ * - PR Pre-Mapping matching (creates pending confirmations in inbox)
+ * 
+ * After import, automatically matches POs against active PR pre-mappings
+ * and creates po_mappings with requiresConfirmation=true for user verification.
  * 
  * Usage:
  *   npx tsx src/imports/po-line-items.ts
@@ -19,6 +23,7 @@ import { parse } from 'csv-parse';
 import { db } from '../client';
 import { poLineItems } from '../schema';
 import { eq, notInArray, and, sql } from 'drizzle-orm';
+import { matchPRPreMappings } from '../matching/match-pr-pre-mappings';
 
 // Configuration
 const CSV_PATH = './data/import-ready/po_line_items.csv';
@@ -221,12 +226,12 @@ async function main() {
   }
 
   // Step 1: Load CSV
-  console.log('\n[1/5] Loading CSV...');
+  console.log('\n[1/6] Loading CSV...');
   const rows = await loadCsv(CSV_PATH);
   console.log(`  Loaded ${rows.length.toLocaleString()} rows from CSV`);
   
   // Step 2: Basic validation
-  console.log('\n[2/5] Validating...');
+  console.log('\n[2/6] Validating...');
   if (rows.length < 1000) {
     console.error(`  ERROR: Only ${rows.length} rows in file - suspiciously low!`);
     console.error('  Aborting to prevent data loss. Use --force to override.');
@@ -244,13 +249,13 @@ async function main() {
   console.log('  Validation passed');
   
   // Step 3: Transform data
-  console.log('\n[3/5] Transforming data...');
+  console.log('\n[3/6] Transforming data...');
   const records = rows.map(transformRow);
   const poLineIds = records.map(r => r.poLineId);
   console.log(`  Transformed ${records.length.toLocaleString()} records`);
   
   // Step 4: Check circuit breaker
-  console.log('\n[4/5] Checking circuit breaker...');
+  console.log('\n[4/6] Checking circuit breaker...');
   
   // Get current active count
   const [{ count: activeCount }] = await db
@@ -283,7 +288,7 @@ async function main() {
   }
   
   if (DRY_RUN) {
-    console.log('\n[5/5] Dry run - skipping database changes');
+    console.log('\n[5-6/6] Dry run - skipping database changes');
     console.log('\n' + '='.repeat(60));
     console.log('DRY RUN COMPLETE - No changes made');
     console.log('='.repeat(60));
@@ -291,7 +296,7 @@ async function main() {
   }
   
   // Step 5: Execute import
-  console.log('\n[5/5] Importing...');
+  console.log('\n[5/6] Importing...');
   
   let totalProcessed = 0;
   const startTime = Date.now();
@@ -324,6 +329,23 @@ async function main() {
           notInArray(poLineItems.poLineId, poLineIds)
         )
       );
+  }
+  
+  // Step 6: Match PR Pre-Mappings
+  console.log('\n[6/6] Matching PR pre-mappings...');
+  const matchResult = await matchPRPreMappings();
+  
+  if (matchResult.totalMatched > 0) {
+    console.log(`  Created ${matchResult.totalMatched} pending confirmation(s)`);
+    for (const match of matchResult.matches) {
+      console.log(`    PR ${match.prNumber}: ${match.matchedCount} line item(s) matched`);
+    }
+  } else {
+    console.log('  No new matches found');
+  }
+  
+  if (matchResult.expiredCount > 0) {
+    console.log(`  Expired ${matchResult.expiredCount} pre-mapping(s)`);
   }
   
   // Final stats

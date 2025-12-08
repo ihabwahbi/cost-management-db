@@ -11,6 +11,7 @@ export * from './projects';
 export * from './wbs-details';
 export * from './cost-breakdown';
 export * from './po-line-items';
+export * from './pr-pre-mappings';  // Must be before po-mappings (dependency)
 export * from './po-mappings';
 
 // PO Operations & Transactions

@@ -891,3 +891,89 @@ This design delivers exceptional UX through:
 7. **Safety**: Manual changes are always protected
 
 The flow transforms mapping from a reactive chore to a proactive, controlled workflow where user intent is captured early, verified explicitly, and locked permanently.
+
+---
+
+## 13. Implementation Status (2025-12-07)
+
+### Phase 1: Schema Updates - COMPLETED
+
+| Item | Status | Notes |
+|------|--------|-------|
+| `pr_pre_mappings` table | Done | Created at `packages/db/src/schema/pr-pre-mappings.ts` |
+| `po_mappings` additions | Done | Added mappingSource, sourcePrPreMappingId, requiresConfirmation, confirmedAt, confirmedBy |
+| Schema export | Done | Both exported from `packages/db/src/schema/index.ts` |
+| Schema sync | Done | `pnpm db:compare` validates, `pnpm db:push` shows no changes |
+
+### Phase 2: tRPC Procedures - COMPLETED
+
+New domain created at `packages/api/src/procedures/pr-mapping/`:
+
+| Procedure | Type | Status |
+|-----------|------|--------|
+| `pr-mapping.router.ts` | Router | Done |
+| `create-pre-mapping.procedure.ts` | Mutation | Done |
+| `check-existing-pos.procedure.ts` | Query | Done |
+| `list-pre-mappings.procedure.ts` | Query | Done |
+| `get-pre-mapping-stats.procedure.ts` | Query | Done |
+| `update-pre-mapping.procedure.ts` | Mutation | Done |
+| `delete-pre-mapping.procedure.ts` | Mutation | Done |
+| `close-pre-mapping.procedure.ts` | Mutation | Done |
+| `get-pending-confirmations.procedure.ts` | Query | Done |
+| `confirm-matches.procedure.ts` | Mutation | Done |
+
+Router registered in `packages/api/src/index.ts` as `prMapping`.
+
+### Phase 3: ETL Matching Logic - COMPLETED
+
+**Location**: `cost-management-db`
+
+| File | Action | Status |
+|------|--------|--------|
+| `src/matching/match-pr-pre-mappings.ts` | New matching logic | Done |
+| `src/imports/po-line-items.ts` | Hook matching after import (Step 6) | Done |
+
+**Implementation Details**:
+- `matchPRPreMappings()` finds ACTIVE pre-mappings and matches against unmapped PO line items
+- Creates `po_mappings` with `requiresConfirmation=true` and `mappingSource='pre-mapping'`
+- Updates `pendingConfirmationCount` and `confirmedCount` on the pre-mapping
+- Automatically expires pre-mappings past their `expiresAt` date
+- Called as Step 6 of the PO Line Items import process
+
+**Call Point**: After PO line item import in ETL pipeline (Step 6/6).
+
+### Phase 4: UI Components - NOT STARTED
+
+Cells to create:
+- `pr-pre-mapping-cell` - Management table
+- `pr-mapping-inbox-cell` - Confirmation inbox
+- `pr-mapping-widget` - Dashboard stats widget
+- Page route at `apps/web/app/pr-mapping/page.tsx`
+
+### Validation Results
+
+```bash
+# Webapp (cost-management)
+pnpm type-check  # PASSED
+pnpm lint        # PASSED (pre-existing warnings only)
+pnpm db:compare  # PASSED - schema validated
+
+# Database (cost-management-db) - Phase 3 ETL Matching
+npm run type-check  # PASSED
+npm test            # PASSED - 21 tests
+```
+
+### Summary
+
+| Phase | Status | Blocker |
+|-------|--------|---------|
+| Schema | COMPLETE | - |
+| Procedures | COMPLETE | - |
+| ETL Matching | COMPLETE | - |
+| UI Components | NOT STARTED | - |
+
+**Next Steps**:
+1. Create UI Cells for pre-mapping management
+2. Create inbox Cell for confirmations
+3. Add dashboard widget
+4. Add page route and navigation

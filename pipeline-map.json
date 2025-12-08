@@ -1303,7 +1303,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-02T09:17:41.414901+00:00",
+  "generated_at": "2025-12-07T07:44:53.069053+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1677,6 +1677,14 @@
     {
       "columns": [
         {
+          "name": "confirmedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "confirmedBy",
+          "type": "varchar"
+        },
+        {
           "name": "costBreakdownId",
           "not_null": true,
           "references": "costBreakdown.id",
@@ -1709,9 +1717,26 @@
           "type": "text"
         },
         {
+          "has_default": true,
+          "name": "mappingSource",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
           "name": "poLineItemId",
           "not_null": true,
           "references": "poLineItems.id",
+          "type": "uuid"
+        },
+        {
+          "has_default": true,
+          "name": "requiresConfirmation",
+          "not_null": true,
+          "type": "boolean"
+        },
+        {
+          "name": "sourcePrPreMappingId",
+          "references": "prPreMappings.id",
           "type": "uuid"
         },
         {
@@ -1863,6 +1888,80 @@
       "extraction_method": "ts-ast",
       "file": "po-transactions.ts",
       "name": "po_transactions"
+    },
+    {
+      "columns": [
+        {
+          "name": "closedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "closedBy",
+          "type": "varchar"
+        },
+        {
+          "has_default": true,
+          "name": "confirmedCount",
+          "not_null": true,
+          "type": "integer"
+        },
+        {
+          "name": "costBreakdownId",
+          "not_null": true,
+          "references": "costBreakdown.id",
+          "type": "uuid"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "createdBy",
+          "type": "varchar"
+        },
+        {
+          "name": "expiresAt",
+          "not_null": true,
+          "type": "timestamp"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "uuid"
+        },
+        {
+          "name": "notes",
+          "type": "text"
+        },
+        {
+          "has_default": true,
+          "name": "pendingConfirmationCount",
+          "not_null": true,
+          "type": "integer"
+        },
+        {
+          "name": "prLine",
+          "type": "integer"
+        },
+        {
+          "name": "prNumber",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "has_default": true,
+          "name": "status",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "pr-pre-mappings.ts",
+      "name": "pr_pre_mappings"
     },
     {
       "columns": [

@@ -3560,6 +3560,30 @@
       "table": "po_line_items",
       "type": "db_column"
     },
+    "db_column:po_mappings.confirmedAt": {
+      "column": "confirmedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:po_mappings.confirmedAt",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
+    "db_column:po_mappings.confirmedBy": {
+      "column": "confirmedBy",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:po_mappings.confirmedBy",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
     "db_column:po_mappings.costBreakdownId": {
       "column": "costBreakdownId",
       "constraints": {
@@ -3644,6 +3668,18 @@
       "table": "po_mappings",
       "type": "db_column"
     },
+    "db_column:po_mappings.mappingSource": {
+      "column": "mappingSource",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:po_mappings.mappingSource",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
     "db_column:po_mappings.poLineItemId": {
       "column": "poLineItemId",
       "constraints": {
@@ -3653,6 +3689,30 @@
       },
       "data_type": "uuid",
       "id": "db_column:po_mappings.poLineItemId",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
+    "db_column:po_mappings.requiresConfirmation": {
+      "column": "requiresConfirmation",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_mappings.requiresConfirmation",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
+    "db_column:po_mappings.sourcePrPreMappingId": {
+      "column": "sourcePrPreMappingId",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": "prPreMappings.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:po_mappings.sourcePrPreMappingId",
       "table": "po_mappings",
       "type": "db_column"
     },
@@ -3978,6 +4038,174 @@
       "data_type": "timestamp",
       "id": "db_column:po_transactions.updatedAt",
       "table": "po_transactions",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.closedAt": {
+      "column": "closedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:pr_pre_mappings.closedAt",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.closedBy": {
+      "column": "closedBy",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:pr_pre_mappings.closedBy",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.confirmedCount": {
+      "column": "confirmedCount",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "integer",
+      "id": "db_column:pr_pre_mappings.confirmedCount",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.costBreakdownId": {
+      "column": "costBreakdownId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": "costBreakdown.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:pr_pre_mappings.costBreakdownId",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:pr_pre_mappings.createdAt",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.createdBy": {
+      "column": "createdBy",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:pr_pre_mappings.createdBy",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.expiresAt": {
+      "column": "expiresAt",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:pr_pre_mappings.expiresAt",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:pr_pre_mappings.id",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.notes": {
+      "column": "notes",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:pr_pre_mappings.notes",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.pendingConfirmationCount": {
+      "column": "pendingConfirmationCount",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "integer",
+      "id": "db_column:pr_pre_mappings.pendingConfirmationCount",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.prLine": {
+      "column": "prLine",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "integer",
+      "id": "db_column:pr_pre_mappings.prLine",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.prNumber": {
+      "column": "prNumber",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:pr_pre_mappings.prNumber",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.status": {
+      "column": "status",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:pr_pre_mappings.status",
+      "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:pr_pre_mappings.updatedAt": {
+      "column": "updatedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:pr_pre_mappings.updatedAt",
+      "table": "pr_pre_mappings",
       "type": "db_column"
     },
     "db_column:projects.createdAt": {
@@ -5011,6 +5239,8 @@
     },
     "table:po_mappings": {
       "columns": [
+        "confirmedAt",
+        "confirmedBy",
         "costBreakdownId",
         "createdAt",
         "id",
@@ -5018,7 +5248,10 @@
         "mappedAt",
         "mappedBy",
         "mappingNotes",
+        "mappingSource",
         "poLineItemId",
+        "requiresConfirmation",
+        "sourcePrPreMappingId",
         "updatedAt"
       ],
       "file": "po-mappings.ts",
@@ -5066,6 +5299,28 @@
       "file": "po-transactions.ts",
       "id": "table:po_transactions",
       "name": "po_transactions",
+      "type": "table"
+    },
+    "table:pr_pre_mappings": {
+      "columns": [
+        "closedAt",
+        "closedBy",
+        "confirmedCount",
+        "costBreakdownId",
+        "createdAt",
+        "createdBy",
+        "expiresAt",
+        "id",
+        "notes",
+        "pendingConfirmationCount",
+        "prLine",
+        "prNumber",
+        "status",
+        "updatedAt"
+      ],
+      "file": "pr-pre-mappings.ts",
+      "id": "table:pr_pre_mappings",
+      "name": "pr_pre_mappings",
       "type": "table"
     },
     "table:projects": {
@@ -5144,13 +5399,13 @@
     },
     "nodes_by_type": {
       "column": 92,
-      "db_column": 141,
+      "db_column": 160,
       "file": 23,
       "script": 17,
-      "table": 11
+      "table": 12
     },
     "total_edges": 145,
-    "total_nodes": 284,
+    "total_nodes": 304,
     "variables_traced": 72
   },
   "variable_sources": {
