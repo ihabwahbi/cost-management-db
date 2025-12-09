@@ -74,7 +74,15 @@ def get_orphaned_files() -> Set[str]:
     extra_in_webapp = webapp_files - db_files
 
     # Heuristic: auth-related files are webapp-only, others are orphaned
-    auth_keywords = {"user", "auth", "session", "registration", "token", "credential"}
+    auth_keywords = {
+        "user",
+        "auth",
+        "session",
+        "registration",
+        "token",
+        "credential",
+        "invite",
+    }
 
     webapp_only = set()
     orphaned = set()

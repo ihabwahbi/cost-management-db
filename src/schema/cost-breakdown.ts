@@ -7,7 +7,6 @@ export const costBreakdown = devV3Schema.table('cost_breakdown', {
   projectId: uuid('project_id')
     .notNull()
     .references(() => projects.id),
-  subBusinessLine: text('sub_business_line').notNull(),
   costLine: text('cost_line').notNull(),
   spendType: text('spend_type').notNull(),
   spendSubCategory: text('spend_sub_category').notNull(),

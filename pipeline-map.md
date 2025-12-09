@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-07T07:44:53.069053+00:00
+Generated: 2025-12-09T03:18:28.464360+00:00
 
 ## Data Flow Diagram
 
@@ -164,7 +164,6 @@ flowchart LR
 |--------|------|-------------|
 | `id` | uuid | PK |
 | `projectId` | uuid | NOT NULL, FK → projects.id |
-| `subBusinessLine` | text | NOT NULL |
 | `costLine` | text | NOT NULL |
 | `spendType` | text | NOT NULL |
 | `spendSubCategory` | text | NOT NULL |

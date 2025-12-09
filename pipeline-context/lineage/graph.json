@@ -2912,18 +2912,6 @@
       "table": "cost_breakdown",
       "type": "db_column"
     },
-    "db_column:cost_breakdown.subBusinessLine": {
-      "column": "subBusinessLine",
-      "constraints": {
-        "not_null": true,
-        "primary_key": false,
-        "references": null
-      },
-      "data_type": "text",
-      "id": "db_column:cost_breakdown.subBusinessLine",
-      "table": "cost_breakdown",
-      "type": "db_column"
-    },
     "db_column:cost_breakdown.updatedAt": {
       "column": "updatedAt",
       "constraints": {
@@ -5153,7 +5141,6 @@
         "projectId",
         "spendSubCategory",
         "spendType",
-        "subBusinessLine",
         "updatedAt"
       ],
       "file": "cost-breakdown.ts",
@@ -5399,13 +5386,13 @@
     },
     "nodes_by_type": {
       "column": 92,
-      "db_column": 160,
+      "db_column": 159,
       "file": 23,
       "script": 17,
       "table": 12
     },
     "total_edges": 145,
-    "total_nodes": 304,
+    "total_nodes": 303,
     "variables_traced": 72
   },
   "variable_sources": {
