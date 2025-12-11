@@ -76,6 +76,11 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   index('po_line_items_po_line_id_idx').on(table.poLineId),
   index('po_line_items_vendor_category_idx').on(table.vendorCategory),
   index('po_line_items_is_active_idx').on(table.isActive),
+  // Performance indexes for PO mapping page query pattern
+  // The main query filters by is_active, is_capex, and po_creation_date, then sorts by date
+  index('po_line_items_po_creation_date_idx').on(table.poCreationDate),
+  index('po_line_items_is_capex_idx').on(table.isCapex),
+  index('po_line_items_wbs_number_idx').on(table.wbsNumber),  // Used in LEFT JOIN to wbs_details
 ]);
 
 export type POLineItem = typeof poLineItems.$inferSelect;
