@@ -10,5 +10,5 @@ dist/
 __pycache__/
 .venv/
 
-# Pipeline cache metadata files
-data/intermediate/.*.meta.json
+# Sensitive data directory (contains raw business data)
+data/
