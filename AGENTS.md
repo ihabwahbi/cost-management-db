@@ -72,6 +72,7 @@ If regeneration fails, the Oracle will exit with an error (never uses broken con
 | `src/schema/index.ts` | All database table exports |
 | `scripts/config/column_mappings.py` | CSV to DB column mappings |
 | `schema_lock.json` | Tracks output schema hashes (auto-validated on commit) |
+| `scripts/check-schema-symlinks.sh` | Validates symlinks to webapp are intact |
 | `scripts/contracts/*.py` | Pandera data contracts for runtime validation |
 | `tests/contracts/test_business_rules.py` | Business rule assertions (from COST_MANAGEMENT_LOGIC.md) |
 
@@ -218,12 +219,18 @@ The data pipeline transforms raw CSV/Excel files into import-ready CSVs that mat
 
 ### Database (npm scripts)
 ```bash
-npm run db:push              # Push schema changes to database
+npm run db:drift             # Detect schema drift (shows SQL, never applies)
+npm run db:drift:sql         # Output raw SQL only (for piping/review)
+npm run db:drift:json        # Output JSON (for CI)
 npm run db:generate          # Generate migration files
 npm run db:studio            # Open Drizzle Studio GUI
 npm run type-check           # TypeScript validation
 npm test                     # Run tests
 ```
+
+**IMPORTANT**: There is no `db:push` command. Schema changes are applied manually
+via SQL (psql, database MCP tool, etc.) after reviewing `db:drift` output.
+This prevents accidental data loss or table drops.
 
 ### Context Oracle CLI
 ```bash
@@ -248,8 +255,6 @@ python3 scripts/profile_data.py <file>                # Profile entire file
 ```bash
 python3 scripts/validators/schema_lock.py --check              # Verify schemas match lock
 python3 scripts/validators/schema_lock.py --update             # Update lock (if intentional)
-python3 scripts/validators/cross_project_schema.py --check     # Verify webapp sync
-python3 scripts/validators/cross_project_schema.py --sync      # Sync to webapp
 ```
 
 ---
@@ -268,32 +273,50 @@ import { pgSchema } from 'drizzle-orm/pg-core';
 const devV3Schema = pgSchema('dev_v3');
 ```
 
-### Cross-Project Schema (This Project Owns Data Schemas)
+### Cross-Project Schema (Symlinked — Bidirectional)
 
-This project owns schema definitions for data tables. The webapp (`cost-management`) imports them.
+Both projects share the `dev_v3` schema. Each project owns some tables and symlinks
+the other project's tables so that `db:push` from either project is safe (won't DROP
+tables it doesn't know about).
 
-```bash
-# Check sync status (runs automatically on commit)
-python3 scripts/validators/cross_project_schema.py --check
+**ETL-owned schemas** (real files here, symlinked INTO webapp):
+`_schema.ts`, `budget-forecasts.ts`, `cost-breakdown.ts`, `forecast-versions.ts`,
+`grir-exposures.ts`, `po-line-items.ts`, `po-mappings.ts`, `po-operations.ts`,
+`po-transactions.ts`, `pr-pre-mappings.ts`, `projects.ts`, `sap-reservations.ts`,
+`wbs-details.ts`, `v-project-financials.ts`, `v-po-mapping-detail.ts`
 
-# Sync to webapp after schema changes
-python3 scripts/validators/cross_project_schema.py --sync
+**Webapp-owned schemas** (symlinked here FROM `cost-management/packages/db/src/schema/`):
+`users.ts`, `agent-memories.ts`, `pending-invites.ts`, `registration-attempts.ts`,
+`registration-audit-log.ts`, `webauthn-credentials.ts`, `webauthn-challenges.ts`
 
-# Then apply from webapp
-cd ../cost-management && npm run db:push
-```
-
-**Workflow for schema changes:**
-1. Edit schema in `src/schema/`
-2. Sync: `python3 scripts/validators/cross_project_schema.py --sync`
-3. Apply: `cd ../cost-management && npm run db:push`
+**Workflow for data schema changes (ETL-owned):**
+1. Edit schema in `src/schema/` — the webapp sees the change immediately via symlink
+2. Detect drift: `npm run db:drift` (shows SQL needed)
+3. Apply the SQL manually via psql or database MCP tool
 4. If pipeline-related: update `column_mappings.py` and stage scripts
+
+**Workflow for webapp schema changes (webapp-owned):**
+1. Edit the file in `cost-management/packages/db/src/schema/` — this project sees the change via symlink
+2. Detect drift: `npm run db:drift` (shows SQL needed)
+3. Apply the SQL manually via psql or database MCP tool
+
+**Adding a new data schema table (ETL-owned):**
+1. Create the `.ts` file in `src/schema/`
+2. Export from `src/schema/index.ts`
+3. Create a symlink in `cost-management/packages/db/src/schema/`
+4. Add the export to `cost-management/packages/db/src/schema/index.ts`
+5. Detect drift: `npm run db:drift` → apply SQL manually
+
+**SAFETY**: Both `index.ts` files must export all tables from both projects.
+Run `check-schema-symlinks.sh` to verify. Never apply schema SQL without
+reviewing the drift output first.
 
 ### Workflow (Single Project)
 1. Edit schema files in `src/schema/`
-2. Run `npm run db:push`
-3. Run `npm run type-check`
-4. Verify with `npm run db:studio` if needed
+2. Run `npm run db:drift` to see what SQL is needed
+3. Apply the SQL manually via psql or database MCP tool
+4. Run `npm run type-check`
+5. Verify with `npm run db:studio` if needed
 
 ### Naming Conventions
 - **TypeScript properties**: `camelCase`
@@ -309,7 +332,7 @@ cd ../cost-management && npm run db:push
 | Layer | What Runs | Purpose |
 |-------|-----------|---------|
 | **Layer 1** | ruff, mypy, pylint | Standard linting, types, duplicate detection |
-| **Layer 2** | Schema lock, Pipeline DAG, Cross-project sync | Catch breaking changes, verify webapp sync |
+| **Layer 2** | Schema lock, Pipeline DAG | Catch breaking changes |
 | **Layer 3** | Oracle regeneration | Keep context artifacts in sync |
 
 ### Handling Failures
@@ -319,7 +342,7 @@ cd ../cost-management && npm run db:push
 | Ruff/MyPy/Pylint | Fix the reported code issues |
 | Schema lock check | If INTENTIONAL: `python3 scripts/validators/schema_lock.py --update && git add schema_lock.json`. If UNINTENTIONAL: fix your code |
 | Pipeline DAG | Fix circular script dependencies |
-| Cross-project sync | Run `python3 scripts/validators/cross_project_schema.py --sync` then `cd ../cost-management && npm run db:push` |
+| Webapp schema outdated | Schema files are symlinked — edit in `src/schema/` and both projects see the change |
 | Oracle regeneration | Stage updated files: `git add pipeline-context/` |
 
 ### What Triggers Oracle Regeneration

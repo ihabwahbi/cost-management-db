@@ -83,7 +83,7 @@
     "Main Vendor SLB Vendor Category": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 149,
+        "line": 178,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       }
@@ -201,6 +201,14 @@
         "file": "scripts/stage2_transform/04_enrich_po_line_items.py",
         "line": 65,
         "script": "04_enrich_po_line_items",
+        "type": "READS"
+      }
+    ],
+    "PO Receipt Status": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 103,
+        "script": "06_prepare_po_line_items",
         "type": "READS"
       }
     ],
@@ -346,6 +354,12 @@
         "line": 81,
         "script": "06_calculate_grir",
         "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 115,
+        "script": "06_prepare_po_line_items",
+        "type": "READS"
       }
     ],
     "Requester": [
@@ -371,13 +385,13 @@
     "Reservation -Line": [
       {
         "file": "scripts/stage1_clean/13_reservations.py",
-        "line": 80,
+        "line": 90,
         "script": "13_reservations",
         "type": "READS"
       },
       {
         "file": "scripts/stage1_clean/13_reservations.py",
-        "line": 83,
+        "line": 93,
         "script": "13_reservations",
         "type": "READS"
       }
@@ -548,6 +562,38 @@
         "type": "WRITES"
       }
     ],
+    "cost_impact_pct": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 172,
+        "script": "06_prepare_po_line_items",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 106,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 115,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 122,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 172,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      }
+    ],
     "cost_impact_qty": [
       {
         "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
@@ -562,16 +608,42 @@
         "type": "WRITES"
       }
     ],
-    "fmt_po": [
+    "cost_impact_value": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 149,
+        "line": 170,
+        "script": "06_prepare_po_line_items",
+        "type": "READS"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 103,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 151,
+        "line": 109,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 170,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      }
+    ],
+    "fmt_po": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 178,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 180,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -607,7 +679,7 @@
     "is_capex": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 206,
+        "line": 235,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -641,13 +713,13 @@
     "open_po_qty": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 141,
+        "line": 164,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 141,
+        "line": 164,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
@@ -667,13 +739,13 @@
     "open_po_value": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 143,
+        "line": 166,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 143,
+        "line": 166,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
@@ -839,7 +911,7 @@
       },
       {
         "file": "scripts/stage1_clean/13_reservations.py",
-        "line": 67,
+        "line": 77,
         "script": "13_reservations",
         "type": "WRITES"
       }
@@ -859,7 +931,7 @@
       },
       {
         "file": "scripts/stage1_clean/13_reservations.py",
-        "line": 83,
+        "line": 93,
         "script": "13_reservations",
         "type": "WRITES"
       }
@@ -879,7 +951,7 @@
       },
       {
         "file": "scripts/stage1_clean/13_reservations.py",
-        "line": 80,
+        "line": 90,
         "script": "13_reservations",
         "type": "WRITES"
       }
@@ -1045,13 +1117,13 @@
     "wbs_number": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 181,
+        "line": 210,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 206,
+        "line": 235,
         "script": "06_prepare_po_line_items",
         "type": "READS"
       },
@@ -1097,13 +1169,13 @@
     "wbs_validated": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 169,
+        "line": 198,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       },
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-        "line": 181,
+        "line": 210,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -1164,7 +1236,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 149,
+      "line": 178,
       "operation": "is_ops_vendor",
       "script": "06_prepare_po_line_items",
       "source": "column:Main Vendor SLB Vendor Category",
@@ -1247,6 +1319,15 @@
       "script": "04_enrich_po_line_items",
       "source": "column:PO Number",
       "target": "column:PO Line ID",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 103,
+      "operation": "po_df.loc[already_closed, 'Purchase Value USD']",
+      "script": "06_prepare_po_line_items",
+      "source": "column:PO Receipt Status",
+      "target": "column:cost_impact_value",
       "type": "TRANSFORMS"
     },
     {
@@ -1379,6 +1460,15 @@
       "type": "TRANSFORMS"
     },
     {
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 115,
+      "operation": "(po_df.loc[has_po_value, 'cost_impact_value'] / po_df.loc[has_po_value, 'Purchase Value USD']).clip(",
+      "script": "06_prepare_po_line_items",
+      "source": "column:Purchase Value USD",
+      "target": "column:cost_impact_pct",
+      "type": "TRANSFORMS"
+    },
+    {
       "source": "column:Requester",
       "table": "po_line_items",
       "target": "db_column:po_line_items.requester",
@@ -1386,7 +1476,7 @@
     },
     {
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 83,
+      "line": 93,
       "operation": "pd.to_numeric(parts.apply(lambda x: x[1]), errors='coerce').astype('Int64')",
       "script": "13_reservations",
       "source": "column:Reservation -Line",
@@ -1395,7 +1485,7 @@
     },
     {
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 80,
+      "line": 90,
       "operation": "parts.apply(lambda x: x[0]).astype('string')",
       "script": "13_reservations",
       "source": "column:Reservation -Line",
@@ -1484,12 +1574,30 @@
       "type": "TRANSFORMS"
     },
     {
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 172,
+      "operation": "po_df['cost_impact_pct'].round(6)",
+      "script": "06_prepare_po_line_items",
+      "source": "column:cost_impact_pct",
+      "target": "column:cost_impact_pct",
+      "type": "TRANSFORMS"
+    },
+    {
       "file": "scripts/stage3_prepare/07_prepare_po_transactions.py",
       "line": 111,
       "operation": "output_df['cost_impact_qty'].round(4)",
       "script": "07_prepare_po_transactions",
       "source": "column:cost_impact_qty",
       "target": "column:cost_impact_qty",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 170,
+      "operation": "po_df['cost_impact_value'].round(2)",
+      "script": "06_prepare_po_line_items",
+      "source": "column:cost_impact_value",
+      "target": "column:cost_impact_value",
       "type": "TRANSFORMS"
     },
     {
@@ -1512,7 +1620,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 141,
+      "line": 164,
       "operation": "po_df['open_po_qty'].round(4)",
       "script": "06_prepare_po_line_items",
       "source": "column:open_po_qty",
@@ -1521,7 +1629,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 143,
+      "line": 166,
       "operation": "po_df['open_po_value'].round(2)",
       "script": "06_prepare_po_line_items",
       "source": "column:open_po_value",
@@ -1746,7 +1854,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 206,
+      "line": 235,
       "operation": "df['wbs_number'].str.startswith('C.', na=False)",
       "script": "06_prepare_po_line_items",
       "source": "column:wbs_number",
@@ -1755,7 +1863,7 @@
     },
     {
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 181,
+      "line": 210,
       "operation": "has_wbs & wbs_exists",
       "script": "06_prepare_po_line_items",
       "source": "column:wbs_number",
@@ -2497,6 +2605,17 @@
       "name": "cost_impact_amount",
       "type": "column"
     },
+    "column:cost_impact_pct": {
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:106",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:115",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:122",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:172"
+      ],
+      "id": "column:cost_impact_pct",
+      "name": "cost_impact_pct",
+      "type": "column"
+    },
     "column:cost_impact_qty": {
       "created_by": [
         "scripts/stage3_prepare/07_prepare_po_transactions.py:111"
@@ -2505,10 +2624,20 @@
       "name": "cost_impact_qty",
       "type": "column"
     },
+    "column:cost_impact_value": {
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:103",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:109",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:170"
+      ],
+      "id": "column:cost_impact_value",
+      "name": "cost_impact_value",
+      "type": "column"
+    },
     "column:fmt_po": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:149",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:151"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:178",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:180"
       ],
       "id": "column:fmt_po",
       "name": "fmt_po",
@@ -2532,7 +2661,7 @@
     },
     "column:is_capex": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:206"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:235"
       ],
       "id": "column:is_capex",
       "name": "is_capex",
@@ -2551,7 +2680,7 @@
     },
     "column:open_po_qty": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:141",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:164",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:88",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:92"
       ],
@@ -2561,7 +2690,7 @@
     },
     "column:open_po_value": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:143",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:166",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:89",
         "scripts/stage3_prepare/06_prepare_po_line_items.py:96"
       ],
@@ -2645,7 +2774,7 @@
     },
     "column:reservation_line_id": {
       "created_by": [
-        "scripts/stage1_clean/13_reservations.py:67"
+        "scripts/stage1_clean/13_reservations.py:77"
       ],
       "id": "column:reservation_line_id",
       "name": "reservation_line_id",
@@ -2653,7 +2782,7 @@
     },
     "column:reservation_line_number": {
       "created_by": [
-        "scripts/stage1_clean/13_reservations.py:83",
+        "scripts/stage1_clean/13_reservations.py:93",
         "scripts/stage3_prepare/10_prepare_reservations.py:240"
       ],
       "id": "column:reservation_line_number",
@@ -2662,7 +2791,7 @@
     },
     "column:reservation_number": {
       "created_by": [
-        "scripts/stage1_clean/13_reservations.py:80",
+        "scripts/stage1_clean/13_reservations.py:90",
         "scripts/stage3_prepare/10_prepare_reservations.py:234"
       ],
       "id": "column:reservation_number",
@@ -2761,12 +2890,288 @@
     },
     "column:wbs_validated": {
       "created_by": [
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:169",
-        "scripts/stage3_prepare/06_prepare_po_line_items.py:181"
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:198",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:210"
       ],
       "id": "column:wbs_validated",
       "name": "wbs_validated",
       "type": "column"
+    },
+    "db_column:agent_memories.accessCount": {
+      "column": "accessCount",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "integer",
+      "id": "db_column:agent_memories.accessCount",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.content": {
+      "column": "content",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:agent_memories.content",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.contentHash": {
+      "column": "contentHash",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:agent_memories.contentHash",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:agent_memories.createdAt",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.embedding": {
+      "column": "embedding",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "unknown",
+      "id": "db_column:agent_memories.embedding",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.entities": {
+      "column": "entities",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "jsonb",
+      "id": "db_column:agent_memories.entities",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.event": {
+      "column": "event",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:agent_memories.event",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:agent_memories.id",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.importance": {
+      "column": "importance",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "real",
+      "id": "db_column:agent_memories.importance",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.keywords": {
+      "column": "keywords",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "jsonb",
+      "id": "db_column:agent_memories.keywords",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.lastAccessedAt": {
+      "column": "lastAccessedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:agent_memories.lastAccessedAt",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.memoryType": {
+      "column": "memoryType",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:agent_memories.memoryType",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.metadata": {
+      "column": "metadata",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "jsonb",
+      "id": "db_column:agent_memories.metadata",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.previousVersionId": {
+      "column": "previousVersionId",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:agent_memories.previousVersionId",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.updatedAt": {
+      "column": "updatedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:agent_memories.updatedAt",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memories.userId": {
+      "column": "userId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": "users.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:agent_memories.userId",
+      "table": "agent_memories",
+      "type": "db_column"
+    },
+    "db_column:agent_memory_history.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:agent_memory_history.createdAt",
+      "table": "agent_memory_history",
+      "type": "db_column"
+    },
+    "db_column:agent_memory_history.event": {
+      "column": "event",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:agent_memory_history.event",
+      "table": "agent_memory_history",
+      "type": "db_column"
+    },
+    "db_column:agent_memory_history.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:agent_memory_history.id",
+      "table": "agent_memory_history",
+      "type": "db_column"
+    },
+    "db_column:agent_memory_history.memoryId": {
+      "column": "memoryId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": "agentMemories.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:agent_memory_history.memoryId",
+      "table": "agent_memory_history",
+      "type": "db_column"
+    },
+    "db_column:agent_memory_history.newContent": {
+      "column": "newContent",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:agent_memory_history.newContent",
+      "table": "agent_memory_history",
+      "type": "db_column"
+    },
+    "db_column:agent_memory_history.oldContent": {
+      "column": "oldContent",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:agent_memory_history.oldContent",
+      "table": "agent_memory_history",
+      "type": "db_column"
+    },
+    "db_column:agent_memory_history.reason": {
+      "column": "reason",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:agent_memory_history.reason",
+      "table": "agent_memory_history",
+      "type": "db_column"
     },
     "db_column:budget_forecasts.costBreakdownId": {
       "column": "costBreakdownId",
@@ -3116,6 +3521,114 @@
       "table": "grir_exposures",
       "type": "db_column"
     },
+    "db_column:pending_invites.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:pending_invites.createdAt",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
+    "db_column:pending_invites.createdBy": {
+      "column": "createdBy",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": "users.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:pending_invites.createdBy",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
+    "db_column:pending_invites.email": {
+      "column": "email",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:pending_invites.email",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
+    "db_column:pending_invites.expiresAt": {
+      "column": "expiresAt",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:pending_invites.expiresAt",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
+    "db_column:pending_invites.failedAttempts": {
+      "column": "failedAttempts",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "integer",
+      "id": "db_column:pending_invites.failedAttempts",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
+    "db_column:pending_invites.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:pending_invites.id",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
+    "db_column:pending_invites.pinHash": {
+      "column": "pinHash",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:pending_invites.pinHash",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
+    "db_column:pending_invites.used": {
+      "column": "used",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:pending_invites.used",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
+    "db_column:pending_invites.usedAt": {
+      "column": "usedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:pending_invites.usedAt",
+      "table": "pending_invites",
+      "type": "db_column"
+    },
     "db_column:po_line_items.accountAssignmentCategory": {
       "column": "accountAssignmentCategory",
       "constraints": {
@@ -3137,6 +3650,30 @@
       },
       "data_type": "varchar",
       "id": "db_column:po_line_items.assetCode",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
+    "db_column:po_line_items.costImpactPct": {
+      "column": "costImpactPct",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "numeric",
+      "id": "db_column:po_line_items.costImpactPct",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
+    "db_column:po_line_items.costImpactValue": {
+      "column": "costImpactValue",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "numeric",
+      "id": "db_column:po_line_items.costImpactValue",
       "table": "po_line_items",
       "type": "db_column"
     },
@@ -4256,6 +4793,198 @@
       "table": "projects",
       "type": "db_column"
     },
+    "db_column:registration_attempts.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:registration_attempts.createdAt",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_attempts.deviceBindingChallenge": {
+      "column": "deviceBindingChallenge",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:registration_attempts.deviceBindingChallenge",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_attempts.deviceBindingVerified": {
+      "column": "deviceBindingVerified",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:registration_attempts.deviceBindingVerified",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_attempts.deviceCredentialId": {
+      "column": "deviceCredentialId",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:registration_attempts.deviceCredentialId",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_attempts.devicePublicKey": {
+      "column": "devicePublicKey",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:registration_attempts.devicePublicKey",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_attempts.email": {
+      "column": "email",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:registration_attempts.email",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_attempts.expiresAt": {
+      "column": "expiresAt",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:registration_attempts.expiresAt",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_attempts.tokenHash": {
+      "column": "tokenHash",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "unknown",
+      "id": "db_column:registration_attempts.tokenHash",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_attempts.used": {
+      "column": "used",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:registration_attempts.used",
+      "table": "registration_attempts",
+      "type": "db_column"
+    },
+    "db_column:registration_audit_log.additionalInfo": {
+      "column": "additionalInfo",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "jsonb",
+      "id": "db_column:registration_audit_log.additionalInfo",
+      "table": "registration_audit_log",
+      "type": "db_column"
+    },
+    "db_column:registration_audit_log.attemptType": {
+      "column": "attemptType",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:registration_audit_log.attemptType",
+      "table": "registration_audit_log",
+      "type": "db_column"
+    },
+    "db_column:registration_audit_log.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:registration_audit_log.createdAt",
+      "table": "registration_audit_log",
+      "type": "db_column"
+    },
+    "db_column:registration_audit_log.email": {
+      "column": "email",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:registration_audit_log.email",
+      "table": "registration_audit_log",
+      "type": "db_column"
+    },
+    "db_column:registration_audit_log.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:registration_audit_log.id",
+      "table": "registration_audit_log",
+      "type": "db_column"
+    },
+    "db_column:registration_audit_log.ipHash": {
+      "column": "ipHash",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "unknown",
+      "id": "db_column:registration_audit_log.ipHash",
+      "table": "registration_audit_log",
+      "type": "db_column"
+    },
+    "db_column:registration_audit_log.userAgent": {
+      "column": "userAgent",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:registration_audit_log.userAgent",
+      "table": "registration_audit_log",
+      "type": "db_column"
+    },
     "db_column:sap_reservations.assetCode": {
       "column": "assetCode",
       "constraints": {
@@ -4520,6 +5249,90 @@
       "table": "sap_reservations",
       "type": "db_column"
     },
+    "db_column:users.backupCodes": {
+      "column": "backupCodes",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:users.backupCodes",
+      "table": "users",
+      "type": "db_column"
+    },
+    "db_column:users.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:users.createdAt",
+      "table": "users",
+      "type": "db_column"
+    },
+    "db_column:users.email": {
+      "column": "email",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:users.email",
+      "table": "users",
+      "type": "db_column"
+    },
+    "db_column:users.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:users.id",
+      "table": "users",
+      "type": "db_column"
+    },
+    "db_column:users.isActive": {
+      "column": "isActive",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:users.isActive",
+      "table": "users",
+      "type": "db_column"
+    },
+    "db_column:users.lastLoginAt": {
+      "column": "lastLoginAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:users.lastLoginAt",
+      "table": "users",
+      "type": "db_column"
+    },
+    "db_column:users.totpSecret": {
+      "column": "totpSecret",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:users.totpSecret",
+      "table": "users",
+      "type": "db_column"
+    },
     "db_column:wbs_details.clientName": {
       "column": "clientName",
       "constraints": {
@@ -4674,6 +5487,210 @@
       "data_type": "varchar",
       "id": "db_column:wbs_details.wbsSource",
       "table": "wbs_details",
+      "type": "db_column"
+    },
+    "db_column:webauthn_challenges.challenge": {
+      "column": "challenge",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:webauthn_challenges.challenge",
+      "table": "webauthn_challenges",
+      "type": "db_column"
+    },
+    "db_column:webauthn_challenges.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:webauthn_challenges.createdAt",
+      "table": "webauthn_challenges",
+      "type": "db_column"
+    },
+    "db_column:webauthn_challenges.email": {
+      "column": "email",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:webauthn_challenges.email",
+      "table": "webauthn_challenges",
+      "type": "db_column"
+    },
+    "db_column:webauthn_challenges.expiresAt": {
+      "column": "expiresAt",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:webauthn_challenges.expiresAt",
+      "table": "webauthn_challenges",
+      "type": "db_column"
+    },
+    "db_column:webauthn_challenges.type": {
+      "column": "type",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:webauthn_challenges.type",
+      "table": "webauthn_challenges",
+      "type": "db_column"
+    },
+    "db_column:webauthn_challenges.userId": {
+      "column": "userId",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:webauthn_challenges.userId",
+      "table": "webauthn_challenges",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.backedUp": {
+      "column": "backedUp",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:webauthn_credentials.backedUp",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.counter": {
+      "column": "counter",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "bigint",
+      "id": "db_column:webauthn_credentials.counter",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:webauthn_credentials.createdAt",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.credentialId": {
+      "column": "credentialId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:webauthn_credentials.credentialId",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.deviceName": {
+      "column": "deviceName",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:webauthn_credentials.deviceName",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.deviceType": {
+      "column": "deviceType",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:webauthn_credentials.deviceType",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:webauthn_credentials.id",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.lastUsedAt": {
+      "column": "lastUsedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:webauthn_credentials.lastUsedAt",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.publicKey": {
+      "column": "publicKey",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:webauthn_credentials.publicKey",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.transports": {
+      "column": "transports",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:webauthn_credentials.transports",
+      "table": "webauthn_credentials",
+      "type": "db_column"
+    },
+    "db_column:webauthn_credentials.userId": {
+      "column": "userId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": "users.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:webauthn_credentials.userId",
+      "table": "webauthn_credentials",
       "type": "db_column"
     },
     "file:data/import-ready/grir_exposures.csv": {
@@ -5093,6 +6110,7 @@
         "clean_po_number",
         "extract_parts",
         "filter_matching_business_lines",
+        "find_input_file",
         "load_data",
         "main",
         "normalize_po_line_id",
@@ -5118,6 +6136,45 @@
       "path": "scripts/pipeline.py",
       "stage": "scripts",
       "type": "script"
+    },
+    "table:agent_memories": {
+      "columns": [
+        "accessCount",
+        "content",
+        "contentHash",
+        "createdAt",
+        "embedding",
+        "entities",
+        "event",
+        "id",
+        "importance",
+        "keywords",
+        "lastAccessedAt",
+        "memoryType",
+        "metadata",
+        "previousVersionId",
+        "updatedAt",
+        "userId"
+      ],
+      "file": "agent-memories.ts",
+      "id": "table:agent_memories",
+      "name": "agent_memories",
+      "type": "table"
+    },
+    "table:agent_memory_history": {
+      "columns": [
+        "createdAt",
+        "event",
+        "id",
+        "memoryId",
+        "newContent",
+        "oldContent",
+        "reason"
+      ],
+      "file": "agent-memories.ts",
+      "id": "table:agent_memory_history",
+      "name": "agent_memory_history",
+      "type": "table"
     },
     "table:budget_forecasts": {
       "columns": [
@@ -5180,10 +6237,29 @@
       "name": "grir_exposures",
       "type": "table"
     },
+    "table:pending_invites": {
+      "columns": [
+        "createdAt",
+        "createdBy",
+        "email",
+        "expiresAt",
+        "failedAttempts",
+        "id",
+        "pinHash",
+        "used",
+        "usedAt"
+      ],
+      "file": "pending-invites.ts",
+      "id": "table:pending_invites",
+      "name": "pending_invites",
+      "type": "table"
+    },
     "table:po_line_items": {
       "columns": [
         "accountAssignmentCategory",
         "assetCode",
+        "costImpactPct",
+        "costImpactValue",
         "createdAt",
         "description",
         "expectedDeliveryDate",
@@ -5323,6 +6399,38 @@
       "name": "projects",
       "type": "table"
     },
+    "table:registration_attempts": {
+      "columns": [
+        "createdAt",
+        "deviceBindingChallenge",
+        "deviceBindingVerified",
+        "deviceCredentialId",
+        "devicePublicKey",
+        "email",
+        "expiresAt",
+        "tokenHash",
+        "used"
+      ],
+      "file": "registration-attempts.ts",
+      "id": "table:registration_attempts",
+      "name": "registration_attempts",
+      "type": "table"
+    },
+    "table:registration_audit_log": {
+      "columns": [
+        "additionalInfo",
+        "attemptType",
+        "createdAt",
+        "email",
+        "id",
+        "ipHash",
+        "userAgent"
+      ],
+      "file": "registration-audit-log.ts",
+      "id": "table:registration_audit_log",
+      "name": "registration_audit_log",
+      "type": "table"
+    },
     "table:sap_reservations": {
       "columns": [
         "assetCode",
@@ -5353,6 +6461,21 @@
       "name": "sap_reservations",
       "type": "table"
     },
+    "table:users": {
+      "columns": [
+        "backupCodes",
+        "createdAt",
+        "email",
+        "id",
+        "isActive",
+        "lastLoginAt",
+        "totpSecret"
+      ],
+      "file": "users.ts",
+      "id": "table:users",
+      "name": "users",
+      "type": "table"
+    },
     "table:wbs_details": {
       "columns": [
         "clientName",
@@ -5373,27 +6496,60 @@
       "id": "table:wbs_details",
       "name": "wbs_details",
       "type": "table"
+    },
+    "table:webauthn_challenges": {
+      "columns": [
+        "challenge",
+        "createdAt",
+        "email",
+        "expiresAt",
+        "type",
+        "userId"
+      ],
+      "file": "webauthn-challenges.ts",
+      "id": "table:webauthn_challenges",
+      "name": "webauthn_challenges",
+      "type": "table"
+    },
+    "table:webauthn_credentials": {
+      "columns": [
+        "backedUp",
+        "counter",
+        "createdAt",
+        "credentialId",
+        "deviceName",
+        "deviceType",
+        "id",
+        "lastUsedAt",
+        "publicKey",
+        "transports",
+        "userId"
+      ],
+      "file": "webauthn-credentials.ts",
+      "id": "table:webauthn_credentials",
+      "name": "webauthn_credentials",
+      "type": "table"
     }
   },
   "stats": {
-    "columns_tracked": 72,
+    "columns_tracked": 75,
     "edges_by_type": {
       "DEPENDS_ON": 13,
       "INPUT": 33,
       "MAPS_TO": 5,
       "OUTPUT": 25,
-      "TRANSFORMS": 69
+      "TRANSFORMS": 73
     },
     "nodes_by_type": {
-      "column": 92,
-      "db_column": 159,
+      "column": 94,
+      "db_column": 233,
       "file": 23,
       "script": 17,
-      "table": 12
+      "table": 20
     },
-    "total_edges": 145,
-    "total_nodes": 303,
-    "variables_traced": 72
+    "total_edges": 149,
+    "total_nodes": 387,
+    "variables_traced": 74
   },
   "variable_sources": {
     "01_po_line_items": {
@@ -5508,11 +6664,17 @@
       "capex_value": [
         "is_capex"
       ],
+      "has_po_value": [
+        "Purchase Value USD"
+      ],
       "has_wbs": [
         "wbs_number"
       ],
       "is_ops_vendor": [
         "Main Vendor SLB Vendor Category"
+      ],
+      "no_po_value": [
+        "Purchase Value USD"
       ],
       "valid_wbs": [
         "wbs_number"

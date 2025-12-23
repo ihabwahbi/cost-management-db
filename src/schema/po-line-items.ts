@@ -67,6 +67,12 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   // Open PO values (calculated: total - cost impact recognized, forced to 0 for closed POs)
   openPoQty: numeric('open_po_qty'),      // orderedQty - SUM(cost_impact_qty)
   openPoValue: numeric('open_po_value'),  // poValueUsd - SUM(cost_impact_amount)
+
+  // Pre-computed cost impact fields (calculated in ETL stage3)
+  // Total cost impact recognized: po_value_usd - open_po_value (or po_value_usd for CLOSED POs)
+  costImpactValue: numeric('cost_impact_value'),
+  // Proportion of PO value received/invoiced [0.0 - 1.0], NULL when po_value_usd = 0
+  costImpactPct: numeric('cost_impact_pct'),
   
   // Timestamps
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

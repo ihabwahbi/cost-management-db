@@ -50,6 +50,10 @@ if PANDERA_AVAILABLE:
         # Calculated fields (required but can be 0)
         open_po_qty: Series[float] = pa.Field(nullable=False)
         open_po_value: Series[float] = pa.Field(nullable=False)
+        cost_impact_value: Series[float] = pa.Field(nullable=False)
+        cost_impact_pct: Series[float] = pa.Field(
+            nullable=True
+        )  # NULL when po_value_usd = 0
         fmt_po: Series[bool] = pa.Field(nullable=False)
 
         # =====================================================

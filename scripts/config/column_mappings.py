@@ -62,6 +62,8 @@ PO_LINE_ITEMS_CALCULATED = [
     "fmt_po",  # Boolean flag (True when vendor_category = OPS)
     "wbs_validated",  # True if wbs_number exists in wbs_details
     "is_capex",  # True if WBS starts with 'C.' (capitalized, doesn't hit P&L)
+    "cost_impact_value",  # po_value_usd - open_po_value (total cost impact recognized)
+    "cost_impact_pct",  # cost_impact_value / po_value_usd [0,1], NULL when po_value=0
 ]
 
 

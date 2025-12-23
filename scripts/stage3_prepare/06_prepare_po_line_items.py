@@ -98,6 +98,29 @@ def calculate_open_values(po_df: pd.DataFrame, cost_df: pd.DataFrame) -> pd.Data
         - po_df.loc[not_closed, "Total Cost Impact Amount"]
     )
 
+    # --- Cost impact pre-computed fields ---
+    # For closed POs: cost_impact_value = full PO value, cost_impact_pct = 1.0
+    po_df.loc[already_closed, "cost_impact_value"] = po_df.loc[
+        already_closed, "Purchase Value USD"
+    ]
+    po_df.loc[already_closed, "cost_impact_pct"] = 1.0
+
+    # For non-closed POs: cost_impact_value = Total Cost Impact Amount
+    po_df.loc[not_closed, "cost_impact_value"] = po_df.loc[
+        not_closed, "Total Cost Impact Amount"
+    ]
+
+    # cost_impact_pct = cost_impact_value / po_value_usd, clamped [0,1]
+    has_po_value = not_closed & (po_df["Purchase Value USD"] > 0)
+    po_df.loc[has_po_value, "cost_impact_pct"] = (
+        po_df.loc[has_po_value, "cost_impact_value"]
+        / po_df.loc[has_po_value, "Purchase Value USD"]
+    ).clip(0, 1)
+
+    # Non-closed POs with zero PO value: NULL pct (division undefined)
+    no_po_value = not_closed & ~(po_df["Purchase Value USD"] > 0)
+    po_df.loc[no_po_value, "cost_impact_pct"] = None
+
     print(f"  Closed POs (from raw status): {already_closed.sum():,}")
     print(f"  Open POs: {not_closed.sum():,}")
 
@@ -141,6 +164,12 @@ def map_columns(po_df: pd.DataFrame) -> pd.DataFrame:
         output_df["open_po_qty"] = po_df["open_po_qty"].round(4)
     if "open_po_value" in po_df.columns:
         output_df["open_po_value"] = po_df["open_po_value"].round(2)
+
+    # Add cost impact calculated columns
+    if "cost_impact_value" in po_df.columns:
+        output_df["cost_impact_value"] = po_df["cost_impact_value"].round(2)
+    if "cost_impact_pct" in po_df.columns:
+        output_df["cost_impact_pct"] = po_df["cost_impact_pct"].round(6)
 
     # Set fmt_po = True when vendor category is OPS
     vendor_category_col = "Main Vendor SLB Vendor Category"

@@ -2,7 +2,7 @@
   "ai_agent_notes": {
     "to_add_new_column": [
       "1. Add column to src/schema/<table>.ts",
-      "2. Run npm run db:push",
+      "2. Run npm run db:drift, then apply the SQL manually",
       "3. Add CSV\u2192DB mapping in scripts/config/column_mappings.py",
       "4. Update relevant stage script to include the column",
       "5. Run python3 scripts/pipeline.py to regenerate data"
@@ -240,7 +240,7 @@
       },
       "null_counts": {},
       "path": "data/intermediate/cost_impact.csv",
-      "row_count": 106563,
+      "row_count": 108592,
       "sample_row": {
         "Cost Impact Amount": 52.0,
         "Cost Impact Qty": 20.0,
@@ -263,7 +263,7 @@
       },
       "null_counts": {},
       "path": "data/raw/gr table.csv",
-      "row_count": 77276,
+      "row_count": 78512,
       "sample_row": {
         "GR Effective Quantity": 0.0,
         "GR Posting Date": "2023-06-06 00:00:00.000",
@@ -285,7 +285,7 @@
       },
       "null_counts": {},
       "path": "data/intermediate/gr_postings.csv",
-      "row_count": 54243,
+      "row_count": 55115,
       "sample_row": {
         "GR Amount": 52.0,
         "GR Effective Quantity": 20.0,
@@ -314,15 +314,15 @@
       },
       "null_counts": {},
       "path": "data/import-ready/grir_exposures.csv",
-      "row_count": 65,
+      "row_count": 68,
       "sample_row": {
-        "days_open": 4,
-        "first_exposure_date": "2025-11-28",
+        "days_open": 59,
+        "first_exposure_date": "2025-12-19",
         "grir_qty": 2.0,
-        "grir_value": 688.98,
-        "po_line_id": "4584538403-4",
-        "snapshot_date": "2025-12-02",
-        "time_bucket": "<1 month"
+        "grir_value": 28233.18,
+        "po_line_id": "4584521978-1",
+        "snapshot_date": "2026-02-16",
+        "time_bucket": "1-3 months"
       }
     },
     "invoice table.csv": {
@@ -338,7 +338,7 @@
       },
       "null_counts": {},
       "path": "data/raw/invoice table.csv",
-      "row_count": 65245,
+      "row_count": 66594,
       "sample_row": {
         "IR Effective Quantity": 2.0,
         "Invoice Posting Date": "2023-06-06 00:00:00.000",
@@ -360,7 +360,7 @@
       },
       "null_counts": {},
       "path": "data/intermediate/ir_postings.csv",
-      "row_count": 54036,
+      "row_count": 55204,
       "sample_row": {
         "IR Effective Quantity": 20.0,
         "Invoice Amount": 52.0,
@@ -436,19 +436,19 @@
         "Ultimate Vendor Number": "object"
       },
       "null_counts": {
-        "NIS Level 0 Desc": 12261,
-        "PO Account Assignment Category": 10826,
-        "PO Account Assignment Category Desc": 10826,
-        "PO Current Supplier Promised Date": 33916,
-        "PO GTS Status": 102,
-        "PO Initial Output Date": 128,
-        "PO Material Number": 48541,
-        "PO Valuation Class": 48541,
-        "PO Valuation Class Desc": 48541,
-        "PO WBS Element": 38616
+        "NIS Level 0 Desc": 12537,
+        "PO Account Assignment Category": 11063,
+        "PO Account Assignment Category Desc": 11063,
+        "PO Current Supplier Promised Date": 34514,
+        "PO GTS Status": 110,
+        "PO Initial Output Date": 134,
+        "PO Material Number": 49765,
+        "PO Valuation Class": 49765,
+        "PO Valuation Class Desc": 49765,
+        "PO WBS Element": 39484
       },
       "path": "data/raw/po line items.csv",
-      "row_count": 62486,
+      "row_count": 64002,
       "sample_row": {
         "Main Vendor ID": "P9516",
         "Main Vendor Name": "Petroleum Equipment & Supplies FZE,",
@@ -498,21 +498,23 @@
       },
       "null_counts": {
         "PR Line": 2,
-        "PR Number": 440,
-        "Requester": 2428
+        "PR Number": 420,
+        "Requester": 2394
       },
       "path": "data/intermediate/po_details_enrichment.csv",
-      "row_count": 21961,
+      "row_count": 22089,
       "sample_row": {
-        "PO Line ID": "4584576859-1",
+        "PO Line ID": "4584629369-1",
         "PR Line": 10.0,
-        "PR Number": "1002991198",
+        "PR Number": "1003030890",
         "Requester": "Walid Benmehidi"
       }
     },
     "po_line_items.csv": {
       "columns": [
         "account_assignment_category",
+        "cost_impact_pct",
+        "cost_impact_value",
         "description",
         "expected_delivery_date",
         "fmt_po",
@@ -546,6 +548,8 @@
       ],
       "dtypes": {
         "account_assignment_category": "object",
+        "cost_impact_pct": "float64",
+        "cost_impact_value": "float64",
         "description": "object",
         "expected_delivery_date": "object",
         "fmt_po": "bool",
@@ -578,18 +582,21 @@
         "wbs_validated": "bool"
       },
       "null_counts": {
-        "account_assignment_category": 8774,
-        "part_number": 46544,
-        "po_gts_status": 60,
-        "pr_line": 36070,
-        "pr_number": 36483,
-        "requester": 35988,
-        "wbs_number": 31989
+        "account_assignment_category": 8925,
+        "cost_impact_pct": 27,
+        "part_number": 47765,
+        "po_gts_status": 62,
+        "pr_line": 37313,
+        "pr_number": 37702,
+        "requester": 37216,
+        "wbs_number": 32723
       },
       "path": "data/import-ready/po_line_items.csv",
-      "row_count": 55803,
+      "row_count": 57184,
       "sample_row": {
         "account_assignment_category": NaN,
+        "cost_impact_pct": 1.0,
+        "cost_impact_value": 52.0,
         "description": "O-RING;332,2.35 IN,0.21 IN,FKM,95 DURO",
         "expected_delivery_date": "2023-01-19 00:00:00.000",
         "fmt_po": false,
@@ -645,7 +652,7 @@
       },
       "null_counts": {},
       "path": "data/import-ready/po_transactions.csv",
-      "row_count": 106563,
+      "row_count": 108592,
       "sample_row": {
         "amount": 0.0,
         "cost_impact_amount": 0.0,
@@ -783,11 +790,11 @@
         "reservation_number": "float64"
       },
       "null_counts": {
-        "Additional PO - Line to Peg": 1466,
-        "Business Line - By Cost Center": 299,
+        "Additional PO - Line to Peg": 1553,
+        "Business Line - By Cost Center": 361,
         "Business Line by Profit Center": 2,
         "Combined SOH & PO Pegging": 2,
-        "Cost Center": 299,
+        "Cost Center": 361,
         "Creation Date": 2,
         "GEO UNIT (Profit Center)": 2,
         "Geo-Unit": 2,
@@ -802,111 +809,111 @@
         "MRP Parameters - Profit Center": 2,
         "MRP Parameters - Safety Stock": 2,
         "MRP Parameters - Standard Price": 2,
-        "Main - PO Line to Peg to Reservation": 968,
-        "Main - PO to Peg to Reservation": 968,
+        "Main - PO Line to Peg to Reservation": 1022,
+        "Main - PO to Peg to Reservation": 1022,
         "Material": 2,
         "Material Description": 2,
         "Material Stratification (Last 12 Month Consumption)": 2,
         "Material Stratification (Last 6 Month Consumption)": 2,
         "Material-Plant": 2,
         "Material/Plant-Open PO Qty - Total": 2,
-        "Material/Plant-SOH - Total": 1028,
+        "Material/Plant-SOH - Total": 1096,
         "Maximo - WO STATUS and Part Status": 2,
-        "Maximo Asset ID": 812,
-        "Maximo Asset Num": 812,
-        "Maximo Serial No": 812,
+        "Maximo Asset ID": 949,
+        "Maximo Asset Num": 949,
+        "Maximo Serial No": 949,
         "Open Qty - Reservation": 2,
         "Open Reservation Value": 2,
-        "Pegged Main PO GR Status": 968,
-        "Pegged Main PO Invoice Status": 968,
+        "Pegged Main PO GR Status": 1022,
+        "Pegged Main PO Invoice Status": 1022,
         "Planned Order - Status": 2,
-        "Planned Orders": 1013,
+        "Planned Orders": 1094,
         "Plant": 2,
-        "Post Pegging PO Qty": 35,
+        "Post Pegging PO Qty": 47,
         "Post Pegging SOH Qty": 2,
-        "Primary Pegged PO-LN - Approval Status": 1044,
-        "Primary Pegged PO-LN - Invoice Qty": 1440,
-        "Primary Pegged PO-LN - Open Qty": 1044,
-        "Primary Pegged PO-LN - Order Qty": 1044,
-        "Primary Pegged PO-LN - RDD Date": 1044,
+        "Primary Pegged PO-LN - Approval Status": 1073,
+        "Primary Pegged PO-LN - Invoice Qty": 1533,
+        "Primary Pegged PO-LN - Open Qty": 1073,
+        "Primary Pegged PO-LN - Order Qty": 1073,
+        "Primary Pegged PO-LN - RDD Date": 1073,
         "Purchase Requisition - Status": 2,
-        "Purchase Requisitions": 1480,
+        "Purchase Requisitions": 1573,
         "Requirements Date": 2,
         "Reservation -Line": 2,
         "Reservation Creation type": 2,
-        "Stock On Hand - DDSC": 712,
-        "Stock On Hand - HDSC": 901,
-        "Sub - Business Line - By Cost Center": 299,
+        "Stock On Hand - DDSC": 761,
+        "Stock On Hand - HDSC": 930,
+        "Sub - Business Line - By Cost Center": 361,
         "User Name": 2,
-        "WBS Element": 1188,
-        "WO Number": 503,
+        "WBS Element": 1217,
+        "WO Number": 536,
         "reservation_line_id": 2,
         "reservation_line_number": 2,
         "reservation_number": 2
       },
       "path": "data/intermediate/reservations.csv",
-      "row_count": 1485,
+      "row_count": 1576,
       "sample_row": {
         "Additional PO - Line to Peg": NaN,
         "Business Line - By Cost Center": "RPE",
         "Business Line by Profit Center": "RPE",
-        "Combined SOH & PO Pegging": "04. PO Available to Peg",
-        "Cost Center": "AU100070",
-        "Creation Date": "2025-11-24",
+        "Combined SOH & PO Pegging": "05. No PO Available to Peg",
+        "Cost Center": "AU100307",
+        "Creation Date": "2025-12-19",
         "GEO UNIT (Profit Center)": "APG",
         "Geo-Unit": "APG",
-        "Goods recipient": "02307312",
+        "Goods recipient": "00821967",
         "Index": "1",
-        "Last 12 Month Consumption": 1.0,
-        "Last 3 Month Consumption": 1.0,
-        "Last 6 Month Consumption": 1.0,
-        "MRP Parameters - MRP Controller": "005",
-        "MRP Parameters - Planned Delivery Time": 18.0,
-        "MRP Parameters - Prime Status": "AR Part",
+        "Last 12 Month Consumption": 0.0,
+        "Last 3 Month Consumption": 0.0,
+        "Last 6 Month Consumption": 0.0,
+        "MRP Parameters - MRP Controller": "ZZZ",
+        "MRP Parameters - Planned Delivery Time": 999.0,
+        "MRP Parameters - Prime Status": "Non AR Part",
         "MRP Parameters - Profit Center": 110516.0,
         "MRP Parameters - Safety Stock": 0.0,
-        "MRP Parameters - Standard Price": 5959.5763,
-        "Main - PO Line to Peg to Reservation": "4584632148-1",
-        "Main - PO to Peg to Reservation": 4584632148.0,
-        "Material": "100109883",
-        "Material Description": "CENTER BODY, ARM MOUNTING",
-        "Material Stratification (Last 12 Month Consumption)": "STRANGER",
-        "Material Stratification (Last 6 Month Consumption)": "STRANGER",
-        "Material-Plant": "100109883-3606",
-        "Material/Plant-Open PO Qty - Total": 1.0,
+        "MRP Parameters - Standard Price": 1035.15,
+        "Main - PO Line to Peg to Reservation": NaN,
+        "Main - PO to Peg to Reservation": NaN,
+        "Material": "100984281",
+        "Material Description": "MODEL, PWA, DEPTH/TENSION, EWAFE2.0",
+        "Material Stratification (Last 12 Month Consumption)": "SLOW MOVER",
+        "Material Stratification (Last 6 Month Consumption)": "SLOW MOVER",
+        "Material-Plant": "100984281-3610",
+        "Material/Plant-Open PO Qty - Total": 0.0,
         "Material/Plant-SOH - Total": NaN,
         "Maximo - WO STATUS and Part Status": "-",
         "Maximo Asset ID": NaN,
         "Maximo Asset Num": NaN,
         "Maximo Serial No": NaN,
         "Open Qty - Reservation": 1.0,
-        "Open Reservation Value": 5757.2104,
-        "Pegged Main PO GR Status": "Pending Full GR",
-        "Pegged Main PO Invoice Status": "PO is not Invoiced",
+        "Open Reservation Value": 1000.0,
+        "Pegged Main PO GR Status": NaN,
+        "Pegged Main PO Invoice Status": NaN,
         "Planned Order - Status": "NO PLD ORDER",
         "Planned Orders": NaN,
-        "Plant": 3606.0,
+        "Plant": 3610.0,
         "Post Pegging PO Qty": 0.0,
         "Post Pegging SOH Qty": -1.0,
-        "Primary Pegged PO-LN - Approval Status": "Approved",
+        "Primary Pegged PO-LN - Approval Status": NaN,
         "Primary Pegged PO-LN - Invoice Qty": NaN,
-        "Primary Pegged PO-LN - Open Qty": 1.0,
-        "Primary Pegged PO-LN - Order Qty": 1.0,
-        "Primary Pegged PO-LN - RDD Date": "2025-11-20",
+        "Primary Pegged PO-LN - Open Qty": NaN,
+        "Primary Pegged PO-LN - Order Qty": NaN,
+        "Primary Pegged PO-LN - RDD Date": NaN,
         "Purchase Requisition - Status": "No Purchase Requisition",
         "Purchase Requisitions": NaN,
-        "Requirements Date": "2025-11-25",
-        "Reservation -Line": "6086214878-1",
+        "Requirements Date": "2026-01-09",
+        "Reservation -Line": "6087563331-1",
         "Reservation Creation type": "MAXIMO",
-        "Stock On Hand - DDSC": 4.0,
+        "Stock On Hand - DDSC": NaN,
         "Stock On Hand - HDSC": NaN,
         "Sub - Business Line - By Cost Center": "WLES",
         "User Name": "SYS-MAXIMO",
         "WBS Element": NaN,
-        "WO Number": "49365954",
-        "reservation_line_id": "6086214878-1",
+        "WO Number": "1010265907",
+        "reservation_line_id": "6087563331-1",
         "reservation_line_number": 1.0,
-        "reservation_number": 6086214878.0
+        "reservation_number": 6087563331.0
       }
     },
     "sap_reservations.csv": {
@@ -953,35 +960,35 @@
         "wbs_number": "object"
       },
       "null_counts": {
-        "asset_code": 810,
-        "asset_serial_number": 839,
-        "po_line_item_id": 966,
-        "po_line_number": 966,
-        "po_number": 966,
+        "asset_code": 947,
+        "asset_serial_number": 976,
+        "po_line_item_id": 1020,
+        "po_line_number": 1020,
+        "po_number": 1020,
         "requester_alias": 14,
-        "wbs_number": 1186
+        "wbs_number": 1215
       },
       "path": "data/import-ready/sap_reservations.csv",
-      "row_count": 1483,
+      "row_count": 1574,
       "sample_row": {
         "asset_code": NaN,
         "asset_serial_number": NaN,
-        "description": "CENTER BODY, ARM MOUNTING",
+        "description": "MODEL, PWA, DEPTH/TENSION, EWAFE2.0",
         "open_reservation_qty": 1.0,
-        "open_reservation_value": 5757.2104,
-        "part_number": "100109883",
-        "plant_code": 3606,
-        "po_line_item_id": "4584632148-1",
-        "po_line_number": 1.0,
-        "po_number": 4584632148.0,
-        "requester_alias": "02307312",
-        "reservation_creation_date": "2025-11-24",
-        "reservation_line_id": "6086214878-1",
+        "open_reservation_value": 1000.0,
+        "part_number": "100984281",
+        "plant_code": 3610,
+        "po_line_item_id": NaN,
+        "po_line_number": NaN,
+        "po_number": NaN,
+        "requester_alias": "00821967",
+        "reservation_creation_date": "2025-12-19",
+        "reservation_line_id": "6087563331-1",
         "reservation_line_number": 1,
-        "reservation_number": 6086214878,
-        "reservation_requirement_date": "2025-11-25",
+        "reservation_number": 6087563331,
+        "reservation_requirement_date": "2026-01-09",
         "reservation_source": "MAXIMO",
-        "reservation_status": "04. PO Available to Peg",
+        "reservation_status": "05. No PO Available to Peg",
         "wbs_number": NaN
       }
     },
@@ -1303,7 +1310,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2025-12-11T02:27:02.505347+00:00",
+  "generated_at": "2026-02-16T12:06:50.218591+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1331,6 +1338,130 @@
   ],
   "project": "cost-management-db",
   "schema_tables": [
+    {
+      "columns": [
+        {
+          "has_default": true,
+          "name": "accessCount",
+          "not_null": true,
+          "type": "integer"
+        },
+        {
+          "name": "content",
+          "not_null": true,
+          "type": "text"
+        },
+        {
+          "name": "contentHash",
+          "type": "varchar"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "embedding",
+          "type": "unknown"
+        },
+        {
+          "has_default": true,
+          "name": "entities",
+          "type": "jsonb"
+        },
+        {
+          "has_default": true,
+          "name": "event",
+          "type": "varchar"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "uuid"
+        },
+        {
+          "has_default": true,
+          "name": "importance",
+          "not_null": true,
+          "type": "real"
+        },
+        {
+          "has_default": true,
+          "name": "keywords",
+          "type": "jsonb"
+        },
+        {
+          "name": "lastAccessedAt",
+          "type": "timestamp"
+        },
+        {
+          "has_default": true,
+          "name": "memoryType",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "has_default": true,
+          "name": "metadata",
+          "type": "jsonb"
+        },
+        {
+          "name": "previousVersionId",
+          "type": "uuid"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "userId",
+          "not_null": true,
+          "references": "users.id",
+          "type": "uuid"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "agent-memories.ts",
+      "name": "agent_memories"
+    },
+    {
+      "columns": [
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "event",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "uuid"
+        },
+        {
+          "name": "memoryId",
+          "not_null": true,
+          "references": "agentMemories.id",
+          "type": "uuid"
+        },
+        {
+          "name": "newContent",
+          "type": "text"
+        },
+        {
+          "name": "oldContent",
+          "type": "text"
+        },
+        {
+          "name": "reason",
+          "type": "text"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "agent-memories.ts",
+      "name": "agent_memory_history"
+    },
     {
       "columns": [
         {
@@ -1508,12 +1639,71 @@
     {
       "columns": [
         {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "createdBy",
+          "references": "users.id",
+          "type": "uuid"
+        },
+        {
+          "name": "email",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "expiresAt",
+          "not_null": true,
+          "type": "timestamp"
+        },
+        {
+          "has_default": true,
+          "name": "failedAttempts",
+          "not_null": true,
+          "type": "integer"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "uuid"
+        },
+        {
+          "name": "pinHash",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "has_default": true,
+          "name": "used",
+          "type": "boolean"
+        },
+        {
+          "name": "usedAt",
+          "type": "timestamp"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "pending-invites.ts",
+      "name": "pending_invites"
+    },
+    {
+      "columns": [
+        {
           "name": "accountAssignmentCategory",
           "type": "varchar"
         },
         {
           "name": "assetCode",
           "type": "varchar"
+        },
+        {
+          "name": "costImpactPct",
+          "type": "numeric"
+        },
+        {
+          "name": "costImpactValue",
+          "type": "numeric"
         },
         {
           "name": "createdAt",
@@ -1991,6 +2181,92 @@
     {
       "columns": [
         {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "deviceBindingChallenge",
+          "type": "varchar"
+        },
+        {
+          "has_default": true,
+          "name": "deviceBindingVerified",
+          "type": "boolean"
+        },
+        {
+          "name": "deviceCredentialId",
+          "type": "text"
+        },
+        {
+          "name": "devicePublicKey",
+          "type": "text"
+        },
+        {
+          "name": "email",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "expiresAt",
+          "not_null": true,
+          "type": "timestamp"
+        },
+        {
+          "name": "tokenHash",
+          "primary_key": true,
+          "type": "unknown"
+        },
+        {
+          "has_default": true,
+          "name": "used",
+          "type": "boolean"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "registration-attempts.ts",
+      "name": "registration_attempts"
+    },
+    {
+      "columns": [
+        {
+          "name": "additionalInfo",
+          "type": "jsonb"
+        },
+        {
+          "name": "attemptType",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "email",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "uuid"
+        },
+        {
+          "name": "ipHash",
+          "type": "unknown"
+        },
+        {
+          "name": "userAgent",
+          "type": "varchar"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "registration-audit-log.ts",
+      "name": "registration_audit_log"
+    },
+    {
+      "columns": [
+        {
           "name": "assetCode",
           "type": "varchar"
         },
@@ -2091,6 +2367,44 @@
     {
       "columns": [
         {
+          "name": "backupCodes",
+          "type": "text"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "email",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "uuid"
+        },
+        {
+          "has_default": true,
+          "name": "isActive",
+          "type": "boolean"
+        },
+        {
+          "name": "lastLoginAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "totpSecret",
+          "type": "varchar"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "users.ts",
+      "name": "users"
+    },
+    {
+      "columns": [
+        {
           "name": "clientName",
           "type": "text"
         },
@@ -2148,6 +2462,101 @@
       "extraction_method": "ts-ast",
       "file": "wbs-details.ts",
       "name": "wbs_details"
+    },
+    {
+      "columns": [
+        {
+          "name": "challenge",
+          "primary_key": true,
+          "type": "text"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "email",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "expiresAt",
+          "not_null": true,
+          "type": "timestamp"
+        },
+        {
+          "name": "type",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "userId",
+          "type": "text"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "webauthn-challenges.ts",
+      "name": "webauthn_challenges"
+    },
+    {
+      "columns": [
+        {
+          "has_default": true,
+          "name": "backedUp",
+          "type": "boolean"
+        },
+        {
+          "has_default": true,
+          "name": "counter",
+          "not_null": true,
+          "type": "bigint"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "credentialId",
+          "not_null": true,
+          "type": "text",
+          "unique": true
+        },
+        {
+          "name": "deviceName",
+          "type": "varchar"
+        },
+        {
+          "name": "deviceType",
+          "type": "varchar"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "uuid"
+        },
+        {
+          "name": "lastUsedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "publicKey",
+          "not_null": true,
+          "type": "text"
+        },
+        {
+          "name": "transports",
+          "type": "text"
+        },
+        {
+          "name": "userId",
+          "not_null": true,
+          "references": "users.id",
+          "type": "uuid"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "webauthn-credentials.ts",
+      "name": "webauthn_credentials"
     }
   ],
   "scripts": [
@@ -3376,7 +3785,7 @@
             "df"
           ],
           "docstring": "Set is_capex = True if WBS indicates a capitalized PO.\n\nCapEx POs (C.* WBS prefix) don't hit P&L - they're capitalized assets.\nExamples: C.FT*, C.NF*, C.LF*, etc.\nThis flag enables reports to filter out CapEx when analyzing OpEx cost impact.",
-          "line": 195,
+          "line": 224,
           "name": "calculate_is_capex",
           "semantics": {
             "aggregates": false,
@@ -3414,7 +3823,7 @@
             "df"
           ],
           "docstring": "Set wbs_validated = True if wbs_number exists in wbs_details.\n\nThis enables data quality reporting for POs with invalid/unknown WBS references\n(e.g., typos, capex WBS tracked in separate systems).",
-          "line": 157,
+          "line": 186,
           "name": "calculate_wbs_validated",
           "semantics": {
             "aggregates": false,
@@ -3432,7 +3841,7 @@
             "series"
           ],
           "docstring": "Clean numeric values that should be strings.\nRemoves .0 suffix from floats (e.g., '4002084960.0' -> '4002084960').",
-          "line": 110,
+          "line": 133,
           "name": "clean_numeric_string",
           "semantics": {
             "aggregates": false,
@@ -3460,7 +3869,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 263,
+          "line": 292,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -3476,13 +3885,15 @@
             "po_df"
           ],
           "docstring": "Map CSV columns to database column names.",
-          "line": 120,
+          "line": 143,
           "name": "map_columns",
           "semantics": {
             "aggregates": false,
             "filters_data": true,
             "joins_data": false,
             "modifies_columns": [
+              "cost_impact_pct",
+              "cost_impact_value",
               "fmt_po",
               "open_po_qty",
               "open_po_value"
@@ -3497,7 +3908,7 @@
             "filepath"
           ],
           "docstring": "Save import-ready DataFrame to CSV.",
-          "line": 254,
+          "line": 283,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -3513,7 +3924,7 @@
             "df"
           ],
           "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
-          "line": 217,
+          "line": 246,
           "name": "validate_output",
           "semantics": {
             "aggregates": false,
@@ -3536,7 +3947,7 @@
         "data/intermediate/cost_impact.csv",
         "data/intermediate/po_line_items.csv"
       ],
-      "line_count": 304,
+      "line_count": 333,
       "name": "06_prepare_po_line_items",
       "outputs": [
         "data/intermediate/cost_impact.csv",
@@ -3546,13 +3957,13 @@
         {
           "code_snippet": "return series.apply(",
           "description": "Applies function to data",
-          "line": 115,
+          "line": 138,
           "operation": "apply"
         },
         {
           "code_snippet": "output_df[db_col] = po_df[csv_col]",
           "description": "Filters rows based on boolean condition",
-          "line": 129,
+          "line": 152,
           "operation": "boolean_filter"
         },
         {
@@ -3570,52 +3981,66 @@
           "operation": "column_assign"
         },
         {
+          "code_snippet": "output_df[\"cost_impact_pct\"] = po_df[\"cost_impact_pct\"].round(6)",
+          "column": "cost_impact_pct",
+          "description": "Creates/modifies column 'cost_impact_pct'",
+          "line": 172,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "output_df[\"cost_impact_value\"] = po_df[\"cost_impact_value\"].round(2)",
+          "column": "cost_impact_value",
+          "description": "Creates/modifies column 'cost_impact_value'",
+          "line": 170,
+          "operation": "column_assign"
+        },
+        {
           "code_snippet": "output_df[\"fmt_po\"] = is_ops_vendor",
           "column": "fmt_po",
           "description": "Creates/modifies column 'fmt_po'",
-          "line": 149,
+          "line": 178,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"fmt_po\"] = False",
           "column": "fmt_po",
           "description": "Creates/modifies column 'fmt_po'",
-          "line": 151,
+          "line": 180,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"is_capex\"] = df[\"wbs_number\"].str.startswith(\"C.\", na=False)",
           "column": "is_capex",
           "description": "Creates/modifies column 'is_capex'",
-          "line": 206,
+          "line": 235,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"open_po_qty\"] = po_df[\"open_po_qty\"].round(4)",
           "column": "open_po_qty",
           "description": "Creates/modifies column 'open_po_qty'",
-          "line": 141,
+          "line": 164,
           "operation": "column_assign"
         },
         {
           "code_snippet": "output_df[\"open_po_value\"] = po_df[\"open_po_value\"].round(2)",
           "column": "open_po_value",
           "description": "Creates/modifies column 'open_po_value'",
-          "line": 143,
+          "line": 166,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"wbs_validated\"] = False",
           "column": "wbs_validated",
           "description": "Creates/modifies column 'wbs_validated'",
-          "line": 169,
+          "line": 198,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"wbs_validated\"] = has_wbs & wbs_exists",
           "column": "wbs_validated",
           "description": "Creates/modifies column 'wbs_validated'",
-          "line": 181,
+          "line": 210,
           "operation": "column_assign"
         },
         {
@@ -3625,13 +4050,13 @@
             "Total Cost Impact Amount",
             "Total Cost Impact Qty"
           ],
-          "line": 105,
+          "line": 128,
           "operation": "drop"
         },
         {
           "code_snippet": "valid_wbs = set(wbs_df[\"wbs_number\"].dropna().unique())",
           "description": "Removes null values",
-          "line": 174,
+          "line": 203,
           "operation": "dropna"
         },
         {
@@ -5664,7 +6089,7 @@
             "val"
           ],
           "docstring": "Remove .0 suffix from PO numbers (artifact of float conversion).",
-          "line": 129,
+          "line": 139,
           "name": "clean_po_number",
           "semantics": {
             "aggregates": false,
@@ -5680,7 +6105,7 @@
             "val"
           ],
           "docstring": null,
-          "line": 70,
+          "line": 80,
           "name": "extract_parts",
           "semantics": {
             "aggregates": false,
@@ -5696,7 +6121,7 @@
             "df"
           ],
           "docstring": "Remove rows where both Business Line columns have the same value\nAND that value is one of WCM, WCF, or WCD.\n\nThese represent internal transfers/overhead allocations.",
-          "line": 153,
+          "line": 163,
           "name": "filter_matching_business_lines",
           "semantics": {
             "aggregates": false,
@@ -5708,11 +6133,25 @@
           }
         },
         {
+          "args": [],
+          "docstring": "Find the reservations input file using glob pattern.",
+          "line": 39,
+          "name": "find_input_file",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [],
+            "renames_columns": false,
+            "type_conversions": false
+          }
+        },
+        {
           "args": [
             "filepath"
           ],
           "docstring": "Load the raw Excel file.",
-          "line": 45,
+          "line": 55,
           "name": "load_data",
           "semantics": {
             "aggregates": false,
@@ -5726,7 +6165,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 195,
+          "line": 205,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -5742,7 +6181,7 @@
             "val"
           ],
           "docstring": "Strip leading zeros from line number part of PO Line ID.",
-          "line": 111,
+          "line": 121,
           "name": "normalize_po_line_id",
           "semantics": {
             "aggregates": false,
@@ -5758,7 +6197,7 @@
             "df"
           ],
           "docstring": "Normalize PO Line IDs to match po_line_items format.\n\nReservations format: \"4584632148-00001\" (5-digit zero-padded line number)\nPO Line Items format: \"4581850069-1\" (no padding)\n\nThis ensures proper joins between sap_reservations and po_line_items tables.",
-          "line": 99,
+          "line": 109,
           "name": "normalize_po_line_ids",
           "semantics": {
             "aggregates": false,
@@ -5775,7 +6214,7 @@
             "filepath"
           ],
           "docstring": "Save the cleaned DataFrame to CSV.",
-          "line": 187,
+          "line": 197,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -5791,7 +6230,7 @@
             "df"
           ],
           "docstring": "Split 'Reservation -Line' column into components.\n\nInput format: \"6086214878-1\" (reservation_number-line_number)\n\nCreates:\n- reservation_line_id: Original combined value (for lookups/traceability)\n- reservation_number: The reservation part (for grouping)\n- reservation_line_number: The line number as integer (for sorting)",
-          "line": 53,
+          "line": 63,
           "name": "split_reservation_line_id",
           "semantics": {
             "aggregates": false,
@@ -5816,7 +6255,7 @@
         "data/intermediate/reservations.csv",
         "data/raw/reservations"
       ],
-      "line_count": 223,
+      "line_count": 234,
       "name": "13_reservations",
       "outputs": [
         "data/intermediate/reservations.csv"
@@ -5825,82 +6264,82 @@
         {
           "code_snippet": "df[po_line_col] = df[po_line_col].apply(normalize_po_line_id)",
           "description": "Applies function to data",
-          "line": 141,
+          "line": 151,
           "operation": "apply"
         },
         {
           "code_snippet": "df[po_num_col] = df[po_num_col].apply(clean_po_number)",
           "description": "Applies function to data",
-          "line": 147,
+          "line": 157,
           "operation": "apply"
         },
         {
           "code_snippet": "parts = df[source_col].apply(extract_parts)",
           "description": "Applies function to data",
-          "line": 79,
+          "line": 89,
           "operation": "apply"
         },
         {
           "code_snippet": "df[\"reservation_number\"] = parts.apply(lambda x: x[0]).astype(",
           "description": "Applies function to data",
-          "line": 80,
+          "line": 90,
           "operation": "apply"
         },
         {
           "code_snippet": "parts.apply(lambda x: x[1]), errors=\"coerce\"",
           "description": "Applies function to data",
-          "line": 84,
+          "line": 94,
           "operation": "apply"
         },
         {
           "code_snippet": "pc = df[\"Business Line by Profit Center\"].astype(\"string\").str.strip().str.upper()",
           "description": "Converts column types",
-          "line": 164,
+          "line": 174,
           "operation": "astype"
         },
         {
           "code_snippet": "cc = df[\"Business Line - By Cost Center\"].astype(\"string\").str.strip().str.upper()",
           "description": "Converts column types",
-          "line": 165,
+          "line": 175,
           "operation": "astype"
         },
         {
           "code_snippet": "df[\"reservation_line_id\"] = df[source_col].astype(str)",
           "description": "Converts column types",
-          "line": 67,
+          "line": 77,
           "operation": "astype"
         },
         {
           "code_snippet": "df[\"reservation_number\"] = parts.apply(lambda x: x[0]).astype(",
           "description": "Converts column types",
-          "line": 80,
+          "line": 90,
           "operation": "astype"
         },
         {
           "code_snippet": "df[\"reservation_line_number\"] = pd.to_numeric(",
           "description": "Converts column types",
-          "line": 83,
+          "line": 93,
           "operation": "astype"
         },
         {
           "code_snippet": "df[\"reservation_line_id\"] = df[source_col].astype(str)",
           "column": "reservation_line_id",
           "description": "Creates/modifies column 'reservation_line_id'",
-          "line": 67,
+          "line": 77,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"reservation_line_number\"] = pd.to_numeric(",
           "column": "reservation_line_number",
           "description": "Creates/modifies column 'reservation_line_number'",
-          "line": 83,
+          "line": 93,
           "operation": "column_assign"
         },
         {
           "code_snippet": "df[\"reservation_number\"] = parts.apply(lambda x: x[0]).astype(",
           "column": "reservation_number",
           "description": "Creates/modifies column 'reservation_number'",
-          "line": 80,
+          "line": 90,
           "operation": "column_assign"
         }
       ],

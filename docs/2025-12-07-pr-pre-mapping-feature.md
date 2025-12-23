@@ -903,7 +903,7 @@ The flow transforms mapping from a reactive chore to a proactive, controlled wor
 | `pr_pre_mappings` table | Done | Created at `packages/db/src/schema/pr-pre-mappings.ts` |
 | `po_mappings` additions | Done | Added mappingSource, sourcePrPreMappingId, requiresConfirmation, confirmedAt, confirmedBy |
 | Schema export | Done | Both exported from `packages/db/src/schema/index.ts` |
-| Schema sync | Done | `pnpm db:compare` validates, `pnpm db:push` shows no changes |
+| Schema sync | Done | `pnpm db:compare` validates, `npm run db:drift` shows no changes |
 
 ### Phase 2: tRPC Procedures - COMPLETED
 

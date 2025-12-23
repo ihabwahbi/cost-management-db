@@ -6,7 +6,9 @@
   "types": "./src/index.ts",
   "scripts": {
     "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push --force",
+    "db:drift": "tsx scripts/detect-schema-drift.ts",
+    "db:drift:sql": "tsx scripts/detect-schema-drift.ts --sql",
+    "db:drift:json": "tsx scripts/detect-schema-drift.ts --json",
     "db:studio": "drizzle-kit studio",
     "type-check": "tsc --noEmit",
     "test": "vitest run",

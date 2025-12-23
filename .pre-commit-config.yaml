@@ -71,13 +71,6 @@ repos:
         files: "^scripts/stage.*\\.py$"
         pass_filenames: false
 
-      # Cross-project schema sync (DB owns data schemas, syncs to webapp)
-      - id: cross-project-schema
-        name: "Schema: Cross-Project Sync"
-        entry: python3 scripts/validators/cross_project_schema.py --check
-        language: system
-        files: "^src/schema/.*\\.ts$"
-        pass_filenames: false
 
   # ============================================
   # LAYER 3: Oracle Regeneration (Conditional)

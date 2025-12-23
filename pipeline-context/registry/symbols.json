@@ -879,7 +879,7 @@
     },
     "PR Number": {
       "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:96",
-      "dtype": "int64",
+      "dtype": "float64",
       "name": "PR Number",
       "source_type": "intermediate",
       "sources": [
@@ -1115,7 +1115,8 @@
         "02_gr_postings",
         "03_ir_postings",
         "05_calculate_cost_impact",
-        "06_calculate_grir"
+        "06_calculate_grir",
+        "06_prepare_po_line_items"
       ]
     },
     "Requester": {
@@ -1405,6 +1406,18 @@
         "07_prepare_po_transactions"
       ]
     },
+    "cost_impact_pct": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:172",
+      "dtype": "float64",
+      "name": "cost_impact_pct",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": [
+        "06_prepare_po_line_items"
+      ]
+    },
     "cost_impact_qty": {
       "created_by": "scripts/stage3_prepare/07_prepare_po_transactions.py:111",
       "dtype": "float64",
@@ -1415,6 +1428,18 @@
       ],
       "used_in": [
         "07_prepare_po_transactions"
+      ]
+    },
+    "cost_impact_value": {
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:170",
+      "dtype": "float64",
+      "name": "cost_impact_value",
+      "source_type": "import-ready",
+      "sources": [
+        "data/import-ready/po_line_items.csv"
+      ],
+      "used_in": [
+        "06_prepare_po_line_items"
       ]
     },
     "days_open": {
@@ -1460,7 +1485,7 @@
       "used_in": []
     },
     "fmt_po": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:149",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:178",
       "dtype": "bool",
       "name": "fmt_po",
       "source_type": "import-ready",
@@ -1496,7 +1521,7 @@
       ]
     },
     "is_capex": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:206",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:235",
       "dtype": "bool",
       "name": "is_capex",
       "source_type": "import-ready",
@@ -1548,7 +1573,7 @@
       "used_in": []
     },
     "open_po_qty": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:141",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:164",
       "dtype": "float64",
       "name": "open_po_qty",
       "source_type": "import-ready",
@@ -1560,7 +1585,7 @@
       ]
     },
     "open_po_value": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:143",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:166",
       "dtype": "float64",
       "name": "open_po_value",
       "source_type": "import-ready",
@@ -1892,7 +1917,7 @@
       "used_in": []
     },
     "reservation_line_id": {
-      "created_by": "scripts/stage1_clean/13_reservations.py:67",
+      "created_by": "scripts/stage1_clean/13_reservations.py:77",
       "dtype": "object",
       "name": "reservation_line_id",
       "source_type": "import-ready",
@@ -1907,7 +1932,7 @@
       ]
     },
     "reservation_line_number": {
-      "created_by": "scripts/stage1_clean/13_reservations.py:83",
+      "created_by": "scripts/stage1_clean/13_reservations.py:93",
       "dtype": "int64",
       "name": "reservation_line_number",
       "source_type": "import-ready",
@@ -1922,7 +1947,7 @@
       ]
     },
     "reservation_number": {
-      "created_by": "scripts/stage1_clean/13_reservations.py:80",
+      "created_by": "scripts/stage1_clean/13_reservations.py:90",
       "dtype": "int64",
       "name": "reservation_number",
       "source_type": "import-ready",
@@ -2219,7 +2244,7 @@
       ]
     },
     "wbs_validated": {
-      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:181",
+      "created_by": "scripts/stage3_prepare/06_prepare_po_line_items.py:210",
       "dtype": "bool",
       "name": "wbs_validated",
       "source_type": "import-ready",
@@ -2234,49 +2259,49 @@
   "constants": [
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 212,
+      "line": 214,
       "name": "EXCLUDED_NIS_LEVELS",
       "value_preview": "['Compensation Business Delivery', 'Compensation Business Enablement']",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 209,
+      "line": 211,
       "name": "EXCLUDED_VALUATION_CLASSES",
       "value_preview": "[7800, 7900, 5008]",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 225,
+      "line": 227,
       "name": "GRIR_EXPOSURES_MAPPING",
       "value_preview": "{'PO Line ID': 'po_line_id', 'GRIR Qty': 'grir_qty', 'GRIR Value': 'grir_value', 'First Exposure Dat",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 236,
+      "line": 238,
       "name": "GRIR_TIME_BUCKETS",
       "value_preview": "{30: '<1 month', 90: '1-3 months', 180: '3-6 months', 365: '6-12 months'}",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 242,
+      "line": 244,
       "name": "GRIR_TIME_BUCKET_MAX",
       "value_preview": ">1 year",
       "value_type": "str"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 177,
+      "line": 179,
       "name": "OPS_DISTRICT_TO_LOCATION",
       "value_preview": "{'APG TS': 'Jandakot', 'AUS East Coast WS': 'Roma', 'AUS West Coast WS': 'Jandakot', 'Moomba WL': 'M",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 152,
+      "line": 154,
       "name": "PLANT_CODE_TO_LOCATION",
       "value_preview": "{'3601': 'Perth', '3606': 'Jandakot', '3608': 'Kewdale', '3609': 'Toowoomba', '3610': 'Roma', '3611'",
       "value_type": "dict"
@@ -2285,7 +2310,7 @@
       "file": "scripts/config/column_mappings.py",
       "line": 59,
       "name": "PO_LINE_ITEMS_CALCULATED",
-      "value_preview": "['open_po_qty', 'open_po_value', 'fmt_po', 'wbs_validated', 'is_capex']",
+      "value_preview": "['open_po_qty', 'open_po_value', 'fmt_po', 'wbs_validated', 'is_capex', 'cost_impact_value', 'cost_i",
       "value_type": "list"
     },
     {
@@ -2297,70 +2322,70 @@
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 82,
+      "line": 84,
       "name": "PO_TRANSACTIONS_GENERATED",
       "value_preview": "['transaction_id', 'amount']",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 71,
+      "line": 73,
       "name": "PO_TRANSACTIONS_MAPPING",
       "value_preview": "{'PO Line ID': 'po_line_id', 'Posting Type': 'transaction_type', 'Posting Date': 'posting_date', 'Po",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 91,
+      "line": 93,
       "name": "REQUIRED_COLUMNS",
       "value_preview": "{'po_line_items': ['po_line_id', 'po_number', 'line_item_number', 'ordered_qty', 'po_value_usd'], 'p",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 299,
+      "line": 301,
       "name": "SAP_RESERVATIONS_DERIVED",
       "value_preview": "{'po_number': \"Extract before '-' from Main - PO Line to Peg to Reservation\", 'po_line_number': \"Ext",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 272,
+      "line": 274,
       "name": "SAP_RESERVATIONS_MAPPING",
       "value_preview": "{'reservation_line_id': 'reservation_line_id', 'reservation_number': 'reservation_number', 'reservat",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 193,
+      "line": 195,
       "name": "SBL_NAME_TO_CODE",
       "value_preview": "{'TCP - Tubing-Conveyed Perforation': 'TCPF', 'TCP-Tubing-Conveyed Perforation': 'TCPF', 'TS Downhol",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 219,
+      "line": 221,
       "name": "SIMPLE_ACCOUNT_CATEGORIES",
       "value_preview": "['K', 'P', 'S', 'V']",
       "value_type": "list"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 218,
+      "line": 220,
       "name": "SIMPLE_VENDOR_CATEGORY",
       "value_preview": "GLD",
       "value_type": "str"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 129,
+      "line": 131,
       "name": "VENDOR_NAME_MAPPING",
       "value_preview": "{'P9516': 'Dubai Hub', 'P9109': 'Houston Hub', 'P9517': 'Shanghai Hub', 'P9518': 'Singapore Hub', 'P",
       "value_type": "dict"
     },
     {
       "file": "scripts/config/column_mappings.py",
-      "line": 248,
+      "line": 250,
       "name": "WBS_DETAILS_MAPPING",
       "value_preview": "{'wbs_number': 'wbs_number', 'wbs_source': 'wbs_source', 'project_number': 'project_number', 'operat",
       "value_type": "dict"
@@ -2548,7 +2573,7 @@
       ],
       "docstring": "Set is_capex = True if WBS indicates a capitalized PO.\n\nCapEx POs (C.* WBS prefix) don't hit P&L - they're capitalized assets.\nExamples: C.FT*, C.NF*, C.LF*, etc.\nThis flag enables reports to filter out CapEx when analyzing OpEx cost impact.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 195,
+      "line": 224,
       "name": "calculate_is_capex",
       "return_type": "pd.DataFrame",
       "signature": "def calculate_is_capex(df: pd.DataFrame) -> pd.DataFrame"
@@ -2563,6 +2588,7 @@
       ],
       "calls": [
         "agg",
+        "clip",
         "drop",
         "fillna",
         "groupby",
@@ -2621,7 +2647,7 @@
       ],
       "docstring": "Set wbs_validated = True if wbs_number exists in wbs_details.\n\nThis enables data quality reporting for POs with invalid/unknown WBS references\n(e.g., typos, capex WBS tracked in separate systems).",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 157,
+      "line": 186,
       "name": "calculate_wbs_validated",
       "return_type": "pd.DataFrame",
       "signature": "def calculate_wbs_validated(df: pd.DataFrame) -> pd.DataFrame"
@@ -2680,7 +2706,7 @@
       ],
       "docstring": "Clean numeric values that should be strings.\nRemoves .0 suffix from floats (e.g., '4002084960.0' -> '4002084960').",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 110,
+      "line": 133,
       "name": "clean_numeric_string",
       "return_type": "pd.Series",
       "signature": "def clean_numeric_string(series: pd.Series) -> pd.Series"
@@ -2717,7 +2743,7 @@
       ],
       "docstring": "Remove .0 suffix from PO numbers (artifact of float conversion).",
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 129,
+      "line": 139,
       "name": "clean_po_number",
       "return_type": null,
       "signature": "def clean_po_number(val)"
@@ -2937,7 +2963,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 70,
+      "line": 80,
       "name": "extract_parts",
       "return_type": null,
       "signature": "def extract_parts(val)"
@@ -3029,7 +3055,7 @@
       ],
       "docstring": "Remove rows where both Business Line columns have the same value\nAND that value is one of WCM, WCF, or WCD.\n\nThese represent internal transfers/overhead allocations.",
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 153,
+      "line": 163,
       "name": "filter_matching_business_lines",
       "return_type": "pd.DataFrame",
       "signature": "def filter_matching_business_lines(df: pd.DataFrame) -> pd.DataFrame"
@@ -3194,7 +3220,9 @@
     },
     {
       "args": [],
-      "called_by": [],
+      "called_by": [
+        "main"
+      ],
       "calls": [
         "glob",
         "len",
@@ -3209,6 +3237,23 @@
       "name": "find_input_file",
       "return_type": "Optional[Path]",
       "signature": "def find_input_file() -> Optional[Path]"
+    },
+    {
+      "args": [],
+      "called_by": [],
+      "calls": [
+        "FileNotFoundError",
+        "glob",
+        "list",
+        "sort",
+        "stat"
+      ],
+      "docstring": "Find the reservations input file using glob pattern.",
+      "file": "scripts/stage1_clean/13_reservations.py",
+      "line": 39,
+      "name": "find_input_file",
+      "return_type": "Path",
+      "signature": "def find_input_file() -> Path"
     },
     {
       "args": [
@@ -3492,7 +3537,7 @@
       ],
       "docstring": "Load the raw Excel file.",
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 45,
+      "line": 55,
       "name": "load_data",
       "return_type": "pd.DataFrame",
       "signature": "def load_data(filepath: Path) -> pd.DataFrame"
@@ -3831,6 +3876,7 @@
       "called_by": [],
       "calls": [
         "filter_matching_business_lines",
+        "find_input_file",
         "load_data",
         "normalize_po_line_ids",
         "print",
@@ -3839,7 +3885,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 195,
+      "line": 205,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -3952,7 +3998,7 @@
       ],
       "docstring": null,
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 263,
+      "line": 292,
       "name": "main",
       "return_type": null,
       "signature": "def main()"
@@ -4061,7 +4107,7 @@
       ],
       "docstring": "Map CSV columns to database column names.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 120,
+      "line": 143,
       "name": "map_columns",
       "return_type": "pd.DataFrame",
       "signature": "def map_columns(po_df: pd.DataFrame) -> pd.DataFrame"
@@ -4249,7 +4295,7 @@
       ],
       "docstring": "Strip leading zeros from line number part of PO Line ID.",
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 111,
+      "line": 121,
       "name": "normalize_po_line_id",
       "return_type": null,
       "signature": "def normalize_po_line_id(val)"
@@ -4274,7 +4320,7 @@
       ],
       "docstring": "Normalize PO Line IDs to match po_line_items format.\n\nReservations format: \"4584632148-00001\" (5-digit zero-padded line number)\nPO Line Items format: \"4581850069-1\" (no padding)\n\nThis ensures proper joins between sap_reservations and po_line_items tables.",
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 99,
+      "line": 109,
       "name": "normalize_po_line_ids",
       "return_type": "pd.DataFrame",
       "signature": "def normalize_po_line_ids(df: pd.DataFrame) -> pd.DataFrame"
@@ -4579,7 +4625,7 @@
       ],
       "docstring": "Save the cleaned DataFrame to CSV.",
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 187,
+      "line": 197,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -4679,7 +4725,7 @@
       ],
       "docstring": "Save import-ready DataFrame to CSV.",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 254,
+      "line": 283,
       "name": "save_data",
       "return_type": "None",
       "signature": "def save_data(df: pd.DataFrame, filepath: Path) -> None"
@@ -4899,7 +4945,7 @@
       ],
       "docstring": "Split 'Reservation -Line' column into components.\n\nInput format: \"6086214878-1\" (reservation_number-line_number)\n\nCreates:\n- reservation_line_id: Original combined value (for lookups/traceability)\n- reservation_number: The reservation part (for grouping)\n- reservation_line_number: The line number as integer (for sorting)",
       "file": "scripts/stage1_clean/13_reservations.py",
-      "line": 53,
+      "line": 63,
       "name": "split_reservation_line_id",
       "return_type": "pd.DataFrame",
       "signature": "def split_reservation_line_id(df: pd.DataFrame) -> pd.DataFrame"
@@ -5009,7 +5055,7 @@
       ],
       "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
       "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
-      "line": 217,
+      "line": 246,
       "name": "validate_output",
       "return_type": "bool",
       "signature": "def validate_output(df: pd.DataFrame) -> bool"
@@ -5120,12 +5166,61 @@
     }
   ],
   "stats": {
-    "total_columns": 195,
+    "total_columns": 197,
     "total_constants": 19,
-    "total_functions": 133,
-    "total_tables": 12
+    "total_functions": 134,
+    "total_tables": 20
   },
   "tables": [
+    {
+      "columns": [
+        "accessCount",
+        "content",
+        "contentHash",
+        "createdAt",
+        "embedding",
+        "entities",
+        "event",
+        "id",
+        "importance",
+        "keywords",
+        "lastAccessedAt",
+        "memoryType",
+        "metadata",
+        "previousVersionId",
+        "updatedAt",
+        "userId"
+      ],
+      "file": "src/schema/agent-memories.ts",
+      "foreign_keys": [
+        {
+          "column": "userId",
+          "references": "users.id"
+        }
+      ],
+      "name": "agent_memories",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "createdAt",
+        "event",
+        "id",
+        "memoryId",
+        "newContent",
+        "oldContent",
+        "reason"
+      ],
+      "file": "src/schema/agent-memories.ts",
+      "foreign_keys": [
+        {
+          "column": "memoryId",
+          "references": "agentMemories.id"
+        }
+      ],
+      "name": "agent_memory_history",
+      "primary_key": "id"
+    },
     {
       "columns": [
         "costBreakdownId",
@@ -5213,8 +5308,32 @@
     },
     {
       "columns": [
+        "createdAt",
+        "createdBy",
+        "email",
+        "expiresAt",
+        "failedAttempts",
+        "id",
+        "pinHash",
+        "used",
+        "usedAt"
+      ],
+      "file": "src/schema/pending-invites.ts",
+      "foreign_keys": [
+        {
+          "column": "createdBy",
+          "references": "users.id"
+        }
+      ],
+      "name": "pending_invites",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
         "accountAssignmentCategory",
         "assetCode",
+        "costImpactPct",
+        "costImpactValue",
         "createdAt",
         "description",
         "expectedDeliveryDate",
@@ -5384,6 +5503,38 @@
     },
     {
       "columns": [
+        "createdAt",
+        "deviceBindingChallenge",
+        "deviceBindingVerified",
+        "deviceCredentialId",
+        "devicePublicKey",
+        "email",
+        "expiresAt",
+        "tokenHash",
+        "used"
+      ],
+      "file": "src/schema/registration-attempts.ts",
+      "foreign_keys": [],
+      "name": "registration_attempts",
+      "primary_key": "tokenHash"
+    },
+    {
+      "columns": [
+        "additionalInfo",
+        "attemptType",
+        "createdAt",
+        "email",
+        "id",
+        "ipHash",
+        "userAgent"
+      ],
+      "file": "src/schema/registration-audit-log.ts",
+      "foreign_keys": [],
+      "name": "registration_audit_log",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
         "assetCode",
         "assetSerialNumber",
         "createdAt",
@@ -5414,6 +5565,21 @@
     },
     {
       "columns": [
+        "backupCodes",
+        "createdAt",
+        "email",
+        "id",
+        "isActive",
+        "lastLoginAt",
+        "totpSecret"
+      ],
+      "file": "src/schema/users.ts",
+      "foreign_keys": [],
+      "name": "users",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
         "clientName",
         "createdAt",
         "location",
@@ -5432,6 +5598,44 @@
       "foreign_keys": [],
       "name": "wbs_details",
       "primary_key": "wbsNumber"
+    },
+    {
+      "columns": [
+        "challenge",
+        "createdAt",
+        "email",
+        "expiresAt",
+        "type",
+        "userId"
+      ],
+      "file": "src/schema/webauthn-challenges.ts",
+      "foreign_keys": [],
+      "name": "webauthn_challenges",
+      "primary_key": "challenge"
+    },
+    {
+      "columns": [
+        "backedUp",
+        "counter",
+        "createdAt",
+        "credentialId",
+        "deviceName",
+        "deviceType",
+        "id",
+        "lastUsedAt",
+        "publicKey",
+        "transports",
+        "userId"
+      ],
+      "file": "src/schema/webauthn-credentials.ts",
+      "foreign_keys": [
+        {
+          "column": "userId",
+          "references": "users.id"
+        }
+      ],
+      "name": "webauthn_credentials",
+      "primary_key": "id"
     }
   ],
   "version": "1.0.0"

@@ -61,13 +61,13 @@
       "source_path": "scripts/stage1_clean/12_wbs_from_ops_activities.py"
     },
     {
-      "compression_ratio": 2.74,
+      "compression_ratio": 2.79,
       "name": "13_reservations",
-      "original_lines": 223,
-      "original_tokens": 1918,
-      "skeleton_lines": 77,
+      "original_lines": 234,
+      "original_tokens": 2032,
+      "skeleton_lines": 82,
       "skeleton_path": "pipeline-context/skeletons/stage1_clean/13_reservations.skeleton.py",
-      "skeleton_tokens": 701,
+      "skeleton_tokens": 729,
       "source_path": "scripts/stage1_clean/13_reservations.py"
     },
     {
@@ -111,13 +111,13 @@
       "source_path": "scripts/stage2_transform/07_process_wbs.py"
     },
     {
-      "compression_ratio": 3.38,
+      "compression_ratio": 3.66,
       "name": "06_prepare_po_line_items",
-      "original_lines": 304,
-      "original_tokens": 2579,
-      "skeleton_lines": 87,
+      "original_lines": 333,
+      "original_tokens": 2901,
+      "skeleton_lines": 88,
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/06_prepare_po_line_items.skeleton.py",
-      "skeleton_tokens": 762,
+      "skeleton_tokens": 793,
       "source_path": "scripts/stage3_prepare/06_prepare_po_line_items.py"
     },
     {
@@ -162,10 +162,10 @@
     }
   ],
   "totals": {
-    "compression_ratio": 3.21,
-    "original_lines": 3651,
-    "original_tokens": 30534,
-    "skeleton_lines": 1105,
-    "skeleton_tokens": 9509
+    "compression_ratio": 3.24,
+    "original_lines": 3691,
+    "original_tokens": 30970,
+    "skeleton_lines": 1111,
+    "skeleton_tokens": 9568
   }
 }

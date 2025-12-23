@@ -7,7 +7,9 @@ Data pipeline and schema definitions for the `dev_v3` PostgreSQL schema.
 ## Quick Reference
 
 ```bash
-npm run db:push       # Push schema changes to database
+npm run db:drift      # Detect schema drift (shows SQL, never applies)
+npm run db:drift:sql  # Output raw SQL only (for review/piping)
+npm run db:drift:json # Output JSON (for CI)
 npm run db:generate   # Generate migration files
 npm run db:studio     # Open Drizzle Studio GUI
 npm run type-check    # TypeScript validation
@@ -17,22 +19,23 @@ npm test             # Run tests
 python3 scripts/pipeline.py           # Run full pipeline
 python3 scripts/pipeline.py --stage1  # Run only stage 1
 
-# Cross-Project Schema Sync (this project owns data schemas)
-python3 scripts/validators/cross_project_schema.py --check  # Verify sync
-python3 scripts/validators/cross_project_schema.py --sync   # Sync to webapp
+# Schema validation
+bash ../cost-management/scripts/check-schema-symlinks.sh  # Verify all symlinks
 ```
 
 ## Key Points
 
 - **Our Schema**: `dev_v3` (isolated, safe to modify)
 - **Production Schema**: `public` (NEVER TOUCH)
-- **This project owns data schemas** - syncs to webapp via pre-commit hook
+- **No db:push** — schema changes are applied manually via SQL after reviewing drift
+- **Bidirectional symlinks** — data schemas owned here, webapp schemas symlinked in
 
 ## Schema Changes Workflow
 
 1. Edit `src/schema/*.ts`
-2. Run `python3 scripts/validators/cross_project_schema.py --sync`
-3. Run `cd ../cost-management && npm run db:push`
+2. Run `npm run db:drift` to see required SQL
+3. Apply the SQL manually via psql or database MCP tool
+4. Run `npm run type-check`
 
 ## Resources
 

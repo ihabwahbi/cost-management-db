@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2025-12-02T08:20:35.480316+00:00",
+  "generated_at": "2026-02-16T12:39:02.448899+00:00",
   "schemas": {
     "01_po_line_items": {
       "columns": [
@@ -62,14 +62,16 @@
       "columns": [
         "Total Cost Impact Amount",
         "Total Cost Impact Qty",
+        "cost_impact_pct",
+        "cost_impact_value",
         "fmt_po",
         "is_capex",
         "open_po_qty",
         "open_po_value",
         "wbs_validated"
       ],
-      "hash": "1ffe1dc1ba93bd72",
-      "count": 7
+      "hash": "dea367d5437bc506",
+      "count": 9
     },
     "07_prepare_po_transactions": {
       "columns": [
@@ -162,5 +164,5 @@
     }
   },
   "total_scripts": 16,
-  "total_columns": 62
+  "total_columns": 64
 }

@@ -64,6 +64,8 @@ interface CsvRow {
   po_gts_status: string;
   open_po_qty: string;
   open_po_value: string;
+  cost_impact_value: string;
+  cost_impact_pct: string;
   fmt_po: string;
   wbs_validated: string;
   is_capex: string;
@@ -154,6 +156,8 @@ function transformRow(row: CsvRow): PoLineItemInsert {
     fmtPo: bool(row.fmt_po),
     openPoQty: str(row.open_po_qty),
     openPoValue: str(row.open_po_value),
+    costImpactValue: str(row.cost_impact_value),
+    costImpactPct: str(row.cost_impact_pct),
     isActive: true,  // All imported records are active
     updatedAt: new Date(),
   };
@@ -202,6 +206,8 @@ async function upsertBatch(records: PoLineItemInsert[]): Promise<number> {
         fmtPo: sql`excluded.fmt_po`,
         openPoQty: sql`excluded.open_po_qty`,
         openPoValue: sql`excluded.open_po_value`,
+        costImpactValue: sql`excluded.cost_impact_value`,
+        costImpactPct: sql`excluded.cost_impact_pct`,
         isActive: sql`excluded.is_active`,
         updatedAt: new Date(),
       },

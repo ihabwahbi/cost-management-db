@@ -25,8 +25,13 @@ SCRIPTS_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 import pandas as pd
 PROJECT_ROOT = SCRIPTS_DIR.parent
-INPUT_FILE = PROJECT_ROOT / 'data' / 'raw' / 'reservations' / 'Data Table - Open Reservation - Supply Element Availability Status (1).xlsx'
+INPUT_DIR = PROJECT_ROOT / 'data' / 'raw' / 'reservations'
+INPUT_PATTERN = 'Data Table - Open Reservation - Supply Element Availability Status*.xlsx'
 OUTPUT_FILE = PROJECT_ROOT / 'data' / 'intermediate' / 'reservations.csv'
+
+def find_input_file() -> Path:
+    """Find the reservations input file using glob pattern."""
+    ...
 EXCLUDED_MATCHING_BUSINESS_LINES = {'WCM', 'WCF', 'WCD'}
 
 def load_data(filepath: Path) -> pd.DataFrame:

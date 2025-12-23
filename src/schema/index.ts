@@ -25,3 +25,17 @@ export * from './sap-reservations';
 // Forecasting tables
 export * from './forecast-versions';
 export * from './budget-forecasts';
+
+// Database views
+export * from './v-project-financials';
+export * from './v-po-mapping-detail';
+
+// Webapp-only schemas (symlinked from cost-management)
+// Included so db:drift from this project reports correct drift (no false DROP proposals)
+export * from './users';
+export * from './agent-memories';
+export * from './pending-invites';
+export * from './registration-attempts';
+export * from './registration-audit-log';
+export * from './webauthn-credentials';
+export * from './webauthn-challenges';

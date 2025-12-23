@@ -9,8 +9,9 @@ Input: data/intermediate/po_line_items.csv, data/intermediate/cost_impact.csv
 Output: data/import-ready/po_line_items.csv
 
 Column Operations:
-  WRITES: Total Cost Impact Amount, Total Cost Impact Qty, fmt_po, is_capex, open_po_qty, open_po_value, wbs_validated
-  READS:  Main Vendor SLB Vendor Category, PO Line ID, Total Cost Impact Amount, Total Cost Impact Qty, open_po_qty, open_po_value, wbs_number"""
+  WRITES: Total Cost Impact Amount, Total Cost Impact Qty, cost_impact_pct, cost_impact_value, fmt_po, is_capex, open_po_qty, open_po_value, wbs_validated
+  READS:  Main Vendor SLB Vendor Category, PO Line ID, PO Receipt Status, Purchase Value USD, Total Cost Impact Amount, Total Cost Impact Qty, cost_impact_pct, cost_impact_value, open_po_qty, open_po_value
+          ...and 1 more"""
 import sys
 from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent

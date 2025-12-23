@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2025-12-11T02:27:02.505347+00:00
+Generated: 2026-02-16T12:06:50.218591+00:00
 
 ## Data Flow Diagram
 
@@ -62,18 +62,26 @@ flowchart TD
     end
 
     subgraph DB["Database Tables"]
+        db_agent_memories[("agent_memories")]
+        db_agent_memory_history[("agent_memory_history")]
         db_budget_forecasts[("budget_forecasts")]
         db_cost_breakdown[("cost_breakdown")]
         db_forecast_versions[("forecast_versions")]
         db_grir_exposures[("grir_exposures")]
+        db_pending_invites[("pending_invites")]
         db_po_line_items[("po_line_items")]
         db_po_mappings[("po_mappings")]
         db_po_operations[("po_operations")]
         db_po_transactions[("po_transactions")]
         db_pr_pre_mappings[("pr_pre_mappings")]
         db_projects[("projects")]
+        db_registration_attempts[("registration_attempts")]
+        db_registration_audit_log[("registration_audit_log")]
         db_sap_reservations[("sap_reservations")]
+        db_users[("users")]
         db_wbs_details[("wbs_details")]
+        db_webauthn_challenges[("webauthn_challenges")]
+        db_webauthn_credentials[("webauthn_credentials")]
     end
 
     %% Data Flow Connections
@@ -148,6 +156,39 @@ flowchart LR
 
 ## Database Schema
 
+### `agent_memories`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `userId` | uuid | NOT NULL, FK → users.id |
+| `content` | text | NOT NULL |
+| `memoryType` | varchar | NOT NULL, DEFAULT |
+| `entities` | jsonb | DEFAULT |
+| `keywords` | jsonb | DEFAULT |
+| `metadata` | jsonb | DEFAULT |
+| `importance` | real | NOT NULL, DEFAULT |
+| `accessCount` | integer | NOT NULL, DEFAULT |
+| `lastAccessedAt` | timestamp | - |
+| `contentHash` | varchar | - |
+| `embedding` | unknown | - |
+| `event` | varchar | DEFAULT |
+| `previousVersionId` | uuid | - |
+| `createdAt` | timestamp | - |
+| *...* | *1 more* | |
+
+### `agent_memory_history`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `memoryId` | uuid | NOT NULL, FK → agentMemories.id |
+| `oldContent` | text | - |
+| `newContent` | text | - |
+| `event` | varchar | NOT NULL |
+| `reason` | text | - |
+| `createdAt` | timestamp | - |
+
 ### `budget_forecasts`
 
 | Column | Type | Constraints |
@@ -197,6 +238,20 @@ flowchart LR
 | `createdAt` | timestamp | - |
 | `updatedAt` | timestamp | - |
 
+### `pending_invites`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `email` | varchar | NOT NULL |
+| `pinHash` | varchar | NOT NULL |
+| `createdBy` | uuid | FK → users.id |
+| `expiresAt` | timestamp | NOT NULL |
+| `used` | boolean | DEFAULT |
+| `usedAt` | timestamp | - |
+| `failedAttempts` | integer | NOT NULL, DEFAULT |
+| `createdAt` | timestamp | - |
+
 ### `po_line_items`
 
 | Column | Type | Constraints |
@@ -216,7 +271,7 @@ flowchart LR
 | `vendorCategory` | varchar | - |
 | `ultimateVendorName` | varchar | - |
 | `lineItemNumber` | integer | NOT NULL |
-| *...* | *21 more* | |
+| *...* | *23 more* | |
 
 ### `po_mappings`
 
@@ -302,6 +357,32 @@ flowchart LR
 | `createdAt` | timestamp | - |
 | `updatedAt` | timestamp | - |
 
+### `registration_attempts`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `tokenHash` | unknown | PK |
+| `email` | varchar | NOT NULL |
+| `expiresAt` | timestamp | NOT NULL |
+| `used` | boolean | DEFAULT |
+| `createdAt` | timestamp | - |
+| `deviceBindingChallenge` | varchar | - |
+| `deviceCredentialId` | text | - |
+| `devicePublicKey` | text | - |
+| `deviceBindingVerified` | boolean | DEFAULT |
+
+### `registration_audit_log`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `email` | varchar | NOT NULL |
+| `attemptType` | varchar | NOT NULL |
+| `ipHash` | unknown | - |
+| `userAgent` | varchar | - |
+| `additionalInfo` | jsonb | - |
+| `createdAt` | timestamp | - |
+
 ### `sap_reservations`
 
 | Column | Type | Constraints |
@@ -323,6 +404,18 @@ flowchart LR
 | `wbsNumber` | varchar | - |
 | *...* | *7 more* | |
 
+### `users`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `email` | varchar | NOT NULL |
+| `totpSecret` | varchar | - |
+| `backupCodes` | text | - |
+| `isActive` | boolean | DEFAULT |
+| `createdAt` | timestamp | - |
+| `lastLoginAt` | timestamp | - |
+
 ### `wbs_details`
 
 | Column | Type | Constraints |
@@ -341,6 +434,33 @@ flowchart LR
 | `createdAt` | timestamp | - |
 | `updatedAt` | timestamp | - |
 
+### `webauthn_challenges`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `challenge` | text | PK |
+| `userId` | text | - |
+| `email` | varchar | NOT NULL |
+| `type` | varchar | NOT NULL |
+| `expiresAt` | timestamp | NOT NULL |
+| `createdAt` | timestamp | - |
+
+### `webauthn_credentials`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `userId` | uuid | NOT NULL, FK → users.id |
+| `credentialId` | text | NOT NULL |
+| `publicKey` | text | NOT NULL |
+| `counter` | bigint | NOT NULL, DEFAULT |
+| `transports` | text | - |
+| `deviceType` | varchar | - |
+| `backedUp` | boolean | DEFAULT |
+| `deviceName` | varchar | - |
+| `createdAt` | timestamp | - |
+| `lastUsedAt` | timestamp | - |
+
 ## Data Profiles
 
 Sample data and types for each CSV file:
@@ -348,7 +468,7 @@ Sample data and types for each CSV file:
 ### `invoice table.csv`
 
 - **Path**: `data/raw/invoice table.csv`
-- **Rows**: 65245
+- **Rows**: 66594
 
 | Column | Type |
 |--------|------|
@@ -359,7 +479,7 @@ Sample data and types for each CSV file:
 ### `po line items.csv`
 
 - **Path**: `data/raw/po line items.csv`
-- **Rows**: 62486
+- **Rows**: 64002
 
 | Column | Type |
 |--------|------|
@@ -376,21 +496,21 @@ Sample data and types for each CSV file:
 | *...* | *21 more* |
 
 **Columns with nulls:**
-- `PO Initial Output Date`: 128 nulls
-- `PO Account Assignment Category`: 10826 nulls
-- `PO Account Assignment Category Desc`: 10826 nulls
-- `PO WBS Element`: 38616 nulls
-- `PO Material Number`: 48541 nulls
-- `PO Valuation Class`: 48541 nulls
-- `PO Valuation Class Desc`: 48541 nulls
-- `NIS Level 0 Desc`: 12261 nulls
-- `PO GTS Status`: 102 nulls
-- `PO Current Supplier Promised Date`: 33916 nulls
+- `PO Initial Output Date`: 134 nulls
+- `PO Account Assignment Category`: 11063 nulls
+- `PO Account Assignment Category Desc`: 11063 nulls
+- `PO WBS Element`: 39484 nulls
+- `PO Material Number`: 49765 nulls
+- `PO Valuation Class`: 49765 nulls
+- `PO Valuation Class Desc`: 49765 nulls
+- `NIS Level 0 Desc`: 12537 nulls
+- `PO GTS Status`: 110 nulls
+- `PO Current Supplier Promised Date`: 34514 nulls
 
 ### `gr table.csv`
 
 - **Path**: `data/raw/gr table.csv`
-- **Rows**: 77276
+- **Rows**: 78512
 
 | Column | Type |
 |--------|------|
@@ -401,7 +521,7 @@ Sample data and types for each CSV file:
 ### `gr_postings.csv`
 
 - **Path**: `data/intermediate/gr_postings.csv`
-- **Rows**: 54243
+- **Rows**: 55115
 
 | Column | Type |
 |--------|------|
@@ -413,7 +533,7 @@ Sample data and types for each CSV file:
 ### `reservations.csv`
 
 - **Path**: `data/intermediate/reservations.csv`
-- **Rows**: 1485
+- **Rows**: 1576
 
 | Column | Type |
 |--------|------|
@@ -439,8 +559,8 @@ Sample data and types for each CSV file:
 - `Reservation -Line`: 2 nulls
 - `Requirements Date`: 2 nulls
 - `Creation Date`: 2 nulls
-- `Stock On Hand - DDSC`: 712 nulls
-- `Stock On Hand - HDSC`: 901 nulls
+- `Stock On Hand - DDSC`: 761 nulls
+- `Stock On Hand - HDSC`: 930 nulls
 - `Last 3 Month Consumption`: 2 nulls
 - `Last 6 Month Consumption`: 2 nulls
 - `Last 12 Month Consumption`: 2 nulls
@@ -448,20 +568,20 @@ Sample data and types for each CSV file:
 - `Material Stratification (Last 12 Month Consumption)`: 2 nulls
 - `Open Qty - Reservation`: 2 nulls
 - `Open Reservation Value`: 2 nulls
-- `Material/Plant-SOH - Total`: 1028 nulls
-- `Primary Pegged PO-LN - Open Qty`: 1044 nulls
+- `Material/Plant-SOH - Total`: 1096 nulls
+- `Primary Pegged PO-LN - Open Qty`: 1073 nulls
 - `Combined SOH & PO Pegging`: 2 nulls
-- `Main - PO Line to Peg to Reservation`: 968 nulls
-- `Main - PO to Peg to Reservation`: 968 nulls
-- `Additional PO - Line to Peg`: 1466 nulls
-- `Primary Pegged PO-LN - Order Qty`: 1044 nulls
-- `Primary Pegged PO-LN - Approval Status`: 1044 nulls
-- `Primary Pegged PO-LN - RDD Date`: 1044 nulls
-- `Pegged Main PO GR Status`: 968 nulls
-- `Pegged Main PO Invoice Status`: 968 nulls
-- `Primary Pegged PO-LN - Invoice Qty`: 1440 nulls
+- `Main - PO Line to Peg to Reservation`: 1022 nulls
+- `Main - PO to Peg to Reservation`: 1022 nulls
+- `Additional PO - Line to Peg`: 1553 nulls
+- `Primary Pegged PO-LN - Order Qty`: 1073 nulls
+- `Primary Pegged PO-LN - Approval Status`: 1073 nulls
+- `Primary Pegged PO-LN - RDD Date`: 1073 nulls
+- `Pegged Main PO GR Status`: 1022 nulls
+- `Pegged Main PO Invoice Status`: 1022 nulls
+- `Primary Pegged PO-LN - Invoice Qty`: 1533 nulls
 - `Post Pegging SOH Qty`: 2 nulls
-- `Post Pegging PO Qty`: 35 nulls
+- `Post Pegging PO Qty`: 47 nulls
 - `Material Description`: 2 nulls
 - `MRP Parameters - MRP Controller`: 2 nulls
 - `MRP Parameters - Profit Center`: 2 nulls
@@ -469,24 +589,24 @@ Sample data and types for each CSV file:
 - `MRP Parameters - Prime Status`: 2 nulls
 - `MRP Parameters - Safety Stock`: 2 nulls
 - `MRP Parameters - Standard Price`: 2 nulls
-- `Business Line - By Cost Center`: 299 nulls
-- `Sub - Business Line - By Cost Center`: 299 nulls
+- `Business Line - By Cost Center`: 361 nulls
+- `Sub - Business Line - By Cost Center`: 361 nulls
 - `Business Line by Profit Center`: 2 nulls
 - `Material/Plant-Open PO Qty - Total`: 2 nulls
 - `Purchase Requisition - Status`: 2 nulls
-- `Purchase Requisitions`: 1480 nulls
+- `Purchase Requisitions`: 1573 nulls
 - `Planned Order - Status`: 2 nulls
-- `Planned Orders`: 1013 nulls
-- `Maximo Asset ID`: 812 nulls
-- `Maximo Asset Num`: 812 nulls
-- `Maximo Serial No`: 812 nulls
+- `Planned Orders`: 1094 nulls
+- `Maximo Asset ID`: 949 nulls
+- `Maximo Asset Num`: 949 nulls
+- `Maximo Serial No`: 949 nulls
 - `Reservation Creation type`: 2 nulls
-- `WO Number`: 503 nulls
+- `WO Number`: 536 nulls
 - `User Name`: 2 nulls
 - `Goods recipient`: 16 nulls
 - `Maximo - WO STATUS and Part Status`: 2 nulls
-- `WBS Element`: 1188 nulls
-- `Cost Center`: 299 nulls
+- `WBS Element`: 1217 nulls
+- `Cost Center`: 361 nulls
 - `reservation_line_id`: 2 nulls
 - `reservation_number`: 2 nulls
 - `reservation_line_number`: 2 nulls
@@ -518,7 +638,7 @@ Sample data and types for each CSV file:
 ### `grir_exposures.csv`
 
 - **Path**: `data/import-ready/grir_exposures.csv`
-- **Rows**: 65
+- **Rows**: 68
 
 | Column | Type |
 |--------|------|
@@ -557,7 +677,7 @@ Sample data and types for each CSV file:
 ### `ir_postings.csv`
 
 - **Path**: `data/intermediate/ir_postings.csv`
-- **Rows**: 54036
+- **Rows**: 55204
 
 | Column | Type |
 |--------|------|
@@ -591,7 +711,7 @@ Sample data and types for each CSV file:
 ### `po_details_enrichment.csv`
 
 - **Path**: `data/intermediate/po_details_enrichment.csv`
-- **Rows**: 21961
+- **Rows**: 22089
 
 | Column | Type |
 |--------|------|
@@ -601,8 +721,8 @@ Sample data and types for each CSV file:
 | `PR Line` | float64 |
 
 **Columns with nulls:**
-- `Requester`: 2428 nulls
-- `PR Number`: 440 nulls
+- `Requester`: 2394 nulls
+- `PR Number`: 420 nulls
 - `PR Line`: 2 nulls
 
 ### `wbs_from_ops_activities.csv`
@@ -631,7 +751,7 @@ Sample data and types for each CSV file:
 ### `cost_impact.csv`
 
 - **Path**: `data/intermediate/cost_impact.csv`
-- **Rows**: 106563
+- **Rows**: 108592
 
 | Column | Type |
 |--------|------|
@@ -669,7 +789,7 @@ Sample data and types for each CSV file:
 ### `po_line_items.csv`
 
 - **Path**: `data/import-ready/po_line_items.csv`
-- **Rows**: 55803
+- **Rows**: 57184
 
 | Column | Type |
 |--------|------|
@@ -683,21 +803,22 @@ Sample data and types for each CSV file:
 | `pr_line` | float64 |
 | `requester` | object |
 | `vendor_id` | object |
-| *...* | *21 more* |
+| *...* | *23 more* |
 
 **Columns with nulls:**
-- `pr_number`: 36483 nulls
-- `pr_line`: 36070 nulls
-- `requester`: 35988 nulls
-- `part_number`: 46544 nulls
-- `account_assignment_category`: 8774 nulls
-- `wbs_number`: 31989 nulls
-- `po_gts_status`: 60 nulls
+- `pr_number`: 37702 nulls
+- `pr_line`: 37313 nulls
+- `requester`: 37216 nulls
+- `part_number`: 47765 nulls
+- `account_assignment_category`: 8925 nulls
+- `wbs_number`: 32723 nulls
+- `po_gts_status`: 62 nulls
+- `cost_impact_pct`: 27 nulls
 
 ### `po_transactions.csv`
 
 - **Path**: `data/import-ready/po_transactions.csv`
-- **Rows**: 106563
+- **Rows**: 108592
 
 | Column | Type |
 |--------|------|
@@ -737,7 +858,7 @@ Sample data and types for each CSV file:
 ### `sap_reservations.csv`
 
 - **Path**: `data/import-ready/sap_reservations.csv`
-- **Rows**: 1483
+- **Rows**: 1574
 
 | Column | Type |
 |--------|------|
@@ -754,13 +875,13 @@ Sample data and types for each CSV file:
 | *...* | *9 more* |
 
 **Columns with nulls:**
-- `wbs_number`: 1186 nulls
+- `wbs_number`: 1215 nulls
 - `requester_alias`: 14 nulls
-- `po_number`: 966 nulls
-- `po_line_number`: 966 nulls
-- `po_line_item_id`: 966 nulls
-- `asset_code`: 810 nulls
-- `asset_serial_number`: 839 nulls
+- `po_number`: 1020 nulls
+- `po_line_number`: 1020 nulls
+- `po_line_item_id`: 1020 nulls
+- `asset_code`: 947 nulls
+- `asset_serial_number`: 976 nulls
 
 ## Common Errors & Solutions
 
@@ -890,16 +1011,16 @@ Key pandas operations used in each script:
 
 | Line | Operation | Details |
 |------|-----------|---------|
-| 67 | column_assign | column: `reservation_line_id` |
-| 80 | column_assign | column: `reservation_number` |
-| 83 | column_assign | column: `reservation_line_number` |
-| 67 | astype | Converts column types |
-| 79 | apply | Applies function to data |
-| 80 | astype | Converts column types |
-| 83 | astype | Converts column types |
-| 141 | apply | Applies function to data |
-| 147 | apply | Applies function to data |
-| 80 | apply | Applies function to data |
+| 77 | column_assign | column: `reservation_line_id` |
+| 90 | column_assign | column: `reservation_number` |
+| 93 | column_assign | column: `reservation_line_number` |
+| 77 | astype | Converts column types |
+| 89 | apply | Applies function to data |
+| 90 | astype | Converts column types |
+| 93 | astype | Converts column types |
+| 151 | apply | Applies function to data |
+| 157 | apply | Applies function to data |
+| 90 | apply | Applies function to data |
 
 ### `04_enrich_po_line_items`
 
@@ -966,14 +1087,14 @@ Key pandas operations used in each script:
 |------|-----------|---------|
 | 80 | column_assign | column: `Total Cost Impact Qty` |
 | 81 | column_assign | column: `Total Cost Impact Amount` |
-| 181 | column_assign | column: `wbs_validated` |
-| 206 | column_assign | column: `is_capex` |
+| 210 | column_assign | column: `wbs_validated` |
+| 235 | column_assign | column: `is_capex` |
 | 77 | merge | on: `PO Line ID` |
 | 80 | fillna | Fills null values |
 | 81 | fillna | Fills null values |
-| 105 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
-| 115 | apply | Applies function to data |
-| 141 | column_assign | column: `open_po_qty` |
+| 128 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
+| 138 | apply | Applies function to data |
+| 164 | column_assign | column: `open_po_qty` |
 
 ### `07_prepare_po_transactions`
 

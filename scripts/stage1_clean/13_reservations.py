@@ -29,14 +29,24 @@ import pandas as pd  # noqa: E402
 
 # Paths
 PROJECT_ROOT = SCRIPTS_DIR.parent
-INPUT_FILE = (
-    PROJECT_ROOT
-    / "data"
-    / "raw"
-    / "reservations"
-    / "Data Table - Open Reservation - Supply Element Availability Status (1).xlsx"
+INPUT_DIR = PROJECT_ROOT / "data" / "raw" / "reservations"
+INPUT_PATTERN = (
+    "Data Table - Open Reservation - Supply Element Availability Status*.xlsx"
 )
 OUTPUT_FILE = PROJECT_ROOT / "data" / "intermediate" / "reservations.csv"
+
+
+def find_input_file() -> Path:
+    """Find the reservations input file using glob pattern."""
+    matches = list(INPUT_DIR.glob(INPUT_PATTERN))
+    if not matches:
+        raise FileNotFoundError(
+            f"No file matching '{INPUT_PATTERN}' found in {INPUT_DIR}"
+        )
+    # Use the most recently modified file if multiple matches
+    matches.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+    return matches[0]
+
 
 # Business lines to exclude when both columns match
 EXCLUDED_MATCHING_BUSINESS_LINES = {"WCM", "WCF", "WCD"}
@@ -198,7 +208,8 @@ def main():
     print("=" * 60)
 
     print("\n[1/5] Loading data...")
-    df = load_data(INPUT_FILE)
+    input_file = find_input_file()
+    df = load_data(input_file)
 
     print("\n[2/5] Filtering matching business lines...")
     df = filter_matching_business_lines(df)
