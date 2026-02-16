@@ -676,10 +676,34 @@
         "type": "WRITES"
       }
     ],
+    "is_approval_blocked": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 271,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      }
+    ],
     "is_capex": [
       {
         "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
         "line": 235,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      }
+    ],
+    "is_effectively_closed": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 278,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      }
+    ],
+    "is_gts_blocked": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 270,
         "script": "06_prepare_po_line_items",
         "type": "WRITES"
       }
@@ -796,6 +820,48 @@
         "line": 118,
         "script": "10_wbs_from_projects",
         "type": "READS"
+      }
+    ],
+    "po_approval_status": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 271,
+        "script": "06_prepare_po_line_items",
+        "type": "READS"
+      }
+    ],
+    "po_gts_status": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 270,
+        "script": "06_prepare_po_line_items",
+        "type": "READS"
+      }
+    ],
+    "po_lifecycle_status": [
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 282,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 283,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 284,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
+      },
+      {
+        "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+        "line": 285,
+        "script": "06_prepare_po_line_items",
+        "type": "WRITES"
       }
     ],
     "po_line_id": [
@@ -1652,6 +1718,24 @@
       "script": "10_wbs_from_projects",
       "source": "column:ops_district",
       "target": "column:location",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 271,
+      "operation": "approval_status == 'blocked'",
+      "script": "06_prepare_po_line_items",
+      "source": "column:po_approval_status",
+      "target": "column:is_approval_blocked",
+      "type": "TRANSFORMS"
+    },
+    {
+      "file": "scripts/stage3_prepare/06_prepare_po_line_items.py",
+      "line": 270,
+      "operation": "gts_status.str.contains('gts blocked', na=False)",
+      "script": "06_prepare_po_line_items",
+      "source": "column:po_gts_status",
+      "target": "column:is_gts_blocked",
       "type": "TRANSFORMS"
     },
     {
@@ -2659,12 +2743,36 @@
       "name": "grir_value",
       "type": "column"
     },
+    "column:is_approval_blocked": {
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:271"
+      ],
+      "id": "column:is_approval_blocked",
+      "name": "is_approval_blocked",
+      "type": "column"
+    },
     "column:is_capex": {
       "created_by": [
         "scripts/stage3_prepare/06_prepare_po_line_items.py:235"
       ],
       "id": "column:is_capex",
       "name": "is_capex",
+      "type": "column"
+    },
+    "column:is_effectively_closed": {
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:278"
+      ],
+      "id": "column:is_effectively_closed",
+      "name": "is_effectively_closed",
+      "type": "column"
+    },
+    "column:is_gts_blocked": {
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:270"
+      ],
+      "id": "column:is_gts_blocked",
+      "name": "is_gts_blocked",
       "type": "column"
     },
     "column:location": {
@@ -2718,6 +2826,27 @@
     "column:ops_district": {
       "id": "column:ops_district",
       "name": "ops_district",
+      "type": "column"
+    },
+    "column:po_approval_status": {
+      "id": "column:po_approval_status",
+      "name": "po_approval_status",
+      "type": "column"
+    },
+    "column:po_gts_status": {
+      "id": "column:po_gts_status",
+      "name": "po_gts_status",
+      "type": "column"
+    },
+    "column:po_lifecycle_status": {
+      "created_by": [
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:282",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:283",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:284",
+        "scripts/stage3_prepare/06_prepare_po_line_items.py:285"
+      ],
+      "id": "column:po_lifecycle_status",
+      "name": "po_lifecycle_status",
       "type": "column"
     },
     "column:po_line_id": {
@@ -3231,6 +3360,102 @@
       "data_type": "uuid",
       "id": "db_column:budget_forecasts.id",
       "table": "budget_forecasts",
+      "type": "db_column"
+    },
+    "db_column:business_unit_rules.businessUnitKey": {
+      "column": "businessUnitKey",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:business_unit_rules.businessUnitKey",
+      "table": "business_unit_rules",
+      "type": "db_column"
+    },
+    "db_column:business_unit_rules.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "serial",
+      "id": "db_column:business_unit_rules.id",
+      "table": "business_unit_rules",
+      "type": "db_column"
+    },
+    "db_column:business_unit_rules.location": {
+      "column": "location",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:business_unit_rules.location",
+      "table": "business_unit_rules",
+      "type": "db_column"
+    },
+    "db_column:business_unit_rules.subBusinessLine": {
+      "column": "subBusinessLine",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:business_unit_rules.subBusinessLine",
+      "table": "business_unit_rules",
+      "type": "db_column"
+    },
+    "db_column:business_units.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "serial",
+      "id": "db_column:business_units.id",
+      "table": "business_units",
+      "type": "db_column"
+    },
+    "db_column:business_units.key": {
+      "column": "key",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:business_units.key",
+      "table": "business_units",
+      "type": "db_column"
+    },
+    "db_column:business_units.label": {
+      "column": "label",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:business_units.label",
+      "table": "business_units",
+      "type": "db_column"
+    },
+    "db_column:business_units.sortOrder": {
+      "column": "sortOrder",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "integer",
+      "id": "db_column:business_units.sortOrder",
+      "table": "business_units",
       "type": "db_column"
     },
     "db_column:cost_breakdown.budgetCost": {
@@ -3749,6 +3974,18 @@
       "table": "po_line_items",
       "type": "db_column"
     },
+    "db_column:po_line_items.isApprovalBlocked": {
+      "column": "isApprovalBlocked",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_line_items.isApprovalBlocked",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
     "db_column:po_line_items.isCapex": {
       "column": "isCapex",
       "constraints": {
@@ -3758,6 +3995,30 @@
       },
       "data_type": "boolean",
       "id": "db_column:po_line_items.isCapex",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
+    "db_column:po_line_items.isEffectivelyClosed": {
+      "column": "isEffectivelyClosed",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_line_items.isEffectivelyClosed",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
+    "db_column:po_line_items.isGtsBlocked": {
+      "column": "isGtsBlocked",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_line_items.isGtsBlocked",
       "table": "po_line_items",
       "type": "db_column"
     },
@@ -3902,6 +4163,18 @@
       },
       "data_type": "varchar",
       "id": "db_column:po_line_items.poGtsStatus",
+      "table": "po_line_items",
+      "type": "db_column"
+    },
+    "db_column:po_line_items.poLifecycleStatus": {
+      "column": "poLifecycleStatus",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:po_line_items.poLifecycleStatus",
       "table": "po_line_items",
       "type": "db_column"
     },
@@ -5951,6 +6224,7 @@
         "calculate_open_values",
         "calculate_wbs_validated",
         "clean_numeric_string",
+        "compute_status_flags",
         "load_data",
         "main",
         "map_columns",
@@ -6189,6 +6463,30 @@
       "name": "budget_forecasts",
       "type": "table"
     },
+    "table:business_unit_rules": {
+      "columns": [
+        "businessUnitKey",
+        "id",
+        "location",
+        "subBusinessLine"
+      ],
+      "file": "business-units.ts",
+      "id": "table:business_unit_rules",
+      "name": "business_unit_rules",
+      "type": "table"
+    },
+    "table:business_units": {
+      "columns": [
+        "id",
+        "key",
+        "label",
+        "sortOrder"
+      ],
+      "file": "business-units.ts",
+      "id": "table:business_units",
+      "name": "business_units",
+      "type": "table"
+    },
     "table:cost_breakdown": {
       "columns": [
         "budgetCost",
@@ -6266,7 +6564,10 @@
         "fmtPo",
         "id",
         "isActive",
+        "isApprovalBlocked",
         "isCapex",
+        "isEffectivelyClosed",
+        "isGtsBlocked",
         "lineItemNumber",
         "location",
         "nisLine",
@@ -6279,6 +6580,7 @@
         "poApprovalStatus",
         "poCreationDate",
         "poGtsStatus",
+        "poLifecycleStatus",
         "poLineId",
         "poNumber",
         "poReceiptStatus",
@@ -6532,24 +6834,24 @@
     }
   },
   "stats": {
-    "columns_tracked": 75,
+    "columns_tracked": 81,
     "edges_by_type": {
       "DEPENDS_ON": 13,
       "INPUT": 33,
       "MAPS_TO": 5,
       "OUTPUT": 25,
-      "TRANSFORMS": 73
+      "TRANSFORMS": 75
     },
     "nodes_by_type": {
-      "column": 94,
-      "db_column": 233,
+      "column": 100,
+      "db_column": 245,
       "file": 23,
       "script": 17,
-      "table": 20
+      "table": 22
     },
-    "total_edges": 149,
-    "total_nodes": 387,
-    "variables_traced": 74
+    "total_edges": 151,
+    "total_nodes": 407,
+    "variables_traced": 80
   },
   "variable_sources": {
     "01_po_line_items": {
@@ -6658,11 +6960,17 @@
       "already_closed": [
         "PO Receipt Status"
       ],
+      "approval_status": [
+        "po_approval_status"
+      ],
       "capex_count": [
         "is_capex"
       ],
       "capex_value": [
         "is_capex"
+      ],
+      "gts_status": [
+        "po_gts_status"
       ],
       "has_po_value": [
         "Purchase Value USD"
@@ -6675,6 +6983,18 @@
       ],
       "no_po_value": [
         "Purchase Value USD"
+      ],
+      "open_qty": [
+        "open_po_qty"
+      ],
+      "open_val": [
+        "open_po_value"
+      ],
+      "receipt_status": [
+        "po_receipt_status"
+      ],
+      "status_counts": [
+        "po_lifecycle_status"
       ],
       "valid_wbs": [
         "wbs_number"

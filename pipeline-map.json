@@ -518,7 +518,10 @@
         "description",
         "expected_delivery_date",
         "fmt_po",
+        "is_approval_blocked",
         "is_capex",
+        "is_effectively_closed",
+        "is_gts_blocked",
         "line_item_number",
         "location",
         "nis_line",
@@ -531,6 +534,7 @@
         "po_approval_status",
         "po_creation_date",
         "po_gts_status",
+        "po_lifecycle_status",
         "po_line_id",
         "po_number",
         "po_receipt_status",
@@ -553,7 +557,10 @@
         "description": "object",
         "expected_delivery_date": "object",
         "fmt_po": "bool",
+        "is_approval_blocked": "bool",
         "is_capex": "bool",
+        "is_effectively_closed": "bool",
+        "is_gts_blocked": "bool",
         "line_item_number": "int64",
         "location": "object",
         "nis_line": "object",
@@ -566,6 +573,7 @@
         "po_approval_status": "object",
         "po_creation_date": "object",
         "po_gts_status": "object",
+        "po_lifecycle_status": "object",
         "po_line_id": "object",
         "po_number": "int64",
         "po_receipt_status": "object",
@@ -600,7 +608,10 @@
         "description": "O-RING;332,2.35 IN,0.21 IN,FKM,95 DURO",
         "expected_delivery_date": "2023-01-19 00:00:00.000",
         "fmt_po": false,
+        "is_approval_blocked": false,
         "is_capex": false,
+        "is_effectively_closed": true,
+        "is_gts_blocked": false,
         "line_item_number": 1,
         "location": "Moomba",
         "nis_line": "Materials and Supplies",
@@ -613,6 +624,7 @@
         "po_approval_status": "Approved",
         "po_creation_date": "2023-01-02 00:00:00.000",
         "po_gts_status": "PO Not blocked by GTS",
+        "po_lifecycle_status": "closed",
         "po_line_id": "4581911397-1",
         "po_number": 4581911397,
         "po_receipt_status": "CLOSED PO",
@@ -1310,7 +1322,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2026-02-16T12:06:50.218591+00:00",
+  "generated_at": "2026-02-16T15:01:35.372293+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1495,6 +1507,61 @@
       "extraction_method": "ts-ast",
       "file": "budget-forecasts.ts",
       "name": "budget_forecasts"
+    },
+    {
+      "columns": [
+        {
+          "name": "businessUnitKey",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "serial"
+        },
+        {
+          "name": "location",
+          "type": "varchar"
+        },
+        {
+          "name": "subBusinessLine",
+          "not_null": true,
+          "type": "varchar"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "business-units.ts",
+      "name": "business_unit_rules"
+    },
+    {
+      "columns": [
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "serial"
+        },
+        {
+          "name": "key",
+          "not_null": true,
+          "type": "varchar",
+          "unique": true
+        },
+        {
+          "name": "label",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "has_default": true,
+          "name": "sortOrder",
+          "not_null": true,
+          "type": "integer"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "business-units.ts",
+      "name": "business_units"
     },
     {
       "columns": [
@@ -1736,7 +1803,25 @@
         },
         {
           "has_default": true,
+          "name": "isApprovalBlocked",
+          "not_null": true,
+          "type": "boolean"
+        },
+        {
+          "has_default": true,
           "name": "isCapex",
+          "type": "boolean"
+        },
+        {
+          "has_default": true,
+          "name": "isEffectivelyClosed",
+          "not_null": true,
+          "type": "boolean"
+        },
+        {
+          "has_default": true,
+          "name": "isGtsBlocked",
+          "not_null": true,
           "type": "boolean"
         },
         {
@@ -1787,6 +1872,12 @@
         },
         {
           "name": "poGtsStatus",
+          "type": "varchar"
+        },
+        {
+          "has_default": true,
+          "name": "poLifecycleStatus",
+          "not_null": true,
           "type": "varchar"
         },
         {
@@ -3853,6 +3944,27 @@
           }
         },
         {
+          "args": [
+            "df"
+          ],
+          "docstring": "Compute pre-materialized status flags from raw SAP columns.\n\nThese replace runtime string matching (ILIKE) with indexed boolean scans\nand eliminate the need for repeated status derivation on every API request.\n\nBusiness rules (from packages/api/src/utils/data-utils.ts):\n- is_gts_blocked: poGtsStatus contains 'gts blocked'\n- is_approval_blocked: poApprovalStatus is 'blocked'\n- is_effectively_closed: receipt='closed po' OR (value=0 AND qty=0)\n- po_lifecycle_status: closed > gts_blocked > pending_approval > open\n\nNOTE: 'cancelled' and 'cancellation_rejected' statuses are NOT computed here.\nThey depend on po_operations (app-managed table) and are derived server-side.",
+          "line": 246,
+          "name": "compute_status_flags",
+          "semantics": {
+            "aggregates": false,
+            "filters_data": false,
+            "joins_data": false,
+            "modifies_columns": [
+              "is_approval_blocked",
+              "is_effectively_closed",
+              "is_gts_blocked",
+              "po_lifecycle_status"
+            ],
+            "renames_columns": false,
+            "type_conversions": true
+          }
+        },
+        {
           "args": [],
           "docstring": "Load intermediate data files.",
           "line": 41,
@@ -3869,7 +3981,7 @@
         {
           "args": [],
           "docstring": null,
-          "line": 292,
+          "line": 345,
           "name": "main",
           "semantics": {
             "aggregates": false,
@@ -3908,7 +4020,7 @@
             "filepath"
           ],
           "docstring": "Save import-ready DataFrame to CSV.",
-          "line": 283,
+          "line": 336,
           "name": "save_data",
           "semantics": {
             "aggregates": false,
@@ -3924,7 +4036,7 @@
             "df"
           ],
           "docstring": "Validate output using Pandera contract (with fallback to basic checks).",
-          "line": 246,
+          "line": 299,
           "name": "validate_output",
           "semantics": {
             "aggregates": false,
@@ -3947,7 +4059,7 @@
         "data/intermediate/cost_impact.csv",
         "data/intermediate/po_line_items.csv"
       ],
-      "line_count": 333,
+      "line_count": 389,
       "name": "06_prepare_po_line_items",
       "outputs": [
         "data/intermediate/cost_impact.csv",
@@ -4009,10 +4121,31 @@
           "operation": "column_assign"
         },
         {
+          "code_snippet": "df[\"is_approval_blocked\"] = approval_status == \"blocked\"",
+          "column": "is_approval_blocked",
+          "description": "Creates/modifies column 'is_approval_blocked'",
+          "line": 271,
+          "operation": "column_assign"
+        },
+        {
           "code_snippet": "df[\"is_capex\"] = df[\"wbs_number\"].str.startswith(\"C.\", na=False)",
           "column": "is_capex",
           "description": "Creates/modifies column 'is_capex'",
           "line": 235,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"is_effectively_closed\"] = status_closed | financially_closed",
+          "column": "is_effectively_closed",
+          "description": "Creates/modifies column 'is_effectively_closed'",
+          "line": 278,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"is_gts_blocked\"] = gts_status.str.contains(\"gts blocked\", na=False)",
+          "column": "is_gts_blocked",
+          "description": "Creates/modifies column 'is_gts_blocked'",
+          "line": 270,
           "operation": "column_assign"
         },
         {
@@ -4027,6 +4160,13 @@
           "column": "open_po_value",
           "description": "Creates/modifies column 'open_po_value'",
           "line": 166,
+          "operation": "column_assign"
+        },
+        {
+          "code_snippet": "df[\"po_lifecycle_status\"] = \"open\"  # Default",
+          "column": "po_lifecycle_status",
+          "description": "Creates/modifies column 'po_lifecycle_status'",
+          "line": 282,
           "operation": "column_assign"
         },
         {
@@ -4058,6 +4198,36 @@
           "description": "Removes null values",
           "line": 203,
           "operation": "dropna"
+        },
+        {
+          "code_snippet": "gts_status = df[\"po_gts_status\"].fillna(\"\").str.strip().str.lower()",
+          "description": "Fills null values",
+          "line": 265,
+          "operation": "fillna"
+        },
+        {
+          "code_snippet": "approval_status = df[\"po_approval_status\"].fillna(\"\").str.strip().str.lower()",
+          "description": "Fills null values",
+          "line": 266,
+          "operation": "fillna"
+        },
+        {
+          "code_snippet": "receipt_status = df[\"po_receipt_status\"].fillna(\"\").str.strip().str.lower()",
+          "description": "Fills null values",
+          "line": 267,
+          "operation": "fillna"
+        },
+        {
+          "code_snippet": "open_qty = pd.to_numeric(df[\"open_po_qty\"], errors=\"coerce\").fillna(0)",
+          "description": "Fills null values",
+          "line": 274,
+          "operation": "fillna"
+        },
+        {
+          "code_snippet": "open_val = pd.to_numeric(df[\"open_po_value\"], errors=\"coerce\").fillna(0)",
+          "description": "Fills null values",
+          "line": 275,
+          "operation": "fillna"
         },
         {
           "code_snippet": "po_df[\"Total Cost Impact Qty\"] = po_df[\"Total Cost Impact Qty\"].fillna(0)",

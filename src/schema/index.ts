@@ -14,6 +14,9 @@ export * from './po-line-items';
 export * from './pr-pre-mappings';  // Must be before po-mappings (dependency)
 export * from './po-mappings';
 
+// Reference tables
+export * from './business-units';
+
 // PO Operations & Transactions
 export * from './po-operations';
 export * from './po-transactions';

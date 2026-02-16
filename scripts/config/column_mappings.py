@@ -64,6 +64,11 @@ PO_LINE_ITEMS_CALCULATED = [
     "is_capex",  # True if WBS starts with 'C.' (capitalized, doesn't hit P&L)
     "cost_impact_value",  # po_value_usd - open_po_value (total cost impact recognized)
     "cost_impact_pct",  # cost_impact_value / po_value_usd [0,1], NULL when po_value=0
+    # Pre-computed status flags (calculated in stage3)
+    "is_gts_blocked",  # po_gts_status contains 'GTS Blocked'
+    "is_approval_blocked",  # po_approval_status is 'Blocked'
+    "is_effectively_closed",  # CLOSED PO or (qty=0 AND value=0)
+    "po_lifecycle_status",  # open|closed|gts_blocked|pending_approval
 ]
 
 

@@ -95,6 +95,15 @@ if PANDERA_AVAILABLE:
         po_receipt_status: Series[str] = pa.Field(nullable=True)
         po_gts_status: Series[str] = pa.Field(nullable=True)
 
+        # Pre-computed status flags (from ETL stage3)
+        is_gts_blocked: Series[bool] = pa.Field(nullable=False)
+        is_approval_blocked: Series[bool] = pa.Field(nullable=False)
+        is_effectively_closed: Series[bool] = pa.Field(nullable=False)
+        po_lifecycle_status: Series[str] = pa.Field(
+            nullable=False,
+            isin=["open", "closed", "gts_blocked", "pending_approval"],
+        )
+
         class Config:
             strict = False  # Allow extra columns (some may be added later)
             coerce = True  # Allow type coercion

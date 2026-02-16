@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2026-02-16T12:06:50.218591+00:00
+Generated: 2026-02-16T15:01:35.372293+00:00
 
 ## Data Flow Diagram
 
@@ -65,6 +65,8 @@ flowchart TD
         db_agent_memories[("agent_memories")]
         db_agent_memory_history[("agent_memory_history")]
         db_budget_forecasts[("budget_forecasts")]
+        db_business_units[("business_units")]
+        db_business_unit_rules[("business_unit_rules")]
         db_cost_breakdown[("cost_breakdown")]
         db_forecast_versions[("forecast_versions")]
         db_grir_exposures[("grir_exposures")]
@@ -199,6 +201,24 @@ flowchart LR
 | `forecastedCost` | numeric | NOT NULL, DEFAULT |
 | `createdAt` | timestamp | - |
 
+### `business_units`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | serial | PK |
+| `key` | varchar | NOT NULL |
+| `label` | varchar | NOT NULL |
+| `sortOrder` | integer | NOT NULL, DEFAULT |
+
+### `business_unit_rules`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | serial | PK |
+| `businessUnitKey` | varchar | NOT NULL |
+| `subBusinessLine` | varchar | NOT NULL |
+| `location` | varchar | - |
+
 ### `cost_breakdown`
 
 | Column | Type | Constraints |
@@ -271,7 +291,7 @@ flowchart LR
 | `vendorCategory` | varchar | - |
 | `ultimateVendorName` | varchar | - |
 | `lineItemNumber` | integer | NOT NULL |
-| *...* | *23 more* | |
+| *...* | *27 more* | |
 
 ### `po_mappings`
 
@@ -803,7 +823,7 @@ Sample data and types for each CSV file:
 | `pr_line` | float64 |
 | `requester` | object |
 | `vendor_id` | object |
-| *...* | *23 more* |
+| *...* | *27 more* |
 
 **Columns with nulls:**
 - `pr_number`: 37702 nulls
@@ -1089,12 +1109,12 @@ Key pandas operations used in each script:
 | 81 | column_assign | column: `Total Cost Impact Amount` |
 | 210 | column_assign | column: `wbs_validated` |
 | 235 | column_assign | column: `is_capex` |
+| 270 | column_assign | column: `is_gts_blocked` |
+| 271 | column_assign | column: `is_approval_blocked` |
+| 278 | column_assign | column: `is_effectively_closed` |
+| 282 | column_assign | column: `po_lifecycle_status` |
 | 77 | merge | on: `PO Line ID` |
 | 80 | fillna | Fills null values |
-| 81 | fillna | Fills null values |
-| 128 | drop | cols: `Total Cost Impact Qty, Total Cost Impact Amount` |
-| 138 | apply | Applies function to data |
-| 164 | column_assign | column: `open_po_qty` |
 
 ### `07_prepare_po_transactions`
 

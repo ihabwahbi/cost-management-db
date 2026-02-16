@@ -9,9 +9,10 @@ Input: data/intermediate/po_line_items.csv, data/intermediate/cost_impact.csv
 Output: data/import-ready/po_line_items.csv
 
 Column Operations:
-  WRITES: Total Cost Impact Amount, Total Cost Impact Qty, cost_impact_pct, cost_impact_value, fmt_po, is_capex, open_po_qty, open_po_value, wbs_validated
+  WRITES: Total Cost Impact Amount, Total Cost Impact Qty, cost_impact_pct, cost_impact_value, fmt_po, is_approval_blocked, is_capex, is_effectively_closed, is_gts_blocked, open_po_qty
+          ...and 3 more
   READS:  Main Vendor SLB Vendor Category, PO Line ID, PO Receipt Status, Purchase Value USD, Total Cost Impact Amount, Total Cost Impact Qty, cost_impact_pct, cost_impact_value, open_po_qty, open_po_value
-          ...and 1 more"""
+          ...and 3 more"""
 import sys
 from pathlib import Path
 SCRIPTS_DIR = Path(__file__).parent.parent
@@ -70,6 +71,24 @@ def calculate_is_capex(df: pd.DataFrame) -> pd.DataFrame:
     CapEx POs (C.* WBS prefix) don't hit P&L - they're capitalized assets.
     Examples: C.FT*, C.NF*, C.LF*, etc.
     This flag enables reports to filter out CapEx when analyzing OpEx cost impact.
+    """
+    ...
+
+def compute_status_flags(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compute pre-materialized status flags from raw SAP columns.
+
+    These replace runtime string matching (ILIKE) with indexed boolean scans
+    and eliminate the need for repeated status derivation on every API request.
+
+    Business rules (from packages/api/src/utils/data-utils.ts):
+    - is_gts_blocked: poGtsStatus contains 'gts blocked'
+    - is_approval_blocked: poApprovalStatus is 'blocked'
+    - is_effectively_closed: receipt='closed po' OR (value=0 AND qty=0)
+    - po_lifecycle_status: closed > gts_blocked > pending_approval > open
+
+    NOTE: 'cancelled' and 'cancellation_rejected' statuses are NOT computed here.
+    They depend on po_operations (app-managed table) and are derived server-side.
     """
     ...
 

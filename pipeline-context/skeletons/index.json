@@ -111,13 +111,13 @@
       "source_path": "scripts/stage2_transform/07_process_wbs.py"
     },
     {
-      "compression_ratio": 3.66,
+      "compression_ratio": 3.53,
       "name": "06_prepare_po_line_items",
-      "original_lines": 333,
-      "original_tokens": 2901,
-      "skeleton_lines": 88,
+      "original_lines": 389,
+      "original_tokens": 3551,
+      "skeleton_lines": 107,
       "skeleton_path": "pipeline-context/skeletons/stage3_prepare/06_prepare_po_line_items.skeleton.py",
-      "skeleton_tokens": 793,
+      "skeleton_tokens": 1006,
       "source_path": "scripts/stage3_prepare/06_prepare_po_line_items.py"
     },
     {
@@ -162,10 +162,10 @@
     }
   ],
   "totals": {
-    "compression_ratio": 3.24,
-    "original_lines": 3691,
-    "original_tokens": 30970,
-    "skeleton_lines": 1111,
-    "skeleton_tokens": 9568
+    "compression_ratio": 3.23,
+    "original_lines": 3747,
+    "original_tokens": 31620,
+    "skeleton_lines": 1130,
+    "skeleton_tokens": 9781
   }
 }

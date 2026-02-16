@@ -63,7 +63,25 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   fmtPo: boolean('fmt_po').notNull().default(false),
   // Soft delete flag - false when PO no longer appears in import file
   isActive: boolean('is_active').notNull().default(true),
-  
+
+  // === Pre-computed status flags (calculated in ETL stage3) ===
+
+  // Normalized blockage flags (derived from raw SAP status strings)
+  // Replaces ILIKE queries: po_gts_status ILIKE '%GTS BLOCKED%'
+  isGtsBlocked: boolean('is_gts_blocked').notNull().default(false),
+  // Replaces ILIKE queries: po_approval_status ILIKE '%BLOCKED%'
+  isApprovalBlocked: boolean('is_approval_blocked').notNull().default(false),
+
+  // TRUE when po_receipt_status='CLOSED PO' OR (open_po_qty=0 AND open_po_value=0)
+  // Accounts for source data lag where receipt status hasn't caught up to financial reality
+  isEffectivelyClosed: boolean('is_effectively_closed').notNull().default(false),
+
+  // ETL-derived lifecycle status based ONLY on SAP data (excludes app-dependent statuses)
+  // Values: 'open' | 'closed' | 'gts_blocked' | 'pending_approval'
+  // NOTE: 'cancelled' and 'cancellation_rejected' require po_operations data
+  // and are derived server-side by combining this column with has-pending-cancel check
+  poLifecycleStatus: varchar('po_lifecycle_status', { length: 20 }).notNull().default('open'),
+
   // Open PO values (calculated: total - cost impact recognized, forced to 0 for closed POs)
   openPoQty: numeric('open_po_qty'),      // orderedQty - SUM(cost_impact_qty)
   openPoValue: numeric('open_po_value'),  // poValueUsd - SUM(cost_impact_amount)
@@ -87,6 +105,11 @@ export const poLineItems = devV3Schema.table('po_line_items', {
   index('po_line_items_po_creation_date_idx').on(table.poCreationDate),
   index('po_line_items_is_capex_idx').on(table.isCapex),
   index('po_line_items_wbs_number_idx').on(table.wbsNumber),  // Used in LEFT JOIN to wbs_details
+  // Pre-computed status flag indexes
+  index('po_line_items_po_lifecycle_status_idx').on(table.poLifecycleStatus),
+  index('po_line_items_is_gts_blocked_idx').on(table.isGtsBlocked),
+  index('po_line_items_is_approval_blocked_idx').on(table.isApprovalBlocked),
+  index('po_line_items_is_effectively_closed_idx').on(table.isEffectivelyClosed),
 ]);
 
 export type POLineItem = typeof poLineItems.$inferSelect;

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-02-16T12:39:02.448899+00:00",
+  "generated_at": "2026-02-16T15:01:47.986172+00:00",
   "schemas": {
     "01_po_line_items": {
       "columns": [
@@ -65,13 +65,17 @@
         "cost_impact_pct",
         "cost_impact_value",
         "fmt_po",
+        "is_approval_blocked",
         "is_capex",
+        "is_effectively_closed",
+        "is_gts_blocked",
         "open_po_qty",
         "open_po_value",
+        "po_lifecycle_status",
         "wbs_validated"
       ],
-      "hash": "dea367d5437bc506",
-      "count": 9
+      "hash": "496c89fcd96f4273",
+      "count": 13
     },
     "07_prepare_po_transactions": {
       "columns": [
@@ -164,5 +168,5 @@
     }
   },
   "total_scripts": 16,
-  "total_columns": 64
+  "total_columns": 68
 }

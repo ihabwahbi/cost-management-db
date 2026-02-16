@@ -243,6 +243,59 @@ def calculate_is_capex(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def compute_status_flags(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compute pre-materialized status flags from raw SAP columns.
+
+    These replace runtime string matching (ILIKE) with indexed boolean scans
+    and eliminate the need for repeated status derivation on every API request.
+
+    Business rules (from packages/api/src/utils/data-utils.ts):
+    - is_gts_blocked: poGtsStatus contains 'gts blocked'
+    - is_approval_blocked: poApprovalStatus is 'blocked'
+    - is_effectively_closed: receipt='closed po' OR (value=0 AND qty=0)
+    - po_lifecycle_status: closed > gts_blocked > pending_approval > open
+
+    NOTE: 'cancelled' and 'cancellation_rejected' statuses are NOT computed here.
+    They depend on po_operations (app-managed table) and are derived server-side.
+    """
+    print("\n--- Computing Status Flags ---")
+
+    # Normalize raw status strings for comparison
+    gts_status = df["po_gts_status"].fillna("").str.strip().str.lower()
+    approval_status = df["po_approval_status"].fillna("").str.strip().str.lower()
+    receipt_status = df["po_receipt_status"].fillna("").str.strip().str.lower()
+
+    # Boolean flags
+    df["is_gts_blocked"] = gts_status.str.contains("gts blocked", na=False)
+    df["is_approval_blocked"] = approval_status == "blocked"
+
+    # Effectively closed: receipt status OR financial zero-out
+    open_qty = pd.to_numeric(df["open_po_qty"], errors="coerce").fillna(0)
+    open_val = pd.to_numeric(df["open_po_value"], errors="coerce").fillna(0)
+    status_closed = receipt_status == "closed po"
+    financially_closed = (open_qty == 0) & (open_val == 0)
+    df["is_effectively_closed"] = status_closed | financially_closed
+
+    # Lifecycle status priority: closed > gts_blocked > pending_approval > open
+    # Priority: closed > gts_blocked > pending_approval > open
+    df["po_lifecycle_status"] = "open"  # Default
+    df.loc[df["is_approval_blocked"], "po_lifecycle_status"] = "pending_approval"
+    df.loc[df["is_gts_blocked"], "po_lifecycle_status"] = "gts_blocked"
+    df.loc[df["is_effectively_closed"], "po_lifecycle_status"] = "closed"
+
+    # Stats
+    status_counts = df["po_lifecycle_status"].value_counts()
+    print("  Lifecycle status distribution:")
+    for status, count in status_counts.items():
+        print(f"    {status}: {count:,}")
+    print(f"  GTS blocked: {df['is_gts_blocked'].sum():,}")
+    print(f"  Approval blocked: {df['is_approval_blocked'].sum():,}")
+    print(f"  Effectively closed: {df['is_effectively_closed'].sum():,}")
+
+    return df
+
+
 def validate_output(df: pd.DataFrame) -> bool:
     """Validate output using Pandera contract (with fallback to basic checks)."""
     # Basic column checks first (fast fail)
@@ -302,22 +355,25 @@ def main():
         print(f"ERROR: Dependency not found: {COST_IMPACT_FILE}")
         return False
 
-    print("\n[1/6] Loading data...")
+    print("\n[1/7] Loading data...")
     po_df, cost_df = load_data()
 
-    print("\n[2/6] Calculating open values...")
+    print("\n[2/7] Calculating open values...")
     po_df = calculate_open_values(po_df, cost_df)
 
-    print("\n[3/6] Mapping columns...")
+    print("\n[3/7] Mapping columns...")
     output_df = map_columns(po_df)
 
-    print("\n[4/6] Calculating WBS validation...")
+    print("\n[4/7] Calculating WBS validation...")
     output_df = calculate_wbs_validated(output_df)
 
-    print("\n[5/6] Calculating CapEx flag...")
+    print("\n[5/7] Calculating CapEx flag...")
     output_df = calculate_is_capex(output_df)
 
-    print("\n[6/6] Validating and saving...")
+    print("\n[6/7] Computing status flags...")
+    output_df = compute_status_flags(output_df)
+
+    print("\n[7/7] Validating and saving...")
     if not validate_output(output_df):
         return False
     save_data(output_df, OUTPUT_FILE)

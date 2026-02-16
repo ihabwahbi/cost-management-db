@@ -69,6 +69,10 @@ interface CsvRow {
   fmt_po: string;
   wbs_validated: string;
   is_capex: string;
+  is_gts_blocked: string;
+  is_approval_blocked: string;
+  is_effectively_closed: string;
+  po_lifecycle_status: string;
 }
 
 type PoLineItemInsert = typeof poLineItems.$inferInsert;
@@ -149,6 +153,10 @@ function transformRow(row: CsvRow): PoLineItemInsert {
     wbsNumber: str(row.wbs_number),
     wbsValidated: bool(row.wbs_validated),
     isCapex: bool(row.is_capex),
+    isGtsBlocked: bool(row.is_gts_blocked),
+    isApprovalBlocked: bool(row.is_approval_blocked),
+    isEffectivelyClosed: bool(row.is_effectively_closed),
+    poLifecycleStatus: row.po_lifecycle_status || 'open',
     expectedDeliveryDate: date(row.expected_delivery_date),
     poApprovalStatus: str(row.po_approval_status),
     poReceiptStatus: str(row.po_receipt_status),
@@ -199,6 +207,10 @@ async function upsertBatch(records: PoLineItemInsert[]): Promise<number> {
         wbsNumber: sql`excluded.wbs_number`,
         wbsValidated: sql`excluded.wbs_validated`,
         isCapex: sql`excluded.is_capex`,
+        isGtsBlocked: sql`excluded.is_gts_blocked`,
+        isApprovalBlocked: sql`excluded.is_approval_blocked`,
+        isEffectivelyClosed: sql`excluded.is_effectively_closed`,
+        poLifecycleStatus: sql`excluded.po_lifecycle_status`,
         expectedDeliveryDate: sql`excluded.expected_delivery_date`,
         poApprovalStatus: sql`excluded.po_approval_status`,
         poReceiptStatus: sql`excluded.po_receipt_status`,
