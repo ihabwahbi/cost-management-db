@@ -3854,6 +3854,126 @@
       "table": "pending_invites",
       "type": "db_column"
     },
+    "db_column:po_date_overrides.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:po_date_overrides.createdAt",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:po_date_overrides.id",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.isActive": {
+      "column": "isActive",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_date_overrides.isActive",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.originalDate": {
+      "column": "originalDate",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "date",
+      "id": "db_column:po_date_overrides.originalDate",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.overrideAt": {
+      "column": "overrideAt",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:po_date_overrides.overrideAt",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.overrideBy": {
+      "column": "overrideBy",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:po_date_overrides.overrideBy",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.overrideDate": {
+      "column": "overrideDate",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "date",
+      "id": "db_column:po_date_overrides.overrideDate",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.poLineItemId": {
+      "column": "poLineItemId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": "poLineItems.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:po_date_overrides.poLineItemId",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.reason": {
+      "column": "reason",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:po_date_overrides.reason",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
+    "db_column:po_date_overrides.updatedAt": {
+      "column": "updatedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:po_date_overrides.updatedAt",
+      "table": "po_date_overrides",
+      "type": "db_column"
+    },
     "db_column:po_line_items.accountAssignmentCategory": {
       "column": "accountAssignmentCategory",
       "constraints": {
@@ -6552,6 +6672,24 @@
       "name": "pending_invites",
       "type": "table"
     },
+    "table:po_date_overrides": {
+      "columns": [
+        "createdAt",
+        "id",
+        "isActive",
+        "originalDate",
+        "overrideAt",
+        "overrideBy",
+        "overrideDate",
+        "poLineItemId",
+        "reason",
+        "updatedAt"
+      ],
+      "file": "po-date-overrides.ts",
+      "id": "table:po_date_overrides",
+      "name": "po_date_overrides",
+      "type": "table"
+    },
     "table:po_line_items": {
       "columns": [
         "accountAssignmentCategory",
@@ -6844,13 +6982,13 @@
     },
     "nodes_by_type": {
       "column": 100,
-      "db_column": 245,
+      "db_column": 255,
       "file": 23,
       "script": 17,
-      "table": 22
+      "table": 23
     },
     "total_edges": 151,
-    "total_nodes": 407,
+    "total_nodes": 418,
     "variables_traced": 80
   },
   "variable_sources": {

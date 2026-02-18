@@ -879,7 +879,7 @@
     },
     "PR Number": {
       "created_by": "scripts/stage2_transform/04_enrich_po_line_items.py:96",
-      "dtype": "float64",
+      "dtype": "int64",
       "name": "PR Number",
       "source_type": "intermediate",
       "sources": [
@@ -1284,7 +1284,7 @@
     },
     "User Name": {
       "created_by": null,
-      "dtype": "object",
+      "dtype": "int64",
       "name": "User Name",
       "source_type": "intermediate",
       "sources": [
@@ -1940,7 +1940,7 @@
     },
     "requester": {
       "created_by": null,
-      "dtype": "object",
+      "dtype": "float64",
       "name": "requester",
       "source_type": "import-ready",
       "sources": [
@@ -5249,7 +5249,7 @@
     "total_columns": 201,
     "total_constants": 19,
     "total_functions": 135,
-    "total_tables": 22
+    "total_tables": 23
   },
   "tables": [
     {
@@ -5430,6 +5430,29 @@
         }
       ],
       "name": "pending_invites",
+      "primary_key": "id"
+    },
+    {
+      "columns": [
+        "createdAt",
+        "id",
+        "isActive",
+        "originalDate",
+        "overrideAt",
+        "overrideBy",
+        "overrideDate",
+        "poLineItemId",
+        "reason",
+        "updatedAt"
+      ],
+      "file": "src/schema/po-date-overrides.ts",
+      "foreign_keys": [
+        {
+          "column": "poLineItemId",
+          "references": "poLineItems.id"
+        }
+      ],
+      "name": "po_date_overrides",
       "primary_key": "id"
     },
     {

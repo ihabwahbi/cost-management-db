@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2026-02-16T15:01:35.372293+00:00
+Generated: 2026-02-18T03:47:17.351867+00:00
 
 ## Data Flow Diagram
 
@@ -71,6 +71,7 @@ flowchart TD
         db_forecast_versions[("forecast_versions")]
         db_grir_exposures[("grir_exposures")]
         db_pending_invites[("pending_invites")]
+        db_po_date_overrides[("po_date_overrides")]
         db_po_line_items[("po_line_items")]
         db_po_mappings[("po_mappings")]
         db_po_operations[("po_operations")]
@@ -271,6 +272,21 @@ flowchart LR
 | `usedAt` | timestamp | - |
 | `failedAttempts` | integer | NOT NULL, DEFAULT |
 | `createdAt` | timestamp | - |
+
+### `po_date_overrides`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `poLineItemId` | uuid | NOT NULL, FK → poLineItems.id |
+| `originalDate` | date | NOT NULL |
+| `overrideDate` | date | NOT NULL |
+| `reason` | text | NOT NULL |
+| `overrideBy` | varchar | NOT NULL |
+| `overrideAt` | timestamp | NOT NULL |
+| `isActive` | boolean | NOT NULL, DEFAULT |
+| `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
 
 ### `po_line_items`
 
@@ -488,7 +504,7 @@ Sample data and types for each CSV file:
 ### `invoice table.csv`
 
 - **Path**: `data/raw/invoice table.csv`
-- **Rows**: 66594
+- **Rows**: 66616
 
 | Column | Type |
 |--------|------|
@@ -499,7 +515,7 @@ Sample data and types for each CSV file:
 ### `po line items.csv`
 
 - **Path**: `data/raw/po line items.csv`
-- **Rows**: 64002
+- **Rows**: 63298
 
 | Column | Type |
 |--------|------|
@@ -516,21 +532,21 @@ Sample data and types for each CSV file:
 | *...* | *21 more* |
 
 **Columns with nulls:**
-- `PO Initial Output Date`: 134 nulls
-- `PO Account Assignment Category`: 11063 nulls
-- `PO Account Assignment Category Desc`: 11063 nulls
-- `PO WBS Element`: 39484 nulls
-- `PO Material Number`: 49765 nulls
-- `PO Valuation Class`: 49765 nulls
-- `PO Valuation Class Desc`: 49765 nulls
-- `NIS Level 0 Desc`: 12537 nulls
+- `PO Initial Output Date`: 227 nulls
+- `PO Account Assignment Category`: 10659 nulls
+- `PO Account Assignment Category Desc`: 10659 nulls
+- `PO WBS Element`: 38174 nulls
+- `PO Material Number`: 49230 nulls
+- `PO Valuation Class`: 49230 nulls
+- `PO Valuation Class Desc`: 49230 nulls
+- `NIS Level 0 Desc`: 12269 nulls
 - `PO GTS Status`: 110 nulls
-- `PO Current Supplier Promised Date`: 34514 nulls
+- `PO Current Supplier Promised Date`: 33304 nulls
 
 ### `gr table.csv`
 
 - **Path**: `data/raw/gr table.csv`
-- **Rows**: 78512
+- **Rows**: 78520
 
 | Column | Type |
 |--------|------|
@@ -541,7 +557,7 @@ Sample data and types for each CSV file:
 ### `gr_postings.csv`
 
 - **Path**: `data/intermediate/gr_postings.csv`
-- **Rows**: 55115
+- **Rows**: 54401
 
 | Column | Type |
 |--------|------|
@@ -553,7 +569,7 @@ Sample data and types for each CSV file:
 ### `reservations.csv`
 
 - **Path**: `data/intermediate/reservations.csv`
-- **Rows**: 1576
+- **Rows**: 1685
 
 | Column | Type |
 |--------|------|
@@ -579,8 +595,8 @@ Sample data and types for each CSV file:
 - `Reservation -Line`: 2 nulls
 - `Requirements Date`: 2 nulls
 - `Creation Date`: 2 nulls
-- `Stock On Hand - DDSC`: 761 nulls
-- `Stock On Hand - HDSC`: 930 nulls
+- `Stock On Hand - DDSC`: 832 nulls
+- `Stock On Hand - HDSC`: 973 nulls
 - `Last 3 Month Consumption`: 2 nulls
 - `Last 6 Month Consumption`: 2 nulls
 - `Last 12 Month Consumption`: 2 nulls
@@ -588,20 +604,20 @@ Sample data and types for each CSV file:
 - `Material Stratification (Last 12 Month Consumption)`: 2 nulls
 - `Open Qty - Reservation`: 2 nulls
 - `Open Reservation Value`: 2 nulls
-- `Material/Plant-SOH - Total`: 1096 nulls
-- `Primary Pegged PO-LN - Open Qty`: 1073 nulls
+- `Material/Plant-SOH - Total`: 1078 nulls
+- `Primary Pegged PO-LN - Open Qty`: 1259 nulls
 - `Combined SOH & PO Pegging`: 2 nulls
-- `Main - PO Line to Peg to Reservation`: 1022 nulls
-- `Main - PO to Peg to Reservation`: 1022 nulls
-- `Additional PO - Line to Peg`: 1553 nulls
-- `Primary Pegged PO-LN - Order Qty`: 1073 nulls
-- `Primary Pegged PO-LN - Approval Status`: 1073 nulls
-- `Primary Pegged PO-LN - RDD Date`: 1073 nulls
-- `Pegged Main PO GR Status`: 1022 nulls
-- `Pegged Main PO Invoice Status`: 1022 nulls
-- `Primary Pegged PO-LN - Invoice Qty`: 1533 nulls
+- `Main - PO Line to Peg to Reservation`: 1177 nulls
+- `Main - PO to Peg to Reservation`: 1177 nulls
+- `Additional PO - Line to Peg`: 1665 nulls
+- `Primary Pegged PO-LN - Order Qty`: 1259 nulls
+- `Primary Pegged PO-LN - Approval Status`: 1259 nulls
+- `Primary Pegged PO-LN - RDD Date`: 1259 nulls
+- `Pegged Main PO GR Status`: 1177 nulls
+- `Pegged Main PO Invoice Status`: 1177 nulls
+- `Primary Pegged PO-LN - Invoice Qty`: 1578 nulls
 - `Post Pegging SOH Qty`: 2 nulls
-- `Post Pegging PO Qty`: 47 nulls
+- `Post Pegging PO Qty`: 45 nulls
 - `Material Description`: 2 nulls
 - `MRP Parameters - MRP Controller`: 2 nulls
 - `MRP Parameters - Profit Center`: 2 nulls
@@ -609,24 +625,24 @@ Sample data and types for each CSV file:
 - `MRP Parameters - Prime Status`: 2 nulls
 - `MRP Parameters - Safety Stock`: 2 nulls
 - `MRP Parameters - Standard Price`: 2 nulls
-- `Business Line - By Cost Center`: 361 nulls
-- `Sub - Business Line - By Cost Center`: 361 nulls
+- `Business Line - By Cost Center`: 308 nulls
+- `Sub - Business Line - By Cost Center`: 308 nulls
 - `Business Line by Profit Center`: 2 nulls
 - `Material/Plant-Open PO Qty - Total`: 2 nulls
 - `Purchase Requisition - Status`: 2 nulls
-- `Purchase Requisitions`: 1573 nulls
+- `Purchase Requisitions`: 1685 nulls
 - `Planned Order - Status`: 2 nulls
-- `Planned Orders`: 1094 nulls
-- `Maximo Asset ID`: 949 nulls
-- `Maximo Asset Num`: 949 nulls
-- `Maximo Serial No`: 949 nulls
+- `Planned Orders`: 1234 nulls
+- `Maximo Asset ID`: 1163 nulls
+- `Maximo Asset Num`: 1163 nulls
+- `Maximo Serial No`: 1163 nulls
 - `Reservation Creation type`: 2 nulls
-- `WO Number`: 536 nulls
+- `WO Number`: 604 nulls
 - `User Name`: 2 nulls
-- `Goods recipient`: 16 nulls
+- `Goods recipient`: 10 nulls
 - `Maximo - WO STATUS and Part Status`: 2 nulls
-- `WBS Element`: 1217 nulls
-- `Cost Center`: 361 nulls
+- `WBS Element`: 1379 nulls
+- `Cost Center`: 308 nulls
 - `reservation_line_id`: 2 nulls
 - `reservation_number`: 2 nulls
 - `reservation_line_number`: 2 nulls
@@ -658,7 +674,7 @@ Sample data and types for each CSV file:
 ### `grir_exposures.csv`
 
 - **Path**: `data/import-ready/grir_exposures.csv`
-- **Rows**: 68
+- **Rows**: 79
 
 | Column | Type |
 |--------|------|
@@ -673,7 +689,7 @@ Sample data and types for each CSV file:
 ### `wbs_from_operations.csv`
 
 - **Path**: `data/intermediate/wbs_from_operations.csv`
-- **Rows**: 144
+- **Rows**: 145
 
 | Column | Type |
 |--------|------|
@@ -690,14 +706,14 @@ Sample data and types for each CSV file:
 | *...* | *1 more* |
 
 **Columns with nulls:**
-- `ops_activity_number`: 144 nulls
+- `ops_activity_number`: 145 nulls
 - `rig`: 10 nulls
-- `location`: 144 nulls
+- `location`: 145 nulls
 
 ### `ir_postings.csv`
 
 - **Path**: `data/intermediate/ir_postings.csv`
-- **Rows**: 55204
+- **Rows**: 54560
 
 | Column | Type |
 |--------|------|
@@ -709,7 +725,7 @@ Sample data and types for each CSV file:
 ### `wbs_from_projects.csv`
 
 - **Path**: `data/intermediate/wbs_from_projects.csv`
-- **Rows**: 369
+- **Rows**: 373
 
 | Column | Type |
 |--------|------|
@@ -725,13 +741,13 @@ Sample data and types for each CSV file:
 | `location` | object |
 
 **Columns with nulls:**
-- `operation_number`: 369 nulls
-- `ops_activity_number`: 369 nulls
+- `operation_number`: 373 nulls
+- `ops_activity_number`: 373 nulls
 
 ### `po_details_enrichment.csv`
 
 - **Path**: `data/intermediate/po_details_enrichment.csv`
-- **Rows**: 22089
+- **Rows**: 21809
 
 | Column | Type |
 |--------|------|
@@ -741,14 +757,14 @@ Sample data and types for each CSV file:
 | `PR Line` | float64 |
 
 **Columns with nulls:**
-- `Requester`: 2394 nulls
-- `PR Number`: 420 nulls
+- `Requester`: 2501 nulls
+- `PR Number`: 366 nulls
 - `PR Line`: 2 nulls
 
 ### `wbs_from_ops_activities.csv`
 
 - **Path**: `data/intermediate/wbs_from_ops_activities.csv`
-- **Rows**: 7182
+- **Rows**: 7211
 
 | Column | Type |
 |--------|------|
@@ -765,13 +781,13 @@ Sample data and types for each CSV file:
 | *...* | *1 more* |
 
 **Columns with nulls:**
-- `rig`: 222 nulls
-- `location`: 7182 nulls
+- `rig`: 235 nulls
+- `location`: 7211 nulls
 
 ### `cost_impact.csv`
 
 - **Path**: `data/intermediate/cost_impact.csv`
-- **Rows**: 108592
+- **Rows**: 107183
 
 | Column | Type |
 |--------|------|
@@ -785,7 +801,7 @@ Sample data and types for each CSV file:
 ### `wbs_processed.csv`
 
 - **Path**: `data/intermediate/wbs_processed.csv`
-- **Rows**: 7852
+- **Rows**: 7889
 
 | Column | Type |
 |--------|------|
@@ -802,14 +818,14 @@ Sample data and types for each CSV file:
 | *...* | *1 more* |
 
 **Columns with nulls:**
-- `operation_number`: 526 nulls
-- `ops_activity_number`: 670 nulls
-- `rig`: 232 nulls
+- `operation_number`: 533 nulls
+- `ops_activity_number`: 678 nulls
+- `rig`: 245 nulls
 
 ### `po_line_items.csv`
 
 - **Path**: `data/import-ready/po_line_items.csv`
-- **Rows**: 57184
+- **Rows**: 56424
 
 | Column | Type |
 |--------|------|
@@ -826,19 +842,20 @@ Sample data and types for each CSV file:
 | *...* | *27 more* |
 
 **Columns with nulls:**
-- `pr_number`: 37702 nulls
-- `pr_line`: 37313 nulls
-- `requester`: 37216 nulls
-- `part_number`: 47765 nulls
-- `account_assignment_category`: 8925 nulls
-- `wbs_number`: 32723 nulls
+- `pr_number`: 37284 nulls
+- `pr_line`: 36946 nulls
+- `requester`: 36838 nulls
+- `part_number`: 47175 nulls
+- `account_assignment_category`: 8711 nulls
+- `nis_line`: 1 nulls
+- `wbs_number`: 31363 nulls
 - `po_gts_status`: 62 nulls
-- `cost_impact_pct`: 27 nulls
+- `cost_impact_pct`: 28 nulls
 
 ### `po_transactions.csv`
 
 - **Path**: `data/import-ready/po_transactions.csv`
-- **Rows**: 108592
+- **Rows**: 107183
 
 | Column | Type |
 |--------|------|
@@ -854,7 +871,7 @@ Sample data and types for each CSV file:
 ### `wbs_details.csv`
 
 - **Path**: `data/import-ready/wbs_details.csv`
-- **Rows**: 7852
+- **Rows**: 7882
 
 | Column | Type |
 |--------|------|
@@ -872,13 +889,13 @@ Sample data and types for each CSV file:
 
 **Columns with nulls:**
 - `operation_number`: 526 nulls
-- `ops_activity_number`: 670 nulls
-- `rig`: 232 nulls
+- `ops_activity_number`: 671 nulls
+- `rig`: 245 nulls
 
 ### `sap_reservations.csv`
 
 - **Path**: `data/import-ready/sap_reservations.csv`
-- **Rows**: 1574
+- **Rows**: 1683
 
 | Column | Type |
 |--------|------|
@@ -895,13 +912,13 @@ Sample data and types for each CSV file:
 | *...* | *9 more* |
 
 **Columns with nulls:**
-- `wbs_number`: 1215 nulls
-- `requester_alias`: 14 nulls
-- `po_number`: 1020 nulls
-- `po_line_number`: 1020 nulls
-- `po_line_item_id`: 1020 nulls
-- `asset_code`: 947 nulls
-- `asset_serial_number`: 976 nulls
+- `wbs_number`: 1377 nulls
+- `requester_alias`: 8 nulls
+- `po_number`: 1175 nulls
+- `po_line_number`: 1175 nulls
+- `po_line_item_id`: 1175 nulls
+- `asset_code`: 1161 nulls
+- `asset_serial_number`: 1190 nulls
 
 ## Common Errors & Solutions
 

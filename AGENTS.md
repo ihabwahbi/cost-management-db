@@ -287,7 +287,8 @@ tables it doesn't know about).
 
 **Webapp-owned schemas** (symlinked here FROM `cost-management/packages/db/src/schema/`):
 `users.ts`, `agent-memories.ts`, `pending-invites.ts`, `registration-attempts.ts`,
-`registration-audit-log.ts`, `webauthn-credentials.ts`, `webauthn-challenges.ts`
+`registration-audit-log.ts`, `webauthn-credentials.ts`, `webauthn-challenges.ts`,
+`po-date-overrides.ts`
 
 **Workflow for data schema changes (ETL-owned):**
 1. Edit schema in `src/schema/` — the webapp sees the change immediately via symlink
