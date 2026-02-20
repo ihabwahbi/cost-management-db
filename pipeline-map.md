@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2026-02-18T03:47:17.351867+00:00
+Generated: 2026-02-20T05:28:02.438851+00:00
 
 ## Data Flow Diagram
 
@@ -315,18 +315,20 @@ flowchart LR
 |--------|------|-------------|
 | `id` | uuid | PK |
 | `poLineItemId` | uuid | NOT NULL, FK → poLineItems.id |
-| `costBreakdownId` | uuid | NOT NULL, FK → costBreakdown.id |
+| `costBreakdownId` | uuid | FK → costBreakdown.id |
 | `mappedAmount` | numeric | NOT NULL |
 | `mappingNotes` | text | - |
 | `mappedBy` | varchar | - |
 | `mappedAt` | timestamp | - |
 | `createdAt` | timestamp | - |
 | `updatedAt` | timestamp | - |
+| `projectId` | uuid | FK → projects.id |
+| `spendType` | text | - |
 | `mappingSource` | varchar | NOT NULL, DEFAULT |
 | `sourcePrPreMappingId` | uuid | FK → prPreMappings.id |
 | `requiresConfirmation` | boolean | NOT NULL, DEFAULT |
 | `confirmedAt` | timestamp | - |
-| `confirmedBy` | varchar | - |
+| *...* | *1 more* | |
 
 ### `po_operations`
 

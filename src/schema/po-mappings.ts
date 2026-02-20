@@ -2,10 +2,15 @@ import { uuid, numeric, text, varchar, timestamp, boolean, index, unique } from 
 import { costBreakdown } from './cost-breakdown';
 import { poLineItems } from './po-line-items';
 import { prPreMappings } from './pr-pre-mappings';
+import { projects } from './projects';
 import { devV3Schema } from './_schema';
 
 /**
  * PO Mappings - Links PO line items to cost breakdown categories
+ * 
+ * Supports two mapping levels:
+ * - Full mapping: projectId + spendType + costBreakdownId (resolved via spend sub-category)
+ * - Partial mapping: projectId + spendType only (costBreakdownId is NULL)
  * 
  * Mapping sources:
  * - 'manual': User created mapping directly in UI
@@ -24,7 +29,6 @@ export const poMappings = devV3Schema.table('po_mappings', {
     .notNull()
     .references(() => poLineItems.id),
   costBreakdownId: uuid('cost_breakdown_id')
-    .notNull()
     .references(() => costBreakdown.id),
   mappedAmount: numeric('mapped_amount').notNull(),
   mappingNotes: text('mapping_notes'),
@@ -32,6 +36,11 @@ export const poMappings = devV3Schema.table('po_mappings', {
   mappedAt: timestamp('mapped_at', { withTimezone: true }).defaultNow(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+  
+  // Direct project + spend type references (always populated on mapping)
+  // Enables partial mappings without requiring a cost_breakdown record
+  projectId: uuid('project_id').references(() => projects.id),
+  spendType: text('spend_type'),
   
   // Source tracking - how was this mapping created?
   mappingSource: varchar('mapping_source', { length: 20 }).notNull().default('manual'),
@@ -47,6 +56,7 @@ export const poMappings = devV3Schema.table('po_mappings', {
 }, (table) => [
   unique('po_mappings_po_line_item_id_key').on(table.poLineItemId),
   index('po_mappings_cost_breakdown_id_idx').on(table.costBreakdownId),
+  index('po_mappings_project_id_idx').on(table.projectId),
   // For inbox queries - find all pending confirmations
   index('po_mappings_requires_confirmation_idx').on(table.requiresConfirmation),
   // For pre-mapping stats - find all mappings from a specific pre-mapping

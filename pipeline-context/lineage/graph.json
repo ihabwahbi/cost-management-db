@@ -4505,7 +4505,7 @@
     "db_column:po_mappings.costBreakdownId": {
       "column": "costBreakdownId",
       "constraints": {
-        "not_null": true,
+        "not_null": false,
         "primary_key": false,
         "references": "costBreakdown.id"
       },
@@ -4610,6 +4610,18 @@
       "table": "po_mappings",
       "type": "db_column"
     },
+    "db_column:po_mappings.projectId": {
+      "column": "projectId",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": "projects.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:po_mappings.projectId",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
     "db_column:po_mappings.requiresConfirmation": {
       "column": "requiresConfirmation",
       "constraints": {
@@ -4631,6 +4643,18 @@
       },
       "data_type": "uuid",
       "id": "db_column:po_mappings.sourcePrPreMappingId",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
+    "db_column:po_mappings.spendType": {
+      "column": "spendType",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:po_mappings.spendType",
       "table": "po_mappings",
       "type": "db_column"
     },
@@ -6753,8 +6777,10 @@
         "mappingNotes",
         "mappingSource",
         "poLineItemId",
+        "projectId",
         "requiresConfirmation",
         "sourcePrPreMappingId",
+        "spendType",
         "updatedAt"
       ],
       "file": "po-mappings.ts",
@@ -6982,13 +7008,13 @@
     },
     "nodes_by_type": {
       "column": 100,
-      "db_column": 255,
+      "db_column": 257,
       "file": 23,
       "script": 17,
       "table": 23
     },
     "total_edges": 151,
-    "total_nodes": 418,
+    "total_nodes": 420,
     "variables_traced": 80
   },
   "variable_sources": {

@@ -1323,7 +1323,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2026-02-18T03:47:17.351867+00:00",
+  "generated_at": "2026-02-20T05:28:02.438851+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -2020,7 +2020,6 @@
         },
         {
           "name": "costBreakdownId",
-          "not_null": true,
           "references": "costBreakdown.id",
           "type": "uuid"
         },
@@ -2063,6 +2062,11 @@
           "type": "uuid"
         },
         {
+          "name": "projectId",
+          "references": "projects.id",
+          "type": "uuid"
+        },
+        {
           "has_default": true,
           "name": "requiresConfirmation",
           "not_null": true,
@@ -2072,6 +2076,10 @@
           "name": "sourcePrPreMappingId",
           "references": "prPreMappings.id",
           "type": "uuid"
+        },
+        {
+          "name": "spendType",
+          "type": "text"
         },
         {
           "name": "updatedAt",

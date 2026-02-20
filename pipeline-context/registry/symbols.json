@@ -5518,8 +5518,10 @@
         "mappingNotes",
         "mappingSource",
         "poLineItemId",
+        "projectId",
         "requiresConfirmation",
         "sourcePrPreMappingId",
+        "spendType",
         "updatedAt"
       ],
       "file": "src/schema/po-mappings.ts",
@@ -5531,6 +5533,10 @@
         {
           "column": "poLineItemId",
           "references": "poLineItems.id"
+        },
+        {
+          "column": "projectId",
+          "references": "projects.id"
         },
         {
           "column": "sourcePrPreMappingId",

@@ -48,10 +48,10 @@ export const vPoMappingDetail = devV3Schema.view('v_po_mapping_detail', {
     pm.created_at AS mapping_created_at,
     cb.id AS cost_breakdown_id,
     cb.cost_line,
-    cb.spend_type,
+    COALESCE(cb.spend_type, pm.spend_type) AS spend_type,
     cb.spend_sub_category,
     cb.budget_cost,
-    p.id AS project_id,
+    COALESCE(p.id, pm.project_id) AS project_id,
     p.name AS project_name,
     pli.id AS po_line_item_id,
     pli.po_line_id,
@@ -68,8 +68,8 @@ export const vPoMappingDetail = devV3Schema.view('v_po_mapping_detail', {
     pli.is_active,
     pli.created_at AS po_created_at
   FROM dev_v3.po_mappings pm
-  JOIN dev_v3.cost_breakdown cb ON cb.id = pm.cost_breakdown_id
-  JOIN dev_v3.projects p ON p.id = cb.project_id
+  LEFT JOIN dev_v3.cost_breakdown cb ON cb.id = pm.cost_breakdown_id
+  LEFT JOIN dev_v3.projects p ON p.id = COALESCE(cb.project_id, pm.project_id)
   LEFT JOIN dev_v3.po_line_items pli ON pli.id = pm.po_line_item_id
 `);
 
