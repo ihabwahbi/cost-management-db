@@ -5507,11 +5507,15 @@
     },
     {
       "columns": [
+        "amortisationSource",
+        "amortisedAt",
+        "amortisedBy",
         "confirmedAt",
         "confirmedBy",
         "costBreakdownId",
         "createdAt",
         "id",
+        "isAmortised",
         "mappedAmount",
         "mappedAt",
         "mappedBy",
@@ -5627,6 +5631,7 @@
     },
     {
       "columns": [
+        "autoAmortiseThreshold",
         "createdAt",
         "id",
         "name",

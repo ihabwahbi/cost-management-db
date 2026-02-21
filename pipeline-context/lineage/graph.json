@@ -4478,6 +4478,42 @@
       "table": "po_line_items",
       "type": "db_column"
     },
+    "db_column:po_mappings.amortisationSource": {
+      "column": "amortisationSource",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:po_mappings.amortisationSource",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
+    "db_column:po_mappings.amortisedAt": {
+      "column": "amortisedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:po_mappings.amortisedAt",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
+    "db_column:po_mappings.amortisedBy": {
+      "column": "amortisedBy",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:po_mappings.amortisedBy",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
     "db_column:po_mappings.confirmedAt": {
       "column": "confirmedAt",
       "constraints": {
@@ -4535,6 +4571,18 @@
       },
       "data_type": "uuid",
       "id": "db_column:po_mappings.id",
+      "table": "po_mappings",
+      "type": "db_column"
+    },
+    "db_column:po_mappings.isAmortised": {
+      "column": "isAmortised",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "boolean",
+      "id": "db_column:po_mappings.isAmortised",
       "table": "po_mappings",
       "type": "db_column"
     },
@@ -5148,6 +5196,18 @@
       "data_type": "timestamp",
       "id": "db_column:pr_pre_mappings.updatedAt",
       "table": "pr_pre_mappings",
+      "type": "db_column"
+    },
+    "db_column:projects.autoAmortiseThreshold": {
+      "column": "autoAmortiseThreshold",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "numeric",
+      "id": "db_column:projects.autoAmortiseThreshold",
+      "table": "projects",
       "type": "db_column"
     },
     "db_column:projects.createdAt": {
@@ -6766,11 +6826,15 @@
     },
     "table:po_mappings": {
       "columns": [
+        "amortisationSource",
+        "amortisedAt",
+        "amortisedBy",
         "confirmedAt",
         "confirmedBy",
         "costBreakdownId",
         "createdAt",
         "id",
+        "isAmortised",
         "mappedAmount",
         "mappedAt",
         "mappedBy",
@@ -6854,6 +6918,7 @@
     },
     "table:projects": {
       "columns": [
+        "autoAmortiseThreshold",
         "createdAt",
         "id",
         "name",
@@ -7008,13 +7073,13 @@
     },
     "nodes_by_type": {
       "column": 100,
-      "db_column": 257,
+      "db_column": 262,
       "file": 23,
       "script": 17,
       "table": 23
     },
     "total_edges": 151,
-    "total_nodes": 420,
+    "total_nodes": 425,
     "variables_traced": 80
   },
   "variable_sources": {

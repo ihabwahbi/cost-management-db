@@ -1323,7 +1323,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2026-02-20T05:28:02.438851+00:00",
+  "generated_at": "2026-02-21T03:15:06.981409+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -2011,6 +2011,18 @@
     {
       "columns": [
         {
+          "name": "amortisationSource",
+          "type": "varchar"
+        },
+        {
+          "name": "amortisedAt",
+          "type": "timestamp"
+        },
+        {
+          "name": "amortisedBy",
+          "type": "varchar"
+        },
+        {
           "name": "confirmedAt",
           "type": "timestamp"
         },
@@ -2031,6 +2043,12 @@
           "name": "id",
           "primary_key": true,
           "type": "uuid"
+        },
+        {
+          "has_default": true,
+          "name": "isAmortised",
+          "not_null": true,
+          "type": "boolean"
         },
         {
           "name": "mappedAmount",
@@ -2307,6 +2325,10 @@
     },
     {
       "columns": [
+        {
+          "name": "autoAmortiseThreshold",
+          "type": "numeric"
+        },
         {
           "name": "createdAt",
           "type": "timestamp"

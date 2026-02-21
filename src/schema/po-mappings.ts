@@ -53,6 +53,12 @@ export const poMappings = devV3Schema.table('po_mappings', {
   requiresConfirmation: boolean('requires_confirmation').notNull().default(false),
   confirmedAt: timestamp('confirmed_at', { withTimezone: true }),
   confirmedBy: varchar('confirmed_by'),
+  
+  // Amortisation tracking - whether this PO's M&S spend is amortised over time
+  isAmortised: boolean('is_amortised').notNull().default(false),
+  amortisationSource: varchar('amortisation_source', { length: 10 }), // 'auto' | 'manual'
+  amortisedBy: varchar('amortised_by'),
+  amortisedAt: timestamp('amortised_at', { withTimezone: true }),
 }, (table) => [
   unique('po_mappings_po_line_item_id_key').on(table.poLineItemId),
   index('po_mappings_cost_breakdown_id_idx').on(table.costBreakdownId),
@@ -61,6 +67,8 @@ export const poMappings = devV3Schema.table('po_mappings', {
   index('po_mappings_requires_confirmation_idx').on(table.requiresConfirmation),
   // For pre-mapping stats - find all mappings from a specific pre-mapping
   index('po_mappings_source_pr_pre_mapping_id_idx').on(table.sourcePrPreMappingId),
+  // For amortisation queries in spend timeline aggregation
+  index('po_mappings_is_amortised_idx').on(table.isAmortised),
 ]);
 
 export type POMapping = typeof poMappings.$inferSelect;

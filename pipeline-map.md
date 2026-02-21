@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2026-02-20T05:28:02.438851+00:00
+Generated: 2026-02-21T03:15:06.981409+00:00
 
 ## Data Flow Diagram
 
@@ -328,7 +328,7 @@ flowchart LR
 | `sourcePrPreMappingId` | uuid | FK → prPreMappings.id |
 | `requiresConfirmation` | boolean | NOT NULL, DEFAULT |
 | `confirmedAt` | timestamp | - |
-| *...* | *1 more* | |
+| *...* | *5 more* | |
 
 ### `po_operations`
 
@@ -394,6 +394,7 @@ flowchart LR
 | `subBusinessLine` | text | NOT NULL |
 | `createdAt` | timestamp | - |
 | `updatedAt` | timestamp | - |
+| `autoAmortiseThreshold` | numeric | - |
 
 ### `registration_attempts`
 
