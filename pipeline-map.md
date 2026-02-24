@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2026-02-21T03:15:06.981409+00:00
+Generated: 2026-02-24T13:24:41.323532+00:00
 
 ## Data Flow Diagram
 
@@ -394,7 +394,6 @@ flowchart LR
 | `subBusinessLine` | text | NOT NULL |
 | `createdAt` | timestamp | - |
 | `updatedAt` | timestamp | - |
-| `autoAmortiseThreshold` | numeric | - |
 
 ### `registration_attempts`
 

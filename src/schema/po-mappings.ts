@@ -56,7 +56,7 @@ export const poMappings = devV3Schema.table('po_mappings', {
   
   // Amortisation tracking - whether this PO's M&S spend is amortised over time
   isAmortised: boolean('is_amortised').notNull().default(false),
-  amortisationSource: varchar('amortisation_source', { length: 10 }), // 'auto' | 'manual'
+  amortisationSource: varchar('amortisation_source', { length: 10 }), // 'manual'
   amortisedBy: varchar('amortised_by'),
   amortisedAt: timestamp('amortised_at', { withTimezone: true }),
 }, (table) => [

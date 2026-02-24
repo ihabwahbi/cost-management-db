@@ -5631,7 +5631,6 @@
     },
     {
       "columns": [
-        "autoAmortiseThreshold",
         "createdAt",
         "id",
         "name",

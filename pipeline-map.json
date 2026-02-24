@@ -1323,7 +1323,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2026-02-21T03:15:06.981409+00:00",
+  "generated_at": "2026-02-24T13:24:41.323532+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -2325,10 +2325,6 @@
     },
     {
       "columns": [
-        {
-          "name": "autoAmortiseThreshold",
-          "type": "numeric"
-        },
         {
           "name": "createdAt",
           "type": "timestamp"
