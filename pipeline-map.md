@@ -1,6 +1,6 @@
 # Pipeline Map
 
-Generated: 2026-02-24T13:24:41.323532+00:00
+Generated: 2026-02-26T00:33:13.650630+00:00
 
 ## Data Flow Diagram
 
@@ -72,6 +72,7 @@ flowchart TD
         db_grir_exposures[("grir_exposures")]
         db_pending_invites[("pending_invites")]
         db_po_date_overrides[("po_date_overrides")]
+        db_po_line_comments[("po_line_comments")]
         db_po_line_items[("po_line_items")]
         db_po_mappings[("po_mappings")]
         db_po_operations[("po_operations")]
@@ -286,6 +287,17 @@ flowchart LR
 | `overrideAt` | timestamp | NOT NULL |
 | `isActive` | boolean | NOT NULL, DEFAULT |
 | `createdAt` | timestamp | - |
+| `updatedAt` | timestamp | - |
+
+### `po_line_comments`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | uuid | PK |
+| `poLineItemId` | uuid | NOT NULL, FK → poLineItems.id |
+| `commentText` | text | NOT NULL |
+| `createdBy` | varchar | NOT NULL |
+| `createdAt` | timestamp | NOT NULL |
 | `updatedAt` | timestamp | - |
 
 ### `po_line_items`

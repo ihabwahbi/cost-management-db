@@ -43,3 +43,4 @@ export * from './registration-audit-log';
 export * from './webauthn-credentials';
 export * from './webauthn-challenges';
 export * from './po-date-overrides';
+export * from './po-line-comments';

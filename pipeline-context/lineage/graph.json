@@ -3974,6 +3974,78 @@
       "table": "po_date_overrides",
       "type": "db_column"
     },
+    "db_column:po_line_comments.commentText": {
+      "column": "commentText",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "text",
+      "id": "db_column:po_line_comments.commentText",
+      "table": "po_line_comments",
+      "type": "db_column"
+    },
+    "db_column:po_line_comments.createdAt": {
+      "column": "createdAt",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:po_line_comments.createdAt",
+      "table": "po_line_comments",
+      "type": "db_column"
+    },
+    "db_column:po_line_comments.createdBy": {
+      "column": "createdBy",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "varchar",
+      "id": "db_column:po_line_comments.createdBy",
+      "table": "po_line_comments",
+      "type": "db_column"
+    },
+    "db_column:po_line_comments.id": {
+      "column": "id",
+      "constraints": {
+        "not_null": false,
+        "primary_key": true,
+        "references": null
+      },
+      "data_type": "uuid",
+      "id": "db_column:po_line_comments.id",
+      "table": "po_line_comments",
+      "type": "db_column"
+    },
+    "db_column:po_line_comments.poLineItemId": {
+      "column": "poLineItemId",
+      "constraints": {
+        "not_null": true,
+        "primary_key": false,
+        "references": "poLineItems.id"
+      },
+      "data_type": "uuid",
+      "id": "db_column:po_line_comments.poLineItemId",
+      "table": "po_line_comments",
+      "type": "db_column"
+    },
+    "db_column:po_line_comments.updatedAt": {
+      "column": "updatedAt",
+      "constraints": {
+        "not_null": false,
+        "primary_key": false,
+        "references": null
+      },
+      "data_type": "timestamp",
+      "id": "db_column:po_line_comments.updatedAt",
+      "table": "po_line_comments",
+      "type": "db_column"
+    },
     "db_column:po_line_items.accountAssignmentCategory": {
       "column": "accountAssignmentCategory",
       "constraints": {
@@ -6762,6 +6834,20 @@
       "name": "po_date_overrides",
       "type": "table"
     },
+    "table:po_line_comments": {
+      "columns": [
+        "commentText",
+        "createdAt",
+        "createdBy",
+        "id",
+        "poLineItemId",
+        "updatedAt"
+      ],
+      "file": "po-line-comments.ts",
+      "id": "table:po_line_comments",
+      "name": "po_line_comments",
+      "type": "table"
+    },
     "table:po_line_items": {
       "columns": [
         "accountAssignmentCategory",
@@ -7060,13 +7146,13 @@
     },
     "nodes_by_type": {
       "column": 100,
-      "db_column": 261,
+      "db_column": 267,
       "file": 23,
       "script": 17,
-      "table": 23
+      "table": 24
     },
     "total_edges": 151,
-    "total_nodes": 424,
+    "total_nodes": 431,
     "variables_traced": 80
   },
   "variable_sources": {

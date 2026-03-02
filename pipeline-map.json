@@ -1323,7 +1323,7 @@
     "06_prepare_po_line_items",
     "07_prepare_po_transactions"
   ],
-  "generated_at": "2026-02-24T13:24:41.323532+00:00",
+  "generated_at": "2026-02-26T00:33:13.650630+00:00",
   "key_files": {
     "column_config": "scripts/config/column_mappings.py",
     "orchestrator": "scripts/pipeline.py",
@@ -1811,6 +1811,43 @@
       "extraction_method": "ts-ast",
       "file": "po-date-overrides.ts",
       "name": "po_date_overrides"
+    },
+    {
+      "columns": [
+        {
+          "name": "commentText",
+          "not_null": true,
+          "type": "text"
+        },
+        {
+          "name": "createdAt",
+          "not_null": true,
+          "type": "timestamp"
+        },
+        {
+          "name": "createdBy",
+          "not_null": true,
+          "type": "varchar"
+        },
+        {
+          "name": "id",
+          "primary_key": true,
+          "type": "uuid"
+        },
+        {
+          "name": "poLineItemId",
+          "not_null": true,
+          "references": "poLineItems.id",
+          "type": "uuid"
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp"
+        }
+      ],
+      "extraction_method": "ts-ast",
+      "file": "po-line-comments.ts",
+      "name": "po_line_comments"
     },
     {
       "columns": [
